@@ -1,0 +1,186 @@
+<!--
+  Copyright 2012 The Android Open Source Project
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<!DOCTYPE resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+
+    <!-- Global strings -->
+    <string name="app_name">PirateSeas</string>
+    <string name="game_title">PIRATE SEAS</string>
+    <string name="activity_new_game">New Game</string>
+    <string name="activity_load_game">Load Game</string>
+    <string name="activity_settings">Settings</string>
+    <string name="activity_help">Help</string>
+    <string name="btn_accept">Accept</string>
+    <string name="btn_cancel">Cancel</string>
+    <string name="btn_close">Close</string>
+    
+    <!-- Exception's messages -->
+    <string name="exception_gold">Not enough gold to purchase that!</string>
+    <string name="exception_ammo">Not enough ammunition to shoot!</string>
+    <string name="exception_reloading">You can\'t shoot yet!</string>
+    <string name="exception_save">Error while saving</string>
+
+    <!-- Game Menu strings -->
+    <string name="game_resume">Resume</string>
+    <string name="label_pause">PAUSE</string>
+    <string name="label_settings">SETTINGS</string>
+    <string name="btn_receive">Receive All</string>
+    <string name="btn_pause">Pause Button</string>
+    <string name="lbl_volume">Volume</string>
+    <string name="tb_control_sensor">Sensor Control</string>
+    <string name="tb_control_touch">Touch Control</string>
+    <string name="lbl_control_mode">Ship Control Mode</string>
+    <string name="settings_change_ammo_volume">Change ammo type with volume keys</string>
+    <string name="settings_change_ammo_touch">Change ammo type by touch</string>
+    <string name="settings_sensorway">By sensor</string>
+    <string name="settings_manual">Manual</string>
+    <string name="settings_pause_mode">Pause game mode</string>
+    <string name="settings_select_mode">Select next level mode</string>
+    <string name="settings_extra">Extra settings</string>
+    <string name="settings_exit_message">Exit through \'Accept\' or \'Cancel\' buttons</string>
+    
+    <!-- Shop strings -->
+    <string name="shop_item_name">Item name</string>
+    <string name="shop_item_crew_name">Crew</string>
+    <string name="shop_item_crew_desc">Restores 5 health points</string>
+    <string name="shop_item_repairman_name">Repairman</string>
+    <string name="shop_item_repairman_desc">Restores 15 health points</string>
+    <string name="shop_item_nest_name">Nest</string>
+    <string name="shop_item_nest_desc">Increases the effective range by 1.15</string>
+    <string name="shop_item_mats_name">Materials</string>
+    <string name="shop_item_mats_desc">Increases the max health in 10 units</string>
+    <string name="shop_item_mpiece_name">Map Piece</string>
+    <string name="shop_item_mpiece_desc">1/6 th section of a map</string>
+    <string name="shop_item_map_name">Map</string>
+    <string name="shop_item_map_desc">Shows the closest treasure</string>
+    <string name="shop_item_bpowder_name">Black Powder</string>
+    <string name="shop_item_bpowder_desc">Increases the firepower by 0.5</string>
+    <string name="shop_item_valuable_name">Valuable</string>
+    <string name="shop_item_valuable_desc">It grants you 100 gold coins</string>
+    <string name="shop_purchase_hint">\n
+        (Select any item to display its description)\n
+        (Long press any item to purchase it)</string>
+    
+    <!-- Shop Purchase Dialog -->
+    <string name="shop_purchase_dialog_title">Purchase</string>
+    <string name="shop_purchase_dialog_message">You will purchase this item!</string>
+    <string name="shop_purchase_dialog_positive">Confirm</string>
+    
+    <!-- Restore Preferences Dialog -->
+    <string name="settings_restore_dialog_title">Restore Preferences</string>
+    <string name="settings_restore_dialog_message">You will wipe all saved data!</string>
+    <string name="settings_restore_dialog_positive">Confirm</string>
+    
+    <!-- Overwrite Game Dialog -->
+    <string name="overwrite_dialog_title">Overwrite Saved Game</string>
+    <string name="overwrite_dialog_message">Your previous saved game will be overwritten!</string>
+    <string name="overwrite_dialog_positive">Confirm</string>
+
+    <!-- Exit Game Dialog -->
+    <string name="exit_dialog_title">Exit Saved Game</string>
+    <string name="exit_dialog_message">Any unsaved progress will be lost!</string>
+    <string name="exit_dialog_positive">Exit</string>
+    <string name="exit_dialog_negative">Cancel</string>
+
+    <!-- Exit Tutorial Dialog -->
+    <string name="exit_tutorial_dialog_title">Exit Tutorial</string>
+    <string name="exit_tutorial_dialog_message">The game will begin!</string>
+    <string name="exit_tutorial_dialog_positive">Proceed</string>
+    
+    <!-- Exit Shop Dialog -->
+    <string name="exit_shop_dialog_title">Exit Shop</string>
+    <string name="exit_shop_dialog_message">The game will resume!</string>
+    <string name="exit_shop_dialog_positive">Proceed</string>
+    
+    <!-- About Dialog -->
+    <string name="about_dialog_title">About us</string>
+    <string name="about_dialog_message">Game developed by \n
+        Miguel Angel Jiménez Rega - UO179050\n
+        For his Master\'s Final Work</string>
+    <string name="about_dialog_positive">OK</string>
+
+    <!-- Screen Slide Content -->
+    <string name="title_screen_slide">Screen Slide</string>
+    <string name="action_finish">Finish</string>
+    <string name="action_previous">Previous</string>
+    <string name="action_next">Next</string>
+    <string name="title_template_step">Tutorial: Step <xliff:g id="step_number">%1$d</xliff:g></string>
+    <string name="code_sensor_list">Sensor List</string>
+    <string name="sensor_list_default">-1;</string>
+
+    <!-- Loading messages -->
+    <string-array name="loading_messages">
+        <item>Loading Seas&#8230;</item>
+        <item>Loading Sky&#8230;</item>
+        <item>Loading Sounds&#8230;</item>
+        <item>Loading UI&#8230;</item>
+        <item>Loading Treasures&#8230;</item>
+        <item>Loading Ships&#8230;</item>
+        <item>Loading Cannons&#8230;</item>
+        <item>Loading Pirates&#8230;</item>
+        <item>Loading Yarrr&#8230;</item>
+        <item>Let\'s sail, mate!</item>
+    </string-array>
+    
+    <!-- Image Content descriptors -->
+    <string name="icd_anim_background">Animation background image</string>
+    <string name="icd_loading_animation">Loading animation image</string>
+    <string name="icd_rest_preferences">Restore preferences</string>
+    <string name="icd_help_hud">Game hud image</string>
+    <string name="icd_item">Item icon</string>
+    <string name="icd_gold">Gold icon</string>
+    <string name="icd_btn_settings">Setting\'s button</string>
+    <string name="icd_btn_help">Help button</string>
+    <string name="icd_tutorial_image">Tutorial background image</string>
+    <string name="icd_btn_change_ammo">Change ammo image</string>
+    <string name="icd_btn_island">Island image</string>
+    <string name="icd_btn_arrow">Arrow image</string>
+    
+	<!-- Numeric values -->
+    <string name="max_value">999</string>
+    
+    <string name="default_sample_text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut 
+        gravida, massa nec bibendum maximus, nunc ante viverra enim, sit amet viverra nisi nulla vitae 
+        massa. Sed tempor lectus porttitor, dapibus nibh sit amet, viverra nisi. Vivamus ex erat, 
+        iaculis ac augue ut, volutpat ornare dolor. Quisque dapibus ante ut laoreet pulvinar. Mauris 
+        metus nisi, fermentum a nulla a, condimentum malesuada ligula. Mauris id libero dolor. Sed 
+        sagittis ultricies tristique. Morbi efficitur eros in tellus tristique, vitae porta turpis 
+        molestie. Cras maximus sollicitudin lectus. Duis sit amet maximus nunc. Curabitur dapibus 
+        tristique auctor. Duis sit amet varius odio. Vestibulum eu dui justo. Phasellus tellus tortor, 
+        molestie sollicitudin porta ac, maximus vitae orci. Nulla nibh massa, convallis egestas orci 
+        quis, efficitur ultricies erat.</string>
+    <string name="empty_string"></string> 
+        
+    <!-- Game strings -->
+    <string name="tutorial_1">Arrr Mate!! Welcome to PIRATE SEAS!!\nYarr want to rule these seas and loot all the booty.</string>
+    <string name="tutorial_2">If you find a cloudy day.. Beware! An enemy might be lurking behind it. Shake your mobile device to wipe out the clouds!</string>
+    <string name="tutorial_3">Touch the screen to shoot your selected ammo.</string>
+    <string name="tutorial_4">Cycle through your ammo types touching the selected ammo icon. (Default setting)</string>
+    <string name="tutorial_5">Colect booty by sinking your enemies or discovering treasures using the maps you will find on the islands in your path.</string>
+    <string name="gameover_title">Game Over</string>
+    <string name="gameover_hint">(Press anywhere to restart game&#8230;)</string>
+    <string name="gameover_score">Score</string>
+    <string name="gameover_days">Days passed</string>
+    <string name="app_about">About us&#8230;</string>
+    <string name="tutorial_content">This is some tutorial content</string>
+    <string name="message_screenselection">Which direction go next, capt\'n?</string>
+    <string name="message_screenselection_detail">Please, select the next direction you want to go</string>
+    <string name="message_islanddetected">Capt\'n! Land in sight!</string>
+    <string name="message_nothinghere">Capt\'n! There\s nothing here! Which direction we go next?</string>
+    <string name="message_shakesleft">Shake your device %1$d more time(s)!</string>
+    
+
+</resources>

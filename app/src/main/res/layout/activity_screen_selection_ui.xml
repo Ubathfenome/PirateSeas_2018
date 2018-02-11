@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layoutBackground"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@mipmap/txtr_map_cover"
+    android:gravity="center_vertical"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:id="@+id/left_zone"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical|center_horizontal"
+            android:layout_margin="@dimen/padding_size"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
+
+            <ImageButton
+                android:id="@+id/btnLeft"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|center_horizontal"
+                android:background="@mipmap/ico_arrow_left"
+                android:contentDescription="@string/icd_btn_arrow"></ImageButton>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/front_zone"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical|center_horizontal"
+            android:layout_margin="@dimen/padding_size"
+            android:orientation="vertical">
+
+            <ImageButton
+                android:id="@+id/btnFront"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|center_horizontal"
+                android:background="@mipmap/ico_arrow_front"
+                android:contentDescription="@string/icd_btn_arrow"></ImageButton>
+
+            <ImageButton
+                android:id="@+id/btnDown"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/ico_arrow_down" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/right_zone"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical|center_horizontal"
+            android:layout_margin="@dimen/padding_size"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
+
+            <ImageButton
+                android:id="@+id/btnRight"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|center_horizontal"
+                android:background="@mipmap/ico_arrow_right"
+                android:contentDescription="@string/icd_btn_arrow"></ImageButton>
+        </LinearLayout>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/txtScreenSelectionLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:alpha="0.7"
+        android:background="@drawable/xml_border"
+        android:gravity="center"
+        android:padding="@dimen/large_padding_size"
+        android:text="@string/message_screenselection_detail"
+        android:textSize="@dimen/title_size" />
+</LinearLayout>

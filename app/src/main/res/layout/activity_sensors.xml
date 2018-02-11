@@ -1,0 +1,37 @@
+<!DOCTYPE LinearLayout>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rootLayoutSensors"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center">
+	
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+        
+        <ImageView  
+			android:id="@+id/img_animation_base"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:contentDescription="@string/icd_anim_background"
+			android:background="@mipmap/img_anim_phone" />
+
+        <ImageView  
+			android:id="@+id/img_load_animation"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:contentDescription="@string/icd_loading_animation"
+			android:background="@drawable/xml_loading_animation" />
+    </FrameLayout>
+    
+    
+				
+	<TextView
+		android:id="@+id/lbl_load_status"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="@array/loading_messages"
+		android:textSize="@dimen/text_size" />
+    
+</LinearLayout>

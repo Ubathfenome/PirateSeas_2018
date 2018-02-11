@@ -1,0 +1,90 @@
+<!DOCTYPE LinearLayout>
+<LinearLayout 
+	xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom="http://schemas.android.com/apk/res/tfm.uniovi.pirateseas"
+	android:id="@+id/UIFrame"
+	android:orientation="vertical"
+	android:layout_width="match_parent"
+    android:layout_height="match_parent">
+	
+	<LinearLayout
+		android:id="@+id/topFrame"
+		android:orientation="horizontal"
+		android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+        
+	    <ImageButton
+	        android:id="@+id/btnChangeAmmo"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:alpha="0.45"
+	        android:background="@drawable/xml_btn_style"
+	        android:contentDescription="@string/icd_btn_change_ammo"
+	        android:paddingLeft="10dp"
+	        android:src="@mipmap/txtr_ammo_default" />
+		
+		<Space
+		    android:id="@+id/enemyHBarSpace"
+		    android:layout_width="0dp"
+		    android:layout_height="wrap_content"
+		    android:layout_gravity="fill"
+		    android:layout_weight="1" />
+			
+		<ImageButton
+			android:id="@+id/btnPause"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:paddingLeft="10dp"
+			android:contentDescription="@string/btn_pause"
+			android:src="@mipmap/ico_pause"
+			android:background="@drawable/xml_btn_style" />
+	</LinearLayout>
+	
+	<Space
+	    android:id="@+id/gameSpace"
+	    android:layout_width="wrap_content"
+	    android:layout_height="150dp"
+	    android:layout_gravity="fill"
+	    android:layout_weight="1" />
+	
+	<LinearLayout
+	    android:id="@+id/bottomFrame"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_gravity="center"
+	    android:layout_weight="50"
+	    android:orientation="horizontal" >
+			
+		<Space
+		    android:id="@+id/playerBarsSpace"
+		    android:layout_width="match_parent"
+		    android:layout_height="wrap_content"
+		    android:layout_gravity="fill"
+		    android:layout_weight="1" />
+		
+		<Space
+		    android:id="@+id/playerSpace"
+		    android:layout_width="match_parent"
+		    android:layout_height="wrap_content"
+		    android:layout_gravity="fill"
+		    android:layout_weight="1" />
+		
+		<com.pirateseas.model.canvasmodel.ui.UIDisplayElement
+		    android:id="@+id/playerGold"
+		    android:layout_width="48dp"
+		    android:layout_height="48dp"
+		    android:layout_margin="8dp"
+		    android:layout_gravity="bottom"
+		    android:background="@mipmap/ico_gold"
+		    custom:defaultValue="0" />
+			
+		<com.pirateseas.model.canvasmodel.ui.UIDisplayElement
+		    android:id="@+id/playerAmmunition"
+		    android:layout_width="48dp"
+		    android:layout_height="48dp"
+		    android:layout_margin="8dp"
+		    android:layout_gravity="bottom"
+		    android:background="@mipmap/ico_ammo"
+		    custom:defaultValue="0" />		
+	</LinearLayout>
+</LinearLayout>

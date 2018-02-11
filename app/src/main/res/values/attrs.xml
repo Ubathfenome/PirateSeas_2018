@@ -1,0 +1,19 @@
+<!DOCTYPE resources>
+<resources>
+    <!--
+         Declare custom theme attributes that allow changing which styles are
+         used for button bars depending on the API level.
+         ?android:attr/buttonBarStyle is new as of API 11 so this is
+         necessary to support previous API levels.
+    -->
+    <declare-styleable name="ButtonBarContainerTheme">
+        <attr name="metaButtonBarStyle" format="reference" />
+        <attr name="metaButtonBarButtonStyle" format="reference" />
+    </declare-styleable>
+
+	<declare-styleable name="UIDisplayElement">
+	    <attr name="android_layout_gravity" format="integer" />
+	    <attr name="android_layout_position" format="integer" />
+        <attr name="defaultValue" format="integer" />
+    </declare-styleable>
+</resources>

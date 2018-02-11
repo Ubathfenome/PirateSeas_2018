@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE LinearLayout>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rootLayoutGameOver"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#7f000000" >
+
+    <TextView
+        android:id="@+id/lblGameOver"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:layout_marginBottom="28dp"
+        android:gravity="center"
+        android:text="@string/gameover_title"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/lblDays"
+            android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="18dp"
+            android:text="@string/gameover_days" />
+
+        <TextView
+            android:id="@+id/txtDays"
+            android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="18dp"
+            android:text="@string/max_value" />
+	</LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/lblScore"
+			android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="18dp"
+            android:text="@string/gameover_score" />
+
+        <TextView
+            android:id="@+id/txtScore"
+			android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="18dp"
+            android:text="@string/max_value" />
+	</LinearLayout>
+
+    <TextView
+        android:id="@+id/lblRestartHint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginBottom="8dp"
+        android:gravity="bottom"
+        android:text="@string/gameover_hint"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+</LinearLayout>

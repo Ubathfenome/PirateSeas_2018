@@ -1,0 +1,71 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="tfm.uniovi.pirateseas"
+    android:installLocation="auto" >
+
+    <uses-sdk
+        android:minSdkVersion="16"
+        android:targetSdkVersion="23" />
+
+    <!-- Ask for WRITE_PERMISSION to the user -->
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/FullscreenTheme"
+        android:hardwareAccelerated="true"
+        android:isGame="true">
+        <activity
+            android:name=".view.activities.MainMenuActivity"
+            android:screenOrientation="landscape">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".view.activities.GameActivity"
+            android:screenOrientation="landscape">
+        </activity>
+        <activity
+            android:name=".view.activities.TutorialActivity"
+            android:screenOrientation="landscape">
+        </activity>
+        <activity
+            android:name=".view.activities.ScreenSelectionActivity"
+            android:screenOrientation="landscape">
+        </activity>
+        <activity
+            android:name=".view.activities.SettingsActivity"
+            android:screenOrientation="landscape">
+        </activity>
+        <activity
+            android:name=".view.activities.SettingsExtraActivity"
+            android:screenOrientation="landscape">
+        </activity>
+        <activity
+            android:name=".view.activities.HelpActivity"
+            android:screenOrientation="landscape">
+        </activity>
+        <activity
+            android:name=".view.activities.SensorActivity"
+            android:screenOrientation="landscape">
+        </activity>
+        <activity
+            android:name=".view.activities.ShopActivity"
+            android:screenOrientation="landscape">
+        </activity>
+        <activity
+            android:name=".view.activities.PauseActivity"
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleDialog">
+        </activity>
+        <activity
+            android:name=".view.activities.GameOverActivity"
+            android:screenOrientation="landscape">
+        </activity>
+    </application>
+</manifest>
