@@ -19,6 +19,7 @@
     <!-- Global strings -->
     <string name="app_name">PirateSeas</string>
     <string name="game_title">PIRATE SEAS</string>
+    <string name="permissions_error">Permissions needed to play the game</string>
     <string name="activity_new_game">New Game</string>
     <string name="activity_load_game">Load Game</string>
     <string name="activity_settings">Settings</string>

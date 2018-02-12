@@ -13,6 +13,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Point;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -187,10 +188,19 @@ public class MainMenuActivity extends Activity {
 	public void requestPermissionsFirstTime(){
 		// New runtime permissions request system for version 23 and above
 		// @see: https://stackoverflow.com/questions/32083913/android-gps-requires-access-fine-location-error-even-though-my-manifest-file
+		// @see: https://stackoverflow.com/questions/32266425/android-6-0-permission-denial-requires-permission-android-permission-write-sett
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-			if(!hasPermission(INITIAL_PERMS[0])) {
-				if(!shouldShowRequestPermissionRationale(INITIAL_PERMS[0]))
-					requestPermissions(INITIAL_PERMS, Constants.REQUEST_PERMISSIONS);
+			if (Settings.System.canWrite(context)) {
+				if(!hasPermission(INITIAL_PERMS[0])) {
+					if(!shouldShowRequestPermissionRationale(INITIAL_PERMS[0]))
+						requestPermissions(INITIAL_PERMS, Constants.REQUEST_PERMISSIONS);
+				}
+			}
+			else {
+				Intent intent = new Intent(android.provider.Settings.ACTION_MANAGE_WRITE_SETTINGS);
+				intent.setData(Uri.parse("package:" + this.getPackageName()));
+				intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+				startActivity(intent);
 			}
 		}
 	}
@@ -240,23 +250,15 @@ public class MainMenuActivity extends Activity {
 			case Constants.REQUEST_PERMISSIONS: {
 				// If request is cancelled, the result arrays are empty.
 				if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
-					// permission was granted, yay! Do the
-					// contacts-related task you need to do.
-
+					// Permission was granted, yay! Do the contacts-related task you need to do.
 					loadSettings();
-
 				} else {
-
-					// permission denied, boo! Disable the
-					// functionality that depends on this permission.
-					Toast.makeText(context, "Se necesita permiso para poder continuar", Toast.LENGTH_LONG).show();
+					// Permission denied, boo! Disable the functionality that depends on this permission.
+					Toast.makeText(context, getResources().getString(R.string.permissions_error), Toast.LENGTH_SHORT).show();
 				}
 				return;
 			}
-
-			// other 'case' lines to check for other
-			// permissions this app might request
+			// other 'case' lines to check for other permissions this app might request
 		}
 	}
 

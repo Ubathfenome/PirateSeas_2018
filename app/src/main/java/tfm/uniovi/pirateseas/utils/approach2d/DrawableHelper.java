@@ -91,7 +91,8 @@ public class DrawableHelper{
 		Bitmap result = Bitmap.createBitmap(parts[0].getWidth() * width, parts[0].getHeight() * height, Bitmap.Config.ARGB_8888);
 		Canvas canvas = new Canvas(result);
 		Paint paint = new Paint();
-		for (int i = 0; i < parts.length; i++) {
+		int length = parts.length;
+		for (int i = 0; i < length; i++) {
 			int left = parts[i].getWidth() * (i % width);
 			int top = parts[i].getHeight() * (i / height);
 			canvas.drawBitmap(parts[i], left, top, paint);

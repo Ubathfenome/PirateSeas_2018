@@ -218,7 +218,10 @@ public class ScreenSelectionActivity extends Activity {
 			}
 		}
 
-		bitmap = DrawableHelper.mergeBitmaps(bmpContent, Constants.MAP_HEIGHT, Constants.MAP_WIDTH);
+		int totalHeight = screenHeight / Constants.MAP_HEIGHT;
+		int totalWidth = screenWidth / Constants.MAP_WIDTH;
+
+		bitmap = DrawableHelper.mergeBitmaps(bmpContent, totalHeight, totalWidth);
 		Resources res = this.getResources();
 		BitmapDrawable bd = new BitmapDrawable(res, bitmap);
 
