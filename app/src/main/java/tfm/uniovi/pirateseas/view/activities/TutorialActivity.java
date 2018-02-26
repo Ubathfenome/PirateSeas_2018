@@ -1,5 +1,6 @@
 package tfm.uniovi.pirateseas.view.activities;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
@@ -23,7 +24,7 @@ public class TutorialActivity extends FragmentActivity{
 	/**
      * The number of pages (wizard steps) to show in this demo.
      */
-    private static final int NUM_PAGES = 5;
+    private static final int NUM_PAGES = 7;
 	
 	/**
      * The pager widget, which handles animation and allows swiping horizontally to access previous
@@ -82,6 +83,7 @@ public class TutorialActivity extends FragmentActivity{
 		exitDialog.show(getFragmentManager(),"LeaveTutorialDialog");
 	}
 	
+	@SuppressLint("ValidFragment")
 	public class LeaveTutorialDialogFragment extends DialogFragment {
 	    @Override
 	    public Dialog onCreateDialog(Bundle savedInstanceState) {

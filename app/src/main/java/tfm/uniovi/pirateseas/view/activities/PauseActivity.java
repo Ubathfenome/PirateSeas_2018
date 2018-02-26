@@ -18,10 +18,11 @@ public class PauseActivity extends Activity {
 	private Context context;
 	
 	private TextView txtTitleLabel;
+	private Button btnResume;
+	private Button btnExit;
 	private ImageButton btnSettings;
 	private ImageButton btnHelp;
-	private Button btnResume;
-	
+
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +34,14 @@ public class PauseActivity extends Activity {
 		txtTitleLabel = (TextView) findViewById (R.id.txtPauseLabel);
 		Typeface customFont = Typeface.createFromAsset(getAssets(), "fonts/" + Constants.FONT_NAME + ".ttf");
 		txtTitleLabel.setTypeface(customFont);
+
+		btnResume = (Button) findViewById(R.id.btnPauseResume);
+		btnResume.setTypeface(customFont);
+		btnResume.setOnClickListener(new OnClickListener(){
+			public void onClick(View v){
+				finish();
+			}
+		});
 		
 		btnSettings = (ImageButton) findViewById(R.id.btnPauseSettings);
 		btnSettings.setOnClickListener(new OnClickListener(){
@@ -50,10 +59,12 @@ public class PauseActivity extends Activity {
 			}
 		});
 		
-		btnResume = (Button) findViewById(R.id.btnPauseResume);
-		btnResume.setOnClickListener(new OnClickListener(){
-			public void onClick(View v){
-				finish();
+		btnExit = (Button) findViewById(R.id.btnPauseExit);
+		btnExit.setTypeface(customFont);
+		btnExit.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View view) {
+
 			}
 		});
 		

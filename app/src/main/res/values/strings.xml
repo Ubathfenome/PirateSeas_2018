@@ -167,10 +167,12 @@
         
     <!-- Game strings -->
     <string name="tutorial_1">Arrr Mate!! Welcome to PIRATE SEAS!!\nYarr want to rule these seas and loot all the booty.</string>
-    <string name="tutorial_2">If you find a cloudy day.. Beware! An enemy might be lurking behind it. Shake your mobile device to wipe out the clouds!</string>
-    <string name="tutorial_3">Touch the screen to shoot your selected ammo.</string>
-    <string name="tutorial_4">Cycle through your ammo types touching the selected ammo icon. (Default setting)</string>
-    <string name="tutorial_5">Colect booty by sinking your enemies or discovering treasures using the maps you will find on the islands in your path.</string>
+    <string name="tutorial_2">Choose wisely your next step mate! Lot\'s of good ol\'men have sunk in these waters.</string>
+    <string name="tutorial_3">If you find a cloudy day.. Beware! An enemy might be lurking behind it. Shake your mobile device to wipe out the clouds!</string>
+    <string name="tutorial_4">Touch the screen to shoot your selected ammo.</string>
+    <string name="tutorial_5">Cycle through your ammo types touching the selected ammo icon. (Default setting)</string>
+    <string name="tutorial_6">Colect booty by sinking your enemies or discovering treasures using the maps you will find on the islands in your path.</string>
+    <string name="tutorial_7">Become the greatest pirate king! or walk the plank!</string>
     <string name="gameover_title">Game Over</string>
     <string name="gameover_hint">(Press anywhere to restart game&#8230;)</string>
     <string name="gameover_score">Score</string>
@@ -182,6 +184,7 @@
     <string name="message_islanddetected">Capt\'n! Land in sight!</string>
     <string name="message_nothinghere">Capt\'n! There\s nothing here! Which direction we go next?</string>
     <string name="message_shakesleft">Shake your device %1$d more time(s)!</string>
-    
+    <string name="game_exit">Exit game</string>
+
 
 </resources>

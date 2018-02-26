@@ -8,12 +8,14 @@ import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 
 import tfm.uniovi.pirateseas.R;
+import tfm.uniovi.pirateseas.global.Constants;
 
 public class HelpActivity extends Activity {
 	
@@ -28,8 +30,10 @@ public class HelpActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_help);
+		Typeface customFont = Typeface.createFromAsset(getAssets(), "fonts/" + Constants.FONT_NAME + ".ttf");
 		
 		btnNext = (Button) findViewById(R.id.btnBarNext);
+		btnNext.setTypeface(customFont);
 		btnNext.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -44,6 +48,7 @@ public class HelpActivity extends Activity {
 		});
 		
 		btnPrev = (Button) findViewById(R.id.btnBarPrev);
+		btnPrev.setTypeface(customFont);
 		btnPrev.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -55,6 +60,7 @@ public class HelpActivity extends Activity {
 		});
 		
 		btnAbout = (Button) findViewById(R.id.btnBarAbout);
+		btnAbout.setTypeface(customFont);
 		btnAbout.setOnClickListener(new OnClickListener() {
 			
 			@Override

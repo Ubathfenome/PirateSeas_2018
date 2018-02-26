@@ -11,8 +11,8 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 
 public class DrawableHelper{
-	
-	
+
+
 	/**
 	 * Returns a bitmap with the upper half of the current sheet
 	 * @return Upper half bitmap
@@ -22,7 +22,7 @@ public class DrawableHelper{
 		Bitmap croppedBmp = Bitmap.createBitmap(bmp, 0, 0, bmp.getWidth(), bmp.getHeight() / 2);
 		return croppedBmp;
 	}
-	
+
 	/**
 	 * Returns a bitmap with the lower half of the current sheet
 	 * @return Lower half bitmap
@@ -32,7 +32,7 @@ public class DrawableHelper{
 		Bitmap croppedBmp = Bitmap.createBitmap(bmp, 0, bmp.getHeight() / 2, bmp.getWidth(), bmp.getHeight() / 2);
 		return croppedBmp;
 	}
-	
+
 	/**
 	 * Returns the received Drawable rotated x degrees
 	 * @param d
@@ -47,7 +47,7 @@ public class DrawableHelper{
 		rotatedDrawable = tmp.getCurrent();
 		return rotatedDrawable;
 	}
-	
+
 	/**
 	 * Returns the received bitmap rotated the received degrees 
 	 * @param bmp
@@ -63,22 +63,24 @@ public class DrawableHelper{
 	}
 
 	public static double getWidth(Resources r, int drawableValue) {
-		BitmapFactory.Options dimensions = new BitmapFactory.Options(); 
+		BitmapFactory.Options dimensions = new BitmapFactory.Options();
 		dimensions.inJustDecodeBounds = true;
 		@SuppressWarnings("unused")
 		Bitmap mBitmap = BitmapFactory.decodeResource(r, drawableValue, dimensions);
 		int width =  dimensions.outWidth;
 		return width;
 	}
-	
+
 	public static double getHeight(Resources r, int drawableValue) {
-		BitmapFactory.Options dimensions = new BitmapFactory.Options(); 
+		BitmapFactory.Options dimensions = new BitmapFactory.Options();
 		dimensions.inJustDecodeBounds = true;
 		@SuppressWarnings("unused")
 		Bitmap mBitmap = BitmapFactory.decodeResource(r, drawableValue, dimensions);
 		int height =  dimensions.outHeight;
 		return height;
 	}
+
+
 
 	/**
 	 * Merge all bitmaps send as param onto one big bitmap, setting one part side to side with the previous
@@ -88,13 +90,23 @@ public class DrawableHelper{
 	 * @return
 	 */
 	public static Bitmap mergeBitmaps(Bitmap[] parts, int height, int width){
-		Bitmap result = Bitmap.createBitmap(parts[0].getWidth() * width, parts[0].getHeight() * height, Bitmap.Config.ARGB_8888);
+		int partsWidth = parts[0].getWidth();
+		int horizontalParts = width / partsWidth;
+		int rawWidthMargin = width - (horizontalParts * partsWidth);
+		int leftMargin = rawWidthMargin / 2;
+		int partsHeight = parts[0].getHeight();
+		int verticalParts = height / partsHeight;
+		int rawHeightMargin = height - (verticalParts * partsHeight);
+		int topMargin = rawHeightMargin / 2;
+
+		Bitmap result = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
 		Canvas canvas = new Canvas(result);
 		Paint paint = new Paint();
 		int length = parts.length;
+
 		for (int i = 0; i < length; i++) {
-			int left = parts[i].getWidth() * (i % width);
-			int top = parts[i].getHeight() * (i / height);
+			int left = leftMargin + parts[i].getWidth() * (i % horizontalParts);
+			int top = topMargin + parts[i].getHeight() * (i / horizontalParts);
 			canvas.drawBitmap(parts[i], left, top, paint);
 		}
 		return result;
@@ -110,5 +122,5 @@ public class DrawableHelper{
 		canvas.drawBitmap(front, move, move, null);
 		return result;
 	}
-	
+
 }

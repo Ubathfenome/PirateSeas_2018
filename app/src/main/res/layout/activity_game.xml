@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-	<com.pirateseas.view.graphics.canvasview.CanvasView 
+	<tfm.uniovi.pirateseas.view.graphics.canvasview.CanvasView
 	    xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/gameLayer"
         android:layout_width="match_parent"

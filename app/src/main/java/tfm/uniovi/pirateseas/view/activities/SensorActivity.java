@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.graphics.drawable.AnimationDrawable;
 import android.hardware.SensorManager;
 import android.os.AsyncTask;
@@ -50,6 +51,7 @@ public class SensorActivity extends Activity{
 		
 		// Set animation layout while loading
 		setContentView(R.layout.activity_sensors);
+		Typeface customFont = Typeface.createFromAsset(getAssets(), "fonts/" + Constants.FONT_NAME + ".ttf");
 				
 		iv = (ImageView) findViewById(R.id.img_load_animation);
 		iv.setBackgroundResource(R.drawable.xml_loading_animation);
@@ -57,6 +59,7 @@ public class SensorActivity extends Activity{
 		enterAnimation = AnimationUtils.loadAnimation(this, R.anim.xml_tween_animation);
 		
 		tv = (TextView) findViewById(R.id.lbl_load_status);
+		tv.setTypeface(customFont);
 	
 		mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
 		mDeviceSensorTypes = new ArrayList<Integer>(); // Performance of Java's Lists @source: http://www.onjava.com/pub/a/onjava/2001/05/30/optimization.html

@@ -16,10 +16,16 @@ import tfm.uniovi.pirateseas.global.Constants;
 public class Map implements Parcelable{
     private long mapSeed;
     private int activeMapCell;
+    private int mapHeight;
+    private int mapWidth;
+    private int mapLength;
     private String[] mapContent;
 
-    public Map(Date date){
+    public Map(Date date, int height, int width){
         mapSeed = date.getTime();
+        this.mapHeight = height;
+        this.mapWidth = width;
+        this.mapLength = mapHeight * mapWidth;
         mapContent = generateContent(mapSeed);
         activeMapCell = 0;
     }
@@ -27,15 +33,18 @@ public class Map implements Parcelable{
     public Map (Parcel source){
         this.mapSeed = source.readLong();
         this.activeMapCell = source.readInt();
+        this.mapHeight = source.readInt();
+        this.mapWidth = source.readInt();
+        this.mapLength = mapHeight * mapWidth;
         source.readStringArray(mapContent);
         // this.mapContent = source.createStringArray();
     }
 
     private String[] generateContent(long mapSeed) {
-        String[] content = new String[Constants.MAP_LENGTH];
+        String[] content = new String[mapLength];
         Random r = new Random();
         r.setSeed(mapSeed);
-        for(int i = 0; i < Constants.MAP_LENGTH; i++){
+        for(int i = 0; i < mapLength; i++){
             // Randomize the type of the map cell (island = true / water = false)
             boolean type = r.nextBoolean();
             if (type){
@@ -83,6 +92,22 @@ public class Map implements Parcelable{
         return this.mapSeed;
     }
 
+    public void setMapLength(int height, int width) {
+        setMapHeight(height);
+        setMapWidth(width);
+        this.mapLength = height * width;
+    }
+
+    public int getMapLength(){ return this.mapLength; }
+
+    public void setMapHeight(int height) { this.mapHeight = height; }
+
+    public int getMapHeight() { return this.mapHeight; }
+
+    public void setMapWidth(int width) { this.mapWidth = width; }
+
+    public int getMapWidth() { return this.mapWidth; }
+
     public String[] getMapContent(){
         return this.mapContent;
     }
@@ -115,6 +140,8 @@ public class Map implements Parcelable{
     public void writeToParcel(Parcel out, int flags){
         out.writeLong(this.mapSeed);
         out.writeInt(this.activeMapCell);
+        out.writeInt(this.mapHeight);
+        out.writeInt(this.mapWidth);
         out.writeStringArray(this.mapContent);
     }
 

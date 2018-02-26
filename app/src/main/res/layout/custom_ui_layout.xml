@@ -69,7 +69,7 @@
 		    android:layout_gravity="fill"
 		    android:layout_weight="1" />
 		
-		<com.pirateseas.model.canvasmodel.ui.UIDisplayElement
+		<tfm.uniovi.pirateseas.model.canvasmodel.ui.UIDisplayElement
 		    android:id="@+id/playerGold"
 		    android:layout_width="48dp"
 		    android:layout_height="48dp"
@@ -78,7 +78,7 @@
 		    android:background="@mipmap/ico_gold"
 		    custom:defaultValue="0" />
 			
-		<com.pirateseas.model.canvasmodel.ui.UIDisplayElement
+		<tfm.uniovi.pirateseas.model.canvasmodel.ui.UIDisplayElement
 		    android:id="@+id/playerAmmunition"
 		    android:layout_width="48dp"
 		    android:layout_height="48dp"

@@ -29,8 +29,6 @@ import tfm.uniovi.pirateseas.R;
  * A fragment representing a single step in a wizard. The fragment shows a dummy title indicating
  * the page number, along with some dummy text.
  *
- * <p>This class is used by the {@link CardFlipActivity} and {@link
- * ScreenSlideActivity} samples.</p>
  */
 public class ScreenSlidePageFragment extends Fragment {
     /**
@@ -94,6 +92,14 @@ public class ScreenSlidePageFragment extends Fragment {
 				imageReference = R.mipmap.img_tutorial_1;
 				((TextView) rootView.findViewById(R.id.text2)).setText(getResources().getString(R.string.tutorial_4));
 				break;
+            case 4:
+                imageReference = R.mipmap.img_tutorial_1;
+                ((TextView) rootView.findViewById(R.id.text2)).setText(getResources().getString(R.string.tutorial_5));
+                break;
+            case 5:
+                imageReference = R.mipmap.img_tutorial_1;
+                ((TextView) rootView.findViewById(R.id.text2)).setText(getResources().getString(R.string.tutorial_6));
+                break;
 			default:
 				imageReference = R.mipmap.img_tutorial_1;
 				((TextView) rootView.findViewById(R.id.text2)).setText(getResources().getString(R.string.tutorial_5));

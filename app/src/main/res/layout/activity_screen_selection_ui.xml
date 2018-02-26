@@ -45,13 +45,14 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical|center_horizontal"
                 android:background="@mipmap/ico_arrow_front"
-                android:contentDescription="@string/icd_btn_arrow"></ImageButton>
+                android:contentDescription="@string/icd_btn_arrow"/>
 
             <ImageButton
                 android:id="@+id/btnDown"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:src="@mipmap/ico_arrow_down" />
+                android:background="@mipmap/ico_arrow_down"
+                android:contentDescription="@string/icd_btn_arrow"/>
         </LinearLayout>
 
         <LinearLayout

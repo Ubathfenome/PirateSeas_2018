@@ -54,7 +54,6 @@ public class GameActivity extends Activity implements SensorEventListener {
 
 	boolean loadGame = false;
 
-	private int islandSide = -1;
 	private int lightLevel;
 
 	protected SensorManager mSensorManager;
@@ -100,8 +99,6 @@ public class GameActivity extends Activity implements SensorEventListener {
 		mGold.setElementValue(0);
 		mAmmo = (UIDisplayElement) findViewById(R.id.playerAmmunition);
 		mAmmo.setElementValue(0);
-
-		MusicManager.getInstance(context, MusicManager.MUSIC_BATTLE).playBackgroundMusic();
 	}
 
 	public boolean hasToLoadGame() {
@@ -314,6 +311,9 @@ public class GameActivity extends Activity implements SensorEventListener {
 					if (Math.abs(linearAccelerationX) > EventShakeClouds.threshold){
 						shakeClouds();
 					}
+					// else {
+					// TODO Add ship movement when preferences are set to sensors
+					//}
 
 					sensorLastTimestamp = event.timestamp;
 				}
@@ -431,14 +431,6 @@ public class GameActivity extends Activity implements SensorEventListener {
 		mCanvasView = null;
 		Log.d(TAG,"Finish Game Activity");
 		finish();
-	}
-
-	public int getIslandSide() {
-		return islandSide;
-	}
-
-	public void setIslandSide(int islandSide) {
-		this.islandSide = islandSide;
 	}
 
 	public void shakeClouds() {

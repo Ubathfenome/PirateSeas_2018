@@ -12,13 +12,17 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Point;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.RequiresApi;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
 import android.view.View;
@@ -26,6 +30,7 @@ import android.view.View.OnClickListener;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.Date;
@@ -39,7 +44,7 @@ import tfm.uniovi.pirateseas.model.canvasmodel.game.entity.Ship;
 import tfm.uniovi.pirateseas.utils.persistence.GameHelper;
 
 public class MainMenuActivity extends Activity {
-	
+
 	private static final String TAG = "MainMenuActivity";
 	private boolean newGame = false;
 	private boolean mOverwriteWarning = false;
@@ -52,6 +57,7 @@ public class MainMenuActivity extends Activity {
 	protected static int screenResolutionWidth;
 	protected static int screenResolutionHeight;
 
+	private TextView txtTitle;
 	private Button btnNewGame;
 	private Button btnLoadGame;
 	private ImageButton btnSettings;
@@ -63,9 +69,10 @@ public class MainMenuActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main_menu);
-		
+		Typeface customFont = Typeface.createFromAsset(getAssets(), "fonts/" + Constants.FONT_NAME + ".ttf");
+
 		context = this;
-		
+
 		mMode = Constants.MODE;
 
 		// Get Screen
@@ -91,9 +98,11 @@ public class MainMenuActivity extends Activity {
 		editor.putBoolean(Constants.TAG_EXE_MODE, Constants.isInDebugMode(mMode));
 		editor.commit();
 
-
+		txtTitle = findViewById(R.id.txtTitleLabel);
+		txtTitle.setTypeface(customFont);
 
 		btnNewGame = (Button) findViewById(R.id.btn_newgame);
+		btnNewGame.setTypeface(customFont);
 		btnNewGame.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				if(mOverwriteWarning){
@@ -107,6 +116,7 @@ public class MainMenuActivity extends Activity {
 		});
 
 		btnLoadGame = (Button) findViewById(R.id.btn_loadgame);
+		btnLoadGame.setTypeface(customFont);
 		btnLoadGame.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				newGame = false;
@@ -132,14 +142,15 @@ public class MainMenuActivity extends Activity {
 		});
 
 		btnExit = (Button) findViewById(R.id.btn_exit);
+		btnExit.setTypeface(customFont);
 		btnExit.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				finish();
 			}
 		});
-		
+
 		AsyncTask<Void, Integer, Boolean> loadSoundsTask = new LoadSounds();
-		loadSoundsTask.execute();		
+		loadSoundsTask.execute();
 	}
 
 	private void launchGame(boolean displayTutorial, int[] sensorTypes) {
@@ -154,7 +165,7 @@ public class MainMenuActivity extends Activity {
 			screenIntent.putExtra(Constants.TAG_LOAD_GAME, !displayTutorial);
 			dummyPlayer = new Player();
 			dummyShip = new Ship();
-			dummyMap = new Map(new Date());
+			dummyMap = new Map(new Date(), calculateMapHeight(), calculateMapWidth());
 
 			GameHelper.loadGameAtPreferences(this, dummyPlayer, dummyShip, dummyMap);
 			screenIntent.putExtra(Constants.TAG_SCREEN_SELECTION_PLAYERDATA, GameHelper.helperPlayer);
@@ -168,7 +179,7 @@ public class MainMenuActivity extends Activity {
 			startActivity(tutorialIntent);
 		}
 	}
-	
+
 	private void launchSensorActivity(){
 		Intent checkSensorListIntent = new Intent(context, SensorActivity.class);
 		startActivityForResult(checkSensorListIntent, Constants.REQUEST_SENSOR_LIST);
@@ -181,7 +192,7 @@ public class MainMenuActivity extends Activity {
 		// Run permissions request only the first time
 		checkAppVersion();
 
-		
+
 		super.onResume();
 	}
 
@@ -218,7 +229,7 @@ public class MainMenuActivity extends Activity {
 					Toast.makeText(this, String.format("App updated from version %d", oldAppVersion), Toast.LENGTH_SHORT).show();
 				else
 					requestPermissionsFirstTime();
-					//Toast.makeText(this, String.format("App started for the first time", oldAppVersion), Toast.LENGTH_SHORT).show();
+				//Toast.makeText(this, String.format("App started for the first time", oldAppVersion), Toast.LENGTH_SHORT).show();
 			} finally {
 				SharedPreferences.Editor preferencesEditor = mPreferences.edit();
 				preferencesEditor.putInt(Constants.APP_VERSION, currentAppVersionCode);
@@ -252,34 +263,54 @@ public class MainMenuActivity extends Activity {
 				if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 					// Permission was granted, yay! Do the contacts-related task you need to do.
 					loadSettings();
-				} else {
-					// Permission denied, boo! Disable the functionality that depends on this permission.
-					Toast.makeText(context, getResources().getString(R.string.permissions_error), Toast.LENGTH_SHORT).show();
 				}
 				return;
 			}
-			// other 'case' lines to check for other permissions this app might request
 		}
+	}
+
+	private int calculateMapHeight(){
+		Bitmap bmpCover = BitmapFactory.decodeResource(getResources(),R.mipmap.txtr_map_cover);
+		DisplayMetrics displayMetrics = new DisplayMetrics();
+		getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+
+		int screenHeight = displayMetrics.heightPixels;
+		int fragmentHeight = bmpCover.getHeight();
+		int mapHeight = screenHeight / fragmentHeight;
+
+		return mapHeight;
+	}
+
+	private int calculateMapWidth(){
+		Bitmap bmpCover = BitmapFactory.decodeResource(getResources(),R.mipmap.txtr_map_cover);
+		DisplayMetrics displayMetrics = new DisplayMetrics();
+		getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+
+		int screenWidth = displayMetrics.widthPixels;
+		int fragmentWidth = bmpCover.getWidth();
+		int mapWidth = screenWidth / fragmentWidth;
+
+		return mapWidth;
 	}
 
 	private void loadSettings() {
 		Settings.System.putInt(getContentResolver(), Settings.System.SCREEN_BRIGHTNESS_MODE,
-                Settings.System.SCREEN_BRIGHTNESS_MODE_AUTOMATIC);
+				Settings.System.SCREEN_BRIGHTNESS_MODE_AUTOMATIC);
 
 		if (mPreferences.getLong(Constants.PREF_PLAYER_TIMESTAMP, 0) == 0) {
-            btnLoadGame.setEnabled(false);
-            mOverwriteWarning = false;
-        } else {
-            btnLoadGame.setEnabled(true);
-            mOverwriteWarning = true;
-        }
+			btnLoadGame.setEnabled(false);
+			mOverwriteWarning = false;
+		} else {
+			btnLoadGame.setEnabled(true);
+			mOverwriteWarning = true;
+		}
 	}
 
 	@Override
 	protected void onDestroy() {
 		MusicManager.getInstance().stopBackgroundMusic();
 		super.onDestroy();
-	}	
+	}
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -288,7 +319,7 @@ public class MainMenuActivity extends Activity {
 				if (resultCode == RESULT_OK) {
 					int[] sensorTypes = data
 							.getIntArrayExtra(Constants.TAG_SENSOR_LIST);
-					
+
 					boolean emptyList = true;
 					for(int i = 0, length = sensorTypes.length; i< length; i++){
 						if(sensorTypes[i] != 0)
@@ -300,7 +331,7 @@ public class MainMenuActivity extends Activity {
 						editor.putBoolean(Constants.PREF_DEVICE_NOSENSORS, true);
 						editor.commit();
 					}
-	
+
 					launchGame(newGame, sensorTypes);
 				}
 				break;
@@ -311,7 +342,7 @@ public class MainMenuActivity extends Activity {
 	private boolean hasPermission(String perm) {
 		return(PackageManager.PERMISSION_GRANTED==checkSelfPermission(perm));
 	}
-	
+
 	@SuppressLint("ValidFragment")
 	public class OverwriteGameDialogFragment extends DialogFragment {
 		@Override
@@ -325,14 +356,14 @@ public class MainMenuActivity extends Activity {
 					.setPositiveButton(R.string.overwrite_dialog_positive,
 							new DialogInterface.OnClickListener() {
 								public void onClick(DialogInterface dialog,
-										int id) {
+													int id) {
 									boolean noSensors = mPreferences.getBoolean(Constants.PREF_DEVICE_NOSENSORS, false);
-									
+
 									SharedPreferences.Editor editor = mPreferences.edit();
 									editor.clear();
 									editor.putBoolean(Constants.TAG_EXE_MODE, Constants.isInDebugMode(mMode));
 									editor.commit();
-									
+
 									if(!noSensors)
 										launchSensorActivity();
 									else{
@@ -344,7 +375,7 @@ public class MainMenuActivity extends Activity {
 					.setNegativeButton(R.string.exit_dialog_negative,
 							new DialogInterface.OnClickListener() {
 								public void onClick(DialogInterface dialog,
-										int id) {
+													int id) {
 									// User cancels the dialog
 								}
 							});
@@ -352,7 +383,7 @@ public class MainMenuActivity extends Activity {
 			return builder.create();
 		}
 	}
-	
+
 	/**
 	 * http://stackoverflow.com/questions/7428448/android-soundpool-heapsize-overflow
 	 * @author Miguel
@@ -388,6 +419,6 @@ public class MainMenuActivity extends Activity {
 		protected void onPostExecute(Boolean result) {
 			Log.d(TAG,"AudioPool loaded");
 			MusicManager.getInstance(context, MusicManager.MUSIC_GAME_MENU).playBackgroundMusic();
-		}		
+		}
 	}
 }

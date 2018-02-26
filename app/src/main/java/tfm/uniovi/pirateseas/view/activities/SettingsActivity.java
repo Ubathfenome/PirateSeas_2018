@@ -81,6 +81,7 @@ public class SettingsActivity extends Activity {
 		});
 		
 		btnSettingsExtra = (Button) findViewById(R.id.btnExtraSettings);
+		btnSettingsExtra.setTypeface(customFont);
 		btnSettingsExtra.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -91,6 +92,7 @@ public class SettingsActivity extends Activity {
 		});
 
 		btnSettingsAccept = (Button) findViewById(R.id.btnSettingsAccept);
+		btnSettingsAccept.setTypeface(customFont);
 		btnSettingsAccept.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -105,6 +107,7 @@ public class SettingsActivity extends Activity {
 		});
 
 		btnSettingsCancel = (Button) findViewById(R.id.btnSettingsCancel);
+		btnSettingsCancel.setTypeface(customFont);
 		btnSettingsCancel.setOnClickListener(new OnClickListener() {
 
 			@Override

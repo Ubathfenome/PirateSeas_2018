@@ -1,5 +1,6 @@
 package tfm.uniovi.pirateseas.view.activities;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -7,6 +8,7 @@ import android.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -14,6 +16,7 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
@@ -25,6 +28,11 @@ public class SettingsExtraActivity extends Activity {
 	private Button btnRestore;
 	private Switch swControlMode;
 	private ToggleButton tglChangeAmmo;
+	private TextView txtControlMode;
+	private ToggleButton tglScreenSelection;
+	private TextView txtScreenSelection;
+	private ToggleButton tglPauseSelection;
+	private TextView txtPauseMode;
 	
 	private boolean controlValue = false;
 	private boolean ammoKeysEnabled = false;
@@ -39,6 +47,8 @@ public class SettingsExtraActivity extends Activity {
 		
 		setContentView(R.layout.activity_settings_extra);
 
+		Typeface customFont = Typeface.createFromAsset(getAssets(), "fonts/" + Constants.FONT_NAME + ".ttf");
+
 		mPreferences = getSharedPreferences(Constants.TAG_PREF_NAME,
 				Context.MODE_PRIVATE);
 
@@ -46,6 +56,7 @@ public class SettingsExtraActivity extends Activity {
 		
 		swControlMode = (Switch) findViewById(R.id.tbControlMode);
 		swControlMode.setChecked(controlValue);
+		swControlMode.setTypeface(customFont);
 		swControlMode.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 			
 			@Override
@@ -54,9 +65,13 @@ public class SettingsExtraActivity extends Activity {
 				controlValue = isChecked;
 			}
 		});
+
+		txtControlMode = findViewById(R.id.txtControlMode);
+		txtControlMode.setTypeface(customFont);
 		
 		tglChangeAmmo = (ToggleButton) findViewById(R.id.tglChangeAmmo);
 		tglChangeAmmo.setChecked(ammoKeysEnabled);
+		tglChangeAmmo.setTypeface(customFont);
 		tglChangeAmmo.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 			
 			@Override
@@ -66,7 +81,20 @@ public class SettingsExtraActivity extends Activity {
 			}
 		});
 
+		tglScreenSelection = (ToggleButton) findViewById(R.id.tglScreenSelection);
+		tglScreenSelection.setTypeface(customFont);
+
+		txtScreenSelection = findViewById(R.id.txtScreenSelectionLabel);
+		txtScreenSelection.setTypeface(customFont);
+
+		tglPauseSelection = (ToggleButton) findViewById(R.id.tglScreenSelection);
+		tglPauseSelection.setTypeface(customFont);
+
+		txtPauseMode = findViewById(R.id.txtScreenSelectionLabel);
+		txtPauseMode.setTypeface(customFont);
+
 		btnRestore = (Button) findViewById(R.id.btnSettingsRestore);
+		btnRestore.setTypeface(customFont);
 		btnRestore.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -89,6 +117,7 @@ public class SettingsExtraActivity extends Activity {
 		finish();
 	}
 
+	@SuppressLint("ValidFragment")
 	public class ResetPreferencesDialogFragment extends DialogFragment {
 		@Override
 		public Dialog onCreateDialog(Bundle savedInstanceState) {

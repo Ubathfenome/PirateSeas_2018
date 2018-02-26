@@ -3,6 +3,7 @@ package tfm.uniovi.pirateseas.view.activities;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.transition.Fade;
@@ -30,13 +31,16 @@ public class GameOverActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		
 		setContentView(R.layout.activity_gameover);
+		Typeface customFont = Typeface.createFromAsset(getAssets(), "fonts/" + Constants.FONT_NAME + ".ttf");
 		
 		// GetIntent Extras
 		Intent intent = getIntent();
 		p = intent.getParcelableExtra(Constants.TAG_GAME_OVER);
 		
 		txtDays = (TextView) findViewById(R.id.txtDays);
+		txtDays.setTypeface(customFont);
 		txtScore = (TextView) findViewById(R.id.txtScore);
+		txtScore.setTypeface(customFont);
 		
 		int score = p.getLevel() * p.getExperience() + p.getGold();
 		if(score == 0)

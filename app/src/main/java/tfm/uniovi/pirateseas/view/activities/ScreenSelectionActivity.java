@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -16,6 +17,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.Date;
@@ -39,12 +41,20 @@ public class ScreenSelectionActivity extends Activity {
 	private ImageButton btnDown;
 	private ImageButton btnRight;
 
+	private TextView txtScreenSelectionLabel;
+
 	private Player p = null;
 	private Map map = null;
 
+	private Drawable currentMap;
+	int mapWidth;
+	int mapHeight;
+	int mapLength;
+	int active;
+
 	int[] sensorTypes = null;
 	boolean loadGame;
-	
+
 	@SuppressWarnings("unused")
 	private Context context;
 
@@ -54,6 +64,8 @@ public class ScreenSelectionActivity extends Activity {
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.activity_screen_selection_ui);
+
+		Typeface customFont = Typeface.createFromAsset(getAssets(), "fonts/" + Constants.FONT_NAME + ".ttf");
 
 		this.context = this;
 
@@ -67,10 +79,16 @@ public class ScreenSelectionActivity extends Activity {
 		p = intent.getParcelableExtra(Constants.TAG_SCREEN_SELECTION_PLAYERDATA);
 		map = intent.getParcelableExtra(Constants.TAG_SCREEN_SELECTION_MAPDATA);
 
-		layoutBackground.setBackground(getCurrentMap(new Date()));
+		currentMap = getCurrentMap(new Date());
+		layoutBackground.setBackground(currentMap);
+		layoutBackground.invalidate();
+
+		mapWidth = map.getMapWidth();
+		mapHeight = map.getMapHeight();
+		mapLength = map.getMapLength();
+		active = map.getActiveCell();
 
 		final boolean encounter = randomEncounter();
-		final int active = map.getActiveCell();
 
 		btnLeft = findViewById(R.id.btnLeft);
 		btnLeft.setOnClickListener(new OnClickListener() {
@@ -78,19 +96,22 @@ public class ScreenSelectionActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				// Get map's left cell content
-				if(active%Constants.MAP_WIDTH != 0){
+				if(active%mapWidth != 0){
 					map.setActiveCell(active-1);
 					map.clearActiveMapCell();
 					if(!map.isActiveCellIsland()){
 						if(encounter) {
 							// Game activity
+							MusicManager.getInstance(context, MusicManager.MUSIC_BATTLE).playBackgroundMusic();
 							startBattleGame();
 						} else {
 							// ScreenSelection activity
+							MusicManager.getInstance(context, MusicManager.MUSIC_GAME_MENU).playBackgroundMusic();
 							reloadSelection();
 						}
 					} else {
 						// Shop activity
+						MusicManager.getInstance(context, MusicManager.MUSIC_ISLAND).playBackgroundMusic();
 						enterRandomIsland();
 					}
 				}
@@ -103,19 +124,22 @@ public class ScreenSelectionActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				// Get map's up cell content
-				if(active>=Constants.MAP_HEIGHT){
-					map.setActiveCell(active-Constants.MAP_WIDTH);
+				if(active>=mapHeight){
+					map.setActiveCell(active-mapWidth);
 					map.clearActiveMapCell();
 					if(!map.isActiveCellIsland()){
 						if(encounter) {
 							// Game activity
+							MusicManager.getInstance(context, MusicManager.MUSIC_BATTLE).playBackgroundMusic();
 							startBattleGame();
 						} else {
 							// ScreenSelection activity
+							MusicManager.getInstance(context, MusicManager.MUSIC_GAME_MENU).playBackgroundMusic();
 							reloadSelection();
 						}
 					} else {
 						// Shop activity
+						MusicManager.getInstance(context, MusicManager.MUSIC_ISLAND).playBackgroundMusic();
 						enterRandomIsland();
 					}
 				}
@@ -128,19 +152,22 @@ public class ScreenSelectionActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				// Get map's right cell content
-				if((active+1)%Constants.MAP_WIDTH != 0){
+				if((active+1)%mapWidth != 0){
 					map.setActiveCell(active+1);
 					map.clearActiveMapCell();
 					if(!map.isActiveCellIsland()){
 						if(encounter) {
 							// Game activity
+							MusicManager.getInstance(context, MusicManager.MUSIC_BATTLE).playBackgroundMusic();
 							startBattleGame();
 						} else {
 							// ScreenSelection activity
+							MusicManager.getInstance(context, MusicManager.MUSIC_GAME_MENU).playBackgroundMusic();
 							reloadSelection();
 						}
 					} else {
 						// Shop activity
+						MusicManager.getInstance(context, MusicManager.MUSIC_ISLAND).playBackgroundMusic();
 						enterRandomIsland();
 					}
 				}
@@ -153,26 +180,30 @@ public class ScreenSelectionActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				// Get map's down cell content
-				if((active+Constants.MAP_WIDTH)<Constants.MAP_LENGTH){
-					map.setActiveCell(active+Constants.MAP_WIDTH);
+				if((active+mapWidth)<mapLength){
+					map.setActiveCell(active+mapWidth);
 					map.clearActiveMapCell();
 					if(!map.isActiveCellIsland()){
 						if(encounter) {
 							// Game activity
+							MusicManager.getInstance(context, MusicManager.MUSIC_BATTLE).playBackgroundMusic();
 							startBattleGame();
 						} else {
 							// ScreenSelection activity
+							MusicManager.getInstance(context, MusicManager.MUSIC_GAME_MENU).playBackgroundMusic();
 							reloadSelection();
 						}
 					} else {
 						// Shop activity
+						MusicManager.getInstance(context, MusicManager.MUSIC_ISLAND).playBackgroundMusic();
 						enterRandomIsland();
 					}
 				}
 			}
 		});
 
-		MusicManager.getInstance(context, MusicManager.MUSIC_GAME_MENU).playBackgroundMusic();
+		txtScreenSelectionLabel = findViewById(R.id.txtScreenSelectionLabel);
+		txtScreenSelectionLabel.setTypeface(customFont);
 	}
 
 	private void startBattleGame(){
@@ -183,12 +214,10 @@ public class ScreenSelectionActivity extends Activity {
 	}
 
 	private Drawable getCurrentMap(Date date) {
-		if(map == null) {
-			map = new Map(date);
-			map.clearActiveMapCell();
-		}
-
-		int active = map.getActiveCell();
+		Bitmap bmpCover = BitmapFactory.decodeResource(getResources(),R.mipmap.txtr_map_cover);
+		Bitmap bmpIsland = BitmapFactory.decodeResource(getResources(),R.mipmap.txtr_map_island);
+		Bitmap bmpWater = BitmapFactory.decodeResource(getResources(),R.mipmap.txtr_map_water);
+		Bitmap bmpActive = BitmapFactory.decodeResource(getResources(),R.mipmap.txtr_map_active);
 
 		DisplayMetrics displayMetrics = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
@@ -196,15 +225,24 @@ public class ScreenSelectionActivity extends Activity {
 		int screenWidth = displayMetrics.widthPixels;
 		Bitmap bitmap = Bitmap.createBitmap(screenWidth, screenHeight, Bitmap.Config.ARGB_8888);
 
-		Bitmap bmpCover = BitmapFactory.decodeResource(getResources(),R.mipmap.txtr_map_cover);
-		Bitmap bmpIsland = BitmapFactory.decodeResource(getResources(),R.mipmap.txtr_map_island);
-		Bitmap bmpWater = BitmapFactory.decodeResource(getResources(),R.mipmap.txtr_map_water);
-		Bitmap bmpActive = BitmapFactory.decodeResource(getResources(),R.mipmap.txtr_map_active);
+		int fragmentHeight = bmpCover.getHeight();
+		int fragmentWidth = bmpCover.getWidth();
+
+		int mapHeight = screenHeight / fragmentHeight;
+		int mapWidth = screenWidth / fragmentWidth;
+
+		if(map == null) {
+			map = new Map(date, mapHeight, mapWidth);
+			map.clearActiveMapCell();
+		}
+
+		int active = map.getActiveCell();
 
 		String[] mapContent = map.getMapContent();
-		Bitmap[] bmpContent = new Bitmap[mapContent.length];
+		int mapLength = mapContent.length;
+		Bitmap[] bmpContent = new Bitmap[mapLength];
 
-		for(int i = 0; i < mapContent.length; i++){
+		for(int i = 0; i < mapLength; i++){
 			String s = mapContent[i];
 			if(s.contains("1")){	// Fog image
 				bmpContent[i] = bmpCover;
@@ -218,18 +256,19 @@ public class ScreenSelectionActivity extends Activity {
 			}
 		}
 
-		int totalHeight = screenHeight / Constants.MAP_HEIGHT;
-		int totalWidth = screenWidth / Constants.MAP_WIDTH;
-
-		bitmap = DrawableHelper.mergeBitmaps(bmpContent, totalHeight, totalWidth);
+		bitmap = DrawableHelper.mergeBitmaps(bmpContent, screenHeight, screenWidth);
 		Resources res = this.getResources();
 		BitmapDrawable bd = new BitmapDrawable(res, bitmap);
 
 		return bd;
 	}
 
+	@SuppressLint("NewApi")
 	@Override
 	protected void onResume() {
+		currentMap = getCurrentMap(new Date());
+		layoutBackground.setBackground(currentMap);
+		layoutBackground.invalidate();
 		super.onResume();
 	}
 
@@ -238,10 +277,10 @@ public class ScreenSelectionActivity extends Activity {
 		int playerLevel = 1;
 		if (p != null)
 			playerLevel = p.getLevel();
-		
+
 		if(playerLevel == 0)
 			playerLevel = 1;
-		
+
 		double logarythm = Math.log(playerLevel);
 		return logarythm % 2 == 0;
 	}
@@ -254,22 +293,24 @@ public class ScreenSelectionActivity extends Activity {
 		Log.d(TAG,"Start Shop ForResult Intent");
 		this.startActivityForResult(shopIntent, Constants.REQUEST_ISLAND);
 	}
-	
+
 	private void reloadSelection(){
 		Toast.makeText(this, getResources().getString(R.string.message_nothinghere), Toast.LENGTH_SHORT).show();
-		
+
 		Intent resetIntent = new Intent(this, ScreenSelectionActivity.class);
-		// TODO Add remaining extras to Intent
+		resetIntent.putExtra(Constants.TAG_SENSOR_LIST, sensorTypes);
+		resetIntent.putExtra(Constants.TAG_LOAD_GAME, loadGame);
 		resetIntent.putExtra(Constants.TAG_SCREEN_SELECTION_PLAYERDATA, p);
+		resetIntent.putExtra(Constants.TAG_SCREEN_SELECTION_MAPDATA, map);
 		Log.d(TAG,"Reset ScreenSelection Intent");
 		this.startActivity(resetIntent);
-		Log.d(TAG,"Finish ScreenSelection Activty");
+		Log.d(TAG,"Finish ScreenSelection Activity");
 		finish();
 	}
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		
+
 		Log.d(TAG, "ScreenSelectionActivity called by " + this.getCallingActivity().getClassName());
 		if (data != null && requestCode == Constants.REQUEST_ISLAND && resultCode == Activity.RESULT_OK)
 			reloadSelection();

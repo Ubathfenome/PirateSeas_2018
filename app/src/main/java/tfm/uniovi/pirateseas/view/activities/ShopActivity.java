@@ -1,5 +1,6 @@
 package tfm.uniovi.pirateseas.view.activities;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -81,7 +82,7 @@ public class ShopActivity extends ListActivity{
 		
 		dummyPlayer = new Player();
 		dummyShip = new Ship();
-		dummyMap = new Map(new Date());
+		dummyMap = new Map(new Date(),0,0);
 		
 		GameHelper.loadGameAtPreferences(this, dummyPlayer, dummyShip, dummyMap);
 		dummyPlayer = GameHelper.helperPlayer;
@@ -210,6 +211,7 @@ public class ShopActivity extends ListActivity{
 		txtDescription.setText(itemList.get(position).getDescription() + descriptionTip);
 	}
 	
+	@SuppressLint("ValidFragment")
 	public class LeaveActivityDialogFragment extends DialogFragment {
 		@Override
 		public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -250,6 +252,7 @@ public class ShopActivity extends ListActivity{
 		}
 	}
 	
+	@SuppressLint("ValidFragment")
 	public class PurchaseItemDialogFragment extends DialogFragment {
 		
 		Item item = null;
