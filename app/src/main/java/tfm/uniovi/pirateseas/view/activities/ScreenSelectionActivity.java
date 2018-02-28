@@ -45,6 +45,7 @@ public class ScreenSelectionActivity extends Activity {
 
 	private Player p = null;
 	private Map map = null;
+	private Date date;
 
 	private Drawable currentMap;
 	int mapWidth;
@@ -69,8 +70,6 @@ public class ScreenSelectionActivity extends Activity {
 
 		this.context = this;
 
-		layoutBackground = (LinearLayout)getLayoutInflater().inflate(R.layout.activity_screen_selection_ui,null);
-
 		Intent intent = getIntent();
 
 		sensorTypes = intent.getIntArrayExtra(Constants.TAG_SENSOR_LIST);
@@ -78,10 +77,11 @@ public class ScreenSelectionActivity extends Activity {
 
 		p = intent.getParcelableExtra(Constants.TAG_SCREEN_SELECTION_PLAYERDATA);
 		map = intent.getParcelableExtra(Constants.TAG_SCREEN_SELECTION_MAPDATA);
+		date = new Date();
 
-		currentMap = getCurrentMap(new Date());
+		layoutBackground = findViewById(R.id.layoutBackground);
+		currentMap = getCurrentMap(date);
 		layoutBackground.setBackground(currentMap);
-		layoutBackground.invalidate();
 
 		mapWidth = map.getMapWidth();
 		mapHeight = map.getMapHeight();
@@ -263,12 +263,8 @@ public class ScreenSelectionActivity extends Activity {
 		return bd;
 	}
 
-	@SuppressLint("NewApi")
 	@Override
 	protected void onResume() {
-		currentMap = getCurrentMap(new Date());
-		layoutBackground.setBackground(currentMap);
-		layoutBackground.invalidate();
 		super.onResume();
 	}
 

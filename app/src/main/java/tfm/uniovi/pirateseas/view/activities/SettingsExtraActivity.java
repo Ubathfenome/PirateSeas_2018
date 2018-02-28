@@ -84,13 +84,13 @@ public class SettingsExtraActivity extends Activity {
 		tglScreenSelection = (ToggleButton) findViewById(R.id.tglScreenSelection);
 		tglScreenSelection.setTypeface(customFont);
 
-		txtScreenSelection = findViewById(R.id.txtScreenSelectionLabel);
+		txtScreenSelection = findViewById(R.id.txtScreenMode);
 		txtScreenSelection.setTypeface(customFont);
 
-		tglPauseSelection = (ToggleButton) findViewById(R.id.tglScreenSelection);
+		tglPauseSelection = (ToggleButton) findViewById(R.id.tglPauseSelection);
 		tglPauseSelection.setTypeface(customFont);
 
-		txtPauseMode = findViewById(R.id.txtScreenSelectionLabel);
+		txtPauseMode = findViewById(R.id.txtPauseMode);
 		txtPauseMode.setTypeface(customFont);
 
 		btnRestore = (Button) findViewById(R.id.btnSettingsRestore);
