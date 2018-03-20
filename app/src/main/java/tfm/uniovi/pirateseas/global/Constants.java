@@ -1,5 +1,7 @@
 package tfm.uniovi.pirateseas.global;
 
+import android.content.Context;
+
 public class Constants{
 	// Modes
 	private static final int MODE_DEBUG = 0x0;
@@ -27,6 +29,8 @@ public class Constants{
 	public static final String TAG_SCREEN_SELECTION_ISLANDDATA = "tfm.uniovi.pirateseas.SCREEN_SELECTION_ISLANDDATA";
 	public static final String TAG_SCREEN_SELECTION_PLAYERDATA = "tfm.uniovi.pirateseas.SCREEN_SELECTION_PLAYERDATA";
 	public static final String TAG_SCREEN_SELECTION_MAPDATA = "tfm.uniovi.pirateseas.SCREEN_SELECTION_MAPDATA";
+	public static final String TAG_SCREEN_SELECTION_MAP_HEIGHT = "tfm.uniovi.pirateseas.SCREEN_SELECTION_MAP_HEIGHT";
+	public static final String TAG_SCREEN_SELECTION_MAP_WIDTH = "tfm.uniovi.pirateseas.SCREEN_SELECTION_MAP_WIDTH";
 	public static final String TAG_LOAD_SCREEN = "tfm.uniovi.pirateseas.LOAD_SCREEN";
 	public static final String TAG_RANDOM_ENCOUNTER = "tfm.uniovi.pirateseas.RANDOM_ENCOUNTER";
 	
@@ -61,10 +65,11 @@ public class Constants{
 	// Global variables	
 	public static final int GAME_FPS = 30;				// FPS = Frames-Per-Second
 	public static final int GAME_MPIGD = 10;			// MPIGD = Minutes-Per-In-Game-Day
+	public static final int ISLAND_SPAWN_RATE = 80;
 
-	public static final int MAP_HEIGHT = 10;
-	public static final int MAP_WIDTH = 10;
-	public static final int MAP_LENGTH = MAP_WIDTH * MAP_HEIGHT;
+	public static final int MAP_MIN_HEIGHT = 1;
+	public static final int MAP_MIN_WIDTH = 1;
+	public static final int MAP_MIN_LENGTH = MAP_MIN_WIDTH * MAP_MIN_HEIGHT;
 	
 	public static final int GAME_STATE_NORMAL = 0;
 	public static final int GAME_STATE_PAUSE = 1;
@@ -94,18 +99,22 @@ public class Constants{
 	public static final String PREF_MAP_SEED = "mapSeed";
 	public static final String PREF_MAP_ACTIVECELL = "mapActiveCell";
 	public static final String PREF_MAP_CONTENT = "mapContent";
+	public static final String PREF_MAP_HEIGHT = "mapHeight";
+	public static final String PREF_MAP_WIDTH = "mapWidth";
 	
 	public static final String PREF_DEVICE_VOLUME = "deviceVolumePref";
 	public static final String PREF_DEVICE_HEIGHT_RES = "deviceHeightPref";
 	public static final String PREF_DEVICE_WIDTH_RES = "deviceWidthPref";
 	public static final String PREF_DEVICE_NOSENSORS = "deviceNoSensorsPref";
-	
-	public static final String PREF_CONTROL_MODE = "gameControlMode";
+
+
+	public static final String PREF_SHIP_CONTROL_MODE = "shipControlMode";
+	public static final String PREF_AMMO_CONTROL_MODE = "ammoControlMode";
+	public static final String PREF_LEVEL_CONTROL_MODE = "levelControlMode";
+	public static final String PREF_PAUSE_CONTROL_MODE = "pauseControlMode";
 	public static final boolean PREF_GAME_SENSORS = false;
 	public static final boolean PREF_GAME_TOUCH = true;
-	
-	public static final String PREF_USE_AMMO_KEYS = "useAmmoKeys";
-	
+
 	public static final String FONT_NAME = "TooneyNoodleNF";
 	
 	public static final String FRONT = "Front";
@@ -141,10 +150,22 @@ public class Constants{
     public static final String TSHIP_AMMO_DOUBLE = "ammoDouble";
     public static final String TSHIP_AMMO_SWEEP = "ammoSweep";
 	public static final String TSHIP_SELECTED_AMMO = "ammoSelection";
+
+	public static final String ITEM_KEY_CREW = "Crew";
+	public static final String ITEM_KEY_REPAIRMAN = "Repairman";
+	public static final String ITEM_KEY_NEST = "Nest";
+	public static final String ITEM_KEY_MATERIALS = "Materials";
+	public static final String ITEM_KEY_MAPPIECE = "MapPiece";
+	public static final String ITEM_KEY_MAP = "Map";
+	public static final String ITEM_KEY_BLACKPOWDER = "BlackPowder";
+	public static final String ITEM_KEY_VALUABLE = "Valuable";
 	
 	public static final int SHAKE_LIMIT = 2;
+	public static final int TUTORIAL_NUM_PAGES = 7;
 
 	public static boolean isInDebugMode(int mMode) {
 		return mMode == Constants.MODE_DEBUG;
 	}
+
+	public static String getString(Context content, int resource) {	return content.getResources().getString(resource); }
 }

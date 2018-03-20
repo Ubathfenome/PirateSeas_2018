@@ -82,7 +82,7 @@ public class ShopActivity extends ListActivity{
 		
 		dummyPlayer = new Player();
 		dummyShip = new Ship();
-		dummyMap = new Map(new Date(),0,0);
+		dummyMap = new Map(new Date(),Constants.MAP_MIN_HEIGHT,Constants.MAP_MIN_WIDTH);
 		
 		GameHelper.loadGameAtPreferences(this, dummyPlayer, dummyShip, dummyMap);
 		dummyPlayer = GameHelper.helperPlayer;
@@ -152,7 +152,7 @@ public class ShopActivity extends ListActivity{
 					LeaveActivityDialogFragment exitShopDialog = new LeaveActivityDialogFragment();
 					exitShopDialog.show(getFragmentManager(), "ExitShopDialog");
 				} else {
-					Log.d(TAG,"Finish Shop Activty");
+					Log.d(TAG,"Finish Shop Activity");
 					finish();
 				}
 				
@@ -172,28 +172,28 @@ public class ShopActivity extends ListActivity{
 			
 			// Add item effects
 			switch(itemPurchased.getName()){
-				case "Crew":
+				case Constants.ITEM_KEY_CREW:
 					dummyShip.gainHealth(5);
 					break;
-				case "Repairman":
+				case Constants.ITEM_KEY_REPAIRMAN:
 					dummyShip.gainHealth(15);
 					break;
-				case "Nest":
+				case Constants.ITEM_KEY_NEST:
 					dummyShip.addRange(1.15f);
 					break;
-				case "Materials":
+				case Constants.ITEM_KEY_MATERIALS:
 					dummyShip.setMaxHealth(dummyShip.getMaxHealth() + 10);
 					break;
-				case "Map Piece":
+				case Constants.ITEM_KEY_MAPPIECE:
 					dummyPlayer.addMapPiece();
 					break;
-				case "Map":
+				case Constants.ITEM_KEY_MAP:
 					dummyPlayer.giveCompleteMap(true);
 					break;
-				case "BlackPowder":
+				case Constants.ITEM_KEY_BLACKPOWDER:
 					dummyShip.addPower(0.5f);
 					break;
-				case "Valuable":
+				case Constants.ITEM_KEY_VALUABLE:
 					dummyPlayer.addGold(100);
 					break;
 			}
@@ -334,7 +334,23 @@ public class ShopActivity extends ListActivity{
 			
 			Item item = getItem(position);
 			if(item != null){
-				vHolder.itemIconView.setBackgroundResource(R.mipmap.ic_launcher);
+				if(item.getName().equals(Constants.ITEM_KEY_CREW))
+						vHolder.itemIconView.setBackgroundResource(R.mipmap.icon_buff_crew);
+				else if(item.getName().equals(Constants.ITEM_KEY_REPAIRMAN))
+						vHolder.itemIconView.setBackgroundResource(R.mipmap.icon_buff_repa);
+				else if(item.getName().equals(Constants.ITEM_KEY_NEST))
+						vHolder.itemIconView.setBackgroundResource(R.mipmap.icon_buff_occu);
+				else if(item.getName().equals(Constants.ITEM_KEY_MATERIALS))
+						vHolder.itemIconView.setBackgroundResource(R.mipmap.icon_buff_wood);
+				else if(item.getName().equals(Constants.ITEM_KEY_MAPPIECE))
+						vHolder.itemIconView.setBackgroundResource(R.mipmap.icon_buff_mapp);
+				else if(item.getName().equals(Constants.ITEM_KEY_MAP))
+						vHolder.itemIconView.setBackgroundResource(R.mipmap.icon_buff_mapp);
+				else if(item.getName().equals(Constants.ITEM_KEY_BLACKPOWDER))
+						vHolder.itemIconView.setBackgroundResource(R.mipmap.icon_buff_bpow);
+				else if(item.getName().equals(Constants.ITEM_KEY_VALUABLE))
+						vHolder.itemIconView.setBackgroundResource(R.mipmap.ico_gold);
+
 				vHolder.itemNameView.setText(item.getName());
 				vHolder.itemPriceView.setText("" + item.getPrice());
 				vHolder.itemPriceIconView.setBackgroundResource(R.mipmap.ico_gold);

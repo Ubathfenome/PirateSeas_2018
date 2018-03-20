@@ -24,6 +24,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import tfm.uniovi.pirateseas.R;
+import tfm.uniovi.pirateseas.global.Constants;
 
 /**
  * A fragment representing a single step in a wizard. The fragment shows a dummy title indicating
@@ -73,7 +74,7 @@ public class ScreenSlidePageFragment extends Fragment {
 
         // Set the title view to show the page number.
         ((TextView) rootView.findViewById(android.R.id.text1)).setText(
-                getString(R.string.title_template_step, mPageNumber + 1));
+                getString(R.string.title_template_step, mPageNumber + 1) + " / " + Constants.TUTORIAL_NUM_PAGES);
 				
 		switch(mPageNumber){
 			case 0:

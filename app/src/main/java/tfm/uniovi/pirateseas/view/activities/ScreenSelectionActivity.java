@@ -28,7 +28,9 @@ import tfm.uniovi.pirateseas.controller.androidGameAPI.Map;
 import tfm.uniovi.pirateseas.controller.androidGameAPI.Player;
 import tfm.uniovi.pirateseas.controller.audio.MusicManager;
 import tfm.uniovi.pirateseas.global.Constants;
+import tfm.uniovi.pirateseas.model.canvasmodel.game.entity.Ship;
 import tfm.uniovi.pirateseas.utils.approach2d.DrawableHelper;
+import tfm.uniovi.pirateseas.utils.persistence.GameHelper;
 
 public class ScreenSelectionActivity extends Activity {
 
@@ -44,10 +46,11 @@ public class ScreenSelectionActivity extends Activity {
 	private TextView txtScreenSelectionLabel;
 
 	private Player p = null;
+	private Ship ship = null;
 	private Map map = null;
 	private Date date;
 
-	private Drawable currentMap;
+	private Drawable currentMapDrawable;
 	int mapWidth;
 	int mapHeight;
 	int mapLength;
@@ -74,14 +77,21 @@ public class ScreenSelectionActivity extends Activity {
 
 		sensorTypes = intent.getIntArrayExtra(Constants.TAG_SENSOR_LIST);
 		loadGame = intent.getBooleanExtra(Constants.TAG_LOAD_GAME, false);
+		mapHeight = intent.getIntExtra(Constants.TAG_SCREEN_SELECTION_MAP_HEIGHT, Constants.MAP_MIN_HEIGHT);
+		mapWidth = intent.getIntExtra(Constants.TAG_SCREEN_SELECTION_MAP_WIDTH, Constants.MAP_MIN_WIDTH);
 
-		p = intent.getParcelableExtra(Constants.TAG_SCREEN_SELECTION_PLAYERDATA);
-		map = intent.getParcelableExtra(Constants.TAG_SCREEN_SELECTION_MAPDATA);
 		date = new Date();
+		GameHelper.loadGameAtPreferences(this,p = new Player(), ship = new Ship(), map = new Map(date, mapHeight, mapWidth));
+		p = GameHelper.helperPlayer;
+		ship = GameHelper.helperShip;
+		map = GameHelper.helperMap;
+
+		if(map.getMapLength() == Constants.MAP_MIN_LENGTH)
+			map = null;
 
 		layoutBackground = findViewById(R.id.layoutBackground);
-		currentMap = getCurrentMap(date);
-		layoutBackground.setBackground(currentMap);
+		currentMapDrawable = getCurrentMap(date);
+		layoutBackground.setBackground(currentMapDrawable);
 
 		mapWidth = map.getMapWidth();
 		mapHeight = map.getMapHeight();
@@ -102,6 +112,7 @@ public class ScreenSelectionActivity extends Activity {
 					if(!map.isActiveCellIsland()){
 						if(encounter) {
 							// Game activity
+							MusicManager.getInstance().stopBackgroundMusic();
 							MusicManager.getInstance(context, MusicManager.MUSIC_BATTLE).playBackgroundMusic();
 							startBattleGame();
 						} else {
@@ -111,9 +122,12 @@ public class ScreenSelectionActivity extends Activity {
 						}
 					} else {
 						// Shop activity
+						MusicManager.getInstance().stopBackgroundMusic();
 						MusicManager.getInstance(context, MusicManager.MUSIC_ISLAND).playBackgroundMusic();
 						enterRandomIsland();
 					}
+				} else {
+					wrongWayMessage();
 				}
 			}
 		});
@@ -124,12 +138,13 @@ public class ScreenSelectionActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				// Get map's up cell content
-				if(active>=mapHeight){
+				if(active-mapWidth>=0){
 					map.setActiveCell(active-mapWidth);
 					map.clearActiveMapCell();
 					if(!map.isActiveCellIsland()){
 						if(encounter) {
 							// Game activity
+							MusicManager.getInstance().stopBackgroundMusic();
 							MusicManager.getInstance(context, MusicManager.MUSIC_BATTLE).playBackgroundMusic();
 							startBattleGame();
 						} else {
@@ -139,9 +154,12 @@ public class ScreenSelectionActivity extends Activity {
 						}
 					} else {
 						// Shop activity
+						MusicManager.getInstance().stopBackgroundMusic();
 						MusicManager.getInstance(context, MusicManager.MUSIC_ISLAND).playBackgroundMusic();
 						enterRandomIsland();
 					}
+				} else {
+					wrongWayMessage();
 				}
 			}
 		});
@@ -158,6 +176,7 @@ public class ScreenSelectionActivity extends Activity {
 					if(!map.isActiveCellIsland()){
 						if(encounter) {
 							// Game activity
+							MusicManager.getInstance().stopBackgroundMusic();
 							MusicManager.getInstance(context, MusicManager.MUSIC_BATTLE).playBackgroundMusic();
 							startBattleGame();
 						} else {
@@ -167,9 +186,12 @@ public class ScreenSelectionActivity extends Activity {
 						}
 					} else {
 						// Shop activity
+						MusicManager.getInstance().stopBackgroundMusic();
 						MusicManager.getInstance(context, MusicManager.MUSIC_ISLAND).playBackgroundMusic();
 						enterRandomIsland();
 					}
+				} else {
+					wrongWayMessage();
 				}
 			}
 		});
@@ -186,6 +208,7 @@ public class ScreenSelectionActivity extends Activity {
 					if(!map.isActiveCellIsland()){
 						if(encounter) {
 							// Game activity
+							MusicManager.getInstance().stopBackgroundMusic();
 							MusicManager.getInstance(context, MusicManager.MUSIC_BATTLE).playBackgroundMusic();
 							startBattleGame();
 						} else {
@@ -195,9 +218,12 @@ public class ScreenSelectionActivity extends Activity {
 						}
 					} else {
 						// Shop activity
+						MusicManager.getInstance().stopBackgroundMusic();
 						MusicManager.getInstance(context, MusicManager.MUSIC_ISLAND).playBackgroundMusic();
 						enterRandomIsland();
 					}
+				} else {
+					wrongWayMessage();
 				}
 			}
 		});
@@ -206,11 +232,46 @@ public class ScreenSelectionActivity extends Activity {
 		txtScreenSelectionLabel.setTypeface(customFont);
 	}
 
+	private void wrongWayMessage(){
+		Toast.makeText(context, "Cap'tain! We can't go that way!",Toast.LENGTH_SHORT).show();
+	}
+
 	private void startBattleGame(){
+		GameHelper.saveGameAtPreferences(this, p, ship, map);
+
 		Intent newGameIntent = new Intent(context, GameActivity.class);
 		newGameIntent.putExtra(Constants.TAG_SENSOR_LIST, sensorTypes);
 		newGameIntent.putExtra(Constants.TAG_LOAD_GAME, loadGame);
+		newGameIntent.putExtra(Constants.TAG_SCREEN_SELECTION_MAP_HEIGHT, mapHeight);
+		newGameIntent.putExtra(Constants.TAG_SCREEN_SELECTION_MAP_WIDTH, mapWidth);
+		newGameIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		Log.d(TAG,"Start GameActivity Intent");
 		startActivity(newGameIntent);
+		finish();
+	}
+
+	private void reloadSelection(){
+		Toast.makeText(this, getResources().getString(R.string.message_nothinghere), Toast.LENGTH_SHORT).show();
+		GameHelper.saveGameAtPreferences(this, p, ship, map);
+
+		Intent resetIntent = new Intent(this, ScreenSelectionActivity.class);
+		resetIntent.putExtra(Constants.TAG_SENSOR_LIST, sensorTypes);
+		resetIntent.putExtra(Constants.TAG_LOAD_GAME, loadGame);
+		resetIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		Log.d(TAG,"Reset ScreenSelection Intent");
+		this.startActivity(resetIntent);
+		Log.d(TAG,"Finish ScreenSelection Activity");
+		finish();
+	}
+
+	private void enterRandomIsland() {
+		GameHelper.saveGameAtPreferences(this, p, ship, map);
+		Random rand = new Random();
+		boolean yesNo = rand.nextBoolean();
+		Intent shopIntent = new Intent(this, ShopActivity.class);
+		shopIntent.putExtra(Constants.ITEMLIST_NATURE, yesNo ? Constants.NATURE_SHOP : Constants.NATURE_TREASURE);
+		Log.d(TAG,"Start Shop ForResult Intent");
+		this.startActivityForResult(shopIntent, Constants.REQUEST_ISLAND);
 	}
 
 	private Drawable getCurrentMap(Date date) {
@@ -281,35 +342,16 @@ public class ScreenSelectionActivity extends Activity {
 		return logarythm % 2 == 0;
 	}
 
-	private void enterRandomIsland() {
-		Random rand = new Random();
-		boolean yesNo = rand.nextBoolean();
-		Intent shopIntent = new Intent(this, ShopActivity.class);
-		shopIntent.putExtra(Constants.ITEMLIST_NATURE, yesNo ? Constants.NATURE_SHOP : Constants.NATURE_TREASURE);
-		Log.d(TAG,"Start Shop ForResult Intent");
-		this.startActivityForResult(shopIntent, Constants.REQUEST_ISLAND);
-	}
-
-	private void reloadSelection(){
-		Toast.makeText(this, getResources().getString(R.string.message_nothinghere), Toast.LENGTH_SHORT).show();
-
-		Intent resetIntent = new Intent(this, ScreenSelectionActivity.class);
-		resetIntent.putExtra(Constants.TAG_SENSOR_LIST, sensorTypes);
-		resetIntent.putExtra(Constants.TAG_LOAD_GAME, loadGame);
-		resetIntent.putExtra(Constants.TAG_SCREEN_SELECTION_PLAYERDATA, p);
-		resetIntent.putExtra(Constants.TAG_SCREEN_SELECTION_MAPDATA, map);
-		Log.d(TAG,"Reset ScreenSelection Intent");
-		this.startActivity(resetIntent);
-		Log.d(TAG,"Finish ScreenSelection Activity");
-		finish();
-	}
-
+	@SuppressLint("NewApi")
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-		Log.d(TAG, "ScreenSelectionActivity called by " + this.getCallingActivity().getClassName());
-		if (data != null && requestCode == Constants.REQUEST_ISLAND && resultCode == Activity.RESULT_OK)
+		if (data != null && requestCode == Constants.REQUEST_ISLAND && resultCode == Activity.RESULT_OK) {
+			currentMapDrawable = getCurrentMap(date);
+			layoutBackground.setBackground(currentMapDrawable);
+			MusicManager.getInstance().stopBackgroundMusic();
+			MusicManager.getInstance(context, MusicManager.MUSIC_GAME_MENU).playBackgroundMusic();
 			reloadSelection();
+		}
 	}
 
 }

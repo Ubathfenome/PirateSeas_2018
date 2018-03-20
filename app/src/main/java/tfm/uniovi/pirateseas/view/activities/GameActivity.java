@@ -5,7 +5,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -26,7 +25,6 @@ import java.util.List;
 
 import tfm.uniovi.pirateseas.R;
 import tfm.uniovi.pirateseas.controller.androidGameAPI.Player;
-import tfm.uniovi.pirateseas.controller.audio.MusicManager;
 import tfm.uniovi.pirateseas.controller.sensors.events.EventDayNightCycle;
 import tfm.uniovi.pirateseas.controller.sensors.events.EventShakeClouds;
 import tfm.uniovi.pirateseas.controller.sensors.events.EventWeatherMaelstrom;
@@ -55,6 +53,8 @@ public class GameActivity extends Activity implements SensorEventListener {
 	boolean loadGame = false;
 
 	private int lightLevel;
+	private int mapHeight;
+	private int mapWidth;
 
 	protected SensorManager mSensorManager;
 	protected List<Sensor> triggeringSensors;
@@ -72,16 +72,23 @@ public class GameActivity extends Activity implements SensorEventListener {
 
 		Intent data = getIntent();
 
-		loadGame = data.getBooleanExtra(Constants.TAG_LOAD_GAME, true);
-
 		// Receive the device event triggering sensor list
 		triggeringSensors = new ArrayList<Sensor>();
 		sensorTypes = data.getIntArrayExtra(Constants.TAG_SENSOR_LIST);
 		mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
-		for (int i = 0; i < sensorTypes.length; i++) {
-			if (sensorTypes[i] != 0)
+
+		int totalSensors = 0;
+		if(sensorTypes!= null)
+			totalSensors = sensorTypes.length;
+		for (int i = 0; i < totalSensors; i++) {
+			if (sensorTypes[i] != 0) {
 				triggeringSensors.add(mSensorManager.getDefaultSensor(sensorTypes[i]));
+			}
 		}
+
+		loadGame = data.getBooleanExtra(Constants.TAG_LOAD_GAME, true);
+		mapHeight = data.getIntExtra(Constants.TAG_SCREEN_SELECTION_MAP_HEIGHT, Constants.MAP_MIN_HEIGHT);
+		mapWidth = data.getIntExtra(Constants.TAG_SCREEN_SELECTION_MAP_WIDTH, Constants.MAP_MIN_WIDTH);
 
 		// Launch the game!!
 		setContentView(R.layout.activity_game);
@@ -113,7 +120,7 @@ public class GameActivity extends Activity implements SensorEventListener {
 		if (mCanvasView != null)
 			mCanvasView.setStatus(Constants.GAME_STATE_PAUSE);
 
-		MusicManager.getInstance().pauseBackgroundMusic();
+		// MusicManager.getInstance().pauseBackgroundMusic();
 
 		super.onPause();
 	}
@@ -137,14 +144,14 @@ public class GameActivity extends Activity implements SensorEventListener {
 			mSensorManager.registerListener(this, s, SensorManager.SENSOR_DELAY_GAME);
 		}
 
-		MusicManager.getInstance().playBackgroundMusic();
+		// MusicManager.getInstance().playBackgroundMusic();
 
 		super.onResume();
 	}
 
 	@Override
 	protected void onDestroy() {
-		MusicManager.getInstance().stopBackgroundMusic();
+		// MusicManager.getInstance().stopBackgroundMusic();
 		super.onDestroy();
 	}
 
@@ -342,6 +349,7 @@ public class GameActivity extends Activity implements SensorEventListener {
 		}
 	}
 
+	/*
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
@@ -379,8 +387,8 @@ public class GameActivity extends Activity implements SensorEventListener {
 								if (canvasGameMode != Constants.GAMEMODE_BATTLE){
 									mCanvasView.setGamemode(Constants.GAMEMODE_BATTLE);
 									Log.d(TAG, "GameActivity: GameMode set to BATTLE");
-									MusicManager.getInstance().stopBackgroundMusic();
-									MusicManager.getInstance(context, MusicManager.MUSIC_BATTLE).playBackgroundMusic();
+									// MusicManager.getInstance().stopBackgroundMusic();
+									// MusicManager.getInstance(context, MusicManager.MUSIC_BATTLE).playBackgroundMusic();
 								}
 								Log.d(TAG, "Spawn enemy on CanvasView CanvasView (" + lightLevel + " < "
 										+ Constants.LIGHT_THRESHOLD + ")");
@@ -388,9 +396,13 @@ public class GameActivity extends Activity implements SensorEventListener {
 							}
 		
 						}
-						// Else call mCanvasView.selecScreen(); again
+						// Else call mCanvasView.selectScreen(); again
 						else {
-							mCanvasView.selectScreen();
+							try {
+								mCanvasView.selectScreen();
+							} catch (SaveGameException e) {
+								Log.e(TAG, e.getMessage());
+							}
 						}
 					}
 					break;
@@ -399,6 +411,7 @@ public class GameActivity extends Activity implements SensorEventListener {
 			mCanvasView.launchMainLogic();
 		}
 	}
+	*/
 
 	private boolean arrayContainsValue(int[] array, int value) {
 		for (int i = 0; i < array.length; i++) {
@@ -438,5 +451,17 @@ public class GameActivity extends Activity implements SensorEventListener {
 		mCanvasView.setShakeMoveCount(shakeCount + 1);
 		Toast.makeText(context, String.format(getResources().getString(R.string.message_shakesleft),(Constants.SHAKE_LIMIT - (shakeCount+1))), Toast.LENGTH_SHORT).show();
 	}
-	
+
+	public int[] getSensorTypes(){
+		return sensorTypes;
+	}
+
+	public int getMapHeight(){
+		return mapHeight;
+	}
+
+	public int getMapWidth(){
+		return mapWidth;
+	}
+
 }

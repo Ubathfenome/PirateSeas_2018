@@ -44,8 +44,9 @@
     <string name="tb_control_sensor">Sensor Control</string>
     <string name="tb_control_touch">Touch Control</string>
     <string name="lbl_control_mode">Ship Control Mode</string>
-    <string name="settings_change_ammo_volume">Change ammo type with volume keys</string>
-    <string name="settings_change_ammo_touch">Change ammo type by touch</string>
+    <string name="settings_change_ammo_volume">With volume keys</string>
+    <string name="settings_change_ammo_touch">By touch</string>
+    <string name="settings_change_ammo_mode">Change ammo type mode</string>
     <string name="settings_sensorway">By sensor</string>
     <string name="settings_manual">Manual</string>
     <string name="settings_pause_mode">Pause game mode</string>

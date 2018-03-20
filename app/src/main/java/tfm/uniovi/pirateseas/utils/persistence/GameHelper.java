@@ -57,14 +57,18 @@ public class GameHelper {
 		}
 		editor.putInt(Constants.PREF_SHIP_HEALTH, ship.getHealth());
 		editor.putInt(Constants.PREF_SHIP_TYPE, ship.getType().ordinal());
+
 		editor.putLong(Constants.PREF_MAP_SEED, map.getMapSeed());
 		editor.putInt(Constants.PREF_MAP_ACTIVECELL, map.getActiveCell());
 		String[] mapContent = map.getMapContent();
 		String mapJointContent = "";
+
 		for(String s : mapContent){
 			mapJointContent += s + ";";
 		}
 		editor.putString(Constants.PREF_MAP_CONTENT, mapJointContent);
+		editor.putInt(Constants.PREF_MAP_HEIGHT, map.getMapHeight());
+		editor.putInt(Constants.PREF_MAP_WIDTH, map.getMapWidth());
 		
 		res = editor.commit();
 		
@@ -193,6 +197,11 @@ public class GameHelper {
 
 		map.setMapSeed(mPreferences.getLong(Constants.PREF_MAP_SEED, 0));
 		map.setActiveCell(mPreferences.getInt(Constants.PREF_MAP_ACTIVECELL, 0));
+		int mapHeight = mPreferences.getInt(Constants.PREF_MAP_HEIGHT,Constants.MAP_MIN_HEIGHT);
+		int mapWidth = mPreferences.getInt(Constants.PREF_MAP_WIDTH,Constants.MAP_MIN_WIDTH);
+		map.setMapHeight(mapHeight);
+		map.setMapWidth(mapWidth);
+		map.setMapLength(mapHeight, mapWidth);
 		map.setMapContent(mPreferences.getString(Constants.PREF_MAP_CONTENT,Constants.EMPTY_STRING).split(";"));
 
 		helperMap = map;

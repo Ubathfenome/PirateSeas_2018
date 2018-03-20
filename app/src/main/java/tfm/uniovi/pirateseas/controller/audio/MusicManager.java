@@ -43,18 +43,29 @@ public class MusicManager{
 	private MediaPlayer mBackgroundMusic;
 	
 	private static MusicManager mInstance = null;
-	
+
+	/**
+	 * Method to get the MusicInstance to start music tracks
+	 * @param context
+	 * @param backgroundMusicId
+	 * @return
+	 */
 	public static MusicManager getInstance(Context context,
 			int backgroundMusicId) {
 		if (mInstance == null) {
 			mInstance = new MusicManager();
 		}
-		if (mInstance.mBackgroundMusic == null){
+		if (mInstance.mBackgroundMusic == null || !mInstance.mBackgroundMusic.isPlaying()){
 			mInstance.initSounds(context, backgroundMusicId);
 		}
 		return mInstance;
 	}
 
+	/**
+	 * Method to get the MusicInstance used for register music tracks and sounds
+	 * @param context
+	 * @return
+	 */
 	public static MusicManager getInstance(Context context) {
 		if (mInstance == null) {
 			mInstance = new MusicManager();
@@ -65,6 +76,10 @@ public class MusicManager{
 		return mInstance;
 	}
 
+	/**
+	 * Method to get the MusicInstance used to manage the music of the Activities
+	 * @return
+	 */
 	public static MusicManager getInstance() {
 		synchronized (MusicManager.class) {
 			if (mInstance == null) {

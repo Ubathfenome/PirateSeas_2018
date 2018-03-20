@@ -13,9 +13,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.CompoundButton;
-import android.widget.CompoundButton.OnCheckedChangeListener;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
@@ -26,17 +23,16 @@ import tfm.uniovi.pirateseas.global.Constants;
 public class SettingsExtraActivity extends Activity {
 	
 	private Button btnRestore;
-	private Switch swControlMode;
-	private ToggleButton tglChangeAmmo;
+	private TextView txtSettingsLabel;
+	private ToggleButton tglControlMode;
 	private TextView txtControlMode;
+	private ToggleButton tglChangeAmmo;
+	private TextView txtAmmoMode;
 	private ToggleButton tglScreenSelection;
 	private TextView txtScreenSelection;
 	private ToggleButton tglPauseSelection;
 	private TextView txtPauseMode;
-	
-	private boolean controlValue = false;
-	private boolean ammoKeysEnabled = false;
-	
+
 	private boolean mDebugMode;
 
 	SharedPreferences mPreferences;
@@ -53,33 +49,21 @@ public class SettingsExtraActivity extends Activity {
 				Context.MODE_PRIVATE);
 
 		mDebugMode = mPreferences.getBoolean(Constants.TAG_EXE_MODE, false);
+
+		txtSettingsLabel = 	findViewById(R.id.txtSettingsLabel);
+		txtSettingsLabel.setTypeface(customFont);
 		
-		swControlMode = (Switch) findViewById(R.id.tbControlMode);
-		swControlMode.setChecked(controlValue);
-		swControlMode.setTypeface(customFont);
-		swControlMode.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-			
-			@Override
-			public void onCheckedChanged(CompoundButton v, boolean isChecked) {
-				v.setChecked(isChecked);
-				controlValue = isChecked;
-			}
-		});
+		tglControlMode = (ToggleButton) findViewById(R.id.tglControlMode);
+		tglControlMode.setTypeface(customFont);
 
 		txtControlMode = findViewById(R.id.txtControlMode);
 		txtControlMode.setTypeface(customFont);
 		
 		tglChangeAmmo = (ToggleButton) findViewById(R.id.tglChangeAmmo);
-		tglChangeAmmo.setChecked(ammoKeysEnabled);
 		tglChangeAmmo.setTypeface(customFont);
-		tglChangeAmmo.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-			
-			@Override
-			public void onCheckedChanged(CompoundButton v, boolean isChecked) {
-				v.setChecked(isChecked);
-				ammoKeysEnabled = isChecked;
-			}
-		});
+
+		txtAmmoMode = findViewById(R.id.txtAmmoMode);
+		txtAmmoMode.setTypeface(customFont);
 
 		tglScreenSelection = (ToggleButton) findViewById(R.id.tglScreenSelection);
 		tglScreenSelection.setTypeface(customFont);
@@ -110,8 +94,10 @@ public class SettingsExtraActivity extends Activity {
 	public void onBackPressed() {
 		// Save changes in preferences
 		SharedPreferences.Editor editor = mPreferences.edit();
-		editor.putBoolean(Constants.PREF_CONTROL_MODE, controlValue);
-		editor.putBoolean(Constants.PREF_USE_AMMO_KEYS, ammoKeysEnabled);
+		editor.putBoolean(Constants.PREF_SHIP_CONTROL_MODE, tglControlMode.isChecked());
+		editor.putBoolean(Constants.PREF_AMMO_CONTROL_MODE, tglChangeAmmo.isChecked());
+		editor.putBoolean(Constants.PREF_LEVEL_CONTROL_MODE, tglScreenSelection.isChecked());
+		editor.putBoolean(Constants.PREF_PAUSE_CONTROL_MODE, tglPauseSelection.isChecked());
 		editor.commit();
 
 		finish();
@@ -155,8 +141,10 @@ public class SettingsExtraActivity extends Activity {
 		SharedPreferences.Editor editor = mPreferences.edit();
 		editor.clear();
 		editor.putBoolean(Constants.TAG_EXE_MODE, mDebugMode);
-		editor.putBoolean(Constants.PREF_CONTROL_MODE, Constants.PREF_GAME_TOUCH);
-		editor.putBoolean(Constants.PREF_USE_AMMO_KEYS, false);
+		editor.putBoolean(Constants.PREF_SHIP_CONTROL_MODE, Constants.PREF_GAME_TOUCH);
+		editor.putBoolean(Constants.PREF_AMMO_CONTROL_MODE, Constants.PREF_GAME_TOUCH);
+		editor.putBoolean(Constants.PREF_LEVEL_CONTROL_MODE, Constants.PREF_GAME_TOUCH);
+		editor.putBoolean(Constants.PREF_PAUSE_CONTROL_MODE, Constants.PREF_GAME_TOUCH);
 		return editor.commit();
 	}
 

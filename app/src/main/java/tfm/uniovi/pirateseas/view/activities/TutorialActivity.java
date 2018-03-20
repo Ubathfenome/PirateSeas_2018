@@ -8,7 +8,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -21,11 +20,6 @@ import tfm.uniovi.pirateseas.R;
 import tfm.uniovi.pirateseas.global.Constants;
 
 public class TutorialActivity extends FragmentActivity{
-	/**
-     * The number of pages (wizard steps) to show in this demo.
-     */
-    private static final int NUM_PAGES = 7;
-	
 	/**
      * The pager widget, which handles animation and allows swiping horizontally to access previous
      * and next wizard steps.
@@ -67,7 +61,7 @@ public class TutorialActivity extends FragmentActivity{
 			
 			@Override
 			public void onPageScrollStateChanged(int state){
-				if (state == ViewPager.SCROLL_STATE_DRAGGING && tmpPosition == (NUM_PAGES - 1))
+				if (state == ViewPager.SCROLL_STATE_DRAGGING && tmpPosition == (Constants.TUTORIAL_NUM_PAGES - 1))
 					checkEndTutorial();
 			}
         });
@@ -110,9 +104,6 @@ public class TutorialActivity extends FragmentActivity{
 		Intent startGameIntent = new Intent(context, ScreenSelectionActivity.class);
 		startGameIntent.putExtra(Constants.TAG_SENSOR_LIST, sensorTypes);
 		startGameIntent.putExtra(Constants.TAG_LOAD_GAME, loadGame);
-
-		startGameIntent.putExtra(Constants.TAG_SCREEN_SELECTION_PLAYERDATA, (Parcelable) null);
-		startGameIntent.putExtra(Constants.TAG_SCREEN_SELECTION_MAPDATA, (Parcelable) null);
 		startActivity(startGameIntent);
 		finish();
 	}
@@ -133,7 +124,7 @@ public class TutorialActivity extends FragmentActivity{
 
         @Override
         public int getCount() {
-            return NUM_PAGES;
+            return Constants.TUTORIAL_NUM_PAGES;
         }
     }
 }

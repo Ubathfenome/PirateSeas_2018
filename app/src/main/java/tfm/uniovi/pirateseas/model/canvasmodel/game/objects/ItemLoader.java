@@ -98,7 +98,6 @@ public class ItemLoader{
 		itemList.add(nest);
 		itemList.add(materials);
 		itemList.add(mapPiece);
-		itemList.add(map);
 		itemList.add(blackPowder);
 		itemList.add(valuable);
 		

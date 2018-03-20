@@ -46,8 +46,8 @@ public class Map implements Parcelable{
         r.setSeed(mapSeed);
         for(int i = 0; i < mapLength; i++){
             // Randomize the type of the map cell (island = true / water = false)
-            boolean type = r.nextBoolean();
-            if (type){
+            int randomValue = r.nextInt(100);
+            if (randomValue >= Constants.ISLAND_SPAWN_RATE){
                 // Initial creation of the cell is meant to be shadowed (0 = clear / 1 = shadow)
                 content[i] = "I1";
             } else {
@@ -68,6 +68,31 @@ public class Map implements Parcelable{
         String activeCell = mapContent[activeMapCell];
         char activeCellType = activeCell.charAt(0);
         mapContent[activeMapCell] = activeCellType + "1";
+    }
+
+    public void clearMapCell(int index){
+        String cell = mapContent[index];
+        char cellType = cell.charAt(0);
+        mapContent[index] = cellType + "0";
+    }
+
+    public void obscureMapCell(int index){
+        String cell = mapContent[index];
+        char cellType = cell.charAt(0);
+        mapContent[index] = cellType + "1";
+    }
+
+    public int getIsland(){
+        for(int i = 0; i < mapLength; i++){
+            String cell = mapContent[i];
+            if(cell.contains("I")){
+                if(cell.contains("1")){
+                    return i;
+                }
+            }
+        }
+
+        return -1;
     }
 
     public void setMapSeed(long seed) { this.mapSeed = seed; }
@@ -113,14 +138,14 @@ public class Map implements Parcelable{
     }
 
     public void setMapContent(String[] content){
-        if(content.length == Constants.MAP_LENGTH)
+        if(content.length == mapLength)
             this.mapContent = content;
         else
             throw new InvalidParameterException("Map content length mismatch");
     }
 
     public boolean isAllClear(){
-        for(int i = 0; i < Constants.MAP_LENGTH; i++){
+        for(int i = 0; i < mapLength; i++){
             String cell = mapContent[i];
             if (cell.endsWith("1")){
                 return false;

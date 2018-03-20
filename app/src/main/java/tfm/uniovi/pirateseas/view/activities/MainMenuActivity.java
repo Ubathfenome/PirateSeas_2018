@@ -33,15 +33,12 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.Date;
-
 import tfm.uniovi.pirateseas.R;
 import tfm.uniovi.pirateseas.controller.androidGameAPI.Map;
 import tfm.uniovi.pirateseas.controller.androidGameAPI.Player;
 import tfm.uniovi.pirateseas.controller.audio.MusicManager;
 import tfm.uniovi.pirateseas.global.Constants;
 import tfm.uniovi.pirateseas.model.canvasmodel.game.entity.Ship;
-import tfm.uniovi.pirateseas.utils.persistence.GameHelper;
 
 public class MainMenuActivity extends Activity {
 
@@ -94,7 +91,10 @@ public class MainMenuActivity extends Activity {
 		SharedPreferences.Editor editor = mPreferences.edit();
 		editor.putInt(Constants.PREF_DEVICE_WIDTH_RES, screenResolutionWidth);
 		editor.putInt(Constants.PREF_DEVICE_HEIGHT_RES, screenResolutionHeight);
-		editor.putBoolean(Constants.PREF_CONTROL_MODE, Constants.PREF_GAME_TOUCH);
+		editor.putBoolean(Constants.PREF_SHIP_CONTROL_MODE, Constants.PREF_GAME_TOUCH);
+		editor.putBoolean(Constants.PREF_AMMO_CONTROL_MODE, Constants.PREF_GAME_TOUCH);
+		editor.putBoolean(Constants.PREF_LEVEL_CONTROL_MODE, Constants.PREF_GAME_TOUCH);
+		editor.putBoolean(Constants.PREF_PAUSE_CONTROL_MODE, Constants.PREF_GAME_TOUCH);
 		editor.putBoolean(Constants.TAG_EXE_MODE, Constants.isInDebugMode(mMode));
 		editor.commit();
 
@@ -163,13 +163,8 @@ public class MainMenuActivity extends Activity {
 			Intent screenIntent = new Intent(context, ScreenSelectionActivity.class);
 			screenIntent.putExtra(Constants.TAG_SENSOR_LIST, sensorTypes);
 			screenIntent.putExtra(Constants.TAG_LOAD_GAME, !displayTutorial);
-			dummyPlayer = new Player();
-			dummyShip = new Ship();
-			dummyMap = new Map(new Date(), calculateMapHeight(), calculateMapWidth());
-
-			GameHelper.loadGameAtPreferences(this, dummyPlayer, dummyShip, dummyMap);
-			screenIntent.putExtra(Constants.TAG_SCREEN_SELECTION_PLAYERDATA, GameHelper.helperPlayer);
-			screenIntent.putExtra(Constants.TAG_SCREEN_SELECTION_MAPDATA, GameHelper.helperMap);
+			screenIntent.putExtra(Constants.TAG_SCREEN_SELECTION_MAP_HEIGHT, calculateMapHeight());
+			screenIntent.putExtra(Constants.TAG_SCREEN_SELECTION_MAP_WIDTH, calculateMapWidth());
 			startActivity(screenIntent);
 		} else {
 			//	New game
@@ -191,7 +186,6 @@ public class MainMenuActivity extends Activity {
 
 		// Run permissions request only the first time
 		checkAppVersion();
-
 
 		super.onResume();
 	}
@@ -398,17 +392,17 @@ public class MainMenuActivity extends Activity {
 			MusicManager.getInstance(context).registerSound(MusicManager.MUSIC_BATTLE, R.raw.msc_soundtrack_battle);
 			MusicManager.getInstance(context).registerSound(MusicManager.MUSIC_ISLAND, R.raw.msc_soundtrack_island);
 			MusicManager.getInstance(context).registerSound(MusicManager.MUSIC_GAME_MENU, R.raw.msc_soundtrack_menu);
-			MusicManager.getInstance().registerSound(MusicManager.SOUND_GOLD_GAINED, R.raw.snd_gold_gained);
-			MusicManager.getInstance().registerSound(MusicManager.SOUND_GOLD_SPENT, R.raw.snd_gold_spent);
-			MusicManager.getInstance().registerSound(MusicManager.SOUND_SHOT_FIRED, R.raw.snd_shot_fired);
-			MusicManager.getInstance().registerSound(MusicManager.SOUND_SHOT_HIT, R.raw.snd_shot_hit);
-			MusicManager.getInstance().registerSound(MusicManager.SOUND_SHOT_MISSED, R.raw.snd_shot_missed);
-			MusicManager.getInstance().registerSound(MusicManager.SOUND_SHOT_RELOADING, R.raw.snd_shot_reload);
-			MusicManager.getInstance().registerSound(MusicManager.SOUND_SHOT_EXPLOSION, R.raw.snd_shot_explosion);
-			MusicManager.getInstance().registerSound(MusicManager.SOUND_WEATHER_FOG, R.raw.snd_weather_fog);
-			MusicManager.getInstance().registerSound(MusicManager.SOUND_WEATHER_STORM, R.raw.snd_weather_storm);
-			MusicManager.getInstance().registerSound(MusicManager.SOUND_WEATHER_MAELSTROM, R.raw.snd_weather_maelstorm);
-			MusicManager.getInstance().registerSound(MusicManager.SOUND_XP_GAINED, R.raw.snd_xp_gained);
+			MusicManager.getInstance(context).registerSound(MusicManager.SOUND_GOLD_GAINED, R.raw.snd_gold_gained);
+			MusicManager.getInstance(context).registerSound(MusicManager.SOUND_GOLD_SPENT, R.raw.snd_gold_spent);
+			MusicManager.getInstance(context).registerSound(MusicManager.SOUND_SHOT_FIRED, R.raw.snd_shot_fired);
+			MusicManager.getInstance(context).registerSound(MusicManager.SOUND_SHOT_HIT, R.raw.snd_shot_hit);
+			MusicManager.getInstance(context).registerSound(MusicManager.SOUND_SHOT_MISSED, R.raw.snd_shot_missed);
+			MusicManager.getInstance(context).registerSound(MusicManager.SOUND_SHOT_RELOADING, R.raw.snd_shot_reload);
+			MusicManager.getInstance(context).registerSound(MusicManager.SOUND_SHOT_EXPLOSION, R.raw.snd_shot_explosion);
+			MusicManager.getInstance(context).registerSound(MusicManager.SOUND_WEATHER_FOG, R.raw.snd_weather_fog);
+			MusicManager.getInstance(context).registerSound(MusicManager.SOUND_WEATHER_STORM, R.raw.snd_weather_storm);
+			MusicManager.getInstance(context).registerSound(MusicManager.SOUND_WEATHER_MAELSTROM, R.raw.snd_weather_maelstorm);
+			MusicManager.getInstance(context).registerSound(MusicManager.SOUND_XP_GAINED, R.raw.snd_xp_gained);
 			return true;
 		}
 
