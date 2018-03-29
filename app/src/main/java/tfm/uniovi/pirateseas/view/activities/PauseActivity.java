@@ -12,6 +12,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import tfm.uniovi.pirateseas.R;
+import tfm.uniovi.pirateseas.controller.audio.MusicManager;
 import tfm.uniovi.pirateseas.global.Constants;
 
 public class PauseActivity extends Activity {	
@@ -64,7 +65,11 @@ public class PauseActivity extends Activity {
 		btnExit.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
-
+				// Exit game. Return to main menu
+				Intent mainMenuIntent = new Intent(context, MainMenuActivity.class);
+				MusicManager.getInstance().stopBackgroundMusic();
+				mainMenuIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+				startActivity(mainMenuIntent);
 			}
 		});
 		

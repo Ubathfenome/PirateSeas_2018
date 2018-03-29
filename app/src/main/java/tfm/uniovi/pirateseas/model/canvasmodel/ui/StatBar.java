@@ -14,11 +14,12 @@ public class StatBar extends BasicModel {
 	
 	private int maxValue;
 	private int currentValue;
-	
-	private static final int BAR_LENGHT = 150;
+
+	private int barLength;
 	
 	public StatBar(Context context, double x, double y, double mCanvasWidth, double mCanvasHeight, int type){
 		super(context, x, y, mCanvasWidth, mCanvasHeight, null);
+		this.barLength = (int)((mCanvasWidth - x) - x);
 		this.mType = type;
 	}
 	
@@ -26,6 +27,7 @@ public class StatBar extends BasicModel {
 		super(context, x, y, mCanvasWidth, mCanvasHeight, null);
 		this.maxValue = maxValue;
 		this.currentValue = currentValue;
+		this.barLength = (int)((mCanvasWidth - x) - x);
 		
 		this.mType = type;
 	}
@@ -34,7 +36,7 @@ public class StatBar extends BasicModel {
 	public void drawOnScreen(Canvas canvas){
 		int startXPoint = (int) x;
 		int yValue = (int) y;
-		int endXPoint = startXPoint + BAR_LENGHT;
+		int endXPoint = startXPoint + barLength;
 		int separation = 2;
 		
 		Paint mPaintLine = new Paint();
@@ -61,7 +63,7 @@ public class StatBar extends BasicModel {
 			mPaintLine.setColor(Color.GREEN);
 		mPaintLine.setStrokeWidth(10);
 		
-		double unitBar = BAR_LENGHT / 100.0f;
+		double unitBar = barLength / 100.0f;
 		double completionPercentage = (currentValue * 100.0f) / maxValue;
 		double value = (startXPoint + (unitBar * completionPercentage)) - separation;
 		canvas.drawLine(startXPoint + separation, yValue, (float) value, yValue, mPaintLine);

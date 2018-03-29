@@ -54,24 +54,28 @@ public class SettingsExtraActivity extends Activity {
 		txtSettingsLabel.setTypeface(customFont);
 		
 		tglControlMode = (ToggleButton) findViewById(R.id.tglControlMode);
+		tglControlMode.setChecked(mPreferences.getBoolean(Constants.PREF_SHIP_CONTROL_MODE, Constants.PREF_GAME_TOUCH));
 		tglControlMode.setTypeface(customFont);
 
 		txtControlMode = findViewById(R.id.txtControlMode);
 		txtControlMode.setTypeface(customFont);
 		
 		tglChangeAmmo = (ToggleButton) findViewById(R.id.tglChangeAmmo);
+		tglChangeAmmo.setChecked(mPreferences.getBoolean(Constants.PREF_AMMO_CONTROL_MODE, Constants.PREF_GAME_TOUCH));
 		tglChangeAmmo.setTypeface(customFont);
 
 		txtAmmoMode = findViewById(R.id.txtAmmoMode);
 		txtAmmoMode.setTypeface(customFont);
 
 		tglScreenSelection = (ToggleButton) findViewById(R.id.tglScreenSelection);
+		tglScreenSelection.setChecked(mPreferences.getBoolean(Constants.PREF_LEVEL_CONTROL_MODE, Constants.PREF_GAME_TOUCH));
 		tglScreenSelection.setTypeface(customFont);
 
 		txtScreenSelection = findViewById(R.id.txtScreenMode);
 		txtScreenSelection.setTypeface(customFont);
 
 		tglPauseSelection = (ToggleButton) findViewById(R.id.tglPauseSelection);
+		tglPauseSelection.setChecked(mPreferences.getBoolean(Constants.PREF_PAUSE_CONTROL_MODE, Constants.PREF_GAME_TOUCH));
 		tglPauseSelection.setTypeface(customFont);
 
 		txtPauseMode = findViewById(R.id.txtPauseMode);

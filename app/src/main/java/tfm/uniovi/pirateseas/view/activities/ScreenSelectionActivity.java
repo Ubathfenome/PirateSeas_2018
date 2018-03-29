@@ -348,6 +348,7 @@ public class ScreenSelectionActivity extends Activity {
 		if (data != null && requestCode == Constants.REQUEST_ISLAND && resultCode == Activity.RESULT_OK) {
 			currentMapDrawable = getCurrentMap(date);
 			layoutBackground.setBackground(currentMapDrawable);
+			layoutBackground.invalidate();
 			MusicManager.getInstance().stopBackgroundMusic();
 			MusicManager.getInstance(context, MusicManager.MUSIC_GAME_MENU).playBackgroundMusic();
 			reloadSelection();

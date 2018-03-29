@@ -12,6 +12,7 @@ import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.View;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -53,12 +54,18 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 	private static final int MAELSTORM_DAMAGE = 15;
 
 	private static final int DEFAULT_PLAYER_SHIP_DIRECTION = 90;
-	private static final int DEFAULT_PLAYER_SHIP_WIDTH = 2;
-	private static final int DEFAULT_PLAYER_SHIP_HEIGHT = 3;
-	private static final int DEFAULT_PLAYER_SHIP_LENGTH = 5;
+	private static final int DEFAULT_SHIP_WIDTH = 2;
+	private static final int DEFAULT_SHIP_HEIGHT = 3;
+	private static final int DEFAULT_SHIP_LENGTH = 5;
 	private static final int DEFAULT_PLAYER_SHIP_AMMO = 20;
 
-	private static int HORIZON_Y_VALUE = 170;
+	private static final int DEFAULT_ENEMY_SHIP_DIRECTION = 270;
+
+	private int HORIZON_Y_VALUE = 200;
+	private double HORIZON_HEIGHT_MULTIPLIER = 0.3;
+	private double ENEMY_BAR_HEIGHT_MULTIPLIER = 0.2;
+	private double BAR_MIN_MARGIN = 25;
+	private static final int BAR_SEPARATION = 20;
 	private static int BAR_INITIAL_X_VALUE = 150;
 
 	private Context nContext;
@@ -97,9 +104,8 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 	private boolean nControlMode;
 
 	int downX = 0, downY = 0;
-	
-	// TODO Actualizar coordenadas verticales barco enemigo
-	// TODO Actualizar cooredenadas horizontales barra de vida del barco enemigo
+
+
 
 	/**
 	 * Constructor
@@ -150,7 +156,7 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 	public void initialize() {
 		nStatus = Constants.GAME_STATE_NORMAL;
 
-		// HORIZON_Y_VALUE = (int) (nScreenHeight * 0.1);
+		HORIZON_Y_VALUE = (int) (nScreenHeight * HORIZON_HEIGHT_MULTIPLIER);
 		// BAR_INITIAL_X_VALUE = (int) (nScreenWidth * 0.1);
 
 		nPreferences = nContext.getSharedPreferences(Constants.TAG_PREF_NAME, Context.MODE_PRIVATE);
@@ -168,8 +174,8 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 
 		// Entities
 		nPlayerShip = new Ship(nContext, ShipType.LIGHT, nScreenWidth / 2 - 100, nScreenHeight - HORIZON_Y_VALUE,
-				nScreenWidth, nScreenHeight, new Point(0, 0), DEFAULT_PLAYER_SHIP_DIRECTION, DEFAULT_PLAYER_SHIP_WIDTH,
-				DEFAULT_PLAYER_SHIP_HEIGHT, DEFAULT_PLAYER_SHIP_LENGTH, DEFAULT_PLAYER_SHIP_AMMO);
+				nScreenWidth, nScreenHeight, new Point(0, 0), DEFAULT_PLAYER_SHIP_DIRECTION, DEFAULT_SHIP_WIDTH,
+				DEFAULT_SHIP_HEIGHT, DEFAULT_SHIP_LENGTH, DEFAULT_PLAYER_SHIP_AMMO);
 
 		nShotList = new ArrayList<Shot>();
 
@@ -180,9 +186,9 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 			loadGame();
 
 		// Game User Interface
-		nPlayerHBar = new StatBar(nContext, BAR_INITIAL_X_VALUE, nScreenHeight - 45, nScreenWidth, nScreenHeight,
+		nPlayerHBar = new StatBar(nContext, BAR_INITIAL_X_VALUE, nScreenHeight - (BAR_MIN_MARGIN + BAR_SEPARATION), nScreenWidth, nScreenHeight,
 				nPlayerShip.getHealth(), nPlayerShip.getType().defaultHealthPoints(), Constants.BAR_HEALTH);
-		nPlayerXPBar = new StatBar(nContext, BAR_INITIAL_X_VALUE, nScreenHeight - 25, nScreenWidth, nScreenHeight,
+		nPlayerXPBar = new StatBar(nContext, BAR_INITIAL_X_VALUE, nScreenHeight - BAR_MIN_MARGIN, nScreenWidth, nScreenHeight,
                 nPlayer.getNextLevelThreshold(), 0, Constants.BAR_EXPERIENCE);
 
 		nGameTimestamp = 0;
@@ -443,6 +449,7 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 		case Constants.GAME_STATE_END:
 			nUpdateThread.setRunning(false);
 			nUpdateThread.interrupt();
+            ((GameActivity) nContext).finish();
 			break;
 		}
 	}
@@ -670,24 +677,15 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 				nPlayer.addExperience(nEnemyShip.getType().defaultHealthPoints() / 2);
 			} else {
 				// Establecer comportamiento enemigo
-				/*
-				EnemyIA eIA = new EnemyIA(nPlayerShip, nEnemyShip, nScreenWidth);
-				nEnemyShip = eIA.getNextMove();
-
-				nEnemyShip.updateImage();
-
-				try {
-					if (eIA.getStatus() == IAStatus.ATTACK) {
-						Shot[] shotArray = nEnemyShip.shootSide();
-						for (Shot s : shotArray) {
-							nShotList.add(s);
-						}
-					}
-				} catch (NoAmmoException e) {
-					if (!Constants.isInDebugMode(Constants.MODE))
-						Log.e(EXCEPTION_TAG, e.getMessage());
+				if(nEnemyShip.getX()+nEnemyShip.getWidth()+nEnemyShip.getShipType().getSpeed() > nScreenWidth) {
+					nEnemyShip.move(0, 30, false);
+				} else if(nEnemyShip.getX()-nEnemyShip.getShipType().getSpeed() < 0){
+					nEnemyShip.move(0,-30,false);
+				} else {
+					nEnemyShip.move(nEnemyShip.getShipType().getSpeed(), 0, true);
 				}
-				*/
+
+
 			}
 		}
 	}
@@ -731,20 +729,21 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 		MusicManager.getInstance(nContext, MusicManager.MUSIC_BATTLE).playBackgroundMusic();
 
 		ShipType sType = Ship.randomShipType();
+		double nEnemyShipXcoord = randomXSpawnValue((int) DrawableHelper.getWidth(getResources(), sType.drawableValue()));
+		double nEnemyShipYcoord = DrawableHelper.getHeight(getResources(), sType.drawableValue()) / 3;
 
 		nEnemyShip = new Ship(nContext, sType,
-				randomXSpawnValue((int) DrawableHelper.getWidth(getResources(), sType.drawableValue())),
-				DrawableHelper.getHeight(getResources(), sType.drawableValue()) / 4,
-				DrawableHelper.getWidth(getResources(), sType.drawableValue()),
-				DrawableHelper.getHeight(getResources(), sType.drawableValue()), new Point(15, 20), 270, 3, 4,
+				nEnemyShipXcoord,
+				nEnemyShipYcoord,
+				nScreenWidth, nScreenHeight, new Point(15, 20), DEFAULT_ENEMY_SHIP_DIRECTION, 3, 4,
 				7, Constants.SHOT_AMMO_UNLIMITED);
-		nEnemyHBar = new StatBar(nContext, BAR_INITIAL_X_VALUE, 25, nScreenWidth, nScreenHeight, nEnemyShip.getHealth(),
-				nEnemyShip.getType().defaultHealthPoints(), Constants.BAR_HEALTH);
-	}
 
-	public void spawnClouds() {
-		nClouds = nUpdateThread.getCanvasViewInstance().nClouds;
-		nClouds.resetShakes();
+		View v = ((GameActivity)nContext).findViewById(R.id.enemyHBarSpace);
+		double nEnemyBarXcoord = v.getX();
+		double nEnemyBarYcoord = BAR_MIN_MARGIN;
+
+		nEnemyHBar = new StatBar(nContext, nEnemyBarXcoord, nEnemyBarYcoord, nScreenWidth, nScreenHeight, nEnemyShip.getHealth(),
+		nEnemyShip.getType().defaultHealthPoints(), Constants.BAR_HEALTH);
 	}
 
 	public void selectScreen() throws SaveGameException {
@@ -758,8 +757,7 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 
 		Log.d(TAG, "Start ScreenSelection Intent");
 		nContext.startActivity(screenSelectionIntent);
-		pauseLogicThread();
-		((GameActivity)nContext).finish();
+		nStatus = Constants.GAME_STATE_END;
 	}
 
 	public void setStatus(int status) {
@@ -780,11 +778,16 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 	}
 
 	public int getShakeMoveCount() {
-		if(nClouds==null)
+		if(nClouds==null) {
 			Log.e(TAG, "'nClouds' is not initialized yet!");
-		else
 			nClouds = nUpdateThread.getCanvasViewInstance().nClouds;
-		return nClouds.getShakeMoveCount();
+			if(nClouds == null)
+				return 0;
+			else
+				return nClouds.getShakeMoveCount();
+		} else {
+			return nClouds.getShakeMoveCount();
+		}
 	}
 
 	public void setShakeMoveCount(int counter) {

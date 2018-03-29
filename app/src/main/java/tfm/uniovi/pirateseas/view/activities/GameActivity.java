@@ -8,6 +8,7 @@ import android.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -56,6 +57,13 @@ public class GameActivity extends Activity implements SensorEventListener {
 	private int mapHeight;
 	private int mapWidth;
 
+	SharedPreferences mPreferences;
+
+	private boolean shipControlMode;
+	private boolean ammoControlMode;
+	private boolean levelControlMode;
+	private boolean pauseControlMode;
+
 	protected SensorManager mSensorManager;
 	protected List<Sensor> triggeringSensors;
 
@@ -90,6 +98,13 @@ public class GameActivity extends Activity implements SensorEventListener {
 		mapHeight = data.getIntExtra(Constants.TAG_SCREEN_SELECTION_MAP_HEIGHT, Constants.MAP_MIN_HEIGHT);
 		mapWidth = data.getIntExtra(Constants.TAG_SCREEN_SELECTION_MAP_WIDTH, Constants.MAP_MIN_WIDTH);
 
+		mPreferences = getSharedPreferences(Constants.TAG_PREF_NAME,
+				Context.MODE_PRIVATE);
+		shipControlMode = mPreferences.getBoolean(Constants.PREF_SHIP_CONTROL_MODE, Constants.PREF_GAME_TOUCH);
+		ammoControlMode = mPreferences.getBoolean(Constants.PREF_AMMO_CONTROL_MODE, Constants.PREF_GAME_TOUCH);
+		levelControlMode = mPreferences.getBoolean(Constants.PREF_LEVEL_CONTROL_MODE, Constants.PREF_GAME_TOUCH);
+		pauseControlMode = mPreferences.getBoolean(Constants.PREF_PAUSE_CONTROL_MODE, Constants.PREF_GAME_TOUCH);
+
 		// Launch the game!!
 		setContentView(R.layout.activity_game);
 
@@ -120,8 +135,6 @@ public class GameActivity extends Activity implements SensorEventListener {
 		if (mCanvasView != null)
 			mCanvasView.setStatus(Constants.GAME_STATE_PAUSE);
 
-		// MusicManager.getInstance().pauseBackgroundMusic();
-
 		super.onPause();
 	}
 
@@ -144,19 +157,20 @@ public class GameActivity extends Activity implements SensorEventListener {
 			mSensorManager.registerListener(this, s, SensorManager.SENSOR_DELAY_GAME);
 		}
 
-		// MusicManager.getInstance().playBackgroundMusic();
-
 		super.onResume();
 	}
 
 	@Override
 	protected void onDestroy() {
-		// MusicManager.getInstance().stopBackgroundMusic();
 		super.onDestroy();
 	}
 
 	@Override
 	public void onBackPressed() {
+		exitGame();
+	}
+
+	public void exitGame(){
 		// Pop up messageBox asking if the user is sure to leave
 		LeaveGameDialogFragment exitDialog = new LeaveGameDialogFragment();
 		exitDialog.show(getFragmentManager(), "LeaveGameDialog");
@@ -447,9 +461,11 @@ public class GameActivity extends Activity implements SensorEventListener {
 	}
 
 	public void shakeClouds() {
-		int shakeCount = mCanvasView.getShakeMoveCount();
-		mCanvasView.setShakeMoveCount(shakeCount + 1);
-		Toast.makeText(context, String.format(getResources().getString(R.string.message_shakesleft),(Constants.SHAKE_LIMIT - (shakeCount+1))), Toast.LENGTH_SHORT).show();
+		if(mCanvasView != null) {
+			int shakeCount = mCanvasView.getShakeMoveCount();
+			mCanvasView.setShakeMoveCount(shakeCount + 1);
+			Toast.makeText(context, String.format(getResources().getString(R.string.message_shakesleft), (Constants.SHAKE_LIMIT - (shakeCount + 1))), Toast.LENGTH_SHORT).show();
+		}
 	}
 
 	public int[] getSensorTypes(){
