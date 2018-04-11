@@ -51,10 +51,10 @@ public class BasicModel{
 			}
 
 			if (y > mCanvasHeight) {
-				y = 0;
+				y = mCanvasHeight - yLength;
 			}
 			if (y < 0) {
-				y = mCanvasHeight;
+				y = 0;
 			}
 		} else {
 			if (x > mCanvasWidth) {

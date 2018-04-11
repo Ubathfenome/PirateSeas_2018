@@ -11,7 +11,6 @@ import java.util.Random;
 import tfm.uniovi.pirateseas.R;
 import tfm.uniovi.pirateseas.exceptions.NoAmmoException;
 import tfm.uniovi.pirateseas.global.Constants;
-import tfm.uniovi.pirateseas.utils.approach2d.DrawableHelper;
 
 public class Ship extends Entity {
 	// Crear array de variables para almacenar la cantidad de cada tipo de municion
@@ -238,40 +237,40 @@ public class Ship extends Entity {
 			} else {
 				switch(sType.ordinal()){
 				case 0:
-					if(entityDirection > 90 && entityDirection < 270){
+					if(entityDirection == 180){
 						setImage(context.getResources().getDrawable(R.mipmap.enemy_light_left, null));
-					} else if(entityDirection < 90 || entityDirection > 270) {
+					} else if(entityDirection == 0) {
 						setImage(context.getResources().getDrawable(R.mipmap.enemy_light_right, null));
 					} else {
 						setImage(context.getResources().getDrawable(R.mipmap.enemy_light_front, null));
 					}
 					
-					this.mCanvasWidth = DrawableHelper.getWidth(context.getResources(), ShipType.LIGHT.drawableValue());
-					this.mCanvasHeight = DrawableHelper.getHeight(context.getResources(), ShipType.LIGHT.drawableValue());
+					// this.mCanvasWidth = DrawableHelper.getWidth(context.getResources(), ShipType.LIGHT.drawableValue());
+					// this.mCanvasHeight = DrawableHelper.getHeight(context.getResources(), ShipType.LIGHT.drawableValue());
 					break;
 				case 1:
-					if(entityDirection > 90 && entityDirection < 270){
+					if(entityDirection == 180){
 						setImage(context.getResources().getDrawable(R.mipmap.enemy_medium_left, null));
-					} else if(entityDirection < 90 || entityDirection > 270) {
+					} else if(entityDirection == 0) {
 						setImage(context.getResources().getDrawable(R.mipmap.enemy_medium_right, null));
 					} else {
 						setImage(context.getResources().getDrawable(R.mipmap.enemy_medium_front, null));
 					}
 					
-					this.mCanvasWidth = DrawableHelper.getWidth(context.getResources(), ShipType.MEDIUM.drawableValue());
-					this.mCanvasHeight = DrawableHelper.getHeight(context.getResources(), ShipType.MEDIUM.drawableValue());
+					// this.mCanvasWidth = DrawableHelper.getWidth(context.getResources(), ShipType.MEDIUM.drawableValue());
+					// this.mCanvasHeight = DrawableHelper.getHeight(context.getResources(), ShipType.MEDIUM.drawableValue());
 					break;
 				case 2:
-					if(entityDirection > 90 && entityDirection < 270){
+					if(entityDirection == 180){
 						setImage(context.getResources().getDrawable(R.mipmap.enemy_heavy_left, null));
-					} else if(entityDirection < 90 || entityDirection > 270) {
+					} else if(entityDirection == 0) {
 						setImage(context.getResources().getDrawable(R.mipmap.enemy_heavy_right, null));
 					} else {
 						setImage(context.getResources().getDrawable(R.mipmap.enemy_heavy_front, null));
 					}
 					
-					this.mCanvasWidth = DrawableHelper.getWidth(context.getResources(), ShipType.HEAVY.drawableValue());
-					this.mCanvasHeight = DrawableHelper.getHeight(context.getResources(), ShipType.HEAVY.drawableValue());
+					// this.mCanvasWidth = DrawableHelper.getWidth(context.getResources(), ShipType.HEAVY.drawableValue());
+					// this.mCanvasHeight = DrawableHelper.getHeight(context.getResources(), ShipType.HEAVY.drawableValue());
 					break;
 				}
 			}
@@ -282,40 +281,40 @@ public class Ship extends Entity {
 			} else {
 				switch(sType.ordinal()){
 				case 0:
-					if(entityDirection > 90 && entityDirection < 270){
+					if(entityDirection == 180){
 						setImage(context.getResources().getDrawable(R.mipmap.enemy_light_left));
-					} else if(entityDirection < 90 || entityDirection > 270) {
+					} else if(entityDirection == 0) {
 						setImage(context.getResources().getDrawable(R.mipmap.enemy_light_right));
 					} else {
 						setImage(context.getResources().getDrawable(R.mipmap.enemy_light_front));
 					}
 					
-					this.mCanvasWidth = DrawableHelper.getWidth(context.getResources(), ShipType.LIGHT.drawableValue());
-					this.mCanvasHeight = DrawableHelper.getHeight(context.getResources(), ShipType.LIGHT.drawableValue());
+					// this.mCanvasWidth = DrawableHelper.getWidth(context.getResources(), ShipType.LIGHT.drawableValue());
+					// this.mCanvasHeight = DrawableHelper.getHeight(context.getResources(), ShipType.LIGHT.drawableValue());
 					break;
 				case 1:
-					if(entityDirection > 90 && entityDirection < 270){
+					if(entityDirection == 180){
 						setImage(context.getResources().getDrawable(R.mipmap.enemy_medium_left));
-					} else if(entityDirection < 90 || entityDirection > 270) {
+					} else if(entityDirection == 0) {
 						setImage(context.getResources().getDrawable(R.mipmap.enemy_medium_right));
 					} else {
 						setImage(context.getResources().getDrawable(R.mipmap.enemy_medium_front));
 					}
 					
-					this.mCanvasWidth = DrawableHelper.getWidth(context.getResources(), ShipType.MEDIUM.drawableValue());
-					this.mCanvasHeight = DrawableHelper.getHeight(context.getResources(), ShipType.MEDIUM.drawableValue());
+					// this.mCanvasWidth = DrawableHelper.getWidth(context.getResources(), ShipType.MEDIUM.drawableValue());
+					// this.mCanvasHeight = DrawableHelper.getHeight(context.getResources(), ShipType.MEDIUM.drawableValue());
 					break;
 				case 2:
-					if(entityDirection > 90 && entityDirection < 270){
+					if(entityDirection == 180){
 						setImage(context.getResources().getDrawable(R.mipmap.enemy_heavy_left));
-					} else if(entityDirection < 90 || entityDirection > 270) {
+					} else if(entityDirection == 0) {
 						setImage(context.getResources().getDrawable(R.mipmap.enemy_heavy_right));
 					} else {
 						setImage(context.getResources().getDrawable(R.mipmap.enemy_heavy_front));
 					}
 					
-					this.mCanvasWidth = DrawableHelper.getWidth(context.getResources(), ShipType.HEAVY.drawableValue());
-					this.mCanvasHeight = DrawableHelper.getHeight(context.getResources(), ShipType.HEAVY.drawableValue());
+					// this.mCanvasWidth = DrawableHelper.getWidth(context.getResources(), ShipType.HEAVY.drawableValue());
+					// this.mCanvasHeight = DrawableHelper.getHeight(context.getResources(), ShipType.HEAVY.drawableValue());
 					break;
 				}
 			}

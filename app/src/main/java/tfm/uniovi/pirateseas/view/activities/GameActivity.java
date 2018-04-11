@@ -30,6 +30,8 @@ import tfm.uniovi.pirateseas.controller.sensors.events.EventDayNightCycle;
 import tfm.uniovi.pirateseas.controller.sensors.events.EventShakeClouds;
 import tfm.uniovi.pirateseas.controller.sensors.events.EventWeatherMaelstrom;
 import tfm.uniovi.pirateseas.global.Constants;
+import tfm.uniovi.pirateseas.model.canvasmodel.game.entity.Ammunitions;
+import tfm.uniovi.pirateseas.model.canvasmodel.game.entity.Ship;
 import tfm.uniovi.pirateseas.model.canvasmodel.ui.UIDisplayElement;
 import tfm.uniovi.pirateseas.view.graphics.canvasview.CanvasView;
 
@@ -64,10 +66,12 @@ public class GameActivity extends Activity implements SensorEventListener {
 	private boolean levelControlMode;
 	private boolean pauseControlMode;
 
+	private float lastX, lastY, lastZ;
+
 	protected SensorManager mSensorManager;
 	protected List<Sensor> triggeringSensors;
 
-	public ImageButton btnPause;
+	public ImageButton btnPause, btnChangeAmmo;
 	public UIDisplayElement mGold, mAmmo;
 
 	@SuppressLint("ClickableViewAccessibility")
@@ -114,6 +118,20 @@ public class GameActivity extends Activity implements SensorEventListener {
 				Intent pauseIntent = new Intent(context, PauseActivity.class);
 				context.startActivity(pauseIntent);
 				Log.d(TAG, "Start Pause Intent");
+			}
+		});
+
+		btnChangeAmmo = (ImageButton) findViewById(R.id.btnChangeAmmo);
+		btnChangeAmmo.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				CanvasView currentCView = mCanvasView.nUpdateThread.getCanvasViewInstance();
+				Ship playerShip = currentCView.nPlayerShip;
+				if(playerShip != null) {
+					currentCView.selectNextAmmo();
+					view.setBackgroundResource(Ammunitions.values()[playerShip.getSelectedAmmunition()].drawableValue());
+					mAmmo.setElementValue(playerShip.getAmmunition(Ammunitions.values()[playerShip.getSelectedAmmunition()]));
+				}
 			}
 		});
 
@@ -228,8 +246,23 @@ public class GameActivity extends Activity implements SensorEventListener {
 							Toast.makeText(context, "Maelstorm inbound!", Toast.LENGTH_SHORT).show();
 							mCanvasView.maelstorm();
 						}
+					} else {
+						// TODO Gestionar los movimientos del barco del jugador dependiendo de los valores de los sensores
+						// @see: https://code.tutsplus.com/tutorials/using-the-accelerometer-on-android--mobile-22125
+						if(mCanvasView.getGamemode() == Constants.GAMEMODE_BATTLE) {
+							if(mCanvasView.nPlayerShip != null && mCanvasView.nPlayerShip.isAlive()){
+
+								float speed = Math.abs(axisSpeedX + axisSpeedY + axisSpeedZ - lastX - lastY - lastZ);
+								Log.d(TAG, "TYPE_ACCELEROMETER: Detected speed is: " + speed);
+
+								// mCanvasView.nPlayerShip.move(0,0,true);
+							}
+						}
 					}
 
+					lastX = axisSpeedX;
+					lastY = axisSpeedY;
+					lastZ = axisSpeedZ;
 					sensorLastTimestamp = event.timestamp;
 				}
 				break;
@@ -278,8 +311,6 @@ public class GameActivity extends Activity implements SensorEventListener {
 						Log.d(TAG, "TYPE_LIGHT: Light (l): " + lux);
 
 					// Event
-					// OLD EventWeatherFog.adjustScreenBrightness(context, lux %
-					// 100);
 					// Save light level as global variable
 					lightLevel = (int) lux;
 
@@ -332,9 +363,6 @@ public class GameActivity extends Activity implements SensorEventListener {
 					if (Math.abs(linearAccelerationX) > EventShakeClouds.threshold){
 						shakeClouds();
 					}
-					// else {
-					// TODO Add ship movement when preferences are set to sensors
-					//}
 
 					sensorLastTimestamp = event.timestamp;
 				}

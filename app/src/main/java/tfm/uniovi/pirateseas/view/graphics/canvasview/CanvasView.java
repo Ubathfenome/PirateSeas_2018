@@ -41,7 +41,6 @@ import tfm.uniovi.pirateseas.model.canvasmodel.ui.StatBar;
 import tfm.uniovi.pirateseas.utils.approach2d.DrawableHelper;
 import tfm.uniovi.pirateseas.utils.persistence.GameHelper;
 import tfm.uniovi.pirateseas.view.activities.GameActivity;
-import tfm.uniovi.pirateseas.view.activities.PauseActivity;
 import tfm.uniovi.pirateseas.view.activities.ScreenSelectionActivity;
 
 public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
@@ -53,13 +52,15 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 	private static final int SHOT_CHK_DELAY = 75;
 	private static final int MAELSTORM_DAMAGE = 15;
 
+	private static final int ENEMY_Y_LIMIT = 30;
+
 	private static final int DEFAULT_PLAYER_SHIP_DIRECTION = 90;
 	private static final int DEFAULT_SHIP_WIDTH = 2;
 	private static final int DEFAULT_SHIP_HEIGHT = 3;
 	private static final int DEFAULT_SHIP_LENGTH = 5;
 	private static final int DEFAULT_PLAYER_SHIP_AMMO = 20;
 
-	private static final int DEFAULT_ENEMY_SHIP_DIRECTION = 270;
+	private static final int DEFAULT_ENEMY_SHIP_DIRECTION = 180;
 
 	private int HORIZON_Y_VALUE = 200;
 	private double HORIZON_HEIGHT_MULTIPLIER = 0.3;
@@ -101,9 +102,12 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 	private int nCheatCounter;
 	private int nGameMode;
 
-	private boolean nControlMode;
+	private boolean nShipControlMode;
 
 	int downX = 0, downY = 0;
+
+	double nEnemyShipInitialXcoord;
+	double nEnemyShipInitialYcoord;
 
 
 
@@ -196,7 +200,7 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 		nCheatCounter = 0;
 		nGameMode = Constants.GAMEMODE_IDLE;
 		Log.d(TAG, "Initialization: GameMode set to IDLE");
-		nControlMode = nPreferences.getBoolean(Constants.PREF_SHIP_CONTROL_MODE, Constants.PREF_GAME_TOUCH);
+		nShipControlMode = nPreferences.getBoolean(Constants.PREF_SHIP_CONTROL_MODE, Constants.PREF_GAME_TOUCH);
 
 		nInitialized = true;
 	}
@@ -234,6 +238,7 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 
 		// Pinta al enemigo y su barra de vida
 		if (nEnemyShip != null && nEnemyShip.isAlive()) {
+			nEnemyShip.updateImage();
 			nEnemyShip.drawOnScreen(canvas);
 			nEnemyHBar.drawOnScreen(canvas);
 		}
@@ -309,83 +314,51 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 
 		if (nStatus == Constants.GAME_STATE_NORMAL && nGameMode == Constants.GAMEMODE_BATTLE) {
 			// If "Sensor control" Then
-			if (!nControlMode) {
+			if (!nShipControlMode) {
 				// TODO Transform sensor acceleration into movement event
 
+
 			} else {
-
-				// ElseIf "Touch control" Then
-
-				if ((x > (getWidth() - (getWidth() / 6))) && (y < getHeight() / 6)) {
-					nStatus = Constants.GAME_STATE_PAUSE;
-					Intent pauseActivityIntent = new Intent(nContext, PauseActivity.class);
-					Log.d(TAG, "Start Pause Intent");
-					nContext.startActivity(pauseActivityIntent);
-				} else {
-					switch (event.getAction()) {
-					case MotionEvent.ACTION_MOVE:
-						break;
-					case MotionEvent.ACTION_UP:
-						boolean reloaded = nPlayerShip.isReloaded(nGameTimestamp);
-						if (reloaded) {
-							String direction = pressedMotion(new Point(downX, downY), new Point(x, y));
-							if (direction.equals(Constants.FRONT)) {
-
-								nCheatCounter = 0;
-
-								try {
-									nShotList.add(nPlayerShip.shootFront());
-								} catch (NoAmmoException e) {
-									Log.e(EXCEPTION_TAG, e.getMessage());
-									Toast.makeText(nContext, e.getMessage(), Toast.LENGTH_SHORT).show();
-								}
-
-							} else if (direction.equals(Constants.RIGHT)) {
-								Shot[] shotArray = null;
-								nCheatCounter = 0;
-
-								try {
-									shotArray = nPlayerShip.shootSide();
-									for (int i = 0, length = shotArray.length; i < length; i++) {
-										nShotList.add(shotArray[i]);
-									}
-								} catch (NoAmmoException e) {
-									Log.e(EXCEPTION_TAG, e.getMessage());
-									Toast.makeText(nContext, e.getMessage(), Toast.LENGTH_SHORT).show();
-								}
-							} else if (direction.equals(Constants.LEFT)) {
-								Shot[] shotArray = null;
-								nCheatCounter = 0;
-
-								try {
-									shotArray = nPlayerShip.shootSide();
-									for (int i = 0, length = shotArray.length; i < length; i++) {
-										nShotList.add(shotArray[i]);
-									}
-								} catch (NoAmmoException e) {
-									Log.e(EXCEPTION_TAG, e.getMessage());
-									Toast.makeText(nContext, e.getMessage(), Toast.LENGTH_SHORT).show();
-								}
-							} else if (direction.equals(Constants.BACK)) {
-								nCheatCounter++;
-								if (nCheatCounter % CHT_VALUE > 0)
-									Log.v("Cheat", CHT_VALUE - (nCheatCounter % CHT_VALUE) + " more touches to go!");
-								if (nCheatCounter % CHT_VALUE == 0)
-									grantCheat2Player();
-							}
-						} else {
+				switch (event.getAction()) {
+				case MotionEvent.ACTION_MOVE:
+					break;
+				case MotionEvent.ACTION_UP:
+					boolean reloaded = nPlayerShip.isReloaded(nGameTimestamp);
+					if (reloaded) {
+						String direction = pressedMotion(new Point(downX, downY), new Point(x, y));
+						if (direction.equals(Constants.FRONT)) {
+							nCheatCounter = 0;
 							try {
-								throw new CannonReloadingException(
-										nContext.getResources().getString(R.string.exception_reloading));
-							} catch (CannonReloadingException e) {
+								nShotList.add(nPlayerShip.shootFront());
+							} catch (NoAmmoException e) {
 								Log.e(EXCEPTION_TAG, e.getMessage());
-								if (!nDebug)
-									MusicManager.getInstance().playSound(MusicManager.SOUND_SHOT_RELOADING);
 								Toast.makeText(nContext, e.getMessage(), Toast.LENGTH_SHORT).show();
 							}
+						} else if (direction.equals(Constants.RIGHT)) {
+							nCheatCounter = 0;
+							nPlayerShip.move(nPlayerShip.getSpeedXLevel(), 0, false);
+						} else if (direction.equals(Constants.LEFT)) {
+							nCheatCounter = 0;
+							nPlayerShip.move(-1 * nPlayerShip.getSpeedXLevel(), 0, false);
+						} else if (direction.equals(Constants.BACK)) {
+							nCheatCounter++;
+							if (nCheatCounter % CHT_VALUE > 0)
+								Log.v("Cheat", CHT_VALUE - (nCheatCounter % CHT_VALUE) + " more touches to go!");
+							if (nCheatCounter % CHT_VALUE == 0)
+								grantCheat2Player();
 						}
-						break;
+					} else {
+						try {
+							throw new CannonReloadingException(
+									nContext.getResources().getString(R.string.exception_reloading));
+						} catch (CannonReloadingException e) {
+							Log.e(EXCEPTION_TAG, e.getMessage());
+							if (!nDebug)
+								MusicManager.getInstance().playSound(MusicManager.SOUND_SHOT_RELOADING);
+							Toast.makeText(nContext, e.getMessage(), Toast.LENGTH_SHORT).show();
+						}
 					}
+					break;
 				}
 			}
 		}
@@ -408,14 +381,6 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 			return deltaX > 0 ? Constants.RIGHT : Constants.LEFT;
 		} else { // Vertical movement
 			return deltaY > 0 ? Constants.BACK : Constants.FRONT;
-		}
-	}
-
-	public static void pauseGame(boolean hasToBePaused) {
-		if (hasToBePaused && nStatus == Constants.GAME_STATE_NORMAL) {
-			nStatus = Constants.GAME_STATE_PAUSE;
-		} else if (!hasToBePaused && nStatus == Constants.GAME_STATE_PAUSE) {
-			nStatus = Constants.GAME_STATE_NORMAL;
 		}
 	}
 
@@ -469,7 +434,6 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 		if (!nUpdateThread.isAlive() && nUpdateThread.getState() != Thread.State.NEW) {
 			launchMainLogic();
 		}
-
 	}
 
 	private void manageTime() {
@@ -676,29 +640,37 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 				nPlayer.addGold(nEnemyShip.getType().defaultHealthPoints() / 5);
 				nPlayer.addExperience(nEnemyShip.getType().defaultHealthPoints() / 2);
 			} else {
-				// Establecer comportamiento enemigo
+				// Establecer comportamiento enemigo con movimiento en circulo
 				if(nEnemyShip.getX()+nEnemyShip.getWidth()+nEnemyShip.getShipType().getSpeed() > nScreenWidth) {
-					nEnemyShip.move(0, 30, false);
-				} else if(nEnemyShip.getX()-nEnemyShip.getShipType().getSpeed() < 0){
-					nEnemyShip.move(0,-30,false);
+					if(nEnemyShip.getY() > nEnemyShipInitialYcoord) {
+						nEnemyShip.setEntityDirection(90);
+						nEnemyShip.move(0, nEnemyShip.getShipType().getSpeed(), true);
+					} else {
+						nEnemyShip.setEntityDirection(180);
+						nEnemyShip.move(nEnemyShip.getShipType().getSpeed(), 0, true);
+					}
+				} else if(nEnemyShip.getX()-nEnemyShip.getShipType().getSpeed() < 0) {
+                    if (nEnemyShip.getY() <= (nEnemyShipInitialYcoord + ENEMY_Y_LIMIT)) {
+						nEnemyShip.setEntityDirection(270);
+                        nEnemyShip.move(0, -nEnemyShip.getShipType().getSpeed(), true);
+                    } else {
+						nEnemyShip.setEntityDirection(0);
+						nEnemyShip.move(-nEnemyShip.getShipType().getSpeed(), 0, true);
+					}
 				} else {
-					nEnemyShip.move(nEnemyShip.getShipType().getSpeed(), 0, true);
+					if(nEnemyShip.getEntityDirection() == 0)
+						nEnemyShip.move(-nEnemyShip.getShipType().getSpeed(), 0, true);
+					else if(nEnemyShip.getEntityDirection() == 180)
+						nEnemyShip.move(nEnemyShip.getShipType().getSpeed(), 0, true);
+					else
+						nEnemyShip.move(nEnemyShip.getShipType().getSpeed(), 0, true);
 				}
-
-
 			}
 		}
 	}
 
-	/**
-	 * Rotate the world around the player whenever he/she moves
-	 */
 	private void managePlayer() {
-		if (nPlayerShip.isAlive()) {
-			if (nEnemyShip != null && nEnemyShip.isAlive()) {
-				nEnemyShip.move(nEnemyShip.getSpeedXLevel(), 0, true);
-			}
-		} else {
+		if (!nPlayerShip.isAlive()) {
 			// Display "Game Over" Screen with calculated score
 			((GameActivity) nContext).gameOver(nPlayer);
 			nStatus = Constants.GAME_STATE_END;
@@ -729,12 +701,12 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 		MusicManager.getInstance(nContext, MusicManager.MUSIC_BATTLE).playBackgroundMusic();
 
 		ShipType sType = Ship.randomShipType();
-		double nEnemyShipXcoord = randomXSpawnValue((int) DrawableHelper.getWidth(getResources(), sType.drawableValue()));
-		double nEnemyShipYcoord = DrawableHelper.getHeight(getResources(), sType.drawableValue()) / 3;
+		nEnemyShipInitialXcoord = randomXSpawnValue((int) DrawableHelper.getWidth(getResources(), sType.drawableValue()));
+		nEnemyShipInitialYcoord = DrawableHelper.getHeight(getResources(), sType.drawableValue()) / 3;
 
 		nEnemyShip = new Ship(nContext, sType,
-				nEnemyShipXcoord,
-				nEnemyShipYcoord,
+				nEnemyShipInitialXcoord,
+				nEnemyShipInitialYcoord,
 				nScreenWidth, nScreenHeight, new Point(15, 20), DEFAULT_ENEMY_SHIP_DIRECTION, 3, 4,
 				7, Constants.SHOT_AMMO_UNLIMITED);
 
@@ -796,5 +768,10 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 		else
 			nClouds = nUpdateThread.getCanvasViewInstance().nClouds;
 		nClouds.setShakeMoveCount(counter);
+	}
+
+	public void selectNextAmmo(){
+		if(nPlayerShip != null && nPlayerShip.isAlive())
+			nPlayerShip.selectNextAmmo();
 	}
 }
