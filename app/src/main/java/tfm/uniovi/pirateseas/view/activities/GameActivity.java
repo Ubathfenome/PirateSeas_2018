@@ -15,6 +15,7 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
@@ -125,12 +126,17 @@ public class GameActivity extends Activity implements SensorEventListener {
 		btnChangeAmmo.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				CanvasView currentCView = mCanvasView.nUpdateThread.getCanvasViewInstance();
-				Ship playerShip = currentCView.nPlayerShip;
-				if(playerShip != null) {
-					currentCView.selectNextAmmo();
-					view.setBackgroundResource(Ammunitions.values()[playerShip.getSelectedAmmunition()].drawableValue());
-					mAmmo.setElementValue(playerShip.getAmmunition(Ammunitions.values()[playerShip.getSelectedAmmunition()]));
+				if(ammoControlMode) {
+					CanvasView currentCView = mCanvasView.nUpdateThread.getCanvasViewInstance();
+					Ship playerShip = currentCView.nPlayerShip;
+					if (playerShip != null) {
+						currentCView.selectNextAmmo();
+						int selectedAmmo = playerShip.getSelectedAmmunition();
+						int drawValue = Ammunitions.values()[playerShip.getSelectedAmmunitionIndex()].drawableValue();
+						btnChangeAmmo.setImageResource(drawValue);
+						btnChangeAmmo.invalidate();
+						mAmmo.setElementValue(selectedAmmo);
+					}
 				}
 			}
 		});
@@ -139,10 +145,6 @@ public class GameActivity extends Activity implements SensorEventListener {
 		mGold.setElementValue(0);
 		mAmmo = (UIDisplayElement) findViewById(R.id.playerAmmunition);
 		mAmmo.setElementValue(0);
-	}
-
-	public boolean hasToLoadGame() {
-		return loadGame;
 	}
 
 	@Override
@@ -188,12 +190,6 @@ public class GameActivity extends Activity implements SensorEventListener {
 		exitGame();
 	}
 
-	public void exitGame(){
-		// Pop up messageBox asking if the user is sure to leave
-		LeaveGameDialogFragment exitDialog = new LeaveGameDialogFragment();
-		exitDialog.show(getFragmentManager(), "LeaveGameDialog");
-	}
-
 	public static class LeaveGameDialogFragment extends DialogFragment {
 		@Override
 		public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -225,6 +221,7 @@ public class GameActivity extends Activity implements SensorEventListener {
 		Sensor sensor = event.sensor;
 		long deltaTime = event.timestamp - sensorLastTimestamp;
 		double deltaSeconds = deltaTime * Constants.NANOS_TO_SECONDS;
+        CanvasView cView = mCanvasView.nUpdateThread.getCanvasViewInstance();
 		if (arrayContainsValue(sensorTypes, sensor.getType())) {
 			switch (sensor.getType()) {
 			case Sensor.TYPE_ACCELEROMETER:
@@ -242,20 +239,27 @@ public class GameActivity extends Activity implements SensorEventListener {
 					// Event
 					if (EventWeatherMaelstrom.generateMaelstrom(axisSpeedY, axisSpeedZ)) {
 						// Notify CanvasView to damage the ships
-						if (mCanvasView.getGamemode() == Constants.GAMEMODE_BATTLE) {
+						if (cView.getGamemode() == Constants.GAMEMODE_BATTLE) {
 							Toast.makeText(context, "Maelstorm inbound!", Toast.LENGTH_SHORT).show();
-							mCanvasView.maelstorm();
+                            cView.maelstorm();
 						}
 					} else {
 						// TODO Gestionar los movimientos del barco del jugador dependiendo de los valores de los sensores
 						// @see: https://code.tutsplus.com/tutorials/using-the-accelerometer-on-android--mobile-22125
-						if(mCanvasView.getGamemode() == Constants.GAMEMODE_BATTLE) {
-							if(mCanvasView.nPlayerShip != null && mCanvasView.nPlayerShip.isAlive()){
+						if(cView.getGamemode() == Constants.GAMEMODE_BATTLE) {
+							if(cView.nPlayerShip != null && cView.nPlayerShip.isAlive() && cView.nEnemyShip != null && cView.nEnemyShip.isAlive()){
+								if(shipControlMode == false) {
+									int shipSpeed = cView.nPlayerShip.getShipType().getSpeed();
+									float speed = Math.abs(axisSpeedX + axisSpeedY + axisSpeedZ - lastX - lastY - lastZ);
+									Log.d(TAG, "TYPE_ACCELEROMETER: Ship movement would be: " + shipSpeed + " + " + speed + " = " + (shipSpeed + speed) +
+											" to the " + (cView.nPlayerShip.getEntityDirection() == 180? "left":"right"));
+									if(cView.nPlayerShip.getEntityDirection() == 180){
+										// cView.nPlayerShip.move((shipSpeed + speed),0,true);
+									} else if(cView.nPlayerShip.getEntityDirection() == 0){
+										// cView.nPlayerShip.move(-(shipSpeed + speed),0,true);
+									}
 
-								float speed = Math.abs(axisSpeedX + axisSpeedY + axisSpeedZ - lastX - lastY - lastZ);
-								Log.d(TAG, "TYPE_ACCELEROMETER: Detected speed is: " + speed);
-
-								// mCanvasView.nPlayerShip.move(0,0,true);
+								}
 							}
 						}
 					}
@@ -455,18 +459,48 @@ public class GameActivity extends Activity implements SensorEventListener {
 	}
 	*/
 
-	private boolean arrayContainsValue(int[] array, int value) {
-		for (int i = 0; i < array.length; i++) {
-			if (array[i] == value)
-				return true;
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if (!ammoControlMode) {
+			if (keyCode == KeyEvent.KEYCODE_VOLUME_UP) {
+				// Change to the next type
+				Ship playerShip = mCanvasView.nPlayerShip;
+				if(playerShip != null) {
+					playerShip.selectNextAmmo();
+					int selectedAmmo = playerShip.getSelectedAmmunition();
+					int drawValue = Ammunitions.values()[playerShip.getSelectedAmmunitionIndex()].drawableValue();
+					btnChangeAmmo.setImageResource(drawValue);
+					btnChangeAmmo.invalidate();
+					mAmmo.setElementValue(selectedAmmo);
+				}
+			} else if (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN) {
+				// Change to the previous type
+				Ship playerShip = mCanvasView.nPlayerShip;
+				if(playerShip != null) {
+					playerShip.selectPreviousAmmo();
+					int selectedAmmo = playerShip.getSelectedAmmunition();
+					int drawValue = Ammunitions.values()[playerShip.getSelectedAmmunitionIndex()].drawableValue();
+					btnChangeAmmo.setImageResource(drawValue);
+					btnChangeAmmo.invalidate();
+					mAmmo.setElementValue(selectedAmmo);
+				}
+			}
 		}
-		return false;
+		return true;
 	}
 
 	@Override
 	public void onAccuracyChanged(Sensor sensor, int accuracy) {
 		if (!Constants.isInDebugMode(Constants.MODE))
 			Log.d(TAG, "Sensor " + sensor.getName() + " got changed in " + accuracy);
+	}
+
+	private boolean arrayContainsValue(int[] array, int value) {
+		for (int i = 0; i < array.length; i++) {
+			if (array[i] == value)
+				return true;
+		}
+		return false;
 	}
 
 	public void gameOver(Player nPlayer) {
@@ -488,12 +522,22 @@ public class GameActivity extends Activity implements SensorEventListener {
 		finish();
 	}
 
+	public void exitGame(){
+		// Pop up messageBox asking if the user is sure to leave
+		LeaveGameDialogFragment exitDialog = new LeaveGameDialogFragment();
+		exitDialog.show(getFragmentManager(), "LeaveGameDialog");
+	}
+
 	public void shakeClouds() {
 		if(mCanvasView != null) {
 			int shakeCount = mCanvasView.getShakeMoveCount();
 			mCanvasView.setShakeMoveCount(shakeCount + 1);
 			Toast.makeText(context, String.format(getResources().getString(R.string.message_shakesleft), (Constants.SHAKE_LIMIT - (shakeCount + 1))), Toast.LENGTH_SHORT).show();
 		}
+	}
+
+	public boolean hasToLoadGame() {
+		return loadGame;
 	}
 
 	public int[] getSensorTypes(){

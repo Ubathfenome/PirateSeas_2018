@@ -259,8 +259,7 @@ public class ScreenSelectionActivity extends Activity {
 		resetIntent.putExtra(Constants.TAG_LOAD_GAME, loadGame);
 		resetIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		Log.d(TAG,"Reset ScreenSelection Intent");
-		this.startActivity(resetIntent);
-		Log.d(TAG,"Finish ScreenSelection Activity");
+		startActivity(resetIntent);
 		finish();
 	}
 
@@ -269,9 +268,13 @@ public class ScreenSelectionActivity extends Activity {
 		Random rand = new Random();
 		boolean yesNo = rand.nextBoolean();
 		Intent shopIntent = new Intent(this, ShopActivity.class);
+		shopIntent.putExtra(Constants.TAG_SENSOR_LIST, sensorTypes);
+		shopIntent.putExtra(Constants.TAG_LOAD_GAME, loadGame);
 		shopIntent.putExtra(Constants.ITEMLIST_NATURE, yesNo ? Constants.NATURE_SHOP : Constants.NATURE_TREASURE);
-		Log.d(TAG,"Start Shop ForResult Intent");
-		this.startActivityForResult(shopIntent, Constants.REQUEST_ISLAND);
+		shopIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		Log.d(TAG,"Start Shop Intent");
+		startActivity(shopIntent);
+		finish();
 	}
 
 	private Drawable getCurrentMap(Date date) {
@@ -341,18 +344,4 @@ public class ScreenSelectionActivity extends Activity {
 		double logarythm = Math.log(playerLevel);
 		return logarythm % 2 == 0;
 	}
-
-	@SuppressLint("NewApi")
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		if (data != null && requestCode == Constants.REQUEST_ISLAND && resultCode == Activity.RESULT_OK) {
-			currentMapDrawable = getCurrentMap(date);
-			layoutBackground.setBackground(currentMapDrawable);
-			layoutBackground.invalidate();
-			MusicManager.getInstance().stopBackgroundMusic();
-			MusicManager.getInstance(context, MusicManager.MUSIC_GAME_MENU).playBackgroundMusic();
-			reloadSelection();
-		}
-	}
-
 }

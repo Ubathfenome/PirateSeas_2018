@@ -8,7 +8,6 @@ import android.graphics.Canvas;
 import android.graphics.Point;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -52,7 +51,7 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 	private static final int SHOT_CHK_DELAY = 75;
 	private static final int MAELSTORM_DAMAGE = 15;
 
-	private static final int ENEMY_Y_LIMIT = 30;
+	private static final int ENEMY_Y_LIMIT = 60;
 
 	private static final int DEFAULT_PLAYER_SHIP_DIRECTION = 90;
 	private static final int DEFAULT_SHIP_WIDTH = 2;
@@ -85,7 +84,7 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 	public Clouds nClouds;
 
 	public Ship nPlayerShip;
-	private Ship nEnemyShip;
+	public Ship nEnemyShip;
 	private List<Shot> nShotList;
 
 	private StatBar nPlayerHBar, nPlayerXPBar;
@@ -286,21 +285,6 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 		}
 	}
 
-	@Override
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		boolean useAmmoKeys = nPreferences.getBoolean(Constants.PREF_AMMO_CONTROL_MODE, Constants.PREF_GAME_TOUCH);
-		if (useAmmoKeys) {
-			if (keyCode == KeyEvent.KEYCODE_VOLUME_UP) {
-				// Change to the next type
-				nPlayerShip.selectNextAmmo();
-			} else if (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN) {
-				// Change to the previous type
-				nPlayerShip.selectPreviousAmmo();
-			}
-		}
-		return true;
-	}
-
 	@SuppressLint("ClickableViewAccessibility")
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
@@ -313,53 +297,52 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 		}
 
 		if (nStatus == Constants.GAME_STATE_NORMAL && nGameMode == Constants.GAMEMODE_BATTLE) {
-			// If "Sensor control" Then
-			if (!nShipControlMode) {
-				// TODO Transform sensor acceleration into movement event
-
-
-			} else {
+			// If "Touch control" Then
+			if (nShipControlMode) {
 				switch (event.getAction()) {
-				case MotionEvent.ACTION_MOVE:
-					break;
-				case MotionEvent.ACTION_UP:
-					boolean reloaded = nPlayerShip.isReloaded(nGameTimestamp);
-					if (reloaded) {
-						String direction = pressedMotion(new Point(downX, downY), new Point(x, y));
-						if (direction.equals(Constants.FRONT)) {
-							nCheatCounter = 0;
+					case MotionEvent.ACTION_MOVE:
+						break;
+					case MotionEvent.ACTION_UP:
+						boolean reloaded = nPlayerShip.isReloaded(nGameTimestamp);
+						if (reloaded) {
+							String direction = pressedMotion(new Point(downX, downY), new Point(x, y));
+							int xDistance = Math.abs(x - downX);
+							int yDistance = Math.abs(y - downY);
+							if (direction.equals(Constants.FRONT)) {
+								nCheatCounter = 0;
+								try {
+									nShotList.add(nPlayerShip.shootFront());
+									MusicManager.getInstance().playSound(MusicManager.SOUND_SHOT_FIRED);
+								} catch (NoAmmoException e) {
+									Log.e(EXCEPTION_TAG, e.getMessage());
+									Toast.makeText(nContext, e.getMessage(), Toast.LENGTH_SHORT).show();
+								}
+							} else if (direction.equals(Constants.RIGHT)) {
+								nCheatCounter = 0;
+								nPlayerShip.move(-(nPlayerShip.getShipType().getSpeed() + xDistance), 0, true);
+							} else if (direction.equals(Constants.LEFT)) {
+								nCheatCounter = 0;
+								nPlayerShip.move(nPlayerShip.getShipType().getSpeed() + xDistance, 0, true);
+							} else if (direction.equals(Constants.BACK)) {
+								nCheatCounter++;
+								if (nCheatCounter % CHT_VALUE > 0)
+									Log.v("Cheat", CHT_VALUE - (nCheatCounter % CHT_VALUE) + " more touches to go!");
+								if (nCheatCounter % CHT_VALUE == 0)
+									grantCheat2Player();
+							}
+						} else {
 							try {
-								nShotList.add(nPlayerShip.shootFront());
-							} catch (NoAmmoException e) {
+								throw new CannonReloadingException(
+										nContext.getResources().getString(R.string.exception_reloading));
+							} catch (CannonReloadingException e) {
 								Log.e(EXCEPTION_TAG, e.getMessage());
+								if (!nDebug)
+									MusicManager.getInstance().playSound(MusicManager.SOUND_SHOT_RELOADING);
 								Toast.makeText(nContext, e.getMessage(), Toast.LENGTH_SHORT).show();
 							}
-						} else if (direction.equals(Constants.RIGHT)) {
-							nCheatCounter = 0;
-							nPlayerShip.move(nPlayerShip.getSpeedXLevel(), 0, false);
-						} else if (direction.equals(Constants.LEFT)) {
-							nCheatCounter = 0;
-							nPlayerShip.move(-1 * nPlayerShip.getSpeedXLevel(), 0, false);
-						} else if (direction.equals(Constants.BACK)) {
-							nCheatCounter++;
-							if (nCheatCounter % CHT_VALUE > 0)
-								Log.v("Cheat", CHT_VALUE - (nCheatCounter % CHT_VALUE) + " more touches to go!");
-							if (nCheatCounter % CHT_VALUE == 0)
-								grantCheat2Player();
 						}
-					} else {
-						try {
-							throw new CannonReloadingException(
-									nContext.getResources().getString(R.string.exception_reloading));
-						} catch (CannonReloadingException e) {
-							Log.e(EXCEPTION_TAG, e.getMessage());
-							if (!nDebug)
-								MusicManager.getInstance().playSound(MusicManager.SOUND_SHOT_RELOADING);
-							Toast.makeText(nContext, e.getMessage(), Toast.LENGTH_SHORT).show();
-						}
+						break;
 					}
-					break;
-				}
 			}
 		}
 		return true;
@@ -391,6 +374,7 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 		checkLogicThread();
 		switch (nStatus) {
 		case Constants.GAME_STATE_NORMAL:
+			/*
 			switch(nGameMode){
 				case Constants.GAMEMODE_BATTLE:
 					Log.d(TAG,"Current GAMEMODE is: BATTLE");
@@ -402,6 +386,7 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 					Log.d(TAG,"Current GAMEMODE is: IDLE");
 					break;
 			}
+			*/
 			manageTime();
 			manageEvents();
 			manageMode();
@@ -726,7 +711,7 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 		screenSelectionIntent.putExtra(Constants.TAG_LOAD_GAME, ((GameActivity) nContext).hasToLoadGame());
 		screenSelectionIntent.putExtra(Constants.TAG_SCREEN_SELECTION_MAP_HEIGHT, ((GameActivity) nContext).getMapHeight());
 		screenSelectionIntent.putExtra(Constants.TAG_SCREEN_SELECTION_MAP_WIDTH, ((GameActivity) nContext).getMapWidth());
-
+		screenSelectionIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		Log.d(TAG, "Start ScreenSelection Intent");
 		nContext.startActivity(screenSelectionIntent);
 		nStatus = Constants.GAME_STATE_END;

@@ -303,6 +303,7 @@ public class MainMenuActivity extends Activity {
 	@Override
 	protected void onDestroy() {
 		MusicManager.getInstance().stopBackgroundMusic();
+		MusicManager.getInstance().releaseResources();
 		super.onDestroy();
 	}
 
@@ -352,9 +353,17 @@ public class MainMenuActivity extends Activity {
 								public void onClick(DialogInterface dialog,
 													int id) {
 									boolean noSensors = mPreferences.getBoolean(Constants.PREF_DEVICE_NOSENSORS, false);
+									boolean shipControlMode = mPreferences.getBoolean(Constants.PREF_SHIP_CONTROL_MODE, Constants.PREF_GAME_TOUCH);
+									boolean ammoControlMode = mPreferences.getBoolean(Constants.PREF_AMMO_CONTROL_MODE, Constants.PREF_GAME_TOUCH);
+									boolean levelControlMode = mPreferences.getBoolean(Constants.PREF_LEVEL_CONTROL_MODE, Constants.PREF_GAME_TOUCH);
+									boolean pauseControlMode = mPreferences.getBoolean(Constants.PREF_PAUSE_CONTROL_MODE, Constants.PREF_GAME_TOUCH);
 
 									SharedPreferences.Editor editor = mPreferences.edit();
 									editor.clear();
+									editor.putBoolean(Constants.PREF_SHIP_CONTROL_MODE, shipControlMode);
+									editor.putBoolean(Constants.PREF_AMMO_CONTROL_MODE, ammoControlMode);
+									editor.putBoolean(Constants.PREF_LEVEL_CONTROL_MODE, levelControlMode);
+									editor.putBoolean(Constants.PREF_PAUSE_CONTROL_MODE, pauseControlMode);
 									editor.putBoolean(Constants.TAG_EXE_MODE, Constants.isInDebugMode(mMode));
 									editor.commit();
 
@@ -412,7 +421,10 @@ public class MainMenuActivity extends Activity {
 		@Override
 		protected void onPostExecute(Boolean result) {
 			Log.d(TAG,"AudioPool loaded");
-			MusicManager.getInstance(context, MusicManager.MUSIC_GAME_MENU).playBackgroundMusic();
+			try {
+				MusicManager.getInstance(context, MusicManager.MUSIC_GAME_MENU).playBackgroundMusic();
+			} catch (IllegalStateException e) {
+			}
 		}
 	}
 }

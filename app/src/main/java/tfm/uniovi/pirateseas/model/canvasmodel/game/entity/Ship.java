@@ -194,8 +194,6 @@ public class Ship extends Entity {
 	public Shot[] shootSide() throws NoAmmoException {
 		Shot[] cannonballArray = new Shot[3];
 		Shot cannonballVector = null;
-		
-		// TODO Ajustar tiro disperso hacia abajo en vez de hacia la derecha
 
 		if (nAmmunitions[selectedAmmoIndex] >= 3 || nAmmunitions[selectedAmmoIndex] == Constants.SHOT_AMMO_UNLIMITED) {
 			timestampLastShot = SystemClock.elapsedRealtime();
@@ -489,6 +487,10 @@ public class Ship extends Entity {
 				+ timestampLastShot + ", entityDirection=" + entityDirection
 				+ ", entityCoordinates=" + entityCoordinates + "]";
 	}
+
+    public int getSelectedAmmunitionIndex() {
+        return selectedAmmoIndex;
+    }
 
 	public int getSelectedAmmunition() {
 		return nAmmunitions[selectedAmmoIndex];

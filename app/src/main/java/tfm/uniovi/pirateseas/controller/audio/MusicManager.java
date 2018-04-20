@@ -180,4 +180,10 @@ public class MusicManager{
 		mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC, streamedVolume, 0);
 		
 	}
+
+	public void releaseResources(){
+		if(mBackgroundMusic!=null && !mBackgroundMusic.isPlaying()){
+			mBackgroundMusic.release();
+		}
+	}
 }

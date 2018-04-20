@@ -32,6 +32,7 @@ import java.util.List;
 import tfm.uniovi.pirateseas.R;
 import tfm.uniovi.pirateseas.controller.androidGameAPI.Map;
 import tfm.uniovi.pirateseas.controller.androidGameAPI.Player;
+import tfm.uniovi.pirateseas.controller.audio.MusicManager;
 import tfm.uniovi.pirateseas.exceptions.NotEnoughGoldException;
 import tfm.uniovi.pirateseas.exceptions.SaveGameException;
 import tfm.uniovi.pirateseas.global.Constants;
@@ -54,6 +55,11 @@ public class ShopActivity extends ListActivity{
 	static String descriptionTip;
 	
 	String mNature = "";
+	private int[] sensorTypes;
+	private boolean loadGame;
+	private int mapHeight;
+	private int mapWidth;
+
 	boolean mDebug = false;
 	
 	Player dummyPlayer;
@@ -69,7 +75,7 @@ public class ShopActivity extends ListActivity{
 
 	Button btnAcceptAll;
 	Button btnClose;
-	
+
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		
@@ -77,6 +83,10 @@ public class ShopActivity extends ListActivity{
 		
 		Intent data = getIntent();
 		mNature = data.getExtras().getString(Constants.ITEMLIST_NATURE, Constants.EMPTY_STRING);
+		sensorTypes = data.getIntArrayExtra(Constants.TAG_SENSOR_LIST);
+		loadGame = data.getBooleanExtra(Constants.TAG_LOAD_GAME, true);
+		mapHeight = data.getIntExtra(Constants.TAG_SCREEN_SELECTION_MAP_HEIGHT, Constants.MAP_MIN_HEIGHT);
+		mapWidth = data.getIntExtra(Constants.TAG_SCREEN_SELECTION_MAP_WIDTH, Constants.MAP_MIN_WIDTH);
 		
 		ItemLoader loader = new ItemLoader(this);
 		
@@ -148,14 +158,10 @@ public class ShopActivity extends ListActivity{
 			
 			@Override
 			public void onClick(View v) {
-				if(!itemList.isEmpty()){
 					LeaveActivityDialogFragment exitShopDialog = new LeaveActivityDialogFragment();
 					exitShopDialog.show(getFragmentManager(), "ExitShopDialog");
-				} else {
+
 					Log.d(TAG,"Finish Shop Activity");
-					finish();
-				}
-				
 			}
 		});
 	}
@@ -227,7 +233,7 @@ public class ShopActivity extends ListActivity{
 										int id) {
 									if (GameHelper.saveGameAtPreferences(dummyActivity, dummyPlayer, dummyShip, dummyMap))
 										Log.v(TAG, "Game saved");
-									else
+									else {
 										try {
 											throw new SaveGameException(getResources().getString(
 													R.string.exception_save));
@@ -237,6 +243,17 @@ public class ShopActivity extends ListActivity{
 											Log.e(TAG, e.getMessage());
 											Toast.makeText(dummyActivity, e.getMessage(), Toast.LENGTH_SHORT).show();
 										}
+									}
+									// Create ScreenSelection Intent, populate extras + flags & start Activity
+									Intent screenSelectionIntent = new Intent(dummyActivity, ScreenSelectionActivity.class);
+									screenSelectionIntent.putExtra(Constants.TAG_SENSOR_LIST, sensorTypes);
+									screenSelectionIntent.putExtra(Constants.TAG_LOAD_GAME, loadGame);
+									screenSelectionIntent.putExtra(Constants.TAG_SCREEN_SELECTION_MAP_HEIGHT, mapHeight);
+									screenSelectionIntent.putExtra(Constants.TAG_SCREEN_SELECTION_MAP_WIDTH, mapWidth);
+									screenSelectionIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP);
+									startActivity(screenSelectionIntent);
+									MusicManager.getInstance().stopBackgroundMusic();
+									MusicManager.getInstance(dummyActivity, MusicManager.MUSIC_GAME_MENU).playBackgroundMusic();
 									dummyActivity.finish();
 								}
 							})
@@ -333,23 +350,24 @@ public class ShopActivity extends ListActivity{
 			}
 			
 			Item item = getItem(position);
-			if(item != null){
-				if(item.getName().equals(Constants.ITEM_KEY_CREW))
-						vHolder.itemIconView.setBackgroundResource(R.mipmap.icon_buff_crew);
-				else if(item.getName().equals(Constants.ITEM_KEY_REPAIRMAN))
-						vHolder.itemIconView.setBackgroundResource(R.mipmap.icon_buff_repa);
-				else if(item.getName().equals(Constants.ITEM_KEY_NEST))
-						vHolder.itemIconView.setBackgroundResource(R.mipmap.icon_buff_occu);
-				else if(item.getName().equals(Constants.ITEM_KEY_MATERIALS))
-						vHolder.itemIconView.setBackgroundResource(R.mipmap.icon_buff_wood);
-				else if(item.getName().equals(Constants.ITEM_KEY_MAPPIECE))
-						vHolder.itemIconView.setBackgroundResource(R.mipmap.icon_buff_mapp);
-				else if(item.getName().equals(Constants.ITEM_KEY_MAP))
-						vHolder.itemIconView.setBackgroundResource(R.mipmap.icon_buff_mapp);
-				else if(item.getName().equals(Constants.ITEM_KEY_BLACKPOWDER))
-						vHolder.itemIconView.setBackgroundResource(R.mipmap.icon_buff_bpow);
-				else if(item.getName().equals(Constants.ITEM_KEY_VALUABLE))
-						vHolder.itemIconView.setBackgroundResource(R.mipmap.ico_gold);
+			if(item != null) {
+				if (item.getName().equals(Constants.ITEM_KEY_CREW)) {
+					vHolder.itemIconView.setImageDrawable(getResources().getDrawable(R.mipmap.icon_buff_crew));
+				} else if (item.getName().equals(Constants.ITEM_KEY_REPAIRMAN)) {
+					vHolder.itemIconView.setImageDrawable(getResources().getDrawable(R.mipmap.icon_buff_repa));
+				} else if (item.getName().equals(Constants.ITEM_KEY_NEST)){
+					vHolder.itemIconView.setImageDrawable(getResources().getDrawable(R.mipmap.icon_buff_occu));
+				}else if(item.getName().equals(Constants.ITEM_KEY_MATERIALS)) {
+					vHolder.itemIconView.setImageDrawable(getResources().getDrawable(R.mipmap.icon_buff_wood));
+				}else if(item.getName().equals(Constants.ITEM_KEY_MAPPIECE)) {
+					vHolder.itemIconView.setImageDrawable(getResources().getDrawable(R.mipmap.icon_buff_mapp));
+				}else if(item.getName().equals(Constants.ITEM_KEY_MAP)) {
+					vHolder.itemIconView.setImageDrawable(getResources().getDrawable(R.mipmap.icon_buff_mapp));
+				}else if(item.getName().equals(Constants.ITEM_KEY_BLACKPOWDER)) {
+					vHolder.itemIconView.setImageDrawable(getResources().getDrawable(R.mipmap.icon_buff_bpow));
+				}else if(item.getName().equals(Constants.ITEM_KEY_VALUABLE)) {
+					vHolder.itemIconView.setImageDrawable(getResources().getDrawable(R.mipmap.ico_gold));
+				}
 
 				vHolder.itemNameView.setText(item.getName());
 				vHolder.itemPriceView.setText("" + item.getPrice());

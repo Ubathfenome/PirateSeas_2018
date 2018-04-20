@@ -92,10 +92,21 @@ public class SettingsExtraActivity extends Activity {
 						"RestorePreferencesDialog");
 			}
 		});
-	}	
+	}
+
+	@Override
+	protected void onDestroy() {
+		savePreferences();
+		super.onDestroy();
+	}
 	
 	@Override
 	public void onBackPressed() {
+		savePreferences();
+		finish();
+	}
+
+	private void savePreferences() {
 		// Save changes in preferences
 		SharedPreferences.Editor editor = mPreferences.edit();
 		editor.putBoolean(Constants.PREF_SHIP_CONTROL_MODE, tglControlMode.isChecked());
@@ -103,8 +114,6 @@ public class SettingsExtraActivity extends Activity {
 		editor.putBoolean(Constants.PREF_LEVEL_CONTROL_MODE, tglScreenSelection.isChecked());
 		editor.putBoolean(Constants.PREF_PAUSE_CONTROL_MODE, tglPauseSelection.isChecked());
 		editor.commit();
-
-		finish();
 	}
 
 	@SuppressLint("ValidFragment")
