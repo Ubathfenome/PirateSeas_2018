@@ -22,7 +22,7 @@ public class GameOverActivity extends Activity {
 	
 	Player  p = null;
 	
-	TextView txtDays, txtScore;
+	TextView lblGameOver, txtDays, txtScore;
 
 	// OnCreate
 	//: Display results	
@@ -36,7 +36,9 @@ public class GameOverActivity extends Activity {
 		// GetIntent Extras
 		Intent intent = getIntent();
 		p = intent.getParcelableExtra(Constants.TAG_GAME_OVER);
-		
+
+		lblGameOver = (TextView) findViewById(R.id.lblGameOver);
+		lblGameOver.setTypeface(customFont);
 		txtDays = (TextView) findViewById(R.id.txtDays);
 		txtDays.setTypeface(customFont);
 		txtScore = (TextView) findViewById(R.id.txtScore);

@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Point;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -232,9 +233,12 @@ public class GameActivity extends Activity implements SensorEventListener {
 					float axisSpeedY = event.values[1];
 					float axisSpeedZ = event.values[2];
 
-					if (!Constants.isInDebugMode(Constants.MODE))
-						Log.d(TAG, "TYPE_ACCELEROMETER: Gravity (m/s^2): " + axisSpeedX + " / " + axisSpeedY + " / "
-								+ axisSpeedZ);
+					int ACCELEROMETER_THRESHOLD = 3;
+
+					double angleX = Math.toDegrees(Math.asin (axisSpeedX / SensorManager.GRAVITY_EARTH));
+					double angleY = Math.toDegrees(Math.asin (axisSpeedY / SensorManager.GRAVITY_EARTH));
+					double angleZ = Math.toDegrees(Math.asin (axisSpeedZ / SensorManager.GRAVITY_EARTH));
+					Log.d(TAG, "TYPE_ACCELEROMETER: Acc:angle = "+axisSpeedX+":"+angleX+"º / "+axisSpeedY+":"+angleY+"º / "+axisSpeedZ+":"+angleZ+"º	");
 
 					// Event
 					if (EventWeatherMaelstrom.generateMaelstrom(axisSpeedY, axisSpeedZ)) {
@@ -244,21 +248,25 @@ public class GameActivity extends Activity implements SensorEventListener {
                             cView.maelstorm();
 						}
 					} else {
-						// TODO Gestionar los movimientos del barco del jugador dependiendo de los valores de los sensores
+						// Gestionar los movimientos del barco del jugador dependiendo de los valores de los sensores
 						// @see: https://code.tutsplus.com/tutorials/using-the-accelerometer-on-android--mobile-22125
 						if(cView.getGamemode() == Constants.GAMEMODE_BATTLE) {
 							if(cView.nPlayerShip != null && cView.nPlayerShip.isAlive() && cView.nEnemyShip != null && cView.nEnemyShip.isAlive()){
 								if(shipControlMode == false) {
-									int shipSpeed = cView.nPlayerShip.getShipType().getSpeed();
-									float speed = Math.abs(axisSpeedX + axisSpeedY + axisSpeedZ - lastX - lastY - lastZ);
-									Log.d(TAG, "TYPE_ACCELEROMETER: Ship movement would be: " + shipSpeed + " + " + speed + " = " + (shipSpeed + speed) +
-											" to the " + (cView.nPlayerShip.getEntityDirection() == 180? "left":"right"));
-									if(cView.nPlayerShip.getEntityDirection() == 180){
-										// cView.nPlayerShip.move((shipSpeed + speed),0,true);
-									} else if(cView.nPlayerShip.getEntityDirection() == 0){
-										// cView.nPlayerShip.move(-(shipSpeed + speed),0,true);
-									}
+									if(Math.abs(axisSpeedY) >= ACCELEROMETER_THRESHOLD) {
+										int shipSpeed = cView.nPlayerShip.getShipType().getSpeed();
+										float speed = Math.abs(axisSpeedX + axisSpeedY + axisSpeedZ - lastX - lastY - lastZ);
 
+										Log.d(TAG, "TYPE_ACCELEROMETER: Ship movement would be: " + shipSpeed + " + " + speed + " = " + (shipSpeed + speed)
+												+ " to the " + (axisSpeedY < 0 ? "left" : "right"));
+										if (axisSpeedY < 0) {
+											cView.nPlayerShip.move((shipSpeed + speed), 0, true);
+											cView.nPlayerShip.moveShipEntity(new Point(cView.nPlayerShip.getCoordinates().x - 1, cView.nPlayerShip.getCoordinates().y));
+										} else if (axisSpeedY > 0) {
+											cView.nPlayerShip.move(-(shipSpeed + speed), 0, true);
+											cView.nPlayerShip.moveShipEntity(new Point(cView.nPlayerShip.getCoordinates().x + 1, cView.nPlayerShip.getCoordinates().y));
+										}
+									}
 								}
 							}
 						}

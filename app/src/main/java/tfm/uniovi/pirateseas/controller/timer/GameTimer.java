@@ -4,7 +4,6 @@ import android.os.SystemClock;
 
 import tfm.uniovi.pirateseas.global.Constants;
 
-// TODO DELETE.ME?
 public class GameTimer {
 	
 	private int gameDay;

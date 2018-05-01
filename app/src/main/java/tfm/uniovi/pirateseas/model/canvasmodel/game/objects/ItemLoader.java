@@ -19,6 +19,10 @@ public class ItemLoader{
 	
 	Item crew;
 	Item repairman;
+	Item ammoSimple;
+	Item ammoAimed;
+	Item ammoDouble;
+	Item ammoSweep;
 	Item nest;
 	Item materials;
 	Item mapPiece;
@@ -28,6 +32,10 @@ public class ItemLoader{
 	
 	public static int CREW_ID;
 	public static int REPAIRMAN_ID;
+	public static int AMMO_SIMPLE_ID;
+	public static int AMMO_AIMED_ID;
+	public static int AMMO_DOUBLE_ID;
+	public static int AMMO_SWEEP_ID;
 	public static int NEST_ID;
 	public static int MATERIALS_ID;
 	public static int MAPPIECE_ID;
@@ -54,6 +62,14 @@ public class ItemLoader{
 		repairman = new Item(getString(R.string.shop_item_repairman_name),
 				getString(R.string.shop_item_repairman_desc), 1, 15);
 		REPAIRMAN_ID = repairman.getId();
+		ammoSimple = new Item(getString(R.string.shop_item_ammo_simple_name), getString(R.string.shop_item_ammo_simple_desc),1,1);
+		AMMO_SIMPLE_ID = ammoSimple.getId();
+		ammoAimed = new Item(getString(R.string.shop_item_ammo_aimed_name), getString(R.string.shop_item_ammo_aimed_desc),1,10);
+		AMMO_AIMED_ID = ammoAimed.getId();
+		ammoDouble = new Item(getString(R.string.shop_item_ammo_double_name), getString(R.string.shop_item_ammo_double_desc), 2, 20);
+		AMMO_DOUBLE_ID = ammoDouble.getId();
+		ammoSweep = new Item(getString(R.string.shop_item_ammo_sweep_name), getString(R.string.shop_item_ammo_sweep_desc), 3, 30);
+		AMMO_SWEEP_ID = ammoSweep.getId();
 		nest = new Item(getString(R.string.shop_item_nest_name),
 				getString(R.string.shop_item_nest_desc), 3, 35);
 		NEST_ID = nest.getId();
@@ -95,6 +111,7 @@ public class ItemLoader{
 		
 		itemList.add(crew);
 		itemList.add(repairman);
+
 		itemList.add(nest);
 		itemList.add(materials);
 		itemList.add(mapPiece);

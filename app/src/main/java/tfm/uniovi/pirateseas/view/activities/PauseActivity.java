@@ -68,11 +68,14 @@ public class PauseActivity extends Activity {
 				// Exit game. Return to main menu
 				Intent mainMenuIntent = new Intent(context, MainMenuActivity.class);
 				MusicManager.getInstance().stopBackgroundMusic();
+				MusicManager.getInstance(context, MusicManager.MUSIC_BATTLE).playBackgroundMusic();
 				mainMenuIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
 				startActivity(mainMenuIntent);
 			}
 		});
-		
+
+		MusicManager.getInstance().stopBackgroundMusic();
+		MusicManager.getInstance(context, MusicManager.MUSIC_GAME_PAUSED).playBackgroundMusic();
 	}	
 	
 }

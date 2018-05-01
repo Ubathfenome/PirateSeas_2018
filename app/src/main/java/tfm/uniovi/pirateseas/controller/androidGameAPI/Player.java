@@ -32,7 +32,7 @@ public class Player implements Parcelable {
 
 	public Player() {
 		this.level = 0;
-		this.gold = 0;
+		this.gold = 10;
 		this.experience = 0;
 		this.mapPieces = 0;
 		this.hasCompleteMap = false;

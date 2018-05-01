@@ -7,8 +7,6 @@ import tfm.uniovi.pirateseas.global.Constants;
 import tfm.uniovi.pirateseas.model.canvasmodel.game.BasicModel;
 
 public class Entity extends BasicModel{
-	
-	private static final int MOVEMENT_DELTA = 12;
 		
 	// Entity Attribs
 	protected int entityWidth;
@@ -46,6 +44,25 @@ public class Entity extends BasicModel{
 		mSpeedXLevel = 0;
 		mSpeedY = 0;
 	}
+
+	public boolean intersection(Entity other){
+		boolean intersection = false;
+		double otherLeft = other.getX();
+		double otherRight = other.getX() + other.getWidth();
+		double otherUp = other.getY();
+		double otherDown = other.getY() + other.getHeight();
+		double thisLeft = x;
+		double thisRight = x + mWidth;
+		double thisUp = y;
+		double thisDown = y + mHeight;
+
+		if(thisRight >= otherLeft
+			&& thisLeft <= otherRight
+			&& thisDown >= otherUp
+			&& thisUp < otherDown)
+			intersection = true;
+		return intersection;
+	}
 	
 	public boolean intersectionWithEntity(Entity other){
 		boolean intersection = false;
@@ -64,8 +81,7 @@ public class Entity extends BasicModel{
 	}
 	
 	private boolean intersectionToBack(Entity other) {
-		return ((entityCoordinates.y + entityHeight / 2) >= (other.entityCoordinates.y - other.entityHeight / 2))
-                && ((entityCoordinates.y - entityWidth / 2) < (other.entityCoordinates.y - other.entityHeight / 2));
+		return ((entityCoordinates.y + entityHeight / 2) >= (other.entityCoordinates.y - other.entityHeight / 2)) && ((entityCoordinates.y - entityWidth / 2) < (other.entityCoordinates.y - other.entityHeight / 2));
 	}
 
 	private boolean intersectionToFront(Entity other) {
@@ -81,52 +97,6 @@ public class Entity extends BasicModel{
 	private boolean intersectionToLeft(Entity other) {
 		return ((entityCoordinates.x - entityWidth / 2) <= (other.entityCoordinates.x + other.entityWidth / 2))
                 && ((entityCoordinates.x + entityWidth / 2) > (other.entityCoordinates.x + other.entityWidth / 2));
-	}
-	
-	public void moveEntity(Point destiny){
-		int xDiff = 0;
-		int yDiff = 0;
-		int nextX = 0;
-		int nextY = 0;
-		
-		// Get current Point
-		Point curr = new Point(entityCoordinates.x, entityCoordinates.y);
-		
-		// Set difference with destiny Point
-		if(destiny.x > curr.x){			// Destiny to the right
-			xDiff = destiny.x - curr.x;	// Get the positive needed amount to reach the destiny
-		} else if(destiny.x < curr.x) {	// Destiny to the left
-			xDiff = curr.x - destiny.x;	// Get the positive needed amount to reach the destiny
-		}		
-		if(destiny.y > curr.y){			// Destiny to the front
-			yDiff = destiny.y - curr.y;	// Get the positive needed amount to reach the destiny
-		} else if(destiny.y < curr.y) { // Destiny to the back
-			yDiff = curr.y - destiny.y;	// Get the positive needed amount to reach the destiny
-		}
-		
-		// Calculate next Point coordinates
-		if(xDiff > 0){
-			if(destiny.x > curr.x){			// Destiny to the right
-				nextX = curr.x + 1;			// Next point moved 1 position to the side
-				x += MOVEMENT_DELTA;		// Move Bitmap coordinates relative to next Point movement
-			} else if(destiny.x < curr.x) {	// Destiny to the left
-				nextX = curr.x - 1;			// Next point moved 1 position to the side
-				x -= MOVEMENT_DELTA;		// Move Bitmap coordinates relative to next Point movement
-			}
-		} 
-		if(yDiff > 0){
-			if(destiny.y > curr.y){			// Destiny to the front
-				nextY = curr.y + 1;			// Next point moved 1 position to the front
-				y -= MOVEMENT_DELTA;		// Move Bitmap coordinates relative to next Point movement
-			} else if(destiny.y < curr.y) {	// Destiny to the back
-				nextY = curr.y - 1;			// Next point moved 1 position to the back
-				y += MOVEMENT_DELTA;		// Move Bitmap coordinates relative to next Point movement
-			}
-		}
-		
-		// Set next Point coordinates
-		Point next = new Point(xDiff > 0 ? nextX : curr.x, yDiff > 0 ? nextY : curr.y);
-		entityCoordinates = new Point(next.x, next.y);
 	}
 
 	public void gainHealth(int points){

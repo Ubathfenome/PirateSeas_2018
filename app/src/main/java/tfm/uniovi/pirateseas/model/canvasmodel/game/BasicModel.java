@@ -43,8 +43,8 @@ public class BasicModel{
 		y = y - yLength;
 		
 		if (bounce) {
-			if (x > mCanvasWidth) {
-				x = mCanvasWidth - xLength;
+			if (x + mWidth > mCanvasWidth) {
+				x = mCanvasWidth - mWidth;
 			}
 			if (x < 0) {
 				x = 0;

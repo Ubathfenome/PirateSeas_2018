@@ -33,6 +33,8 @@ public class SettingsExtraActivity extends Activity {
 	private ToggleButton tglPauseSelection;
 	private TextView txtPauseMode;
 
+	// TODO Incluir status del barco en pantalla de configuración (Visible cuando exista una partida en memoria)
+
 	private boolean mDebugMode;
 
 	SharedPreferences mPreferences;

@@ -32,7 +32,7 @@ public class Ship extends Entity {
 	private Context context;
 	
 	public Ship(){
-		super(null, 0, 0, 0, 0, new Point(0, 0), 90, 0, 0, 0);
+		super(null, 0, 0, 0, 0, new Point(0, 0), Constants.DEFAULT_PLAYER_SHIP_DIRECTION, 0, 0, 0);
 		for(int i = 0; i < nAmmoTypes; i++){
 			nAmmunitions[i] = 0;
 		}
@@ -59,7 +59,7 @@ public class Ship extends Entity {
 		this.sType = sType;
 		this.mRange = sType.rangeMultiplier();
 		this.mPower = sType.powerMultiplier();
-		this.mReloadTime = (int) sType.powerMultiplier() * Constants.SHIP_RELOAD;
+		this.mReloadTime = (int) sType.powerMultiplier() * Constants.DEFAULT_SHIP_RELOAD;
 		gainHealth(this.mMaxHealth = sType.defaultHealthPoints());		
 		
 		this.isPlayable = ammo != Constants.SHOT_AMMO_UNLIMITED;
@@ -117,7 +117,7 @@ public class Ship extends Entity {
 		this.sType = sType;
 		this.mRange = sType.rangeMultiplier();
 		this.mPower = sType.powerMultiplier();
-		this.mReloadTime = (int) sType.powerMultiplier() * Constants.SHIP_RELOAD;
+		this.mReloadTime = (int) sType.powerMultiplier() * Constants.DEFAULT_SHIP_RELOAD;
 		this.mMaxHealth = sType.defaultHealthPoints() > health ? sType.defaultHealthPoints() : health;
 		gainHealth(health);
 		
@@ -146,7 +146,7 @@ public class Ship extends Entity {
 		this.sType = sType;
 		this.mRange = sType.rangeMultiplier();
 		this.mPower = sType.powerMultiplier();
-		this.mReloadTime = (int) sType.powerMultiplier() * Constants.SHIP_RELOAD;
+		this.mReloadTime = (int) sType.powerMultiplier() * Constants.DEFAULT_SHIP_RELOAD;
 		this.mMaxHealth = sType.defaultHealthPoints() > health ? sType.defaultHealthPoints() : health;
 		gainHealth(health);
 		
@@ -173,13 +173,14 @@ public class Ship extends Entity {
 
 		if (nAmmunitions[selectedAmmoIndex] > 0 || nAmmunitions[selectedAmmoIndex] == Constants.SHOT_AMMO_UNLIMITED) {
 			timestampLastShot = SystemClock.elapsedRealtime();
-			cannonballVector = new Shot(context, x + (mWidth / 2) - (Shot.shotWidth / 2), y,
+			// TODO Crear constructor de disparos para los otros tipos de municion
+			cannonballVector = new Shot(context, x + (mWidth / 2) - (Shot.shotWidth / 2), y - Shot.shotHeight - 10,
 					this.mCanvasWidth, this.mCanvasHeight, new Point(
 							this.entityCoordinates.x, this.entityCoordinates.y
 									+ entityLength / 2), new Point(0,
-							Constants.SHIP_BASIC_RANGE
-									* sType.rangeMultiplier()), 90,
-					(int) (Constants.SHIP_BASIC_DAMAGE * sType
+							Constants.DEFAULT_SHIP_BASIC_RANGE
+									* sType.rangeMultiplier()), Constants.DEFAULT_PLAYER_SHIP_DIRECTION,
+					(int) (Constants.DEFAULT_SHOOT_DAMAGE * sType
 							.powerMultiplier()), timestampLastShot);
 			if (nAmmunitions[selectedAmmoIndex] != Constants.SHOT_AMMO_UNLIMITED)
 				nAmmunitions[selectedAmmoIndex]--;
@@ -201,7 +202,7 @@ public class Ship extends Entity {
 
 				Point ini = new Point(this.entityCoordinates.x + entityWidth
 						/ 2, this.entityCoordinates.y);
-				Point fin = new Point(Constants.SHIP_BASIC_RANGE
+				Point fin = new Point(Constants.DEFAULT_SHIP_BASIC_RANGE
 						* sType.rangeMultiplier(), i - 1);
 				int num = fin.y - ini.y;
 				int den = fin.x - ini.x;
@@ -210,7 +211,7 @@ public class Ship extends Entity {
 				cannonballVector = new Shot(context, x + (mWidth / 2), y
 						+ (mHeight / 4), this.mCanvasWidth, this.mCanvasHeight,
 						ini, fin, (int) (-angM),
-						(int) (Constants.SHIP_BASIC_DAMAGE * sType
+						(int) (Constants.DEFAULT_SHOOT_DAMAGE * sType
 								.powerMultiplier()), timestampLastShot);
 
 				cannonballArray[i] = cannonballVector;
@@ -518,5 +519,54 @@ public class Ship extends Entity {
 		int randomIndex = new Random().nextInt(length);
 		return types[randomIndex];
 	}
-	
+
+	public void moveShipEntity (Point destiny){
+		int xDiff = 0;
+		int yDiff = 0;
+		int nextX = 0;
+		int nextY = 0;
+
+		// Get current Point
+		Point curr = new Point(entityCoordinates.x, entityCoordinates.y);
+
+		// Set difference with destiny Point
+		if(destiny.x > curr.x){			// Destiny to the right
+			xDiff = destiny.x - curr.x;	// Get the positive needed amount to reach the destiny
+		} else if(destiny.x < curr.x) {	// Destiny to the left
+			xDiff = curr.x - destiny.x;	// Get the positive needed amount to reach the destiny
+		}
+		if(destiny.y > curr.y){			// Destiny to the front
+			yDiff = destiny.y - curr.y;	// Get the positive needed amount to reach the destiny
+		} else if(destiny.y < curr.y) { // Destiny to the back
+			yDiff = curr.y - destiny.y;	// Get the positive needed amount to reach the destiny
+		}
+
+		// Calculate next Point coordinates
+		if(xDiff > 0){
+			if(destiny.x > curr.x){			// Destiny to the right
+				nextX = curr.x + 1;			// Next point moved 1 position to the side
+			} else if(destiny.x < curr.x) {	// Destiny to the left
+				nextX = curr.x - 1;			// Next point moved 1 position to the side
+			}
+		}
+		if(yDiff > 0){
+			if(destiny.y > curr.y){			// Destiny to the front
+				nextY = curr.y + 1;			// Next point moved 1 position to the front
+			} else if(destiny.y < curr.y) {	// Destiny to the back
+				nextY = curr.y - 1;			// Next point moved 1 position to the back
+			}
+		}
+
+		// Set next Point coordinates
+		Point next = new Point(xDiff > 0 ? nextX : curr.x, yDiff > 0 ? nextY : curr.y);
+		entityCoordinates = new Point(next.x, next.y);
+	}
+
+	public void updateShipType(ShipType newShipType) {
+		this.sType = newShipType;
+		this.mRange = sType.rangeMultiplier();
+		this.mPower = sType.powerMultiplier();
+		this.mReloadTime = (int) sType.powerMultiplier() * Constants.DEFAULT_SHIP_RELOAD;
+		gainHealth(this.mMaxHealth = sType.defaultHealthPoints());
+	}
 }

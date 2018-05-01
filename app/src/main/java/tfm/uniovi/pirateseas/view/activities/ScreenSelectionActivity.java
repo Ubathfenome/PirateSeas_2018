@@ -29,6 +29,7 @@ import tfm.uniovi.pirateseas.controller.androidGameAPI.Player;
 import tfm.uniovi.pirateseas.controller.audio.MusicManager;
 import tfm.uniovi.pirateseas.global.Constants;
 import tfm.uniovi.pirateseas.model.canvasmodel.game.entity.Ship;
+import tfm.uniovi.pirateseas.model.canvasmodel.game.entity.ShipType;
 import tfm.uniovi.pirateseas.utils.approach2d.DrawableHelper;
 import tfm.uniovi.pirateseas.utils.persistence.GameHelper;
 
@@ -108,23 +109,29 @@ public class ScreenSelectionActivity extends Activity {
 				// Get map's left cell content
 				if(active%mapWidth != 0){
 					map.setActiveCell(active-1);
-					map.clearActiveMapCell();
-					if(!map.isActiveCellIsland()){
-						if(encounter) {
-							// Game activity
-							MusicManager.getInstance().stopBackgroundMusic();
-							MusicManager.getInstance(context, MusicManager.MUSIC_BATTLE).playBackgroundMusic();
-							startBattleGame();
-						} else {
-							// ScreenSelection activity
-							MusicManager.getInstance(context, MusicManager.MUSIC_GAME_MENU).playBackgroundMusic();
-							reloadSelection();
-						}
-					} else {
-						// Shop activity
+					if(map.isActiveCellCleared() && map.isActiveCellIsland()){
 						MusicManager.getInstance().stopBackgroundMusic();
 						MusicManager.getInstance(context, MusicManager.MUSIC_ISLAND).playBackgroundMusic();
-						enterRandomIsland();
+						enterVisitedIsland();
+					} else {
+						map.clearActiveMapCell();
+						if (!map.isActiveCellIsland()) {
+							if (encounter) {
+								// Game activity
+								MusicManager.getInstance().stopBackgroundMusic();
+								MusicManager.getInstance(context, MusicManager.MUSIC_BATTLE).playBackgroundMusic();
+								startBattleGame();
+							} else {
+								// ScreenSelection activity
+								MusicManager.getInstance(context, MusicManager.MUSIC_GAME_MENU).playBackgroundMusic();
+								reloadSelection();
+							}
+						} else {
+							// Shop activity
+							MusicManager.getInstance().stopBackgroundMusic();
+							MusicManager.getInstance(context, MusicManager.MUSIC_ISLAND).playBackgroundMusic();
+							enterRandomIsland();
+						}
 					}
 				} else {
 					wrongWayMessage();
@@ -140,23 +147,29 @@ public class ScreenSelectionActivity extends Activity {
 				// Get map's up cell content
 				if(active-mapWidth>=0){
 					map.setActiveCell(active-mapWidth);
-					map.clearActiveMapCell();
-					if(!map.isActiveCellIsland()){
-						if(encounter) {
-							// Game activity
-							MusicManager.getInstance().stopBackgroundMusic();
-							MusicManager.getInstance(context, MusicManager.MUSIC_BATTLE).playBackgroundMusic();
-							startBattleGame();
-						} else {
-							// ScreenSelection activity
-							MusicManager.getInstance(context, MusicManager.MUSIC_GAME_MENU).playBackgroundMusic();
-							reloadSelection();
-						}
-					} else {
-						// Shop activity
+					if(map.isActiveCellCleared() && map.isActiveCellIsland()){
 						MusicManager.getInstance().stopBackgroundMusic();
 						MusicManager.getInstance(context, MusicManager.MUSIC_ISLAND).playBackgroundMusic();
-						enterRandomIsland();
+						enterVisitedIsland();
+					} else {
+						map.clearActiveMapCell();
+						if (!map.isActiveCellIsland()) {
+							if (encounter) {
+								// Game activity
+								MusicManager.getInstance().stopBackgroundMusic();
+								MusicManager.getInstance(context, MusicManager.MUSIC_BATTLE).playBackgroundMusic();
+								startBattleGame();
+							} else {
+								// ScreenSelection activity
+								MusicManager.getInstance(context, MusicManager.MUSIC_GAME_MENU).playBackgroundMusic();
+								reloadSelection();
+							}
+						} else {
+							// Shop activity
+							MusicManager.getInstance().stopBackgroundMusic();
+							MusicManager.getInstance(context, MusicManager.MUSIC_ISLAND).playBackgroundMusic();
+							enterRandomIsland();
+						}
 					}
 				} else {
 					wrongWayMessage();
@@ -172,23 +185,29 @@ public class ScreenSelectionActivity extends Activity {
 				// Get map's right cell content
 				if((active+1)%mapWidth != 0){
 					map.setActiveCell(active+1);
-					map.clearActiveMapCell();
-					if(!map.isActiveCellIsland()){
-						if(encounter) {
-							// Game activity
-							MusicManager.getInstance().stopBackgroundMusic();
-							MusicManager.getInstance(context, MusicManager.MUSIC_BATTLE).playBackgroundMusic();
-							startBattleGame();
-						} else {
-							// ScreenSelection activity
-							MusicManager.getInstance(context, MusicManager.MUSIC_GAME_MENU).playBackgroundMusic();
-							reloadSelection();
-						}
-					} else {
-						// Shop activity
+					if(map.isActiveCellCleared() && map.isActiveCellIsland()){
 						MusicManager.getInstance().stopBackgroundMusic();
 						MusicManager.getInstance(context, MusicManager.MUSIC_ISLAND).playBackgroundMusic();
-						enterRandomIsland();
+						enterVisitedIsland();
+					} else {
+						map.clearActiveMapCell();
+						if (!map.isActiveCellIsland()) {
+							if (encounter) {
+								// Game activity
+								MusicManager.getInstance().stopBackgroundMusic();
+								MusicManager.getInstance(context, MusicManager.MUSIC_BATTLE).playBackgroundMusic();
+								startBattleGame();
+							} else {
+								// ScreenSelection activity
+								MusicManager.getInstance(context, MusicManager.MUSIC_GAME_MENU).playBackgroundMusic();
+								reloadSelection();
+							}
+						} else {
+							// Shop activity
+							MusicManager.getInstance().stopBackgroundMusic();
+							MusicManager.getInstance(context, MusicManager.MUSIC_ISLAND).playBackgroundMusic();
+							enterRandomIsland();
+						}
 					}
 				} else {
 					wrongWayMessage();
@@ -204,23 +223,29 @@ public class ScreenSelectionActivity extends Activity {
 				// Get map's down cell content
 				if((active+mapWidth)<mapLength){
 					map.setActiveCell(active+mapWidth);
-					map.clearActiveMapCell();
-					if(!map.isActiveCellIsland()){
-						if(encounter) {
-							// Game activity
-							MusicManager.getInstance().stopBackgroundMusic();
-							MusicManager.getInstance(context, MusicManager.MUSIC_BATTLE).playBackgroundMusic();
-							startBattleGame();
-						} else {
-							// ScreenSelection activity
-							MusicManager.getInstance(context, MusicManager.MUSIC_GAME_MENU).playBackgroundMusic();
-							reloadSelection();
-						}
-					} else {
-						// Shop activity
+					if(map.isActiveCellCleared() && map.isActiveCellIsland()){
 						MusicManager.getInstance().stopBackgroundMusic();
 						MusicManager.getInstance(context, MusicManager.MUSIC_ISLAND).playBackgroundMusic();
-						enterRandomIsland();
+						enterVisitedIsland();
+					} else {
+						map.clearActiveMapCell();
+						if (!map.isActiveCellIsland()) {
+							if (encounter) {
+								// Game activity
+								MusicManager.getInstance().stopBackgroundMusic();
+								MusicManager.getInstance(context, MusicManager.MUSIC_BATTLE).playBackgroundMusic();
+								startBattleGame();
+							} else {
+								// ScreenSelection activity
+								MusicManager.getInstance(context, MusicManager.MUSIC_GAME_MENU).playBackgroundMusic();
+								reloadSelection();
+							}
+						} else {
+							// Shop activity
+							MusicManager.getInstance().stopBackgroundMusic();
+							MusicManager.getInstance(context, MusicManager.MUSIC_ISLAND).playBackgroundMusic();
+							enterRandomIsland();
+						}
 					}
 				} else {
 					wrongWayMessage();
@@ -230,10 +255,34 @@ public class ScreenSelectionActivity extends Activity {
 
 		txtScreenSelectionLabel = findViewById(R.id.txtScreenSelectionLabel);
 		txtScreenSelectionLabel.setTypeface(customFont);
+
+		if(map.isAllClear()){
+			// Map completed! Clear map from preferences and start new map
+			Toast.makeText(context, getString(R.string.message_mapcompleted), Toast.LENGTH_LONG).show();
+			Map newMap = new Map(new Date(), Constants.MAP_MIN_HEIGHT, Constants.MAP_MIN_WIDTH);
+			// Create new and better PlayerShip?
+			ShipType st = ship.getShipType();
+			ShipType newShipType = getBetterShipType(st);
+			ship.updateShipType(newShipType);
+			GameHelper.saveGameAtPreferences(context, p, ship, newMap);
+		}
+	}
+
+	private ShipType getBetterShipType(ShipType st) {
+		ShipType[] sTypes = ShipType.values();
+		for(int i = 0; i < sTypes.length; i++){
+			ShipType sType = sTypes[i];
+			if(sType.name().equals(st.name()) && ((i + 1)<=(sTypes.length-1))){
+				return sTypes[i+1];
+			} else {
+				return st;
+			}
+		}
+		return st;
 	}
 
 	private void wrongWayMessage(){
-		Toast.makeText(context, "Cap'tain! We can't go that way!",Toast.LENGTH_SHORT).show();
+		Toast.makeText(context, getString(R.string.message_wrongway),Toast.LENGTH_SHORT).show();
 	}
 
 	private void startBattleGame(){
@@ -261,6 +310,10 @@ public class ScreenSelectionActivity extends Activity {
 		Log.d(TAG,"Reset ScreenSelection Intent");
 		startActivity(resetIntent);
 		finish();
+	}
+
+	private void enterVisitedIsland() {
+		GameHelper.saveGameAtPreferences(this, p, ship, map);
 	}
 
 	private void enterRandomIsland() {

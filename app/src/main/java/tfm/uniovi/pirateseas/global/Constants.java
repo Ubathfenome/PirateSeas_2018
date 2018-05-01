@@ -47,10 +47,27 @@ public class Constants{
 	// Entities
 	public static final int STATE_ALIVE = 0;
 	public static final int STATE_DEAD = 1;
+
+    public static final int DIRECTION_RIGHT = 0;
+    public static final int DIRECTION_UP = 90;
+    public static final int DIRECTION_LEFT = 180;
+    public static final int DIRECTION_DOWN = 270;
+
+	public static final int CHT_VALUE = 20;
+	public static final int MAELSTORM_DAMAGE = 15;
+
+	public static final int DEFAULT_ENEMY_SHIP_DIRECTION = DIRECTION_LEFT;
+	public static final int DEFAULT_ENEMY_Y_LIMIT = 60;
+
+	public static final int DEFAULT_PLAYER_SHIP_DIRECTION = DIRECTION_UP;
+	public static final int DEFAULT_PLAYER_SHIP_AMMO = 20;
+	public static final int DEFAULT_SHIP_WIDTH = 2;
+	public static final int DEFAULT_SHIP_HEIGHT = 3;
+	public static final int DEFAULT_SHIP_LENGTH = 5;
 	
-	public static final int SHIP_RELOAD = 2;
-	public static final int SHIP_BASIC_RANGE = 3;
-	public static final float SHIP_BASIC_DAMAGE = 10;
+	public static final int DEFAULT_SHIP_RELOAD = 2;
+	public static final int DEFAULT_SHIP_BASIC_RANGE = 5;
+	public static final float DEFAULT_SHOOT_DAMAGE = 10;
 	
 	public static final int SHOT_AMMO_UNLIMITED = -1;
 	public static final int SHOT_FIRED = 0;
@@ -82,7 +99,16 @@ public class Constants{
 	public static final int MILLIS_TO_SECONDS = 1000;
 	public static final double MILLIS_TO_SECONDS_INV = Math.pow(MILLIS_TO_SECONDS, -1); 
 	public static final double NANOS_TO_SECONDS = Math.pow(10, -9);
-	
+
+	public static final int FLYING_TIME_MULTIPLIER = 10;
+
+    public static final int SHAKE_LIMIT = 2;
+    public static final int TUTORIAL_NUM_PAGES = 7;
+
+    public static final int MAX_ENTITY_WIDTH = 15;
+    public static final int MAX_ENTITY_HEIGHT = 15;
+    public static final int MIN_ENTITY_HEIGHT = 10;
+
 	public static final String EMPTY_STRING = "";
 	public static final String PREF_SENSOR_LIST = "sensorListPref";
 	public static final String PREF_PLAYER_TIMESTAMP = "playerTimestampPref";
@@ -159,9 +185,10 @@ public class Constants{
 	public static final String ITEM_KEY_MAP = "Map";
 	public static final String ITEM_KEY_BLACKPOWDER = "BlackPowder";
 	public static final String ITEM_KEY_VALUABLE = "Valuable";
-	
-	public static final int SHAKE_LIMIT = 2;
-	public static final int TUTORIAL_NUM_PAGES = 7;
+	public static final String ITEM_KEY_AMMO_SIMPLE = "Ammo simple";
+	public static final String ITEM_KEY_AMMO_AIMED = "Ammo aimed";
+	public static final String ITEM_KEY_AMMO_DOUBLE = "Ammo double";
+	public static final String ITEM_KEY_AMMO_SWEEP = "Ammo sweep";
 
 	public static boolean isInDebugMode(int mMode) {
 		return mMode == Constants.MODE_DEBUG;

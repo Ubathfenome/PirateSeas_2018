@@ -302,8 +302,12 @@ public class MainMenuActivity extends Activity {
 
 	@Override
 	protected void onDestroy() {
-		MusicManager.getInstance().stopBackgroundMusic();
-		MusicManager.getInstance().releaseResources();
+		try {
+			MusicManager.getInstance().stopBackgroundMusic();
+			MusicManager.getInstance().releaseResources();
+		}catch (IllegalStateException e){
+
+		}
 		super.onDestroy();
 	}
 

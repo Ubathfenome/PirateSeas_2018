@@ -31,7 +31,7 @@
     <!-- Exception's messages -->
     <string name="exception_gold">Not enough gold to purchase that!</string>
     <string name="exception_ammo">Not enough ammunition to shoot!</string>
-    <string name="exception_reloading">You can\'t shoot yet!</string>
+    <string name="exception_reloading">Reloading cannons!</string>
     <string name="exception_save">Error while saving</string>
 
     <!-- Game Menu strings -->
@@ -60,6 +60,14 @@
     <string name="shop_item_crew_desc">Restores 5 health points</string>
     <string name="shop_item_repairman_name">Repairman</string>
     <string name="shop_item_repairman_desc">Restores 15 health points</string>
+    <string name="shop_item_ammo_simple_name">Ammo simple</string>
+    <string name="shop_item_ammo_simple_desc">Gain 10 simple cannonballs</string>
+    <string name="shop_item_ammo_aimed_name">Ammo aimed</string>
+    <string name="shop_item_ammo_aimed_desc">Gain 5 auto aimed cannonballs</string>
+    <string name="shop_item_ammo_double_name">Ammo double</string>
+    <string name="shop_item_ammo_double_desc">Gain 5 double fire cannonballs</string>
+    <string name="shop_item_ammo_sweep_name">Ammo sweep</string>
+    <string name="shop_item_ammo_sweep_desc">Gain 2 screen sweep cannonballs</string>
     <string name="shop_item_nest_name">Nest</string>
     <string name="shop_item_nest_desc">Increases the effective range by 1.15</string>
     <string name="shop_item_mats_name">Materials</string>
@@ -167,14 +175,14 @@
     <string name="empty_string"></string> 
         
     <!-- Game strings -->
-    <string name="tutorial_1">Arrr Mate!! Welcome to PIRATE SEAS!!\nYarr want to rule these seas and loot all the booty.</string>
+    <string name="tutorial_1">Arrr Mate!! Welcome to PIRATE SEAS!!\r\nYarr want to rule these seas and loot all the booty.</string>
     <string name="tutorial_2">Choose wisely your next step mate! Lot\'s of good ol\'men have sunk in these waters.</string>
     <string name="tutorial_3">If you find a cloudy day.. Beware! An enemy might be lurking behind it. Shake your mobile device to wipe out the clouds!</string>
     <string name="tutorial_4">Touch the screen to shoot your selected ammo.</string>
     <string name="tutorial_5">Cycle through your ammo types touching the selected ammo icon. (Default setting)</string>
-    <string name="tutorial_6">Colect booty by sinking your enemies or discovering treasures using the maps you will find on the islands in your path.</string>
+    <string name="tutorial_6">Collect booty by sinking your enemies or discovering treasures using the maps you will find on the islands in your path.</string>
     <string name="tutorial_7">Become the greatest pirate king! or walk the plank!</string>
-    <string name="gameover_title">Game Over</string>
+    <string name="gameover_title">Game Over\r\nYou when to sleep with Davi Jones</string>
     <string name="gameover_hint">(Press anywhere to restart game&#8230;)</string>
     <string name="gameover_score">Score</string>
     <string name="gameover_days">Days passed</string>
@@ -184,6 +192,8 @@
     <string name="message_screenselection_detail">Please, select the next direction you want to go</string>
     <string name="message_islanddetected">Capt\'n! Land in sight!</string>
     <string name="message_nothinghere">Capt\'n! There\s nothing here! Which direction we go next?</string>
+    <string name="message_wrongway">Capt\'n! We can\'t go that way!</string>
+    <string name="message_mapcompleted">Map completed!</string>
     <string name="message_shakesleft">Shake your device %1$d more time(s)!</string>
     <string name="game_exit">Exit game</string>
 

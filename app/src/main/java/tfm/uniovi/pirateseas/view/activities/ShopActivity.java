@@ -36,6 +36,7 @@ import tfm.uniovi.pirateseas.controller.audio.MusicManager;
 import tfm.uniovi.pirateseas.exceptions.NotEnoughGoldException;
 import tfm.uniovi.pirateseas.exceptions.SaveGameException;
 import tfm.uniovi.pirateseas.global.Constants;
+import tfm.uniovi.pirateseas.model.canvasmodel.game.entity.Ammunitions;
 import tfm.uniovi.pirateseas.model.canvasmodel.game.entity.Ship;
 import tfm.uniovi.pirateseas.model.canvasmodel.game.objects.Item;
 import tfm.uniovi.pirateseas.model.canvasmodel.game.objects.ItemLoader;
@@ -183,6 +184,18 @@ public class ShopActivity extends ListActivity{
 					break;
 				case Constants.ITEM_KEY_REPAIRMAN:
 					dummyShip.gainHealth(15);
+					break;
+				case Constants.ITEM_KEY_AMMO_SIMPLE:
+					dummyShip.gainAmmo(10, Ammunitions.DEFAULT);
+					break;
+				case Constants.ITEM_KEY_AMMO_AIMED:
+					dummyShip.gainAmmo(5, Ammunitions.AIMED);
+					break;
+				case Constants.ITEM_KEY_AMMO_DOUBLE:
+					dummyShip.gainAmmo(5, Ammunitions.DOUBLE);
+					break;
+				case Constants.ITEM_KEY_AMMO_SWEEP:
+					dummyShip.gainAmmo(2, Ammunitions.SWEEP);
 					break;
 				case Constants.ITEM_KEY_NEST:
 					dummyShip.addRange(1.15f);
@@ -355,6 +368,14 @@ public class ShopActivity extends ListActivity{
 					vHolder.itemIconView.setImageDrawable(getResources().getDrawable(R.mipmap.icon_buff_crew));
 				} else if (item.getName().equals(Constants.ITEM_KEY_REPAIRMAN)) {
 					vHolder.itemIconView.setImageDrawable(getResources().getDrawable(R.mipmap.icon_buff_repa));
+				} else if (item.getName().equals(Constants.ITEM_KEY_AMMO_SIMPLE)) {
+					vHolder.itemIconView.setImageDrawable(getResources().getDrawable(R.mipmap.txtr_ammo_default));
+				} else if (item.getName().equals(Constants.ITEM_KEY_AMMO_AIMED)) {
+					vHolder.itemIconView.setImageDrawable(getResources().getDrawable(R.mipmap.txtr_ammo_aimed));
+				} else if (item.getName().equals(Constants.ITEM_KEY_AMMO_DOUBLE)) {
+					vHolder.itemIconView.setImageDrawable(getResources().getDrawable(R.mipmap.txtr_ammo_double));
+				} else if (item.getName().equals(Constants.ITEM_KEY_AMMO_SWEEP)) {
+					vHolder.itemIconView.setImageDrawable(getResources().getDrawable(R.mipmap.txtr_ammo_sweep));
 				} else if (item.getName().equals(Constants.ITEM_KEY_NEST)){
 					vHolder.itemIconView.setImageDrawable(getResources().getDrawable(R.mipmap.icon_buff_occu));
 				}else if(item.getName().equals(Constants.ITEM_KEY_MATERIALS)) {

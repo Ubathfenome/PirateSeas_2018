@@ -19,8 +19,6 @@ import tfm.uniovi.pirateseas.global.Constants;
 
 public class HelpActivity extends Activity {
 	
-	private static final int HELP_PAGES = 1;
-	
 	Button btnNext, btnPrev, btnAbout;
 	String versionName;
 	
@@ -38,7 +36,7 @@ public class HelpActivity extends Activity {
 			
 			@Override
 			public void onClick(View v) {
-				if(currentPage == HELP_PAGES)
+				if(currentPage == Constants.TUTORIAL_NUM_PAGES)
 					finish();
 				else {
 					currentPage++;
