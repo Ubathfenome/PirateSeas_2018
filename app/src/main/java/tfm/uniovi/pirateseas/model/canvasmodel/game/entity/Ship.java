@@ -4,6 +4,8 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Point;
 import android.os.Build;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.os.SystemClock;
 
 import java.util.Random;
@@ -11,8 +13,9 @@ import java.util.Random;
 import tfm.uniovi.pirateseas.R;
 import tfm.uniovi.pirateseas.exceptions.NoAmmoException;
 import tfm.uniovi.pirateseas.global.Constants;
+import tfm.uniovi.pirateseas.view.graphics.canvasview.CanvasView;
 
-public class Ship extends Entity {
+public class Ship extends Entity implements Parcelable{
 	// Crear array de variables para almacenar la cantidad de cada tipo de municion
 	private int nAmmoTypes = Ammunitions.values().length;
 	private int[] nAmmunitions = new int[nAmmoTypes];
@@ -161,6 +164,34 @@ public class Ship extends Entity {
 		
 	}
 
+	protected Ship(Parcel in) {
+		this();
+		nAmmoTypes = in.readInt();
+		nAmmunitions = in.createIntArray();
+		selectedAmmoIndex = in.readInt();
+		mReloadTime = in.readInt();
+		mPower = in.readFloat();
+		mRange = in.readFloat();
+		timestampLastShot = in.readLong();
+		isPlayable = in.readByte() != 0;
+		wasIdle = in.readByte() != 0;
+		mHealthPoints = in.readInt();
+		mMaxHealth = in.readInt();
+		sType = ShipType.values()[in.readInt()];
+	}
+
+	public static final Creator<Ship> CREATOR = new Creator<Ship>() {
+		@Override
+		public Ship createFromParcel(Parcel in) {
+			return new Ship(in);
+		}
+
+		@Override
+		public Ship[] newArray(int size) {
+			return new Ship[size];
+		}
+	};
+
 	public void gainAmmo(int ammo, Ammunitions ammoType){
 		if(ammo > 0){
 			nAmmunitions[Ammunitions.valueOf(ammoType.getName()).ordinal()] += ammo;
@@ -168,22 +199,80 @@ public class Ship extends Entity {
 			throw new IllegalArgumentException("Encontrado valor de puntos negativo al modificar mAmmunition");
 	}
 	
-	public Shot shootFront() throws NoAmmoException {
+	public Shot shootCannon() throws NoAmmoException {
 		Shot cannonballVector = null;
 
 		if (nAmmunitions[selectedAmmoIndex] > 0 || nAmmunitions[selectedAmmoIndex] == Constants.SHOT_AMMO_UNLIMITED) {
 			timestampLastShot = SystemClock.elapsedRealtime();
-			// TODO Crear constructor de disparos para los otros tipos de municion
-			cannonballVector = new Shot(context, x + (mWidth / 2) - (Shot.shotWidth / 2), y - Shot.shotHeight - 10,
-					this.mCanvasWidth, this.mCanvasHeight, new Point(
-							this.entityCoordinates.x, this.entityCoordinates.y
-									+ entityLength / 2), new Point(0,
-							Constants.DEFAULT_SHIP_BASIC_RANGE
-									* sType.rangeMultiplier()), Constants.DEFAULT_PLAYER_SHIP_DIRECTION,
-					(int) (Constants.DEFAULT_SHOOT_DAMAGE * sType
-							.powerMultiplier()), timestampLastShot);
-			if (nAmmunitions[selectedAmmoIndex] != Constants.SHOT_AMMO_UNLIMITED)
-				nAmmunitions[selectedAmmoIndex]--;
+			if(this.isPlayable()) {
+				switch (selectedAmmoIndex) {
+					case 0:
+						cannonballVector = new Shot(context, x + (mWidth / 2) - (Shot.shotWidth / 2), y - Shot.shotHeight - 10,
+								this.mCanvasWidth, this.mCanvasHeight, new Point(
+								this.entityCoordinates.x, this.entityCoordinates.y
+								+ entityLength / 2), new Point(this.entityCoordinates.x,
+								Constants.DEFAULT_SHIP_BASIC_RANGE
+										* sType.rangeMultiplier()), Constants.DEFAULT_PLAYER_SHIP_DIRECTION,
+								(int) (Constants.DEFAULT_SHOOT_DAMAGE * sType
+										.powerMultiplier()), timestampLastShot);
+						break;
+					case 1:
+						cannonballVector = new Shot(context, x + (mWidth / 2) - (Shot.shotWidth / 2), y - Shot.shotHeight - 10,
+								this.mCanvasWidth, this.mCanvasHeight, new Point(
+								this.entityCoordinates.x, this.entityCoordinates.y
+								+ entityLength / 2), new Point(this.entityCoordinates.x,
+								Constants.DEFAULT_SHIP_BASIC_RANGE
+										* sType.rangeMultiplier()), Constants.DEFAULT_PLAYER_SHIP_DIRECTION,
+								(int) (Constants.DEFAULT_SHOOT_DAMAGE * sType
+										.powerMultiplier()), timestampLastShot);
+						break;
+					case 2:
+						Shot[] cannonDoubleArray = new Shot[2];
+						for (int i = 0, length = cannonDoubleArray.length; i < length; i++) {
+							// Calculate value -1 when id is 0, +1 when id is 1
+							int xValue = i==0?-1:1;
+							cannonballVector = new Shot(context, x + (mWidth / 2) - (Shot.shotWidth / 2), y - Shot.shotHeight - 10,
+									this.mCanvasWidth, this.mCanvasHeight, new Point(
+									this.entityCoordinates.x, this.entityCoordinates.y
+									+ entityLength / 2), new Point(xValue,
+									Constants.DEFAULT_SHIP_BASIC_RANGE
+											* sType.rangeMultiplier()), Constants.DEFAULT_PLAYER_SHIP_DIRECTION,
+									(int) (Constants.DEFAULT_SHOOT_DAMAGE * sType
+											.powerMultiplier()), timestampLastShot);
+						}
+						break;
+					case 3:
+						int shotsOnScreen = CanvasView.mScreenWidth / Shot.shotWidth;
+						Shot[] cannonSweepArray = new Shot[shotsOnScreen - 1];
+						for (int i = 0, length = cannonSweepArray.length; i < length; i++) {
+							int xValue = i - (shotsOnScreen/2);
+							cannonballVector = new Shot(context, x + (mWidth / 2) - (Shot.shotWidth / 2), y - Shot.shotHeight - 10,
+									this.mCanvasWidth, this.mCanvasHeight, new Point(
+									this.entityCoordinates.x, this.entityCoordinates.y
+									+ entityLength / 2), new Point(xValue,
+									Constants.DEFAULT_SHIP_BASIC_RANGE
+											* sType.rangeMultiplier()), Constants.DEFAULT_PLAYER_SHIP_DIRECTION,
+									(int) (Constants.DEFAULT_SHOOT_DAMAGE * sType
+											.powerMultiplier()), timestampLastShot);
+						}
+						break;
+				}
+
+				if (nAmmunitions[selectedAmmoIndex] != Constants.SHOT_AMMO_UNLIMITED)
+					nAmmunitions[selectedAmmoIndex]--;
+			} else {
+				// Crear constructor de disparos para disparos del barco enemigo
+				Point origin = new Point(this.entityCoordinates.x, this.entityCoordinates.y
+						+ entityLength / 2);
+				Point destination = new Point(this.entityCoordinates.x,
+						Constants.DEFAULT_SHIP_BASIC_RANGE
+								* sType.rangeMultiplier());
+				// Set shot image coordinates within horizon bounds
+				cannonballVector = new Shot(context, x + (mWidth / 2) - (Shot.shotWidth / 2), y + mHeight + 10,
+						this.mCanvasWidth, this.mCanvasHeight, origin, destination, Constants.DIRECTION_DOWN,
+						(int) (Constants.DEFAULT_SHOOT_DAMAGE * sType
+								.powerMultiplier()), timestampLastShot);
+			}
 		} else {
 			throw new NoAmmoException(context.getResources().getString(
 					R.string.exception_ammo));
@@ -236,10 +325,12 @@ public class Ship extends Entity {
 			} else {
 				switch(sType.ordinal()){
 				case 0:
-					if(entityDirection == 180){
+					if(entityDirection == Constants.DIRECTION_LEFT){
 						setImage(context.getResources().getDrawable(R.mipmap.enemy_light_left, null));
-					} else if(entityDirection == 0) {
+					} else if(entityDirection == Constants.DIRECTION_RIGHT) {
 						setImage(context.getResources().getDrawable(R.mipmap.enemy_light_right, null));
+					} else if(entityDirection == Constants.DIRECTION_UP) {
+						setImage(context.getResources().getDrawable(R.mipmap.enemy_light_back, null));
 					} else {
 						setImage(context.getResources().getDrawable(R.mipmap.enemy_light_front, null));
 					}
@@ -248,10 +339,12 @@ public class Ship extends Entity {
 					// this.mCanvasHeight = DrawableHelper.getHeight(context.getResources(), ShipType.LIGHT.drawableValue());
 					break;
 				case 1:
-					if(entityDirection == 180){
+					if(entityDirection == Constants.DIRECTION_LEFT){
 						setImage(context.getResources().getDrawable(R.mipmap.enemy_medium_left, null));
-					} else if(entityDirection == 0) {
+					} else if(entityDirection == Constants.DIRECTION_RIGHT) {
 						setImage(context.getResources().getDrawable(R.mipmap.enemy_medium_right, null));
+					} else if(entityDirection == Constants.DIRECTION_UP){
+						setImage(context.getResources().getDrawable(R.mipmap.enemy_medium_back, null));
 					} else {
 						setImage(context.getResources().getDrawable(R.mipmap.enemy_medium_front, null));
 					}
@@ -260,10 +353,12 @@ public class Ship extends Entity {
 					// this.mCanvasHeight = DrawableHelper.getHeight(context.getResources(), ShipType.MEDIUM.drawableValue());
 					break;
 				case 2:
-					if(entityDirection == 180){
+					if(entityDirection == Constants.DIRECTION_LEFT){
 						setImage(context.getResources().getDrawable(R.mipmap.enemy_heavy_left, null));
-					} else if(entityDirection == 0) {
+					} else if(entityDirection == Constants.DIRECTION_RIGHT) {
 						setImage(context.getResources().getDrawable(R.mipmap.enemy_heavy_right, null));
+					} else if(entityDirection == Constants.DIRECTION_UP){
+						setImage(context.getResources().getDrawable(R.mipmap.enemy_heavy_back, null));
 					} else {
 						setImage(context.getResources().getDrawable(R.mipmap.enemy_heavy_front, null));
 					}
@@ -280,10 +375,12 @@ public class Ship extends Entity {
 			} else {
 				switch(sType.ordinal()){
 				case 0:
-					if(entityDirection == 180){
+					if(entityDirection == Constants.DIRECTION_LEFT){
 						setImage(context.getResources().getDrawable(R.mipmap.enemy_light_left));
-					} else if(entityDirection == 0) {
+					} else if(entityDirection == Constants.DIRECTION_RIGHT) {
 						setImage(context.getResources().getDrawable(R.mipmap.enemy_light_right));
+					} else if(entityDirection == Constants.DIRECTION_UP){
+						setImage(context.getResources().getDrawable(R.mipmap.enemy_light_back));
 					} else {
 						setImage(context.getResources().getDrawable(R.mipmap.enemy_light_front));
 					}
@@ -292,10 +389,12 @@ public class Ship extends Entity {
 					// this.mCanvasHeight = DrawableHelper.getHeight(context.getResources(), ShipType.LIGHT.drawableValue());
 					break;
 				case 1:
-					if(entityDirection == 180){
+					if(entityDirection == Constants.DIRECTION_LEFT){
 						setImage(context.getResources().getDrawable(R.mipmap.enemy_medium_left));
-					} else if(entityDirection == 0) {
+					} else if(entityDirection == Constants.DIRECTION_RIGHT) {
 						setImage(context.getResources().getDrawable(R.mipmap.enemy_medium_right));
+					} else if(entityDirection == Constants.DIRECTION_UP){
+						setImage(context.getResources().getDrawable(R.mipmap.enemy_medium_back));
 					} else {
 						setImage(context.getResources().getDrawable(R.mipmap.enemy_medium_front));
 					}
@@ -304,10 +403,12 @@ public class Ship extends Entity {
 					// this.mCanvasHeight = DrawableHelper.getHeight(context.getResources(), ShipType.MEDIUM.drawableValue());
 					break;
 				case 2:
-					if(entityDirection == 180){
+					if(entityDirection == Constants.DIRECTION_LEFT){
 						setImage(context.getResources().getDrawable(R.mipmap.enemy_heavy_left));
-					} else if(entityDirection == 0) {
+					} else if(entityDirection == Constants.DIRECTION_RIGHT) {
 						setImage(context.getResources().getDrawable(R.mipmap.enemy_heavy_right));
+					} else if(entityDirection == Constants.DIRECTION_UP){
+						setImage(context.getResources().getDrawable(R.mipmap.enemy_heavy_back));
 					} else {
 						setImage(context.getResources().getDrawable(R.mipmap.enemy_heavy_front));
 					}
@@ -500,6 +601,17 @@ public class Ship extends Entity {
 	public ShipType getShipType() {
 		return sType;
 	}
+
+	public int getShipTypeIndex(ShipType s){
+		int index = 0;
+		ShipType[] sTypes = ShipType.values();
+		for(int i = 0; i < sTypes.length; i++){
+			ShipType st = sTypes[i];
+			if(s.name().equals(st.name()))
+				index = i;
+		}
+		return index;
+	}
 	
 	public void setShipTypeDefaultSpeed(){
 		this.mSpeedXLevel = this.sType.getSpeed();
@@ -568,5 +680,28 @@ public class Ship extends Entity {
 		this.mPower = sType.powerMultiplier();
 		this.mReloadTime = (int) sType.powerMultiplier() * Constants.DEFAULT_SHIP_RELOAD;
 		gainHealth(this.mMaxHealth = sType.defaultHealthPoints());
+	}
+
+	@Override
+	public int describeContents() {
+		return 0;
+	}
+
+	@Override
+	public void writeToParcel(Parcel parcel, int i) {
+
+		parcel.writeInt(nAmmoTypes);
+		parcel.writeIntArray(nAmmunitions);
+		parcel.writeInt(selectedAmmoIndex);
+		parcel.writeInt(mReloadTime);
+		parcel.writeFloat(mPower);
+		parcel.writeFloat(mRange);
+		parcel.writeLong(timestampLastShot);
+		parcel.writeByte((byte) (isPlayable ? 1 : 0));
+		parcel.writeByte((byte) (wasIdle ? 1 : 0));
+		parcel.writeInt(mHealthPoints);
+		parcel.writeInt(mMaxHealth);
+		int shipEnum = getShipTypeIndex(sType);
+		parcel.writeInt(shipEnum);
 	}
 }

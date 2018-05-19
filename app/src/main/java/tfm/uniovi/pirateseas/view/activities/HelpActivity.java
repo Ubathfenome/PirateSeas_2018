@@ -28,6 +28,7 @@ public class HelpActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_help);
+
 		Typeface customFont = Typeface.createFromAsset(getAssets(), "fonts/" + Constants.FONT_NAME + ".ttf");
 		
 		btnNext = (Button) findViewById(R.id.btnBarNext);

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#7f000000" >
+    android:background="@mipmap/img_menu_background" >
 
     <TextView
         android:id="@+id/lblGameOver"

@@ -28,12 +28,6 @@ public class SettingsExtraActivity extends Activity {
 	private TextView txtControlMode;
 	private ToggleButton tglChangeAmmo;
 	private TextView txtAmmoMode;
-	private ToggleButton tglScreenSelection;
-	private TextView txtScreenSelection;
-	private ToggleButton tglPauseSelection;
-	private TextView txtPauseMode;
-
-	// TODO Incluir status del barco en pantalla de configuración (Visible cuando exista una partida en memoria)
 
 	private boolean mDebugMode;
 
@@ -69,20 +63,6 @@ public class SettingsExtraActivity extends Activity {
 		txtAmmoMode = findViewById(R.id.txtAmmoMode);
 		txtAmmoMode.setTypeface(customFont);
 
-		tglScreenSelection = (ToggleButton) findViewById(R.id.tglScreenSelection);
-		tglScreenSelection.setChecked(mPreferences.getBoolean(Constants.PREF_LEVEL_CONTROL_MODE, Constants.PREF_GAME_TOUCH));
-		tglScreenSelection.setTypeface(customFont);
-
-		txtScreenSelection = findViewById(R.id.txtScreenMode);
-		txtScreenSelection.setTypeface(customFont);
-
-		tglPauseSelection = (ToggleButton) findViewById(R.id.tglPauseSelection);
-		tglPauseSelection.setChecked(mPreferences.getBoolean(Constants.PREF_PAUSE_CONTROL_MODE, Constants.PREF_GAME_TOUCH));
-		tglPauseSelection.setTypeface(customFont);
-
-		txtPauseMode = findViewById(R.id.txtPauseMode);
-		txtPauseMode.setTypeface(customFont);
-
 		btnRestore = (Button) findViewById(R.id.btnSettingsRestore);
 		btnRestore.setTypeface(customFont);
 		btnRestore.setOnClickListener(new OnClickListener() {
@@ -113,8 +93,6 @@ public class SettingsExtraActivity extends Activity {
 		SharedPreferences.Editor editor = mPreferences.edit();
 		editor.putBoolean(Constants.PREF_SHIP_CONTROL_MODE, tglControlMode.isChecked());
 		editor.putBoolean(Constants.PREF_AMMO_CONTROL_MODE, tglChangeAmmo.isChecked());
-		editor.putBoolean(Constants.PREF_LEVEL_CONTROL_MODE, tglScreenSelection.isChecked());
-		editor.putBoolean(Constants.PREF_PAUSE_CONTROL_MODE, tglPauseSelection.isChecked());
 		editor.commit();
 	}
 

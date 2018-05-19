@@ -79,58 +79,6 @@
 					android:text="@string/settings_change_ammo_mode"
 					android:textSize="@dimen/text_size" />
 			</LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:orientation="horizontal"
-                android:padding="5dp" >
-
-                <ToggleButton
-                    android:id="@+id/tglScreenSelection"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/xml_toggle_style"
-                    android:textOff="@string/settings_sensorway"
-                    android:textOn="@string/settings_manual" />
-
-                <TextView
-                    android:id="@+id/txtScreenMode"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginRight="8dp"
-                    android:labelFor="@id/tglScreenSelection"
-                    android:text="@string/settings_select_mode"
-                    android:textSize="@dimen/text_size" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:orientation="horizontal"
-                android:padding="5dp" >
-
-                <ToggleButton
-                    android:id="@+id/tglPauseSelection"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/xml_toggle_style"
-                    android:textOff="@string/settings_sensorway"
-                    android:textOn="@string/settings_manual" />
-
-                <TextView
-                    android:id="@+id/txtPauseMode"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginRight="8dp"
-                    android:labelFor="@id/tglPauseSelection"
-                    android:text="@string/settings_pause_mode"
-                    android:textSize="@dimen/text_size" />
-            </LinearLayout>
             
             <Button
 	            android:id="@+id/btnSettingsRestore"

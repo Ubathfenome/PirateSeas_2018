@@ -20,29 +20,17 @@ public class Constants{
 	public static final String TAG_EXE_MODE = "tfm.uniovi.pirateseas.EXE_MODE";
 	public static final String TAG_SENSOR_LIST = "tfm.uniovi.pirateseas.SENSOR_LIST";
 	public static final String TAG_LOAD_GAME = "tfm.uniovi.pirateseas.LOAD_GAME";
-	public static final String TAG_DISPLAY_TUTORIAL = "tfm.uniovi.pirateseas.DISPLAY_TUTORIAL";
-	public static final String TAG_NEW_GAME = "tfm.uniovi.pirateseas.NEW_GAME";
 	public static final String TAG_GAME_OVER = "tfm.uniovi.pirateseas.GAME_OVER";
 	public static final String TAG_PREF_NAME = "tfm.uniovi.pirateseas.PREFERENCES";
-	public static final String TAG_BRIGHTNESS_LEVEL = "tfm.uniovi.pirateseas.BRIGHTNESS";
-	public static final String TAG_REMOVE_PREFERENCES = "tfm.uniovi.pirateseas.REMOVE_PREFERENCES";
-	public static final String TAG_SCREEN_SELECTION_ISLANDDATA = "tfm.uniovi.pirateseas.SCREEN_SELECTION_ISLANDDATA";
-	public static final String TAG_SCREEN_SELECTION_PLAYERDATA = "tfm.uniovi.pirateseas.SCREEN_SELECTION_PLAYERDATA";
-	public static final String TAG_SCREEN_SELECTION_MAPDATA = "tfm.uniovi.pirateseas.SCREEN_SELECTION_MAPDATA";
 	public static final String TAG_SCREEN_SELECTION_MAP_HEIGHT = "tfm.uniovi.pirateseas.SCREEN_SELECTION_MAP_HEIGHT";
 	public static final String TAG_SCREEN_SELECTION_MAP_WIDTH = "tfm.uniovi.pirateseas.SCREEN_SELECTION_MAP_WIDTH";
-	public static final String TAG_LOAD_SCREEN = "tfm.uniovi.pirateseas.LOAD_SCREEN";
-	public static final String TAG_RANDOM_ENCOUNTER = "tfm.uniovi.pirateseas.RANDOM_ENCOUNTER";
 	
 	// Math factors	
 	public static final int BYTES_PER_FLOAT = 4;
 	
 	// Requests
 	public static final int REQUEST_SENSOR_LIST = 0x00;
-	public static final int REQUEST_ISLAND = 0x01;
-	public static final int REQUEST_REMOVE_PREFERENCES = 0x02;
-	public static final int REQUEST_SCREEN_SELECTION = 0x03;
-	public static final int REQUEST_PERMISSIONS = 0x04;
+	public static final int REQUEST_PERMISSIONS = 0x01;
 	
 	// Entities
 	public static final int STATE_ALIVE = 0;
@@ -68,7 +56,10 @@ public class Constants{
 	public static final int DEFAULT_SHIP_RELOAD = 2;
 	public static final int DEFAULT_SHIP_BASIC_RANGE = 5;
 	public static final float DEFAULT_SHOOT_DAMAGE = 10;
-	
+
+	public static final int SHIP_MAX_POWER = 500;
+	public static final int SHIP_MAX_RANGE = 30;
+
 	public static final int SHOT_AMMO_UNLIMITED = -1;
 	public static final int SHOT_FIRED = 0;
 	public static final int SHOT_FLYING = 1;
@@ -91,7 +82,7 @@ public class Constants{
 	public static final int GAME_STATE_NORMAL = 0;
 	public static final int GAME_STATE_PAUSE = 1;
 	public static final int GAME_STATE_END = 2;
-	
+
 	public static final int LIGHT_THRESHOLD = 600;
 	
 	public static final int SECONDS_PER_IN_GAME_HOUR = 60;
@@ -100,10 +91,10 @@ public class Constants{
 	public static final double MILLIS_TO_SECONDS_INV = Math.pow(MILLIS_TO_SECONDS, -1); 
 	public static final double NANOS_TO_SECONDS = Math.pow(10, -9);
 
-	public static final int FLYING_TIME_MULTIPLIER = 10;
+	public static final int FLYING_TIME_MULTIPLIER = 600;
 
     public static final int SHAKE_LIMIT = 2;
-    public static final int TUTORIAL_NUM_PAGES = 7;
+    public static final int TUTORIAL_NUM_PAGES = 8;
 
     public static final int MAX_ENTITY_WIDTH = 15;
     public static final int MAX_ENTITY_HEIGHT = 15;
@@ -112,7 +103,6 @@ public class Constants{
 	public static final String EMPTY_STRING = "";
 	public static final String PREF_SENSOR_LIST = "sensorListPref";
 	public static final String PREF_PLAYER_TIMESTAMP = "playerTimestampPref";
-	public static final String PREF_PLAYER_DAYS = "playerDaysPref";
 	public static final String PREF_PLAYER_LEVEL = "playerLevelPref";
 	public static final String PREF_PLAYER_GOLD = "playerGoldPref";
 	public static final String PREF_PLAYER_XP = "playerExperiencePref";
@@ -138,7 +128,6 @@ public class Constants{
 	public static final String PREF_AMMO_CONTROL_MODE = "ammoControlMode";
 	public static final String PREF_LEVEL_CONTROL_MODE = "levelControlMode";
 	public static final String PREF_PAUSE_CONTROL_MODE = "pauseControlMode";
-	public static final boolean PREF_GAME_SENSORS = false;
 	public static final boolean PREF_GAME_TOUCH = true;
 
 	public static final String FONT_NAME = "TooneyNoodleNF";
@@ -189,8 +178,9 @@ public class Constants{
 	public static final String ITEM_KEY_AMMO_AIMED = "Ammo aimed";
 	public static final String ITEM_KEY_AMMO_DOUBLE = "Ammo double";
 	public static final String ITEM_KEY_AMMO_SWEEP = "Ammo sweep";
+    public static final String PAUSE_SHIP = "PLAYERSHIP";
 
-	public static boolean isInDebugMode(int mMode) {
+    public static boolean isInDebugMode(int mMode) {
 		return mMode == Constants.MODE_DEBUG;
 	}
 

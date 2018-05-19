@@ -1,5 +1,6 @@
 package tfm.uniovi.pirateseas.utils.approach2d;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -7,8 +8,12 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.graphics.Point;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
+import android.view.Display;
+import android.view.WindowManager;
 
 public class DrawableHelper{
 
@@ -80,6 +85,32 @@ public class DrawableHelper{
 		return height;
 	}
 
+	public static int getScreenWidth(Context context){
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+			Point size = new Point();
+			((Activity)context).getWindowManager().getDefaultDisplay().getSize(size);
+			return size.x;
+		} else {
+			Display display = ((WindowManager) context
+					.getSystemService(Context.WINDOW_SERVICE))
+					.getDefaultDisplay();
+			return display.getWidth();
+		}
+	}
+
+	public static int getScreenHeight(Context context){
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+			Point size = new Point();
+			((Activity)context).getWindowManager().getDefaultDisplay().getSize(size);
+			return size.y;
+		} else {
+			Display display = ((WindowManager) context
+					.getSystemService(Context.WINDOW_SERVICE))
+					.getDefaultDisplay();
+			return display.getHeight();
+		}
+	}
+
 
 
 	/**
@@ -123,4 +154,49 @@ public class DrawableHelper{
 		return result;
 	}
 
+	public static Bitmap decodeBitmapFromResource(Resources res, int resId,
+														 int reqWidth, int reqHeight) {
+
+		Bitmap bitmap = null;
+		// First decode with inJustDecodeBounds=true to check dimensions
+		final BitmapFactory.Options options = new BitmapFactory.Options();
+		options.inJustDecodeBounds = true;
+		BitmapFactory.decodeResource(res, resId, options);
+
+		// Calculate inSampleSize
+		options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
+
+		// Decode bitmap with inSampleSize set
+		options.inJustDecodeBounds = false;
+		try {
+			bitmap = BitmapFactory.decodeResource(res, resId, options);
+		} catch(OutOfMemoryError e){
+			System.gc();
+			bitmap = BitmapFactory.decodeResource(res, resId, options);
+		}
+		return bitmap;
+	}
+
+	public static int calculateInSampleSize(
+			BitmapFactory.Options options, int reqWidth, int reqHeight) {
+		// Raw height and width of image
+		final int height = options.outHeight;
+		final int width = options.outWidth;
+		int inSampleSize = 1;
+
+		if (height > reqHeight || width > reqWidth) {
+
+			final int halfHeight = height / 2;
+			final int halfWidth = width / 2;
+
+			// Calculate the largest inSampleSize value that is a power of 2 and keeps both
+			// height and width larger than the requested height and width.
+			while ((halfHeight / inSampleSize) >= reqHeight
+					&& (halfWidth / inSampleSize) >= reqWidth) {
+				inSampleSize *= 2;
+			}
+		}
+
+		return inSampleSize;
+	}
 }

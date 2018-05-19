@@ -16,15 +16,18 @@
 
 package tfm.uniovi.pirateseas.view.activities;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import tfm.uniovi.pirateseas.R;
 import tfm.uniovi.pirateseas.global.Constants;
+import tfm.uniovi.pirateseas.utils.approach2d.DrawableHelper;
 
 /**
  * A fragment representing a single step in a wizard. The fragment shows a dummy title indicating
@@ -41,6 +44,9 @@ public class ScreenSlidePageFragment extends Fragment {
      * The fragment's page number, which is set to the argument value for {@link #ARG_PAGE}.
      */
     private int mPageNumber;
+
+    ViewGroup rootView;
+    int imageReference;
 
     /**
      * Factory method for this fragment class. Constructs a new fragment for the given page number.
@@ -66,10 +72,10 @@ public class ScreenSlidePageFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
 				
-		int imageReference = 0;
+		imageReference = 0;
 				
         // Inflate the layout containing a title and body text.
-        ViewGroup rootView = (ViewGroup) inflater
+        rootView = (ViewGroup) inflater
                 .inflate(R.layout.fragment_screen_slide_page, container, false);
 
         // Set the title view to show the page number.
@@ -78,37 +84,42 @@ public class ScreenSlidePageFragment extends Fragment {
 				
 		switch(mPageNumber){
 			case 0:
-				imageReference = R.mipmap.img_tutorial_1;
+				imageReference = R.mipmap.img_game_activity;
 				((TextView) rootView.findViewById(R.id.text2)).setText(getResources().getString(R.string.tutorial_1));
 				break;
 			case 1:
-				imageReference = R.mipmap.img_tutorial_1;
+				imageReference = R.mipmap.img_screen_selection;
 				((TextView) rootView.findViewById(R.id.text2)).setText(getResources().getString(R.string.tutorial_2));
 				break;
 			case 2:
-				imageReference = R.mipmap.img_tutorial_1;
+				imageReference = R.mipmap.img_movement_spawn;
 				((TextView) rootView.findViewById(R.id.text2)).setText(getResources().getString(R.string.tutorial_3));
 				break;
 			case 3:
-				imageReference = R.mipmap.img_tutorial_1;
+				imageReference = R.mipmap.img_movement_shoot;
 				((TextView) rootView.findViewById(R.id.text2)).setText(getResources().getString(R.string.tutorial_4));
 				break;
             case 4:
-                imageReference = R.mipmap.img_tutorial_1;
+                imageReference = R.mipmap.img_ammunition;
                 ((TextView) rootView.findViewById(R.id.text2)).setText(getResources().getString(R.string.tutorial_5));
                 break;
             case 5:
-                imageReference = R.mipmap.img_tutorial_1;
+                imageReference = R.mipmap.img_screen_selection;
                 ((TextView) rootView.findViewById(R.id.text2)).setText(getResources().getString(R.string.tutorial_6));
                 break;
-			default:
-				imageReference = R.mipmap.img_tutorial_1;
-				((TextView) rootView.findViewById(R.id.text2)).setText(getResources().getString(R.string.tutorial_5));
-				break;
+            case 6:
+                imageReference = R.mipmap.img_pause;
+                ((TextView) rootView.findViewById(R.id.text2)).setText(getResources().getString(R.string.tutorial_7));
+                break;
+            case 7:
+                imageReference = R.mipmap.img_gameover;
+                ((TextView) rootView.findViewById(R.id.text2)).setText(getResources().getString(R.string.tutorial_8));
+                break;
 		}
-		
-		
-		rootView.findViewById(R.id.content).setBackgroundResource(imageReference);
+
+		ImageView background = rootView.findViewById(R.id.imgDisplayed);
+		Context context = getActivity();
+		background.setImageBitmap(DrawableHelper.decodeBitmapFromResource(getResources(),imageReference, DrawableHelper.getScreenWidth(context), DrawableHelper.getScreenHeight(context)));
 
         return rootView;
     }

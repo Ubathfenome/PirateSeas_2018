@@ -181,8 +181,9 @@
     <string name="tutorial_4">Touch the screen to shoot your selected ammo.</string>
     <string name="tutorial_5">Cycle through your ammo types touching the selected ammo icon. (Default setting)</string>
     <string name="tutorial_6">Collect booty by sinking your enemies or discovering treasures using the maps you will find on the islands in your path.</string>
-    <string name="tutorial_7">Become the greatest pirate king! or walk the plank!</string>
-    <string name="gameover_title">Game Over\r\nYou when to sleep with Davi Jones</string>
+    <string name="tutorial_7">Gain exp when sink your enemies ang unlock better upgrades</string>
+    <string name="tutorial_8">Become the greatest pirate king! or walk the plank!</string>
+    <string name="gameover_title">Game Over\nYou when to sleep with Davi Jones</string>
     <string name="gameover_hint">(Press anywhere to restart game&#8230;)</string>
     <string name="gameover_score">Score</string>
     <string name="gameover_days">Days passed</string>
@@ -195,7 +196,7 @@
     <string name="message_wrongway">Capt\'n! We can\'t go that way!</string>
     <string name="message_mapcompleted">Map completed!</string>
     <string name="message_shakesleft">Shake your device %1$d more time(s)!</string>
-    <string name="game_exit">Exit game</string>
+    <string name="game_exit">Exit</string>
 
 
 </resources>

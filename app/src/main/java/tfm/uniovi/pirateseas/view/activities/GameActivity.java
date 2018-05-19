@@ -65,8 +65,6 @@ public class GameActivity extends Activity implements SensorEventListener {
 
 	private boolean shipControlMode;
 	private boolean ammoControlMode;
-	private boolean levelControlMode;
-	private boolean pauseControlMode;
 
 	private float lastX, lastY, lastZ;
 
@@ -108,8 +106,6 @@ public class GameActivity extends Activity implements SensorEventListener {
 				Context.MODE_PRIVATE);
 		shipControlMode = mPreferences.getBoolean(Constants.PREF_SHIP_CONTROL_MODE, Constants.PREF_GAME_TOUCH);
 		ammoControlMode = mPreferences.getBoolean(Constants.PREF_AMMO_CONTROL_MODE, Constants.PREF_GAME_TOUCH);
-		levelControlMode = mPreferences.getBoolean(Constants.PREF_LEVEL_CONTROL_MODE, Constants.PREF_GAME_TOUCH);
-		pauseControlMode = mPreferences.getBoolean(Constants.PREF_PAUSE_CONTROL_MODE, Constants.PREF_GAME_TOUCH);
 
 		// Launch the game!!
 		setContentView(R.layout.activity_game);
@@ -118,6 +114,9 @@ public class GameActivity extends Activity implements SensorEventListener {
 		btnPause.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				Intent pauseIntent = new Intent(context, PauseActivity.class);
+				CanvasView currentCView = mCanvasView.nUpdateThread.getCanvasViewInstance();
+				Ship playerShip = currentCView.nPlayerShip;
+				pauseIntent.putExtra(Constants.PAUSE_SHIP, playerShip);
 				context.startActivity(pauseIntent);
 				Log.d(TAG, "Start Pause Intent");
 			}
@@ -177,6 +176,9 @@ public class GameActivity extends Activity implements SensorEventListener {
 			Sensor s = triggeringSensors.get(i);
 			mSensorManager.registerListener(this, s, SensorManager.SENSOR_DELAY_GAME);
 		}
+
+		// Reload saved settings in preferences
+		mCanvasView.loadSettings();
 
 		super.onResume();
 	}

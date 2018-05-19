@@ -14,16 +14,18 @@
 		
 	    <ImageView 
 	        android:id="@+id/imgHelpHud"
-	        android:layout_width="wrap_content"
+	        android:layout_width="0dp"
     		android:layout_height="wrap_content"
+            android:layout_weight="4"
     		android:layout_margin="5dip"
     		android:contentDescription="@string/icd_help_hud"
-    		android:background="@mipmap/img_tutorial_1"/>
+    		android:background="@mipmap/img_game_help_hud"/>
 	    
 	    <ListView 
 	        android:id="@+id/lstScreenItems"
-	        android:layout_width="wrap_content"
-    		android:layout_height="wrap_content">
+	        android:layout_width="0dp"
+    		android:layout_height="wrap_content"
+            android:layout_weight="1">
 	        
 	    </ListView>
 	    

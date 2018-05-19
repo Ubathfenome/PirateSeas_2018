@@ -16,24 +16,25 @@ public class MusicManager{
 	private static final String TAG = "MusicManager";
 	
 	// Sound Ids
-	public final static int SOUND_SHOT_FIRED = 0x0;
-	public final static int SOUND_SHOT_HIT = 0x1;
-	public final static int SOUND_SHOT_MISSED = 0x2;
-	public final static int SOUND_SHOT_RELOADING = 0x3;
-	public final static int SOUND_SHOT_EXPLOSION = 0x4;
-	public final static int SOUND_WEATHER_FOG = 0x5;
-	public final static int SOUND_WEATHER_STORM = 0x6;
-	public final static int SOUND_WEATHER_MAELSTROM = 0x7;
-	public final static int SOUND_ENEMY_APPEAR = 0x8;
-	public final static int SOUND_GOLD_GAINED = 0x9;
-	public final static int SOUND_GOLD_SPENT = 0xA;
-	public final static int SOUND_XP_GAINED = 0xB;
-	public final static int MUSIC_GAME_PAUSED = 0xC;
-	public final static int MUSIC_BATTLE = 0xD;
-	public final static int MUSIC_ISLAND = 0xE;
-	public final static int MUSIC_GAME_MENU = 0xF;
-		
-	// Sounds
+	public final static int SOUND_SHOT_FIRED = 0x00;
+	public final static int SOUND_SHOT_HIT = 0x01;
+	public final static int SOUND_SHOT_MISSED = 0x02;
+	public final static int SOUND_SHOT_RELOADING = 0x03;
+	public final static int SOUND_SHOT_EXPLOSION = 0x04;
+	public final static int SOUND_WEATHER_FOG = 0x05;
+	public final static int SOUND_WEATHER_STORM = 0x06;
+	public final static int SOUND_WEATHER_MAELSTROM = 0x07;
+	public final static int SOUND_ENEMY_APPEAR = 0x08;
+	public final static int SOUND_GOLD_GAINED = 0x09;
+	public final static int SOUND_GOLD_SPENT = 0x0A;
+	public final static int SOUND_XP_GAINED = 0x0B;
+	public final static int MUSIC_GAME_PAUSED = 0x0C;
+	public final static int MUSIC_BATTLE = 0x0D;
+	public final static int MUSIC_ISLAND = 0x0E;
+	public final static int MUSIC_GAME_MENU = 0x0F;
+    public static final int MUSIC_GAME_OVER = 0x10;
+
+    // Sounds
 	private HashMap<Integer,Integer> mSoundKeys;
 	private SoundPools mSoundPools;
 	private AudioManager  mAudioManager;
@@ -155,6 +156,12 @@ public class MusicManager{
 	public void stopBackgroundMusic(){
 		if(mBackgroundMusic!= null && mBackgroundMusic.isPlaying()){
 			mBackgroundMusic.stop();
+		}
+	}
+
+	public void resetPlayer(){
+		if(mBackgroundMusic!=null){
+			mBackgroundMusic.reset();
 		}
 	}
 	

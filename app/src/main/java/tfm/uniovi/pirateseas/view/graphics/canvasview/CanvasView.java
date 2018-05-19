@@ -98,7 +98,7 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 	double nEnemyShipInitialXcoord;
 	double nEnemyShipInitialYcoord;
 
-
+	public static int mScreenWidth, mScreenHeight;
 
 	/**
 	 * Constructor
@@ -243,10 +243,12 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 
 	public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
 		nScreenWidth = width;
+		mScreenWidth = width;
 		nScreenHeight = height;
+		mScreenHeight = height;
 		nPixelsWidth = width / Constants.MAX_ENTITY_WIDTH;
 		nPixelsHeight = (height / Constants.MAX_ENTITY_HEIGHT) / Constants.FLYING_TIME_MULTIPLIER;
-		Log.d(TAG, "Surface changed");
+		Log.d(TAG, "Surface changed nPixelsHeight: " + nPixelsHeight);
 	}
 
 	public void surfaceCreated(SurfaceHolder holder) {
@@ -289,53 +291,56 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 
 		if (nStatus == Constants.GAME_STATE_NORMAL && nGameMode == Constants.GAMEMODE_BATTLE) {
 			// If "Touch control" Then
-			if (nShipControlMode) {
-				switch (event.getAction()) {
-					case MotionEvent.ACTION_MOVE:
-						break;
-					case MotionEvent.ACTION_UP:
-						boolean reloaded = nPlayerShip.isReloaded(nGameTimestamp);
-						if (reloaded && nEnemyShip.isAlive()) {
-							String direction = pressedMotion(new Point(downX, downY), new Point(x, y));
-							int xDistance = Math.abs(x - downX);
-							int yDistance = Math.abs(y - downY);
-							if (direction.equals(Constants.FRONT)) {
-								nCheatCounter = 0;
-								try {
-									nShotList.add(nPlayerShip.shootFront());
-									MusicManager.getInstance().playSound(MusicManager.SOUND_SHOT_FIRED);
-								} catch (NoAmmoException e) {
-									Log.e(EXCEPTION_TAG, e.getMessage());
-									Toast.makeText(nContext, e.getMessage(), Toast.LENGTH_SHORT).show();
-								}
-							} else if (direction.equals(Constants.RIGHT)) {
+			switch (event.getAction()) {
+				case MotionEvent.ACTION_MOVE:
+					break;
+				case MotionEvent.ACTION_UP:
+					boolean reloaded = nPlayerShip.isReloaded(nGameTimestamp);
+					if (reloaded && nEnemyShip.isAlive()) {
+						String direction = pressedMotion(new Point(downX, downY), new Point(x, y));
+						int xDistance = Math.abs(x - downX);
+						int yDistance = Math.abs(y - downY);
+						if (direction.equals(Constants.FRONT)) {
+							nCheatCounter = 0;
+							try {
+								nShotList.add(nPlayerShip.shootCannon());
+								MusicManager.getInstance().playSound(MusicManager.SOUND_SHOT_FIRED);
+							} catch (NoAmmoException e) {
+								Log.e(EXCEPTION_TAG, e.getMessage());
+								Toast.makeText(nContext, e.getMessage(), Toast.LENGTH_SHORT).show();
+							}
+						} else if (direction.equals(Constants.RIGHT)) {
+							if (nShipControlMode) {
 								nCheatCounter = 0;
 								nPlayerShip.move(-(nPlayerShip.getShipType().getSpeed() + xDistance), 0, true);
 								nPlayerShip.moveShipEntity(new Point(nPlayerShip.getCoordinates().x + 1, nPlayerShip.getCoordinates().y));
-							} else if (direction.equals(Constants.LEFT)) {
+							}
+						} else if (direction.equals(Constants.LEFT)) {
+							if (nShipControlMode) {
 								nCheatCounter = 0;
 								nPlayerShip.move(nPlayerShip.getShipType().getSpeed() + xDistance, 0, true);
 								nPlayerShip.moveShipEntity(new Point(nPlayerShip.getCoordinates().x - 1, nPlayerShip.getCoordinates().y));
-							} else if (direction.equals(Constants.BACK)) {
-								nCheatCounter++;
-								if (nCheatCounter % Constants.CHT_VALUE > 0)
-									Log.v("Cheat", Constants.CHT_VALUE - (nCheatCounter % Constants.CHT_VALUE) + " more touches to go!");
-								if (nCheatCounter % Constants.CHT_VALUE == 0)
-									grantCheat2Player();
 							}
-						} else {
-							try {
-								throw new CannonReloadingException(
-										nContext.getResources().getString(R.string.exception_reloading));
-							} catch (CannonReloadingException e) {
-								Log.e(EXCEPTION_TAG, e.getMessage());
-								MusicManager.getInstance().playSound(MusicManager.SOUND_SHOT_RELOADING);
-								Toast.makeText(nContext, e.getMessage(), Toast.LENGTH_SHORT).show();
-							}
+						} else if (direction.equals(Constants.BACK)) {
+							nCheatCounter++;
+							if (nCheatCounter % Constants.CHT_VALUE > 0)
+								Log.v("Cheat", Constants.CHT_VALUE - (nCheatCounter % Constants.CHT_VALUE) + " more touches to go!");
+							if (nCheatCounter % Constants.CHT_VALUE == 0)
+								grantCheat2Player();
 						}
-						break;
+					} else {
+						try {
+							throw new CannonReloadingException(
+									nContext.getResources().getString(R.string.exception_reloading));
+						} catch (CannonReloadingException e) {
+							Log.e(EXCEPTION_TAG, e.getMessage());
+							MusicManager.getInstance().playSound(MusicManager.SOUND_SHOT_RELOADING);
+							Toast.makeText(nContext, e.getMessage(), Toast.LENGTH_SHORT).show();
+						}
 					}
+					break;
 			}
+
 		}
 		return true;
 	}
@@ -569,7 +574,26 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 								}
 							}
 
-							s.moveShotEntity(s.getEndPoint(), nPixelsWidth, nPixelsHeight);
+							// Change shot behaviour for the type of ammunition used
+							if(s.getEntityDirection() == Constants.DIRECTION_UP) {
+								switch (nPlayerShip.getSelectedAmmunitionIndex()) {
+									case 0:
+										s.moveShotEntity(s.getEndPoint(), nPixelsWidth, nPixelsHeight);
+										break;
+									case 1:
+										s.moveShotEntity(s.getEndPoint(), nPixelsWidth, nPixelsHeight);
+										break;
+									case 2:
+										s.moveShotEntity(s.getEndPoint(), nPixelsWidth, nPixelsHeight);
+										break;
+									case 3:
+										s.moveShotEntity(s.getEndPoint(), nPixelsWidth, nPixelsHeight);
+										break;
+								}
+							} else {
+								s.moveShotEntity(s.getEndPoint(), nPixelsWidth, nPixelsHeight);
+							}
+
 							nShotLastTimeChecked[i] = nGameTimestamp;
 
 							if (s.getCoordinates().x == s.getEndPoint().x && s.getCoordinates().y == s.getEndPoint().y)
@@ -617,6 +641,15 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 				nPlayer.addGold(nEnemyShip.getType().defaultHealthPoints() / 5);
 				nPlayer.addExperience(nEnemyShip.getType().defaultHealthPoints() / 2);
 			} else {
+				// EnemyShip shoot
+				if(nEnemyShip.isReloaded(nGameTimestamp))
+					try {
+						nShotList.add(nEnemyShip.shootCannon());
+						MusicManager.getInstance().playSound(MusicManager.SOUND_SHOT_FIRED);
+					} catch (NoAmmoException e) {
+						Log.e(EXCEPTION_TAG, e.getMessage());
+						Toast.makeText(nContext, e.getMessage(), Toast.LENGTH_SHORT).show();
+					}
 				// Establecer comportamiento enemigo con movimiento en circulo
 				if(nEnemyShip.getX()+nEnemyShip.getWidth()+nEnemyShip.getShipType().getSpeed() > nScreenWidth) {
 					if(nEnemyShip.getY() > nEnemyShipInitialYcoord) {
@@ -657,6 +690,8 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 	private void managePlayer() {
 		if (!nPlayerShip.isAlive()) {
 			// Display "Game Over" Screen with calculated score
+			MusicManager.getInstance().stopBackgroundMusic();
+			MusicManager.getInstance(nContext,MusicManager.MUSIC_GAME_OVER).playBackgroundMusic();
 			((GameActivity) nContext).gameOver(nPlayer);
 			nStatus = Constants.GAME_STATE_END;
 		}
@@ -760,5 +795,11 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 	public void selectNextAmmo(){
 		if(nPlayerShip != null && nPlayerShip.isAlive())
 			nPlayerShip.selectNextAmmo();
+	}
+
+	public void loadSettings() {
+		if(nPreferences==null)
+			nPreferences = nContext.getSharedPreferences(Constants.TAG_PREF_NAME, Context.MODE_PRIVATE);
+		nShipControlMode = nPreferences.getBoolean(Constants.PREF_SHIP_CONTROL_MODE, Constants.PREF_GAME_TOUCH);
 	}
 }

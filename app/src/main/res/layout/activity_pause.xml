@@ -2,45 +2,131 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="@dimen/padding_size"
-    android:orientation="vertical"
     android:background="@drawable/xml_border"
-    android:gravity="center">
-	
-		<TextView 
-			android:id="@+id/txtPauseLabel"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:textSize="@dimen/title_size"
-			android:text="@string/label_pause"
-			android:paddingBottom="@dimen/small_padding_size"/>
+    android:gravity="center"
+    android:orientation="vertical">
 
-		<Button android:id="@+id/btnPauseResume"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:text="@string/game_resume"
-			android:background="@drawable/xml_btn_style" />
-			
-		<ImageButton android:id="@+id/btnPauseSettings"
-			android:src="@mipmap/ico_settings"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:contentDescription="@string/activity_settings"
-			android:text="@string/activity_settings"
-			android:background="@drawable/xml_btn_style" />
-		
-		<ImageButton android:id="@+id/btnPauseHelp"
-			android:src="@mipmap/ico_help"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:contentDescription="@string/activity_help"
-			android:text="@string/activity_help"
-			android:background="@drawable/xml_btn_style" />
+    <TextView
+        android:id="@+id/txtPauseLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/label_pause"
+        android:textAlignment="center"
+        android:textSize="@dimen/title_size" />
 
-		<Button android:id="@+id/btnPauseExit"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:text="@string/game_exit"
-			android:background="@drawable/xml_btn_style" />
-		
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal"
+        android:padding="@dimen/extra_small_padding_size">
+
+        <Button
+            android:id="@+id/btnPauseResume"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:background="@drawable/xml_btn_style"
+            android:text="@string/game_resume" />
+
+        <ImageButton
+            android:id="@+id/btnPauseSettings"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:background="@drawable/xml_btn_style"
+            android:contentDescription="@string/activity_settings"
+            android:src="@mipmap/ico_settings"
+            android:text="@string/activity_settings" />
+
+        <ImageButton
+            android:id="@+id/btnPauseHelp"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:background="@drawable/xml_btn_style"
+            android:contentDescription="@string/activity_help"
+            android:src="@mipmap/ico_help"
+            android:text="@string/activity_help" />
+
+        <Button
+            android:id="@+id/btnPauseExit"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:background="@drawable/xml_btn_style"
+            android:text="@string/game_exit" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/extra_small_padding_size"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/imgHealth"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dip"
+                    android:contentDescription="@string/icd_help_hud"
+                    android:background="@mipmap/icon_buff_repa"/>
+
+            <ProgressBar
+                android:id="@+id/pgrsHealth"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/extra_small_padding_size"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/imgRange"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dip"
+                    android:contentDescription="@string/icd_help_hud"
+                    android:background="@mipmap/icon_buff_occu"/>
+
+            <ProgressBar
+                android:id="@+id/pgrsRange"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/extra_small_padding_size"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/imgPower"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dip"
+                    android:contentDescription="@string/icd_help_hud"
+                    android:background="@mipmap/icon_buff_bpow"/>
+
+            <ProgressBar
+                android:id="@+id/pgrsPower"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+    </LinearLayout>
 </LinearLayout>

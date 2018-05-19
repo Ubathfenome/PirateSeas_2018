@@ -398,13 +398,27 @@ public class MainMenuActivity extends Activity {
 	 */
 	private class LoadSounds extends AsyncTask<Void, Integer, Boolean>{
 
-		@Override
+        @Override
+        protected void onPreExecute() {
+            try {
+                MusicManager.getInstance().stopBackgroundMusic();
+            } catch (IllegalStateException e) {
+            	try {
+					MusicManager.getInstance().resetPlayer();
+				} catch (IllegalStateException ex){
+            		Log.e(TAG, "MusicManager has not the resources yet/anymore");
+				}
+            }
+        }
+
+        @Override
 		protected Boolean doInBackground(Void... arg0) {
 			MusicManager.getInstance(context).registerSound(MusicManager.SOUND_ENEMY_APPEAR, R.raw.snd_ship_ahoy);
 			MusicManager.getInstance(context).registerSound(MusicManager.MUSIC_GAME_PAUSED, R.raw.msc_game_paused);
 			MusicManager.getInstance(context).registerSound(MusicManager.MUSIC_BATTLE, R.raw.msc_soundtrack_battle);
 			MusicManager.getInstance(context).registerSound(MusicManager.MUSIC_ISLAND, R.raw.msc_soundtrack_island);
 			MusicManager.getInstance(context).registerSound(MusicManager.MUSIC_GAME_MENU, R.raw.msc_soundtrack_menu);
+			MusicManager.getInstance(context).registerSound(MusicManager.MUSIC_GAME_OVER, R.raw.msc_soundtrack_gameover);
 			MusicManager.getInstance(context).registerSound(MusicManager.SOUND_GOLD_GAINED, R.raw.snd_gold_gained);
 			MusicManager.getInstance(context).registerSound(MusicManager.SOUND_GOLD_SPENT, R.raw.snd_gold_spent);
 			MusicManager.getInstance(context).registerSound(MusicManager.SOUND_SHOT_FIRED, R.raw.snd_shot_fired);
