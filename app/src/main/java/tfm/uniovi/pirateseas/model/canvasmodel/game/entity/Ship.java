@@ -41,9 +41,9 @@ public class Ship extends Entity implements Parcelable{
 		}
 		
 		this.sType = ShipType.LIGHT;
-		this.isPlayable = false;
 		this.setIdle(true);
-		this.selectedAmmo = Ammunitions.DEFAULT;
+        this.isPlayable = false;
+        this.selectedAmmo = Ammunitions.DEFAULT;
 		this.selectedAmmoIndex = Ammunitions.valueOf(selectedAmmo.getName()).ordinal();
 	}
 	
@@ -522,7 +522,7 @@ public class Ship extends Entity implements Parcelable{
 	}*/
 	
 	public boolean isReloaded(long timestamp){
-		return timestamp - timestampLastShot > (mReloadTime * 1000);
+		return (timestamp - timestampLastShot) > (mReloadTime * 1000);
 	}
 
 	/**
@@ -704,4 +704,8 @@ public class Ship extends Entity implements Parcelable{
 		int shipEnum = getShipTypeIndex(sType);
 		parcel.writeInt(shipEnum);
 	}
+
+    public void setPlayable(boolean playable) {
+        this.isPlayable = playable;
+    }
 }

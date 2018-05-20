@@ -45,7 +45,7 @@ public class SettingsActivity extends Activity {
 		
 		context = this;
 
-		txtTitleLabel = (TextView) findViewById(R.id.txtSettingsLabel);
+		txtTitleLabel = findViewById(R.id.txtSettingsLabel);
 		Typeface customFont = Typeface.createFromAsset(getAssets(), "fonts/"
 				+ Constants.FONT_NAME + ".ttf");
 		txtTitleLabel.setTypeface(customFont);
@@ -54,11 +54,11 @@ public class SettingsActivity extends Activity {
 				Constants.PREF_DEVICE_VOLUME, MusicManager
 				.getInstance(this).getDeviceVolume());
 
-		txtVolumeLabel = (TextView) findViewById(R.id.txtVolumeLabel);
+		txtVolumeLabel = findViewById(R.id.txtVolumeLabel);
 		labelValue = (String) txtVolumeLabel.getText();
 		txtVolumeLabel.setText(labelValue + " " + (int) volumeValue);
 
-		skbVolume = (SeekBar) findViewById(R.id.sbVolume);
+		skbVolume = findViewById(R.id.sbVolume);
 		skbVolume.setProgress((int) volumeValue);
 		skbVolume.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
 
@@ -80,7 +80,7 @@ public class SettingsActivity extends Activity {
 			}
 		});
 		
-		btnSettingsExtra = (Button) findViewById(R.id.btnExtraSettings);
+		btnSettingsExtra = findViewById(R.id.btnExtraSettings);
 		btnSettingsExtra.setTypeface(customFont);
 		btnSettingsExtra.setOnClickListener(new OnClickListener() {
 			
@@ -91,7 +91,7 @@ public class SettingsActivity extends Activity {
 			}
 		});
 
-		btnSettingsAccept = (Button) findViewById(R.id.btnSettingsAccept);
+		btnSettingsAccept = findViewById(R.id.btnSettingsAccept);
 		btnSettingsAccept.setTypeface(customFont);
 		btnSettingsAccept.setOnClickListener(new OnClickListener() {
 
@@ -106,7 +106,7 @@ public class SettingsActivity extends Activity {
 			}
 		});
 
-		btnSettingsCancel = (Button) findViewById(R.id.btnSettingsCancel);
+		btnSettingsCancel = findViewById(R.id.btnSettingsCancel);
 		btnSettingsCancel.setTypeface(customFont);
 		btnSettingsCancel.setOnClickListener(new OnClickListener() {
 

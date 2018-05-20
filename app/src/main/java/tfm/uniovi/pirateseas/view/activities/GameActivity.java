@@ -51,6 +51,7 @@ public class GameActivity extends Activity implements SensorEventListener {
 
 	private CanvasView mCanvasView;
 	private static final int SENSOR_UPDATE_SECONDS = 2;
+	private static final int ACCELEROMETER_THRESHOLD = 2;
 
 	protected int[] sensorTypes = null;
 	protected long sensorLastTimestamp;
@@ -110,7 +111,7 @@ public class GameActivity extends Activity implements SensorEventListener {
 		// Launch the game!!
 		setContentView(R.layout.activity_game);
 
-		btnPause = (ImageButton) findViewById(R.id.btnPause);
+		btnPause = findViewById(R.id.btnPause);
 		btnPause.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				Intent pauseIntent = new Intent(context, PauseActivity.class);
@@ -122,7 +123,7 @@ public class GameActivity extends Activity implements SensorEventListener {
 			}
 		});
 
-		btnChangeAmmo = (ImageButton) findViewById(R.id.btnChangeAmmo);
+		btnChangeAmmo = findViewById(R.id.btnChangeAmmo);
 		btnChangeAmmo.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
@@ -141,9 +142,9 @@ public class GameActivity extends Activity implements SensorEventListener {
 			}
 		});
 
-		mGold = (UIDisplayElement) findViewById(R.id.playerGold);
+		mGold = findViewById(R.id.playerGold);
 		mGold.setElementValue(0);
-		mAmmo = (UIDisplayElement) findViewById(R.id.playerAmmunition);
+		mAmmo = findViewById(R.id.playerAmmunition);
 		mAmmo.setElementValue(0);
 	}
 
@@ -178,7 +179,7 @@ public class GameActivity extends Activity implements SensorEventListener {
 		}
 
 		// Reload saved settings in preferences
-		mCanvasView.loadSettings();
+		mCanvasView.nUpdateThread.getCanvasViewInstance().loadSettings();
 
 		super.onResume();
 	}
@@ -228,48 +229,49 @@ public class GameActivity extends Activity implements SensorEventListener {
 		if (arrayContainsValue(sensorTypes, sensor.getType())) {
 			switch (sensor.getType()) {
 			case Sensor.TYPE_ACCELEROMETER:
-				if (deltaSeconds >= SENSOR_UPDATE_SECONDS) { // Hold sensor
-																// updates
+
+				if (deltaSeconds >= SENSOR_UPDATE_SECONDS) { // Hold sensor updates
 					// Parameters
 					float axisSpeedX = event.values[0];
 					float axisSpeedY = event.values[1];
 					float axisSpeedZ = event.values[2];
 
-					int ACCELEROMETER_THRESHOLD = 3;
-
 					double angleX = Math.toDegrees(Math.asin (axisSpeedX / SensorManager.GRAVITY_EARTH));
 					double angleY = Math.toDegrees(Math.asin (axisSpeedY / SensorManager.GRAVITY_EARTH));
 					double angleZ = Math.toDegrees(Math.asin (axisSpeedZ / SensorManager.GRAVITY_EARTH));
-					Log.d(TAG, "TYPE_ACCELEROMETER: Acc:angle = "+axisSpeedX+":"+angleX+"º / "+axisSpeedY+":"+angleY+"º / "+axisSpeedZ+":"+angleZ+"º	");
 
+					Log.d(TAG, "TYPE_ACCELEROMETER: Acc:angle = "+axisSpeedX+":"+angleX+"º / "+axisSpeedY+":"+angleY+"º / "+axisSpeedZ+":"+angleZ+"º	");
 					// Event
 					if (EventWeatherMaelstrom.generateMaelstrom(axisSpeedY, axisSpeedZ)) {
 						// Notify CanvasView to damage the ships
 						if (cView.getGamemode() == Constants.GAMEMODE_BATTLE) {
 							Toast.makeText(context, "Maelstorm inbound!", Toast.LENGTH_SHORT).show();
-                            cView.maelstorm();
+							cView.maelstorm();
 						}
-					} else {
-						// Gestionar los movimientos del barco del jugador dependiendo de los valores de los sensores
-						// @see: https://code.tutsplus.com/tutorials/using-the-accelerometer-on-android--mobile-22125
-						if(cView.getGamemode() == Constants.GAMEMODE_BATTLE) {
-							if(cView.nPlayerShip != null && cView.nPlayerShip.isAlive() && cView.nEnemyShip != null && cView.nEnemyShip.isAlive()){
-								if(shipControlMode == false) {
-									if(Math.abs(axisSpeedY) >= ACCELEROMETER_THRESHOLD) {
-										int shipSpeed = cView.nPlayerShip.getShipType().getSpeed();
-										float speed = Math.abs(axisSpeedX + axisSpeedY + axisSpeedZ - lastX - lastY - lastZ);
+					}
+				}
 
-										Log.d(TAG, "TYPE_ACCELEROMETER: Ship movement would be: " + shipSpeed + " + " + speed + " = " + (shipSpeed + speed)
-												+ " to the " + (axisSpeedY < 0 ? "left" : "right"));
-										if (axisSpeedY < 0) {
-											cView.nPlayerShip.move((shipSpeed + speed), 0, true);
-											cView.nPlayerShip.moveShipEntity(new Point(cView.nPlayerShip.getCoordinates().x - 1, cView.nPlayerShip.getCoordinates().y));
-										} else if (axisSpeedY > 0) {
-											cView.nPlayerShip.move(-(shipSpeed + speed), 0, true);
-											cView.nPlayerShip.moveShipEntity(new Point(cView.nPlayerShip.getCoordinates().x + 1, cView.nPlayerShip.getCoordinates().y));
-										}
-									}
-								}
+				// Gestionar los movimientos del barco del jugador dependiendo de los valores de los sensores
+				// @see: https://code.tutsplus.com/tutorials/using-the-accelerometer-on-android--mobile-22125
+				if(cView.getGamemode() == Constants.GAMEMODE_BATTLE) {
+					// Parameters
+					float axisSpeedX = event.values[0];
+					float axisSpeedY = event.values[1];
+					float axisSpeedZ = event.values[2];
+
+					if (shipControlMode == false && battleIsGoing(cView)) {
+						if (Math.abs(axisSpeedY) >= ACCELEROMETER_THRESHOLD) {
+							int shipSpeed = cView.nPlayerShip.getShipType().getSpeed();
+							float speed = Math.abs(axisSpeedX + axisSpeedY + axisSpeedZ - lastX - lastY - lastZ);
+
+							Log.d(TAG, "TYPE_ACCELEROMETER: Ship movement would be: " + shipSpeed + " + " + speed + " = " + (shipSpeed + speed)
+									+ " to the " + (axisSpeedY < 0 ? "left" : "right"));
+							if (axisSpeedY < 0) {
+								cView.nPlayerShip.move((shipSpeed + speed), 0, true);
+								cView.nPlayerShip.moveShipEntity(new Point(cView.nPlayerShip.getCoordinates().x - 1, cView.nPlayerShip.getCoordinates().y));
+							} else if (axisSpeedY > 0) {
+								cView.nPlayerShip.move(-(shipSpeed + speed), 0, true);
+								cView.nPlayerShip.moveShipEntity(new Point(cView.nPlayerShip.getCoordinates().x + 1, cView.nPlayerShip.getCoordinates().y));
 							}
 						}
 					}
@@ -301,13 +303,13 @@ public class GameActivity extends Activity implements SensorEventListener {
 				if (deltaSeconds >= SENSOR_UPDATE_SECONDS) { // Hold sensor
 																// updates
 					// Parameters
-					float axisSpeedX = event.values[0];
-					float axisSpeedY = event.values[1];
-					float axisSpeedZ = event.values[2];
+					float axisGyroSpeedX = event.values[0];
+					float axisGyroSpeedY = event.values[1];
+					float axisGyroSpeedZ = event.values[2];
 
 					if (!Constants.isInDebugMode(Constants.MODE))
-						Log.d(TAG, "TYPE_GYROSCOPE: Gyroscope (rad/s): x = " + axisSpeedX + "; y = " + axisSpeedY
-								+ "; z = " + axisSpeedZ);
+						Log.d(TAG, "TYPE_GYROSCOPE: Gyroscope (rad/s): x = " + axisGyroSpeedX + "; y = " + axisGyroSpeedY
+								+ "; z = " + axisGyroSpeedZ);
 
 					// Event
 					// Establish an event in a future version of the game
@@ -403,6 +405,10 @@ public class GameActivity extends Activity implements SensorEventListener {
 				break;
 			}
 		}
+	}
+
+	private boolean battleIsGoing(CanvasView cView) {
+		return cView.nPlayerShip != null && cView.nPlayerShip.isAlive() && cView.nEnemyShip != null && cView.nEnemyShip.isAlive();
 	}
 
 	/*

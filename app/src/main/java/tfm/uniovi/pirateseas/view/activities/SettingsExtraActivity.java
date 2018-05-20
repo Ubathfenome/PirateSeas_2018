@@ -49,21 +49,22 @@ public class SettingsExtraActivity extends Activity {
 		txtSettingsLabel = 	findViewById(R.id.txtSettingsLabel);
 		txtSettingsLabel.setTypeface(customFont);
 		
-		tglControlMode = (ToggleButton) findViewById(R.id.tglControlMode);
-		tglControlMode.setChecked(mPreferences.getBoolean(Constants.PREF_SHIP_CONTROL_MODE, Constants.PREF_GAME_TOUCH));
+		tglControlMode = findViewById(R.id.tglControlMode);
+		boolean controlCheck = mPreferences.getBoolean(Constants.PREF_SHIP_CONTROL_MODE, Constants.PREF_GAME_TOUCH);
+		tglControlMode.setChecked(controlCheck);
 		tglControlMode.setTypeface(customFont);
 
 		txtControlMode = findViewById(R.id.txtControlMode);
 		txtControlMode.setTypeface(customFont);
 		
-		tglChangeAmmo = (ToggleButton) findViewById(R.id.tglChangeAmmo);
+		tglChangeAmmo = findViewById(R.id.tglChangeAmmo);
 		tglChangeAmmo.setChecked(mPreferences.getBoolean(Constants.PREF_AMMO_CONTROL_MODE, Constants.PREF_GAME_TOUCH));
 		tglChangeAmmo.setTypeface(customFont);
 
 		txtAmmoMode = findViewById(R.id.txtAmmoMode);
 		txtAmmoMode.setTypeface(customFont);
 
-		btnRestore = (Button) findViewById(R.id.btnSettingsRestore);
+		btnRestore = findViewById(R.id.btnSettingsRestore);
 		btnRestore.setTypeface(customFont);
 		btnRestore.setOnClickListener(new OnClickListener() {
 

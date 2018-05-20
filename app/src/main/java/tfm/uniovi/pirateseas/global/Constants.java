@@ -48,12 +48,12 @@ public class Constants{
 	public static final int DEFAULT_ENEMY_Y_LIMIT = 60;
 
 	public static final int DEFAULT_PLAYER_SHIP_DIRECTION = DIRECTION_UP;
-	public static final int DEFAULT_PLAYER_SHIP_AMMO = 20;
+	public static final int DEFAULT_PLAYER_SHIP_AMMO = 50;
 	public static final int DEFAULT_SHIP_WIDTH = 2;
 	public static final int DEFAULT_SHIP_HEIGHT = 3;
 	public static final int DEFAULT_SHIP_LENGTH = 5;
 	
-	public static final int DEFAULT_SHIP_RELOAD = 2;
+	public static final int DEFAULT_SHIP_RELOAD = 4;
 	public static final int DEFAULT_SHIP_BASIC_RANGE = 5;
 	public static final float DEFAULT_SHOOT_DAMAGE = 10;
 
@@ -91,7 +91,7 @@ public class Constants{
 	public static final double MILLIS_TO_SECONDS_INV = Math.pow(MILLIS_TO_SECONDS, -1); 
 	public static final double NANOS_TO_SECONDS = Math.pow(10, -9);
 
-	public static final int FLYING_TIME_MULTIPLIER = 600;
+	public static final int FLYING_TIME_MULTIPLIER = 6;
 
     public static final int SHAKE_LIMIT = 2;
     public static final int TUTORIAL_NUM_PAGES = 8;

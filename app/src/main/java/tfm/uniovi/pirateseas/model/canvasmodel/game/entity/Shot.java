@@ -132,7 +132,7 @@ public class Shot extends Entity{
 	}
 	
 	public void setShotStatus(int shotStatus) {
-		mShotStatus = shotStatus;		
+		mShotStatus = shotStatus;
 	}
 
 	public int getShotStatus() {
@@ -169,7 +169,7 @@ public class Shot extends Entity{
 
 	@Override
 	public String toString() {
-		return "Shot [startPoint=" + startPoint + ", endPoint=" + endPoint
+		return "Shot [EntityOrigin=" + (startPoint.y<5?"Player":"Enemy") + ", startPoint=" + startPoint + ", endPoint=" + endPoint
 				+ ", pathLength=" + pathLength + ", mDamage=" + mDamage
 				+ ", mStatus=" + mShotStatus +  ", entityDirection=" + entityDirection
 				+ ", entityCoordinates=" + entityCoordinates

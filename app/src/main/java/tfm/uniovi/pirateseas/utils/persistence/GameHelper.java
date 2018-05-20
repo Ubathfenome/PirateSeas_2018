@@ -192,6 +192,7 @@ public class GameHelper {
 		ShipType st = ShipType.values()[mPreferences.getInt(Constants.PREF_SHIP_TYPE, 0)];
 		int hp = mPreferences.getInt(Constants.PREF_SHIP_HEALTH, st.defaultHealthPoints());
 		ship = new Ship(context, ship, st, p, DEFAULT_DIRECTION, DEFAULT_SHIP_WIDTH, DEFAULT_SHIP_HEIGHT, DEFAULT_SHIP_LENGTH, hp, ammo);
+		ship.setPlayable(true);
 			
 		helperShip = ship;
 
