@@ -24,11 +24,20 @@ public class SoundPools {
 
 	private List<SoundPoolContainer> containers;
 
+	/**
+	 * Constructor
+	 */
 	public SoundPools() {
 		containers = Collections
 				.synchronizedList(new ArrayList<SoundPoolContainer>());
 	}
 
+	/**
+	 * Method to register a new sound resource on the available pool
+	 * @param context
+	 * @param soundId New sound resource
+	 * @param id Sound tag id
+	 */
 	public void loadSound(Context context, String soundId, int id) {
 		Log.d(TAG, "SouldPools load sound " + soundId);
 		try {
@@ -51,6 +60,13 @@ public class SoundPools {
 		}
 	}
 
+	/**
+	 * Play the selected sound
+	 * @param context
+	 * @param soundId   Sound resource
+	 * @param id	Sound tag id
+	 * @param loopSound	Whether the sound should play on a loop or not
+	 */
 	public void playSound(Context context, String soundId, int id, boolean loopSound) {
 		int loop = loopSound?1:0;
 		Log.d(TAG, "SouldPools play sound " + soundId);
@@ -76,25 +92,36 @@ public class SoundPools {
 		}
 	}
 
+	/**
+	 * Pause the current sound
+	 */
 	public void onPause() {
 		for (SoundPoolContainer container : containers) {
 			container.onPause();
 		}
 	}
 
+	/**
+	 * Resume the current sound
+	 */
 	public void onResume() {
 		for (SoundPoolContainer container : containers) {
 			container.onResume();
 		}
 	}
 
+	/**
+	 * Sound pool inner class
+	 */
 	private static class SoundPoolContainer {
 		SoundPool soundPool;
 		Map<String, Integer> soundMap;
 		AtomicInteger size;
 
 		@SuppressLint("NewApi")
-		@SuppressWarnings("deprecation")
+		/**
+		 * Constructor
+		 */
 		public SoundPoolContainer() {
 			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 				AudioAttributes.Builder attrBuilder = new AudioAttributes.Builder()
@@ -111,6 +138,12 @@ public class SoundPools {
 			this.size = new AtomicInteger(0);
 		}
 
+		/**
+		 * Load the selected sound resource into the sound pool
+		 * @param context
+		 * @param soundId Sound resource
+		 * @param id	Sound tag id
+		 */
 		public void load(Context context, String soundId, int id) {
 			try {
 				if(soundPool != null){
@@ -123,6 +156,13 @@ public class SoundPools {
 			}
 		}
 
+		/**
+		 * Play the selected sound
+		 * @param context
+		 * @param sound	Sound tag id
+		 * @param id	Sound resource id
+		 * @param loop	Whether the sound should be played on loop or not
+		 */
 		public void play(Context context, String sound, int id, int loop) {
 			android.media.AudioManager audioManager = (android.media.AudioManager) context
 					.getSystemService(Context.AUDIO_SERVICE);
@@ -151,14 +191,26 @@ public class SoundPools {
 			}
 		}
 
+		/**
+		 * Check if the pool contains the selected sound
+		 * @param id
+		 * @return
+		 */
 		public boolean contains(String id) {
 			return soundMap.containsKey(id);
 		}
 
+		/**
+		 * Checks if the pool is full
+		 * @return
+		 */
 		public boolean isFull() {
 			return this.size.get() >= MAX_STREAMS_PER_POOL;
 		}
 
+		/**
+		 * Pause the current sound
+		 */
 		public void onPause() {
 			try {
 				soundPool.autoPause();
@@ -167,6 +219,9 @@ public class SoundPools {
 			}
 		}
 
+		/**
+		 * Resume the current sound
+		 */
 		public void onResume() {
 			try {
 				soundPool.autoResume();

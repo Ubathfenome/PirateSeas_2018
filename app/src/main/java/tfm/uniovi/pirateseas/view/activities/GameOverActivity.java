@@ -15,12 +15,14 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import tfm.uniovi.pirateseas.R;
+import tfm.uniovi.pirateseas.controller.androidGameAPI.Map;
 import tfm.uniovi.pirateseas.controller.androidGameAPI.Player;
 import tfm.uniovi.pirateseas.global.Constants;
 
 public class GameOverActivity extends Activity {
 	
 	Player  p = null;
+	Map m = null;
 	
 	TextView lblGameOver, txtDays, txtScore;
 
@@ -35,20 +37,21 @@ public class GameOverActivity extends Activity {
 		
 		// GetIntent Extras
 		Intent intent = getIntent();
-		p = intent.getParcelableExtra(Constants.TAG_GAME_OVER);
+		p = intent.getParcelableExtra(Constants.TAG_GAME_OVER_PLAYER);
+		m = intent.getParcelableExtra(Constants.TAG_GAME_OVER_MAP);
 
-		lblGameOver = (TextView) findViewById(R.id.lblGameOver);
+		lblGameOver = findViewById(R.id.lblGameOver);
 		lblGameOver.setTypeface(customFont);
-		txtDays = (TextView) findViewById(R.id.txtDays);
+		txtDays = findViewById(R.id.txtDays);
 		txtDays.setTypeface(customFont);
-		txtScore = (TextView) findViewById(R.id.txtScore);
+		txtScore = findViewById(R.id.txtScore);
 		txtScore.setTypeface(customFont);
 		
 		int score = p.getLevel() * p.getExperience() + p.getGold();
 		if(score == 0)
 			score = p.getExperience() + p.getGold();
 		
-		txtDays.setText("NaN");
+		txtDays.setText(m.getClearedCells());
 		txtScore.setText("" + score);
 		
 		// Upload score to the cloud? | Save score in the preferences?

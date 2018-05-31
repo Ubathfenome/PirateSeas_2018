@@ -655,7 +655,7 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 			// Display "Game Over" Screen with calculated score
 			MusicManager.getInstance().stopBackgroundMusic();
 			MusicManager.getInstance(nContext,MusicManager.MUSIC_GAME_OVER).playBackgroundMusic();
-			((GameActivity) nContext).gameOver(nPlayer);
+			((GameActivity) nContext).gameOver(nPlayer, nMap);
 			nStatus = Constants.GAME_STATE_END;
 		}
 	}

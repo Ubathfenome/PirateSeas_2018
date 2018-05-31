@@ -21,6 +21,8 @@ public class Constants{
 	public static final String TAG_SENSOR_LIST = "tfm.uniovi.pirateseas.SENSOR_LIST";
 	public static final String TAG_LOAD_GAME = "tfm.uniovi.pirateseas.LOAD_GAME";
 	public static final String TAG_GAME_OVER = "tfm.uniovi.pirateseas.GAME_OVER";
+	public static final String TAG_GAME_OVER_PLAYER = "GameOverPlayer";
+	public static final String TAG_GAME_OVER_MAP = "GameOverMap";
 	public static final String TAG_PREF_NAME = "tfm.uniovi.pirateseas.PREFERENCES";
 	public static final String TAG_SCREEN_SELECTION_MAP_HEIGHT = "tfm.uniovi.pirateseas.SCREEN_SELECTION_MAP_HEIGHT";
 	public static final String TAG_SCREEN_SELECTION_MAP_WIDTH = "tfm.uniovi.pirateseas.SCREEN_SELECTION_MAP_WIDTH";

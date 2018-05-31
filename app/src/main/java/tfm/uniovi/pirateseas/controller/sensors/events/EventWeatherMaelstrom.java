@@ -8,11 +8,17 @@ public class EventWeatherMaelstrom {
 	private static final int AVERAGE = 10;
 	private static final int THRESHOLD = 9;
 
+	/**
+	 * Return SensorType used on this event
+	 * @return SensorType code
+	 */
 	public static SensorType getSensorType() {
 		return SensorType.TYPE_ACCELEROMETER;
 	}
-	
-	// Establish event effects on sensor trigger
+
+	/**
+	 * Establish event effects on sensor trigger
+ 	 */
 	public static boolean generateMaelstrom(float ySpeed, float zSpeed){
 		/*
 		double gHypot = Math.sqrt(ySpeed*ySpeed + zSpeed*zSpeed);

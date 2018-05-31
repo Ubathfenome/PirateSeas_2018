@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import tfm.uniovi.pirateseas.R;
+import tfm.uniovi.pirateseas.controller.androidGameAPI.Map;
 import tfm.uniovi.pirateseas.controller.androidGameAPI.Player;
 import tfm.uniovi.pirateseas.controller.sensors.events.EventDayNightCycle;
 import tfm.uniovi.pirateseas.controller.sensors.events.EventShakeClouds;
@@ -519,10 +520,11 @@ public class GameActivity extends Activity implements SensorEventListener {
 		return false;
 	}
 
-	public void gameOver(Player nPlayer) {
+	public void gameOver(Player nPlayer, Map map) {
 		Intent gameOverIntent = new Intent(this, GameOverActivity.class);
 		// Parcelable Extra with Player object content
-		gameOverIntent.putExtra(Constants.TAG_GAME_OVER, Player.clonePlayer(nPlayer));
+		gameOverIntent.putExtra(Constants.TAG_GAME_OVER_PLAYER, Player.clonePlayer(nPlayer));
+		gameOverIntent.putExtra(Constants.TAG_GAME_OVER_MAP, map);
 		Log.d(TAG, "Start GameOver Intent");
 		this.startActivity(gameOverIntent);
 		shutdownGame();

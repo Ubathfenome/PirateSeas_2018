@@ -5,7 +5,9 @@ import android.hardware.SensorManager;
 import tfm.uniovi.pirateseas.controller.sensors.SensorType;
 import tfm.uniovi.pirateseas.global.Constants;
 
-@SuppressWarnings("unused")
+/**
+ * Event for the Day Night cycle that obscures the screen at night and brightens it al day
+ */
 public class EventDayNightCycle {
 	private static final String TAG = "EventDayNightCycle";
 	
@@ -14,12 +16,21 @@ public class EventDayNightCycle {
 	private static final float HOUR_VALUE_RATIO = (MAX_SHADOW_VALUE * 2) / (Constants.HOURS_PER_DAY * PSA); // Ratio = 510 values / 60 hours per day; -> X values per hour
 	public static float pressure = PSA;
 
+	/**
+	 * Return SensorType used on this event
+	 * @return SensorType code
+	 */
 	public static SensorType getSensorType() {
 		return SensorType.TYPE_PRESSURE;
 	}
-	
+
+	/**
+	 * Filter to apply to the background image of the sky
+	 * @param hour inGame hour value
+	 * @return Filter to apply
+	 */
 	public static int getSkyFilter(float hour){
-		// Variar de dia a noche y de noche a dia
+		// Changes between day to night and viceversa
 		int filterValue = 0;
 		if(hour <= (Constants.HOURS_PER_DAY / 2))
 			filterValue = (int) (hour * pressure * HOUR_VALUE_RATIO);
