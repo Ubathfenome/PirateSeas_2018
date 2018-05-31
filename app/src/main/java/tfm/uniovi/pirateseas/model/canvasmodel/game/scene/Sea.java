@@ -9,6 +9,9 @@ import android.os.Build;
 import tfm.uniovi.pirateseas.R;
 import tfm.uniovi.pirateseas.model.canvasmodel.game.BasicModel;
 
+/**
+ * Class to manage the sea behaviour
+ */
 public class Sea extends BasicModel{
 	
 	private Drawable mImageAux;
@@ -16,6 +19,9 @@ public class Sea extends BasicModel{
 	
 	@SuppressWarnings("deprecation")
 	@SuppressLint("NewApi")
+    /**
+     * Constructor
+     */
 	public Sea(Context context, double x, double y, double mCanvasWidth,
             double mCanvasHeight){
 		super(context, x, y, mCanvasWidth, mCanvasHeight, null);
@@ -32,6 +38,9 @@ public class Sea extends BasicModel{
 	}
 	
 	@Override
+    /**
+     * Draws on the screen the image of the model
+     */
 	public void drawOnScreen(Canvas canvas){
 		yUp = (int) y;
 		xLeft = (int) x;
@@ -61,6 +70,9 @@ public class Sea extends BasicModel{
 	}
 		
 	@Override
+    /**
+     * Move the sea image
+     */
 	public void move(double xLength, double yLength, boolean bounce){
 		x = x - xLength;
 		y = y + Math.abs(yLength);
@@ -78,7 +90,11 @@ public class Sea extends BasicModel{
 			y = startingHeight;
 		}
 	}
-	
+
+    /**
+     * Sets the filter to the sea brightness
+     * @param value Filter value
+     */
 	public void setFilterValue(int value){
 		this.filterValue = value;
 	}

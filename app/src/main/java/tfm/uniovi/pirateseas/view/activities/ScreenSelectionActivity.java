@@ -33,6 +33,9 @@ import tfm.uniovi.pirateseas.model.canvasmodel.game.entity.ShipType;
 import tfm.uniovi.pirateseas.utils.approach2d.DrawableHelper;
 import tfm.uniovi.pirateseas.utils.persistence.GameHelper;
 
+/**
+ * Activity to show the player map and decide which is the new map cell that the player should visit
+ */
 public class ScreenSelectionActivity extends Activity {
 
 	private static final String TAG = "ScreenSelectionActivity";
@@ -268,6 +271,11 @@ public class ScreenSelectionActivity extends Activity {
 		}
 	}
 
+	/**
+	 * Return the next better ship type for the player's ship type
+	 * @param st Original Ship Type
+	 * @return Better ship type
+	 */
 	private ShipType getBetterShipType(ShipType st) {
 		ShipType[] sTypes = ShipType.values();
 		for(int i = 0; i < sTypes.length; i++){
@@ -281,10 +289,16 @@ public class ScreenSelectionActivity extends Activity {
 		return st;
 	}
 
+	/**
+	 * Display a wrong way message
+	 */
 	private void wrongWayMessage(){
 		Toast.makeText(context, getString(R.string.message_wrongway),Toast.LENGTH_SHORT).show();
 	}
 
+	/**
+	 * Launch the battle activity
+	 */
 	private void startBattleGame(){
 		GameHelper.saveGameAtPreferences(this, p, ship, map);
 
@@ -299,6 +313,9 @@ public class ScreenSelectionActivity extends Activity {
 		finish();
 	}
 
+	/**
+	 * Relaunch the select screen activity
+	 */
 	private void reloadSelection(){
 		Toast.makeText(this, getResources().getString(R.string.message_nothinghere), Toast.LENGTH_SHORT).show();
 		GameHelper.saveGameAtPreferences(this, p, ship, map);
@@ -312,10 +329,16 @@ public class ScreenSelectionActivity extends Activity {
 		finish();
 	}
 
+	/**
+	 * Save the game when going into an already visited island
+	 */
 	private void enterVisitedIsland() {
 		GameHelper.saveGameAtPreferences(this, p, ship, map);
 	}
 
+	/**
+	 * Launch a random island Activity
+	 */
 	private void enterRandomIsland() {
 		GameHelper.saveGameAtPreferences(this, p, ship, map);
 		Random rand = new Random();
@@ -330,6 +353,11 @@ public class ScreenSelectionActivity extends Activity {
 		finish();
 	}
 
+	/**
+	 * Returns the current map drawable
+	 * @param date Active date (used for its seed)
+	 * @return Complete drawable for the map
+	 */
 	private Drawable getCurrentMap(Date date) {
 		Bitmap bmpCover = BitmapFactory.decodeResource(getResources(),R.mipmap.txtr_map_cover);
 		Bitmap bmpIsland = BitmapFactory.decodeResource(getResources(),R.mipmap.txtr_map_island);
@@ -385,8 +413,11 @@ public class ScreenSelectionActivity extends Activity {
 		super.onResume();
 	}
 
+	/**
+	 * Method that generates a random value with rate depending on player's level
+	 * @return Should a player have to fight an enemy? true : false
+	 */
 	protected boolean randomEncounter() {
-		// Generate random value with rate depending on player's level
 		int playerLevel = 1;
 		if (p != null)
 			playerLevel = p.getLevel();

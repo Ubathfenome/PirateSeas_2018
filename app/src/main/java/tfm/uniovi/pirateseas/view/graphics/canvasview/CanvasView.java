@@ -12,7 +12,6 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -36,12 +35,16 @@ import tfm.uniovi.pirateseas.model.canvasmodel.game.entity.Shot;
 import tfm.uniovi.pirateseas.model.canvasmodel.game.scene.Clouds;
 import tfm.uniovi.pirateseas.model.canvasmodel.game.scene.Sea;
 import tfm.uniovi.pirateseas.model.canvasmodel.game.scene.Sky;
+import tfm.uniovi.pirateseas.model.canvasmodel.game.scene.Whirlpool;
 import tfm.uniovi.pirateseas.model.canvasmodel.ui.StatBar;
 import tfm.uniovi.pirateseas.utils.approach2d.DrawableHelper;
 import tfm.uniovi.pirateseas.utils.persistence.GameHelper;
 import tfm.uniovi.pirateseas.view.activities.GameActivity;
 import tfm.uniovi.pirateseas.view.activities.ScreenSelectionActivity;
 
+/**
+ * Class to represent the game on the screen
+ */
 public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 	private static final String TAG = "CanvasView";
 	private static final String EXCEPTION_TAG = "CustomException";
@@ -71,6 +74,7 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 
 	private Sky nSky;
 	private Sea nSea;
+	private Whirlpool nWhirlpool;
 	public Clouds nClouds;
 
 	public Ship nPlayerShip;
@@ -146,6 +150,9 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 		}
 	}
 
+	/**
+	 * Method to initialize the class
+	 */
 	public void initialize() {
 		nStatus = Constants.GAME_STATE_NORMAL;
 
@@ -193,10 +200,17 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 		nInitialized = true;
 	}
 
+	/**
+	 * Checks whether the class has been initialized
+	 * @return true if it has been initialized, false otherwise
+	 */
 	public boolean isInitialized() {
 		return nInitialized;
 	}
 
+	/**
+	 * Method to load the game saved on the preferences
+	 */
 	public void loadGame() {
 		GameHelper.loadGameAtPreferences(nContext, nPlayer, nPlayerShip, nMap);
 		nPlayer = GameHelper.helperPlayer;
@@ -204,6 +218,10 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 		nMap = GameHelper.helperMap;
 	}
 
+	/**
+	 * Method to save the game on the preferences
+	 * @throws SaveGameException Exception if an error happens while saving
+	 */
 	public void saveGame() throws SaveGameException {
 		if (GameHelper.saveGameAtPreferences(nContext, nPlayer, nPlayerShip, nMap))
 			Log.v(TAG, "Game saved");
@@ -236,10 +254,20 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 				s.drawOnScreen(canvas);
 		}
 
+		nWhirlpool.getCurrentFrame();
+		nWhirlpool.drawOnScreen(canvas);
+
 		nPlayerHBar.drawOnScreen(canvas);
 		nPlayerXPBar.drawOnScreen(canvas);
 	}
 
+	/**
+	 * Method called if the screen surface changes
+	 * @param holder
+	 * @param format
+	 * @param width
+	 * @param height
+	 */
 	public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
 		nScreenWidth = width;
 		mScreenWidth = width;
@@ -250,6 +278,10 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 		Log.d(TAG, "Surface changed");
 	}
 
+	/**
+	 * Method called when the screen surface is created
+	 * @param holder
+	 */
 	public void surfaceCreated(SurfaceHolder holder) {
 		if (!Constants.isInDebugMode(Constants.MODE))
 			Log.d(TAG, "Surface Created");
@@ -265,6 +297,10 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 
 	}
 
+	/**
+	 * Method called if the screen surface is destroyed
+	 * @param holder
+	 */
 	public void surfaceDestroyed(SurfaceHolder holder) {
 		boolean tryAgain = true;
 		while (tryAgain) {
@@ -279,6 +315,9 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 
 	@SuppressLint("ClickableViewAccessibility")
 	@Override
+	/**
+	 * Event called when a user touches the screen
+	 */
 	public boolean onTouchEvent(MotionEvent event) {
 		int x = (int) event.getX();
 		int y = (int) event.getY();
@@ -302,11 +341,17 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 						if (direction.equals(Constants.FRONT)) {
 							nCheatCounter = 0;
 							try {
-								nShotList.add(nPlayerShip.shootCannon());
+								// If using AIMED ammo, dealt damage to enemy instantly
+								if(nPlayerShip.getSelectedAmmo()==Ammunitions.AIMED && nPlayerShip.getSelectedAmmunition()>0){
+									nEnemyShip.looseHealth((int) (Constants.DEFAULT_SHOOT_DAMAGE * nPlayerShip.getPower()));
+									nPlayerShip.setSelectedAmmunition(nPlayerShip.getSelectedAmmunition()-1);
+								} else {
+									nShotList.add(nPlayerShip.shootCannon());
+								}
 								MusicManager.getInstance().playSound(MusicManager.SOUND_SHOT_FIRED);
 							} catch (NoAmmoException e) {
 								Log.e(EXCEPTION_TAG, e.getMessage());
-								Toast.makeText(nContext, e.getMessage(), Toast.LENGTH_SHORT).show();
+								((GameActivity)nContext).showText(e.getMessage(), 2);
 							}
 						} else if (direction.equals(Constants.RIGHT)) {
 							if (nShipControlMode) {
@@ -334,7 +379,7 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 						} catch (CannonReloadingException e) {
 							Log.e(EXCEPTION_TAG, e.getMessage());
 							MusicManager.getInstance().playSound(MusicManager.SOUND_SHOT_RELOADING);
-							Toast.makeText(nContext, e.getMessage(), Toast.LENGTH_SHORT).show();
+							((GameActivity)nContext).showText(e.getMessage(), 2);
 						}
 					}
 					break;
@@ -344,6 +389,9 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 		return true;
 	}
 
+	/**
+	 * Easter-egg method to grant cheats to the player
+	 */
 	private void grantCheat2Player() {
 		nPlayer.addExperience(200);
 		nPlayer.addGold(50);
@@ -352,6 +400,12 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 		nPlayerShip.gainHealth(30);
 	}
 
+	/**
+	 * Method to determine the direction of a touching motion
+	 * @param start
+	 * @param end
+	 * @return String with the direction (LEFT, RIGHT, FRONT, BACK)
+	 */
 	private String pressedMotion(Point start, Point end) {
 		int deltaX = end.x - start.x;
 		int deltaY = end.y - start.y;
@@ -387,16 +441,25 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 		}
 	}
 
+	/**
+	 * Pause the logic thread
+	 */
 	public void pauseLogicThread() {
 		nUpdateThread.setRunning(false);
 	}
 
+	/**
+	 * Checks the logic thread status
+	 */
 	private void checkLogicThread() {
 		if (!nUpdateThread.isAlive() && nUpdateThread.getState() != Thread.State.NEW) {
 			launchMainLogic();
 		}
 	}
 
+	/**
+	 * Manage the in-game time
+	 */
 	private void manageTime() {
 		nGameTimestamp = nGameTimer.getLastTimestamp();
 
@@ -410,6 +473,9 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 		}
 	}
 
+	/**
+	 * Manage changes on the UI
+	 */
 	private void manageUI() {
 		if (nGameMode == Constants.GAMEMODE_BATTLE) {
 			// Manage StatBars
@@ -436,10 +502,14 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 		    int xp = nEnemyShip.getType().defaultHealthPoints() / 2;
             nPlayer.addGold(gold);
             nPlayer.addExperience(xp);
-            Toast.makeText(nContext, "You found " + gold + " gold coins & gained " + xp + " xp!", Toast.LENGTH_SHORT).show();
+			((GameActivity)nContext).showText(String.format(getResources().getString(R.string.game_message_enemy_defeated), gold, xp), 2);
         }
 	}
 
+	/**
+	 * Manage the game mode
+	 * @throws SaveGameException
+	 */
 	private void manageMode() throws SaveGameException {
 		if (nGameMode == Constants.GAMEMODE_ADVANCE) {
 			// Manage Island reveal on map
@@ -449,7 +519,7 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 				if(index != -1) {
 					nMap.clearMapCell(index);
 				} else {
-					Toast.makeText(nContext, "All islands have been discovered. We'll sell this map for 90 gold coins!", Toast.LENGTH_SHORT).show();
+					((GameActivity)nContext).showText(getResources().getString(R.string.game_message_islands_discovered), 2);
 					nPlayer.addGold(90);
 				}
 
@@ -463,6 +533,9 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 		}
 	}
 
+	/**
+	 * Manages the movement of background elements on the screen
+	 */
 	private void manageScreen() {
 		if (nGameMode == Constants.GAMEMODE_BATTLE) {
 			// Set SEA horizon at cam level to shoot enemies
@@ -475,6 +548,9 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 		}
 	}
 
+	/**
+	 * Manage background events
+	 */
 	private void manageEvents() {
 		nSky.setFilterValue(EventDayNightCycle.getSkyFilter(nGameTimer.getHour()));
 
@@ -500,12 +576,18 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 		}
 	}
 
+	/**
+	 * Manages entities
+	 */
 	private void manageEntities() {
 		managePlayer();
 		manageEnemies();
 		manageShots();
 	}
 
+	/**
+	 * Manage active shots
+	 */
 	private void manageShots() {
 		int size = nShotList.size();
 
@@ -595,6 +677,9 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 		}
 	}
 
+	/**
+	 * Manages enemy's behaviour
+	 */
 	private void manageEnemies() {
 		if (nEnemyShip != null) {
 			if (!nEnemyShip.isAlive()) {
@@ -610,7 +695,7 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
                         MusicManager.getInstance().playSound(MusicManager.SOUND_SHOT_FIRED);
                     } catch (NoAmmoException e) {
                         Log.e(EXCEPTION_TAG, e.getMessage());
-                        Toast.makeText(nContext, e.getMessage(), Toast.LENGTH_SHORT).show();
+						((GameActivity)nContext).showText(e.getMessage(), 2);
                     }
                 }
 				// Establecer comportamiento enemigo con movimiento en circulo
@@ -650,25 +735,37 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 		}
 	}
 
+	/**
+	 * manage player
+	 */
 	private void managePlayer() {
 		if (!nPlayerShip.isAlive()) {
 			// Display "Game Over" Screen with calculated score
 			MusicManager.getInstance().stopBackgroundMusic();
 			MusicManager.getInstance(nContext,MusicManager.MUSIC_GAME_OVER).playBackgroundMusic();
-			((GameActivity) nContext).gameOver(nPlayer);
+			((GameActivity) nContext).gameOver(nPlayer, nMap);
 			nStatus = Constants.GAME_STATE_END;
 		}
 	}
 
+	/**
+	 * Return a random x coordinate for the enemy to spawn
+	 * @param shipWidth Ship's width
+	 * @return x value
+	 */
 	private double randomXSpawnValue(int shipWidth) {
 		Random r = new Random();
 		double d = r.nextDouble() * (nScreenWidth - shipWidth);
 		return d;
 	}
 
+	/**
+	 * Activates the maelstorm event
+	 */
 	public void maelstorm() {
 		if (!Constants.isInDebugMode(Constants.MODE))
 			Log.d(TAG, "Maelstorm inbound!");
+		nWhirlpool = new Whirlpool(nContext, 0, HORIZON_Y_VALUE, nScreenWidth, nScreenHeight, null);
 		// All ships loose some health
 		if (nPlayerShip != null && nPlayerShip.isAlive())
 			nPlayerShip.looseHealth(Constants.MAELSTORM_DAMAGE);
@@ -677,6 +774,9 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 		MusicManager.getInstance().playSound(MusicManager.SOUND_WEATHER_MAELSTROM);
 	}
 
+	/**
+	 * Spawn a random enemy
+	 */
 	public void spawnEnemyShip() {
 		if (!Constants.isInDebugMode(Constants.MODE))
 			Log.d(TAG, "Enemy spawned");
@@ -703,6 +803,10 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 		nEnemyShip.getType().defaultHealthPoints(), Constants.BAR_HEALTH);
 	}
 
+	/**
+	 * Calls the ScreenSelection Activity
+	 * @throws SaveGameException
+	 */
 	public void selectScreen() throws SaveGameException {
 		saveGame();
 
@@ -717,25 +821,37 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 		nStatus = Constants.GAME_STATE_END;
 	}
 
+	/**
+	 * Set game status
+	 * @param status
+	 */
 	public void setStatus(int status) {
 		if(nStatus==Constants.GAME_STATE_PAUSE&&status==Constants.GAME_STATE_NORMAL)
 			loadSettings();
 		nStatus = status;
 	}
 
-	public boolean hasEnemyShip() {
-		return nEnemyShip != null;
-	}
-
+	/**
+	 * Get the Game mode
+	 * @return Game mode
+	 */
 	public int getGamemode() {
 		return nGameMode;
 	}
 
+	/**
+	 * Set the Game mode
+	 * @param gamemode New Game mode
+	 */
 	public void setGamemode(int gamemode) {
 		this.nGameMode = gamemode;
 		Log.d(TAG, "GameMode set to '" + gamemode + "'");
 	}
 
+	/**
+	 * Return the remaining shakes to dismiss the clouds
+	 * @return remaining shakes
+	 */
 	public int getShakeMoveCount() {
 		if(nClouds==null) {
 			Log.e(TAG, "'nClouds' is not initialized yet!");
@@ -749,6 +865,10 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 		}
 	}
 
+	/**
+	 * Set the shake counter
+	 * @param counter New remaining shakes
+	 */
 	public void setShakeMoveCount(int counter) {
 		if(nClouds==null)
 			Log.e(TAG, "'nClouds' is not initialized yet!");
@@ -757,11 +877,17 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 		nClouds.setShakeMoveCount(counter);
 	}
 
+	/**
+	 * Selects the next ammunition type
+	 */
 	public void selectNextAmmo(){
 		if(nPlayerShip != null && nPlayerShip.isAlive())
 			nPlayerShip.selectNextAmmo();
 	}
 
+	/**
+	 * Load the settings from the preferences
+	 */
 	public void loadSettings() {
 		if(nPreferences==null)
 			nPreferences = nContext.getSharedPreferences(Constants.TAG_PREF_NAME, Context.MODE_PRIVATE);

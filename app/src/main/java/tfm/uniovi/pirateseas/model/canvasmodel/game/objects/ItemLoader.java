@@ -8,6 +8,9 @@ import java.util.List;
 
 import tfm.uniovi.pirateseas.R;
 
+/**
+ * Class for the ItemLoader of the ShopActivity
+ */
 public class ItemLoader{
 	
 	List<Item> itemList, defaultList;
@@ -51,6 +54,9 @@ public class ItemLoader{
 	private Context context;
 	
 	@SuppressWarnings("unchecked")
+	/**
+	 * Constructor
+	 */
 	public ItemLoader(Context c){
 		itemList = new ArrayList<Item>();
 		
@@ -101,11 +107,20 @@ public class ItemLoader{
 				levelProbabilities[i] = 3;
 		}
 	}
-	
+
+	/**
+	 * Get String of a resource
+	 * @param id Resource index
+	 * @return String
+	 */
 	private String getString(int id){
 		return context.getResources().getString(id);
 	}
-	
+
+	/**
+	 * Method to load all the Items on the Shop
+	 * @return List with all the loaded Items
+	 */
 	public List<Item> loadAll(){
 		itemList.clear();
 		
@@ -122,12 +137,12 @@ public class ItemLoader{
 		
 		return itemList;
 	}
-	
-	public List<Item> loadEmpty(){
-		itemList.clear();
-		return itemList;
-	}
-	
+
+	/**
+	 * Method to load the default Items for the Shop based on the Player's level
+	 * @param level Player's level
+	 * @return List with the loaded Items
+	 */
 	public List<Item> loadDefault(int level){
 		itemList.clear();
 		for(int i = 0, all = defaultList.size(); i < all; i++){
@@ -137,7 +152,11 @@ public class ItemLoader{
 		}
 		return itemList;
 	}
-	
+
+	/**
+	 * Methpd to load Random Items to the Shop
+	 * @return List with the loaded Items
+	 */
 	public List<Item> loadRandom(){
 		for(Item item : defaultList){
 			if(item.getLevel() == 1)
@@ -157,7 +176,11 @@ public class ItemLoader{
 		
 		return itemList;
 	}
-	
+
+	/**
+	 * Method to get a Random Item
+	 * @return Random Item
+	 */
 	private Item getRandomItem(){
 		int randomProbability = (int) Math.random() * 100;
 		Item item = null;

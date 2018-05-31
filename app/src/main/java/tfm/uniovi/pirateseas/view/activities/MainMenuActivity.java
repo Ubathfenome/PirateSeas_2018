@@ -40,6 +40,9 @@ import tfm.uniovi.pirateseas.controller.audio.MusicManager;
 import tfm.uniovi.pirateseas.global.Constants;
 import tfm.uniovi.pirateseas.model.canvasmodel.game.entity.Ship;
 
+/**
+ * Main menu activity
+ */
 public class MainMenuActivity extends Activity {
 
 	private static final String TAG = "MainMenuActivity";
@@ -56,6 +59,7 @@ public class MainMenuActivity extends Activity {
 
 	private TextView txtTitle;
 	private Button btnNewGame;
+	private Button btnTutorial;
 	private Button btnLoadGame;
 	private ImageButton btnSettings;
 	private ImageButton btnHelp;
@@ -101,7 +105,7 @@ public class MainMenuActivity extends Activity {
 		txtTitle = findViewById(R.id.txtTitleLabel);
 		txtTitle.setTypeface(customFont);
 
-		btnNewGame = (Button) findViewById(R.id.btn_newgame);
+		btnNewGame = findViewById(R.id.btn_newgame);
 		btnNewGame.setTypeface(customFont);
 		btnNewGame.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
@@ -115,7 +119,16 @@ public class MainMenuActivity extends Activity {
 			}
 		});
 
-		btnLoadGame = (Button) findViewById(R.id.btn_loadgame);
+		btnTutorial = findViewById(R.id.btn_tutorial);
+		btnTutorial.setTypeface(customFont);
+		btnTutorial.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				launchGame(true, null);
+			}
+		});
+
+		btnLoadGame = findViewById(R.id.btn_loadgame);
 		btnLoadGame.setTypeface(customFont);
 		btnLoadGame.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
@@ -124,7 +137,7 @@ public class MainMenuActivity extends Activity {
 			}
 		});
 
-		btnSettings = (ImageButton) findViewById(R.id.btn_settings);
+		btnSettings = findViewById(R.id.btn_settings);
 		btnSettings.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				Intent settingsIntent = new Intent(context,
@@ -133,7 +146,7 @@ public class MainMenuActivity extends Activity {
 			}
 		});
 
-		btnHelp = (ImageButton) findViewById(R.id.btn_help);
+		btnHelp = findViewById(R.id.btn_help);
 		btnHelp.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				Intent helpIntent = new Intent(context, HelpActivity.class);
@@ -141,7 +154,7 @@ public class MainMenuActivity extends Activity {
 			}
 		});
 
-		btnExit = (Button) findViewById(R.id.btn_exit);
+		btnExit = findViewById(R.id.btn_exit);
 		btnExit.setTypeface(customFont);
 		btnExit.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
@@ -153,6 +166,11 @@ public class MainMenuActivity extends Activity {
 		loadSoundsTask.execute();
 	}
 
+	/**
+	 * Launch the next activity in the starting game flow
+	 * @param displayTutorial
+	 * @param sensorTypes
+	 */
 	private void launchGame(boolean displayTutorial, int[] sensorTypes) {
 		Player dummyPlayer;
 		Ship dummyShip;
@@ -175,6 +193,9 @@ public class MainMenuActivity extends Activity {
 		}
 	}
 
+	/**
+	 * Launch the Sensor activity
+	 */
 	private void launchSensorActivity(){
 		Intent checkSensorListIntent = new Intent(context, SensorActivity.class);
 		startActivityForResult(checkSensorListIntent, Constants.REQUEST_SENSOR_LIST);
@@ -190,6 +211,9 @@ public class MainMenuActivity extends Activity {
 		super.onResume();
 	}
 
+	/**
+	 * Request permissions for the first use of the app
+	 */
 	public void requestPermissionsFirstTime(){
 		// New runtime permissions request system for version 23 and above
 		// @see: https://stackoverflow.com/questions/32083913/android-gps-requires-access-fine-location-error-even-though-my-manifest-file
@@ -211,6 +235,7 @@ public class MainMenuActivity extends Activity {
 	}
 
 	/**
+	 * Checks the app version
 	 * @sourcec: http://blog.cubeactive.com/app-version-number-android-tutorial/
 	 * @see: https://developer.android.com/studio/publish/versioning.html?hl=es-419
 	 */
@@ -235,7 +260,8 @@ public class MainMenuActivity extends Activity {
 	}
 
 	/**
-	 * @return
+	 * Get the current app version
+	 * @return App version
 	 * @source: http://blog.cubeactive.com/app-version-number-android-tutorial/
 	 */
 	private int getCurrentAppVersionCode() {
@@ -263,6 +289,10 @@ public class MainMenuActivity extends Activity {
 		}
 	}
 
+	/**
+	 * Calculates the max number of map cells for a map to fit on the screen vertically
+	 * @return Number of cells
+	 */
 	private int calculateMapHeight(){
 		Bitmap bmpCover = BitmapFactory.decodeResource(getResources(),R.mipmap.txtr_map_cover);
 		DisplayMetrics displayMetrics = new DisplayMetrics();
@@ -275,6 +305,10 @@ public class MainMenuActivity extends Activity {
 		return mapHeight;
 	}
 
+	/**
+	 * Calculates the max number of map cells for a map to fit on the screen horizontally
+	 * @return Number of cells
+	 */
 	private int calculateMapWidth(){
 		Bitmap bmpCover = BitmapFactory.decodeResource(getResources(),R.mipmap.txtr_map_cover);
 		DisplayMetrics displayMetrics = new DisplayMetrics();
@@ -287,6 +321,9 @@ public class MainMenuActivity extends Activity {
 		return mapWidth;
 	}
 
+	/**
+	 * Load the settings
+	 */
 	private void loadSettings() {
 		Settings.System.putInt(getContentResolver(), Settings.System.SCREEN_BRIGHTNESS_MODE,
 				Settings.System.SCREEN_BRIGHTNESS_MODE_AUTOMATIC);
@@ -338,11 +375,17 @@ public class MainMenuActivity extends Activity {
 	}
 
 	@RequiresApi(api = Build.VERSION_CODES.M)
+	/**
+	 * Checks if the app has the valid permission active in the device
+	 */
 	private boolean hasPermission(String perm) {
 		return(PackageManager.PERMISSION_GRANTED==checkSelfPermission(perm));
 	}
 
 	@SuppressLint("ValidFragment")
+	/**
+	 * Class to show a dialog that asks the player if he/she is sure to overwrite the last saved game
+	 */
 	public class OverwriteGameDialogFragment extends DialogFragment {
 		@Override
 		public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -392,8 +435,8 @@ public class MainMenuActivity extends Activity {
 	}
 
 	/**
-	 * http://stackoverflow.com/questions/7428448/android-soundpool-heapsize-overflow
-	 * @author Miguel
+	 * Class to async load the app sounds
+	 * @see: http://stackoverflow.com/questions/7428448/android-soundpool-heapsize-overflow
 	 *
 	 */
 	private class LoadSounds extends AsyncTask<Void, Integer, Boolean>{

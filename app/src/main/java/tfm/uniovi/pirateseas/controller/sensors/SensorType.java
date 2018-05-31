@@ -1,5 +1,8 @@
 package tfm.uniovi.pirateseas.controller.sensors;
 
+/**
+ * Enum with all possible sensors of an Android device
+ */
 public enum SensorType {
 	//TYPE_ALL(-1),
 	TYPE_ACCELEROMETER(1),
@@ -18,10 +21,18 @@ public enum SensorType {
 	
 	private final int code;
 
+	/**
+	 * Constructor
+	 * @param code SensorType code
+	 */
 	SensorType(int code){
 		this.code = code;
 	}
-	
+
+	/**
+	 * Return the SensorType code
+	 * @return SensorType code
+	 */
 	public int getCode(){
 		return code;
 	}

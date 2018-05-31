@@ -18,6 +18,9 @@ import tfm.uniovi.pirateseas.R;
 import tfm.uniovi.pirateseas.controller.audio.MusicManager;
 import tfm.uniovi.pirateseas.global.Constants;
 
+/**
+ * Activity to manage the app settings
+ */
 public class SettingsActivity extends Activity {
 	private TextView txtTitleLabel;
 	private TextView txtVolumeLabel;
@@ -26,7 +29,6 @@ public class SettingsActivity extends Activity {
 	private Button btnSettingsExtra;
 	
 	private Button btnSettingsAccept;
-	private Button btnSettingsCancel;
 
 	private float volumeValue = 0f;
 	private String labelValue;
@@ -50,9 +52,8 @@ public class SettingsActivity extends Activity {
 				+ Constants.FONT_NAME + ".ttf");
 		txtTitleLabel.setTypeface(customFont);
 		
-		volumeValue = (int) mPreferences.getFloat(
-				Constants.PREF_DEVICE_VOLUME, MusicManager
-				.getInstance(this).getDeviceVolume());
+		volumeValue = MusicManager
+				.getInstance(this).getDeviceVolume();
 
 		txtVolumeLabel = findViewById(R.id.txtVolumeLabel);
 		labelValue = (String) txtVolumeLabel.getText();
@@ -94,21 +95,6 @@ public class SettingsActivity extends Activity {
 		btnSettingsAccept = findViewById(R.id.btnSettingsAccept);
 		btnSettingsAccept.setTypeface(customFont);
 		btnSettingsAccept.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View arg0) {
-				// Save changes in preferences
-				SharedPreferences.Editor editor = mPreferences.edit();
-				editor.putFloat(Constants.PREF_DEVICE_VOLUME, volumeValue);
-				editor.commit();
-
-				finish();
-			}
-		});
-
-		btnSettingsCancel = findViewById(R.id.btnSettingsCancel);
-		btnSettingsCancel.setTypeface(customFont);
-		btnSettingsCancel.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View arg0) {

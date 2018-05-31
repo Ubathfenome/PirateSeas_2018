@@ -6,6 +6,9 @@ import android.graphics.Point;
 import tfm.uniovi.pirateseas.global.Constants;
 import tfm.uniovi.pirateseas.model.canvasmodel.game.BasicModel;
 
+/**
+ * Class to add living attributes to the in-game objects
+ */
 public class Entity extends BasicModel{
 		
 	// Entity Attribs
@@ -24,7 +27,20 @@ public class Entity extends BasicModel{
 	protected int mMaxHealth = 0;
 	protected int mSpeedXLevel = 0;
 	protected int mSpeedY = 0;
-		
+
+	/**
+	 * Constructor
+	 * @param context
+	 * @param x
+	 * @param y
+	 * @param canvasWidth
+	 * @param canvasHeight
+	 * @param eCoords
+	 * @param eDirection
+	 * @param eWidth
+	 * @param eHeight
+	 * @param eLength
+	 */
 	public Entity(Context context, double x, double y, double canvasWidth, double canvasHeight, Point eCoords, int eDirection, int eWidth, int eHeight, int eLength){
 		super(context, x, y, canvasWidth, canvasHeight, null);
 		
@@ -45,6 +61,11 @@ public class Entity extends BasicModel{
 		mSpeedY = 0;
 	}
 
+	/**
+	 * Method to retrieve if this Entity is within bounds of another entity
+	 * @param other The other entity
+	 * @return true if is in-bounds, false otherwise
+	 */
 	public boolean intersection(Entity other){
 		boolean intersection = false;
 		double otherLeft = other.getX();
@@ -63,42 +84,11 @@ public class Entity extends BasicModel{
 			intersection = true;
 		return intersection;
 	}
-	
-	public boolean intersectionWithEntity(Entity other){
-		boolean intersection = false;
-		boolean horizontalInt = false, verticalInt = false;
-		
-		if (intersectionToRight(other) || intersectionToLeft(other))
-			horizontalInt = true;
-		
-		if (intersectionToFront(other) || intersectionToBack(other))
-			verticalInt = true;
-		
-		if(horizontalInt && verticalInt)
-			intersection = true;
-		
-		return intersection;
-	}
-	
-	private boolean intersectionToBack(Entity other) {
-		return ((entityCoordinates.y + entityHeight / 2) >= (other.entityCoordinates.y - other.entityHeight / 2)) && ((entityCoordinates.y - entityWidth / 2) < (other.entityCoordinates.y - other.entityHeight / 2));
-	}
 
-	private boolean intersectionToFront(Entity other) {
-		return ((entityCoordinates.y - entityHeight / 2) <= (other.entityCoordinates.y + other.entityHeight / 2))
-                && ((entityCoordinates.y + entityWidth / 2) > (other.entityCoordinates.y + other.entityHeight / 2));
-	}
-
-	private boolean intersectionToRight(Entity other) {
-		return ((entityCoordinates.x + entityWidth / 2) >= (other.entityCoordinates.x - other.entityWidth / 2))
-                && ((entityCoordinates.x - entityWidth / 2) < (other.entityCoordinates.x - other.entityWidth / 2));
-	}
-
-	private boolean intersectionToLeft(Entity other) {
-		return ((entityCoordinates.x - entityWidth / 2) <= (other.entityCoordinates.x + other.entityWidth / 2))
-                && ((entityCoordinates.x + entityWidth / 2) > (other.entityCoordinates.x + other.entityWidth / 2));
-	}
-
+	/**
+	 * Method to add health to the entity
+	 * @param points Health points to add to the entity
+	 */
 	public void gainHealth(int points){
 		if(points >= 0){
 			if(mHealthPoints + points <= mMaxHealth)
@@ -108,32 +98,48 @@ public class Entity extends BasicModel{
 		}else
 			throw new IllegalArgumentException("Encontrado valor de puntos invalido al modificar HealthPoints");
 	}
-	
+
+	/**
+	 * Method to substract health from the entity
+	 * @param points
+	 */
 	public void looseHealth(int points){
 		if(points > 0)
 			mHealthPoints -= points;
 		else
 			throw new IllegalArgumentException("Encontrado valor de puntos negativo al modificar HealthPoints");
 	}
-	
+
+	/**
+	 * Get the entity's health points
+	 * @return Health points
+	 */
 	public int getHealth(){
 		return mHealthPoints;
 	}
-	
+
+	/**
+	 * Get if the entity is alive or not
+	 * @return true if the entity has any health point, false otherwise
+	 */
 	public boolean isAlive(){
 		return mHealthPoints > 0;
 	}
-	
+
+	/**
+	 * Get the entity's coordinates
+	 * @return Point with the entity's coordinates
+	 */
 	public Point getCoordinates(){
 		return entityCoordinates;
 	}
-	
+
+	/**
+	 * Set the entity's coordinates
+	 * @param point New coordinates
+	 */
 	public void setCoordinates(Point point){
 		this.entityCoordinates = point;
-	}
-	
-	public boolean isMoving(){
-		return mSpeedXLevel > 0;
 	}
 	
 	/**
@@ -162,16 +168,5 @@ public class Entity extends BasicModel{
 	 */
 	public void setEntityDirection(int entityDirection) {
 		this.entityDirection = entityDirection;
-	}
-
-	/**
-	 * @return the mSpeedXLevel
-	 */
-	public int getSpeedXLevel() {
-		return mSpeedXLevel;
-	}
-	
-	public void resetSpeedLevel(){
-		this.mSpeedXLevel = 0;
 	}
 }

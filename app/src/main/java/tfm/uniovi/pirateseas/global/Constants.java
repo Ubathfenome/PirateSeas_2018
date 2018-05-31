@@ -2,6 +2,9 @@ package tfm.uniovi.pirateseas.global;
 
 import android.content.Context;
 
+/**
+ * Class to set all project's global variables
+ */
 public class Constants{
 	// Modes
 	private static final int MODE_DEBUG = 0x0;
@@ -21,6 +24,8 @@ public class Constants{
 	public static final String TAG_SENSOR_LIST = "tfm.uniovi.pirateseas.SENSOR_LIST";
 	public static final String TAG_LOAD_GAME = "tfm.uniovi.pirateseas.LOAD_GAME";
 	public static final String TAG_GAME_OVER = "tfm.uniovi.pirateseas.GAME_OVER";
+	public static final String TAG_GAME_OVER_PLAYER = "GameOverPlayer";
+	public static final String TAG_GAME_OVER_MAP = "GameOverMap";
 	public static final String TAG_PREF_NAME = "tfm.uniovi.pirateseas.PREFERENCES";
 	public static final String TAG_SCREEN_SELECTION_MAP_HEIGHT = "tfm.uniovi.pirateseas.SCREEN_SELECTION_MAP_HEIGHT";
 	public static final String TAG_SCREEN_SELECTION_MAP_WIDTH = "tfm.uniovi.pirateseas.SCREEN_SELECTION_MAP_WIDTH";
@@ -48,7 +53,7 @@ public class Constants{
 	public static final int DEFAULT_ENEMY_Y_LIMIT = 60;
 
 	public static final int DEFAULT_PLAYER_SHIP_DIRECTION = DIRECTION_UP;
-	public static final int DEFAULT_PLAYER_SHIP_AMMO = 50;
+	public static final int DEFAULT_PLAYER_SHIP_AMMO = 200;
 	public static final int DEFAULT_SHIP_WIDTH = 2;
 	public static final int DEFAULT_SHIP_HEIGHT = 3;
 	public static final int DEFAULT_SHIP_LENGTH = 5;
@@ -180,9 +185,20 @@ public class Constants{
 	public static final String ITEM_KEY_AMMO_SWEEP = "Ammo sweep";
     public static final String PAUSE_SHIP = "PLAYERSHIP";
 
-    public static boolean isInDebugMode(int mMode) {
+	/**
+	 * Method that evaluates if the game is in debugging mode or not
+	 * @param mMode
+	 * @return true if the game is in debug mode, false otherwise
+	 */
+	public static boolean isInDebugMode(int mMode) {
 		return mMode == Constants.MODE_DEBUG;
 	}
 
+	/**
+	 * get String from resource
+	 * @param content Activity that calls the method
+	 * @param resource resource index
+	 * @return resource string
+	 */
 	public static String getString(Context content, int resource) {	return content.getResources().getString(resource); }
 }

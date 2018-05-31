@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+
+    <!-- Global strings -->
+    <string name="app_name">PirateSeas</string>
+    <string name="game_title">PIRATE SEAS</string>
+    <string name="permissions_error">Se necesitan permisos para jugar al juego</string>
+    <string name="activity_new_game">Nueva Partida</string>
+    <string name="activity_tutorial">Tutorial</string>
+    <string name="activity_load_game">Cargar Partida</string>
+    <string name="activity_settings">Configuracion</string>
+    <string name="activity_help">Ayuda</string>
+    <string name="btn_accept">Aceptar</string>
+    <string name="btn_cancel">Cancelar</string>
+    <string name="btn_close">Cerrar</string>
+
+    <!-- Exception's messages -->
+    <string name="exception_gold">No hay suficiente oro para comprar eso!</string>
+    <string name="exception_ammo">No hay suficiente municion para disparar!</string>
+    <string name="exception_reloading">Recargando cañones!</string>
+    <string name="exception_save">Error al guardar</string>
+
+    <!-- Game Menu strings -->
+    <string name="game_resume">Continuar</string>
+    <string name="label_pause">PAUSA</string>
+    <string name="label_settings">CONFIGURACION</string>
+    <string name="btn_receive">Recibir todo</string>
+    <string name="btn_pause">Botón de pausa</string>
+    <string name="lbl_volume">Volumen</string>
+    <string name="tb_control_sensor">Control por sensores</string>
+    <string name="tb_control_touch">Control tactil</string>
+    <string name="lbl_control_mode">Modo de control del barco</string>
+    <string name="settings_change_ammo_volume">Con teclas de volumenWith volume keys</string>
+    <string name="settings_change_ammo_touch">Tactil</string>
+    <string name="settings_change_ammo_mode">Modo de seleccion de la municion</string>
+    <string name="settings_sensorway">Por sensores</string>
+    <string name="settings_manual">Tactil</string>
+    <string name="settings_extra">Configuracion Extra</string>
+    <string name="settings_exit_message">Salir mediante los botones de \'Aceptar\' o \'Cancelar\'</string>
+
+    <!-- Shop strings -->
+    <string name="shop_item_name">Nombre del objeto</string>
+    <string name="shop_item_crew_name">Tripulacion</string>
+    <string name="shop_item_crew_desc">Recupera 5 puntos de salud</string>
+    <string name="shop_item_repairman_name">Reparador</string>
+    <string name="shop_item_repairman_desc">Recupera 15 puntos de vida</string>
+    <string name="shop_item_ammo_simple_name">Municion basica</string>
+    <string name="shop_item_ammo_simple_desc">Gana 10 balas de municion basica</string>
+    <string name="shop_item_ammo_aimed_name">Bala teledirigida</string>
+    <string name="shop_item_ammo_aimed_desc">Gana 5 balas autodirigidas</string>
+    <string name="shop_item_ammo_double_name">Municion doble</string>
+    <string name="shop_item_ammo_double_desc">Gana 5 disparos de municion doble</string>
+    <string name="shop_item_ammo_sweep_name">Municion barrido</string>
+    <string name="shop_item_ammo_sweep_desc">Gana 2 disparos de barrido de pantalla</string>
+    <string name="shop_item_nest_name">Vigia</string>
+    <string name="shop_item_nest_desc">Incrementa el rango por 1.15</string>
+    <string name="shop_item_mats_name">Materiales</string>
+    <string name="shop_item_mats_desc">Incrementa el máximo de salud en 10 puntos</string>
+    <string name="shop_item_mpiece_name">Pieza de mapa</string>
+    <string name="shop_item_mpiece_desc">1/6 parte de un mapa</string>
+    <string name="shop_item_map_name">Mapa</string>
+    <string name="shop_item_map_desc">Muestra la isla del tesoro más cercana</string>
+    <string name="shop_item_bpowder_name">Polvora</string>
+    <string name="shop_item_bpowder_desc">Incrementa la fuerza por 0.5</string>
+    <string name="shop_item_valuable_name">Gemas preciosas</string>
+    <string name="shop_item_valuable_desc">Las puedes vender por 100 monedas</string>
+    <string name="shop_purchase_hint">\n
+        (Seleccionar la ayuda de un objeto para mostrar su descripcion)\n
+        (Seleccionar el objeto para comprarlo)</string>
+
+    <!-- Shop Purchase Dialog -->
+    <string name="shop_purchase_dialog_title">Comprar</string>
+    <string name="shop_purchase_dialog_message">Compraras este objeto!</string>
+    <string name="shop_purchase_dialog_positive">Confirmar</string>
+
+    <!-- Restore Preferences Dialog -->
+    <string name="settings_restore_dialog_title">Restaurar Preferencias</string>
+    <string name="settings_restore_dialog_message">Borraras todos los  datos guardados!</string>
+    <string name="settings_restore_dialog_positive">Confirmar</string>
+
+    <!-- Overwrite Game Dialog -->
+    <string name="overwrite_dialog_title">Sobreescribir partida guardada</string>
+    <string name="overwrite_dialog_message">Tu anterior partida se sobreescribira!</string>
+    <string name="overwrite_dialog_positive">Confirmar</string>
+
+    <!-- Exit Game Dialog -->
+    <string name="exit_dialog_title">Salir del juego</string>
+    <string name="exit_dialog_message">El progreso no guardado se perdera!</string>
+    <string name="exit_dialog_positive">Salir</string>
+    <string name="exit_dialog_negative">Cancelar</string>
+
+    <!-- Exit Tutorial Dialog -->
+    <string name="exit_tutorial_dialog_title">Salir del Tutorial</string>
+    <string name="exit_tutorial_main_menu_message">Volveras al Menu Principal</string>
+    <string name="exit_tutorial_dialog_message">El juego dara comienzo!</string>
+    <string name="exit_tutorial_dialog_positive">Continuar</string>
+
+    <!-- Exit Shop Dialog -->
+    <string name="exit_shop_dialog_title">Abandonar la Isla</string>
+    <string name="exit_shop_dialog_message">El juego continuara!</string>
+    <string name="exit_shop_dialog_positive">Continuar</string>
+
+    <!-- About Dialog -->
+    <string name="about_dialog_title">Acerca de</string>
+    <string name="about_dialog_message">Juego desarrollado por \n
+        Miguel Angel Jiménez Rega - UO179050\n
+        Para el Trabajo de Fin de Master</string>
+    <string name="about_dialog_positive">OK</string>
+
+    <!-- Pause Activity tooltips -->
+    <string name="pause_hint_health">Salud del barco: %1$d / %2$d</string>
+    <string name="pause_hint_power">Daño de los cañones: %1$d / %2$d</string>
+    <string name="pause_hint_range">Alcance de los cañones: %1$d / %2$d</string>
+    <string name="pause_hint_default">Pasa el dedo sobre los iconos para ver su valor</string>
+
+    <!-- Screen Slide Content -->
+    <string name="title_screen_slide">Diapositivas</string>
+    <string name="action_finish">Teminar</string>
+    <string name="action_previous">Anterior</string>
+    <string name="action_next">Siguiente</string>
+    <string name="title_template_step">Tutorial: Paso <xliff:g id="step_number">%1$d</xliff:g></string>
+    <string name="code_sensor_list">Lista de Sensores</string>
+    <string name="sensor_list_default">-1;</string>
+
+    <!-- Loading messages -->
+    <string-array name="loading_messages">
+        <item>Cargando Mares&#8230;</item>
+        <item>Cargando Cielo&#8230;</item>
+        <item>Cargando Sonidos&#8230;</item>
+        <item>Cargando UI&#8230;</item>
+        <item>Cargando Tesoros&#8230;</item>
+        <item>Cargando Barcos&#8230;</item>
+        <item>Cargando Cañones&#8230;</item>
+        <item>Cargando Piratas&#8230;</item>
+        <item>Cargando Yarrr&#8230;</item>
+        <item>Al abordaje, grumete!</item>
+    </string-array>
+
+    <!-- Image Content descriptors -->
+    <string name="icd_anim_background">Animation background image</string>
+    <string name="icd_loading_animation">Loading animation image</string>
+    <string name="icd_rest_preferences">Restore preferences</string>
+    <string name="icd_help_hud">Game hud image</string>
+    <string name="icd_item">Item icon</string>
+    <string name="icd_gold">Gold icon</string>
+    <string name="icd_btn_settings">Setting\'s button</string>
+    <string name="icd_btn_help">Help button</string>
+    <string name="icd_tutorial_image">Tutorial background image</string>
+    <string name="icd_btn_change_ammo">Change ammo image</string>
+    <string name="icd_btn_island">Island image</string>
+    <string name="icd_btn_arrow">Arrow image</string>
+
+    <!-- Numeric values -->
+    <string name="max_value">999</string>
+
+    <string name="default_sample_text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut
+        gravida, massa nec bibendum maximus, nunc ante viverra enim, sit amet viverra nisi nulla vitae
+        massa. Sed tempor lectus porttitor, dapibus nibh sit amet, viverra nisi. Vivamus ex erat,
+        iaculis ac augue ut, volutpat ornare dolor. Quisque dapibus ante ut laoreet pulvinar. Mauris
+        metus nisi, fermentum a nulla a, condimentum malesuada ligula. Mauris id libero dolor. Sed
+        sagittis ultricies tristique. Morbi efficitur eros in tellus tristique, vitae porta turpis
+        molestie. Cras maximus sollicitudin lectus. Duis sit amet maximus nunc. Curabitur dapibus
+        tristique auctor. Duis sit amet varius odio. Vestibulum eu dui justo. Phasellus tellus tortor,
+        molestie sollicitudin porta ac, maximus vitae orci. Nulla nibh massa, convallis egestas orci
+        quis, efficitur ultricies erat.</string>
+    <string name="empty_string"></string>
+
+    <!-- Game strings -->
+    <string name="tutorial_1">Arrr Grumete!! Bienvenido a PIRATE SEAS!!\r\nArr quieres dominar los siete mares? Pues conquista todas las islas y hazte rico.</string>
+    <string name="tutorial_2">Escoge tu siguiente paso con cuidado grumetillo! Muchos buenos hombres se han hundido en estas aguas.</string>
+    <string name="tutorial_3">Si te encuentras con neblina en le mar.. Cuidado! Seguro que hay un enemigo tras la niebla. Agita tu dispositivo para aclarar el cielo!</string>
+    <string name="tutorial_4">Toca la pantalla hacia arriba para disparar la munición seleccionada.</string>
+    <string name="tutorial_5">Cambia el tipo de munición seleccionada pulsando en el icono de la munición (por defecto) o pulsando las teclas de volumen.</string>
+    <string name="tutorial_6">Consigue riquezas hundiendo a tus enemigos o descubriendo tesoros con los mapas que encontraras en tu camino.
+        \r\nLos barcos rojos son mas resistentes y lentos.
+        \r\nLos barcos amarillos tienen una vida y velocidad normales.
+        \r\Los barcos verdes son los mas debiles, pero tambien los mas rapidos.</string>
+    <string name="tutorial_7">Gana experiencia hundiendo a tus enemigos y desbloquea mejores actualizaciones.</string>
+    <string name="tutorial_8">Conviertete en el mayor Rey Pirata! o caminaras por la plancha!</string>
+    <string name="gameover_title">Fin de la partida\nA dormir con los tiburones</string>
+    <string name="gameover_hint">(Pulsa en cualquier lugar para reiniciar el juego&#8230;)</string>
+    <string name="gameover_score">Puntuacion</string>
+    <string name="gameover_days">Dias transcurridos</string>
+    <string name="app_about">Acerca de&#8230;</string>
+    <string name="message_screenselection">Que direccion tomamos ahora, Capi?</string>
+    <string name="message_screenselection_detail">Por favor, selecciona la siguiente dirección a la que quieres navegar</string>
+    <string name="message_islanddetected">Capi! Tierra a la vista!</string>
+    <string name="message_nothinghere">Capi! No hay nada ahi! Que direccion debemos tomar?</string>
+    <string name="message_wrongway">Capi! No podemos ir por ahi!</string>
+    <string name="message_mapcompleted">Mapa completado!</string>
+    <string name="message_shakesleft">Agita tu dispositivo %1$d veces mas!</string>
+    <string name="game_exit">Salir</string>
+    <string name="game_message_enemy_defeated">Has encontrado %1$d monedas de oro y conseguido %2$d xp!</string>
+    <string name="game_message_islands_discovered">Ya hemos encontrado todas las islas de este mar. Venderemos este mapa por 90 monedas de oro!</string>
+
+    <!-- Help strings -->
+    <string name="help_message_1">Selected ammution type</string>
+    <string name="help_message_2">Enemy health bar</string>
+    <string name="help_message_3">Pause button</string>
+    <string name="help_message_4">Enemy ship</string>
+    <string name="help_message_5">Player health bar</string>
+    <string name="help_message_6">Player experience bar</string>
+    <string name="help_message_7">Player ship</string>
+    <string name="help_message_8">Player\'s gold</string>
+    <string name="help_message_9">Selected remaining ammo</string>
+
+</resources>

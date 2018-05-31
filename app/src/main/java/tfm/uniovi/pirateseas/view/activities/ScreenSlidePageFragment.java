@@ -104,7 +104,7 @@ public class ScreenSlidePageFragment extends Fragment {
                 ((TextView) rootView.findViewById(R.id.text2)).setText(getResources().getString(R.string.tutorial_5));
                 break;
             case 5:
-                imageReference = R.mipmap.img_screen_selection;
+                imageReference = R.mipmap.enemy_types;
                 ((TextView) rootView.findViewById(R.id.text2)).setText(getResources().getString(R.string.tutorial_6));
                 break;
             case 6:

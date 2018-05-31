@@ -9,6 +9,13 @@
     android:background="@drawable/xml_border"
     android:padding="8dp" >
 
+    <TextView
+        android:id="@+id/lblShopTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="top|center_horizontal"
+        android:text="@string/message_islanddetected"/>
+
     <ListView
         android:id="@android:id/list"
         android:layout_width="match_parent"

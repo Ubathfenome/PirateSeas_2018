@@ -17,12 +17,14 @@ import android.widget.Button;
 import tfm.uniovi.pirateseas.R;
 import tfm.uniovi.pirateseas.global.Constants;
 
+/**
+ * Activity that shows help about the game
+ */
 public class HelpActivity extends Activity {
-	
-	Button btnNext, btnPrev, btnAbout;
+
+	Button btnNext, btnAbout;
 	String versionName;
-	
-	int currentPage = 1;	
+
 	
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,35 +32,18 @@ public class HelpActivity extends Activity {
 		setContentView(R.layout.activity_help);
 
 		Typeface customFont = Typeface.createFromAsset(getAssets(), "fonts/" + Constants.FONT_NAME + ".ttf");
-		
-		btnNext = (Button) findViewById(R.id.btnBarNext);
+
+		btnNext = findViewById(R.id.btnBarNext);
 		btnNext.setTypeface(customFont);
 		btnNext.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
-				if(currentPage == Constants.TUTORIAL_NUM_PAGES)
 					finish();
-				else {
-					currentPage++;
-					btnPrev.setVisibility(View.VISIBLE);
-				}
 			}
 		});
 		
-		btnPrev = (Button) findViewById(R.id.btnBarPrev);
-		btnPrev.setTypeface(customFont);
-		btnPrev.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				if(currentPage == 2) 
-					v.setVisibility(View.INVISIBLE);
-				currentPage--;				
-			}
-		});
-		
-		btnAbout = (Button) findViewById(R.id.btnBarAbout);
+		btnAbout = findViewById(R.id.btnBarAbout);
 		btnAbout.setTypeface(customFont);
 		btnAbout.setOnClickListener(new OnClickListener() {
 			
@@ -109,6 +94,4 @@ public class HelpActivity extends Activity {
 		findViewById(R.id.rootLayoutHelp).setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE);
 		super.onResume();
 	}
-	
-	
 }

@@ -8,7 +8,7 @@ import tfm.uniovi.pirateseas.R;
 import tfm.uniovi.pirateseas.exceptions.NotEnoughGoldException;
 
 /**
- * 
+ * Class that represents the player stats. Holds the value of the gold the player won, its experience points among its experience level and the map pieces found
  * @author p7166421
  *
  * @see: http://developer.android.com/distribute/stories/games.html
@@ -30,6 +30,10 @@ public class Player implements Parcelable {
 	
 	private boolean hasCompleteMap = false;
 
+	/**
+	 * Dummy constructor for the Player class.
+	 * Preloads the Player object
+	 */
 	public Player() {
 		this.level = 0;
 		this.gold = 10;
@@ -37,8 +41,16 @@ public class Player implements Parcelable {
 		this.mapPieces = 0;
 		this.hasCompleteMap = false;
 	}
-	
-	public Player(int level, int gold, int xp, long ts, int days, int mapPieces,
+
+	/**
+	 * Constructor of the Player class
+	 * @param level XP level
+	 * @param gold Gold won by the player
+	 * @param xp XP points
+	 * @param mapPieces Map pieces found
+	 * @param map Boolean hasCompleteMap
+	 */
+	public Player(int level, int gold, int xp, int mapPieces,
 			boolean map) {
 		this.level = level;
 		this.gold = gold;
@@ -47,6 +59,10 @@ public class Player implements Parcelable {
 		this.hasCompleteMap = map;
 	}
 
+	/**
+	 * Constructor for the Parcel object
+	 * @param source Source parcel
+	 */
 	public Player(Parcel source) {
 		this.level = source.readInt();
 		this.gold = source.readInt();
@@ -54,10 +70,15 @@ public class Player implements Parcelable {
 		this.mapPieces = source.readInt();
 		this.hasCompleteMap = source.readInt() == 1;
 	}
-	
+
+	/**
+	 * Copy Player method
+	 * @param origin Origin Player
+	 * @return Copied Player
+	 */
 	public static Player clonePlayer(Player origin) {
 		return new Player(origin.getLevel(), origin.getGold(),
-				origin.getExperience(), 0, 0,
+				origin.getExperience(),
 				origin.getMapPieces(), origin.hasCompleteMap());
 	}
 
@@ -83,10 +104,20 @@ public class Player implements Parcelable {
 		this.gold = gold;
 	}
 
+	/**
+	 * Add gold to the Player previous amount
+	 * @param gold
+	 */
 	public void addGold(int gold) {
 		this.gold += gold > 0 ? gold : 0;
 	}
 
+	/**
+	 * Spend gold on an item
+	 * @param context Activity that calls the method
+	 * @param gold	Gold to spend
+	 * @throws NotEnoughGoldException Exception if the player does not have enough gold to purchase the item
+	 */
 	public void useGold(Context context, int gold)
 			throws NotEnoughGoldException {
 		if (this.gold < gold)
@@ -102,7 +133,11 @@ public class Player implements Parcelable {
 	public int getExperience() {
 		return experience;
 	}
-	
+
+	/**
+	 * Return XP points required to get the next XP level
+	 * @return XP points
+	 */
 	public int getNextLevelThreshold(){
 		return LOG_BASES[level + 1];
 	}
@@ -116,6 +151,10 @@ public class Player implements Parcelable {
 		addExperience(experience);
 	}
 
+	/**
+	 * Add XP points to the Player XP pool
+	 * @param experience XP Points
+	 */
 	public void addExperience(int experience) {		
 		this.experience += experience > 0 ? experience : 0;
 		this.level = INVALID_VALUE;
@@ -127,10 +166,18 @@ public class Player implements Parcelable {
 			this.level = LOG_BASES.length - 1;
 	}
 
+	/**
+	 * Return number of map pieces
+	 * @return Map pieces
+	 */
 	public int getMapPieces() {
 		return mapPieces;
 	}
 
+	/**
+	 * Set the number of map pieces held by the player
+	 * @param mapPieces Number of map pieces held by the player
+	 */
 	public void setMapPieces(int mapPieces) {
 		if (mapPieces < 0) {
 			this.mapPieces = 0;
@@ -146,6 +193,9 @@ public class Player implements Parcelable {
 		}
 	}
 
+	/**
+	 * Add a new Map piece or sets a complete map for the player
+	 */
 	public void addMapPiece() {
 		this.mapPieces++;
 		if (mapPieces % MAP_PIECES_LIMIT == 0) {
@@ -154,14 +204,26 @@ public class Player implements Parcelable {
 		}
 	}
 
+	/**
+	 * Determine if the player has a complete map
+	 * @return HasCompleteMap = true; MapPiecesRemains = false
+	 */
 	public boolean hasCompleteMap() {
 		return hasCompleteMap;
 	}
 
+	/**
+	 * Set if the player has a complete map
+	 * @param hasCompleteMap
+	 */
 	public void giveCompleteMap(boolean hasCompleteMap) {
 		this.hasCompleteMap = hasCompleteMap;
 	}
 
+	/**
+	 * toString
+	 * @return Player object as a readable string
+	 */
 	@Override
 	public String toString() {
 		return "Player [level=" + level + ", gold=" + gold + ", experience="
@@ -185,7 +247,6 @@ public class Player implements Parcelable {
 		out.writeInt(level);
 		out.writeInt(gold);
 		out.writeInt(experience);
-		out.writeInt(0);
 		out.writeInt(mapPieces);
 		out.writeInt(hasCompleteMap ? 1 : 0);
 	}
@@ -207,6 +268,9 @@ public class Player implements Parcelable {
 		}
 	};
 
+	/**
+	 * Spends the player's complete map
+	 */
 	public void spendMap() {
 		if(hasCompleteMap)
 			this.hasCompleteMap = false;

@@ -21,12 +21,14 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import tfm.uniovi.pirateseas.R;
+import tfm.uniovi.pirateseas.controller.androidGameAPI.Map;
 import tfm.uniovi.pirateseas.controller.androidGameAPI.Player;
 import tfm.uniovi.pirateseas.controller.sensors.events.EventDayNightCycle;
 import tfm.uniovi.pirateseas.controller.sensors.events.EventShakeClouds;
@@ -38,8 +40,7 @@ import tfm.uniovi.pirateseas.model.canvasmodel.ui.UIDisplayElement;
 import tfm.uniovi.pirateseas.view.graphics.canvasview.CanvasView;
 
 /**
- * 
- * @author p7166421
+ * Activity that hold the game Canvas and the UI layer
  *
  * @see: http://android-developers.blogspot.com.es/2011/11/making-android-games-that-play-nice.html
  */
@@ -72,6 +73,7 @@ public class GameActivity extends Activity implements SensorEventListener {
 	protected SensorManager mSensorManager;
 	protected List<Sensor> triggeringSensors;
 
+	public TextView txtMsg;
 	public ImageButton btnPause, btnChangeAmmo;
 	public UIDisplayElement mGold, mAmmo;
 
@@ -146,6 +148,25 @@ public class GameActivity extends Activity implements SensorEventListener {
 		mGold.setElementValue(0);
 		mAmmo = findViewById(R.id.playerAmmunition);
 		mAmmo.setElementValue(0);
+
+		txtMsg = findViewById(R.id.txtCanvasMsg);
+	}
+
+	/**
+	 * Show temporary descriptions (like a tooltip)
+	 * @param text
+	 * @param seconds
+	 */
+	public void showText(String text, int seconds){
+		long initStamp = System.currentTimeMillis();
+		long endStamp = initStamp;
+		txtMsg.setText(text);
+		txtMsg.setVisibility(View.VISIBLE);
+		while((endStamp-initStamp)<seconds){
+			endStamp = System.currentTimeMillis();
+		}
+		txtMsg.setVisibility(View.GONE);
+		txtMsg.setText(R.string.empty_string);
 	}
 
 	@Override
@@ -194,6 +215,9 @@ public class GameActivity extends Activity implements SensorEventListener {
 		exitGame();
 	}
 
+	/**
+	 * Class to create a Dialog that asks the player if he/she is sure of leaving the game activity
+	 */
 	public static class LeaveGameDialogFragment extends DialogFragment {
 		@Override
 		public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -407,73 +431,14 @@ public class GameActivity extends Activity implements SensorEventListener {
 		}
 	}
 
+	/**
+	 * Checks whether an active battle is taking place
+	 * @param cView
+	 * @return true if there is an alive enemy and the player is still alive
+	 */
 	private boolean battleIsGoing(CanvasView cView) {
 		return cView.nPlayerShip != null && cView.nPlayerShip.isAlive() && cView.nEnemyShip != null && cView.nEnemyShip.isAlive();
 	}
-
-	/*
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-		ComponentName caller = this.getCallingActivity();
-		if (caller != null)
-			Log.d(TAG, "GameActivity called by " + caller);
-
-		if(data!= null){
-			int canvasGameMode = mCanvasView.getGamemode();
-			
-			if (!mCanvasView.isInitialized()) {
-				mCanvasView.initialize();
-			}
-			switch (requestCode) {
-				case Constants.REQUEST_SCREEN_SELECTION:
-					if (resultCode == Activity.RESULT_OK) {
-						// Get randomized encounter boolean value from Intent data
-						boolean encounter = data.getBooleanExtra(Constants.TAG_RANDOM_ENCOUNTER, false);
-						// If true check if light level is lower than XX level
-						if (encounter) {
-							// If it is lower, generate fog (where an enemy will be
-							// hiding)
-							if (lightLevel < Constants.LIGHT_THRESHOLD) {
-								if(canvasGameMode == Constants.GAMEMODE_ADVANCE){
-									Log.d(TAG, "Spawn fog on CanvasView (" + lightLevel + " < " + Constants.LIGHT_THRESHOLD + ")");
-									mCanvasView.setGamemode(Constants.GAMEMODE_IDLE);
-									Log.d(TAG, "GameActivity: GameMode set to IDLE");
-									mCanvasView.spawnClouds();
-								} else if (mCanvasView.getGamemode() == Constants.GAMEMODE_IDLE){
-									
-								}
-							}
-							// Else show enemy
-							else {
-								if (canvasGameMode != Constants.GAMEMODE_BATTLE){
-									mCanvasView.setGamemode(Constants.GAMEMODE_BATTLE);
-									Log.d(TAG, "GameActivity: GameMode set to BATTLE");
-									// MusicManager.getInstance().stopBackgroundMusic();
-									// MusicManager.getInstance(context, MusicManager.MUSIC_BATTLE).playBackgroundMusic();
-								}
-								Log.d(TAG, "Spawn enemy on CanvasView CanvasView (" + lightLevel + " < "
-										+ Constants.LIGHT_THRESHOLD + ")");
-								mCanvasView.spawnEnemyShip();
-							}
-		
-						}
-						// Else call mCanvasView.selectScreen(); again
-						else {
-							try {
-								mCanvasView.selectScreen();
-							} catch (SaveGameException e) {
-								Log.e(TAG, e.getMessage());
-							}
-						}
-					}
-					break;
-			}
-	
-			mCanvasView.launchMainLogic();
-		}
-	}
-	*/
 
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -511,6 +476,12 @@ public class GameActivity extends Activity implements SensorEventListener {
 			Log.d(TAG, "Sensor " + sensor.getName() + " got changed in " + accuracy);
 	}
 
+	/**
+	 * Checks if an integer array has a certain value in it
+	 * @param array
+	 * @param value
+	 * @return true if it hold it, false otherwise
+	 */
 	private boolean arrayContainsValue(int[] array, int value) {
 		for (int i = 0; i < array.length; i++) {
 			if (array[i] == value)
@@ -519,10 +490,16 @@ public class GameActivity extends Activity implements SensorEventListener {
 		return false;
 	}
 
-	public void gameOver(Player nPlayer) {
+	/**
+	 * Calls the activity to end the game
+	 * @param nPlayer
+	 * @param map
+	 */
+	public void gameOver(Player nPlayer, Map map) {
 		Intent gameOverIntent = new Intent(this, GameOverActivity.class);
 		// Parcelable Extra with Player object content
-		gameOverIntent.putExtra(Constants.TAG_GAME_OVER, Player.clonePlayer(nPlayer));
+		gameOverIntent.putExtra(Constants.TAG_GAME_OVER_PLAYER, Player.clonePlayer(nPlayer));
+		gameOverIntent.putExtra(Constants.TAG_GAME_OVER_MAP, map);
 		Log.d(TAG, "Start GameOver Intent");
 		this.startActivity(gameOverIntent);
 		shutdownGame();
@@ -538,12 +515,18 @@ public class GameActivity extends Activity implements SensorEventListener {
 		finish();
 	}
 
+	/**
+	 * Exit the game and go back to hte main menu screen
+	 */
 	public void exitGame(){
 		// Pop up messageBox asking if the user is sure to leave
 		LeaveGameDialogFragment exitDialog = new LeaveGameDialogFragment();
 		exitDialog.show(getFragmentManager(), "LeaveGameDialog");
 	}
 
+	/**
+	 * Shake the clouds once
+	 */
 	public void shakeClouds() {
 		if(mCanvasView != null) {
 			int shakeCount = mCanvasView.getShakeMoveCount();
@@ -552,18 +535,34 @@ public class GameActivity extends Activity implements SensorEventListener {
 		}
 	}
 
+	/**
+	 * checks if there is a saved game
+	 * @return true if a saved game exists on the preferences, false otherwise
+	 */
 	public boolean hasToLoadGame() {
 		return loadGame;
 	}
 
+	/**
+	 * Get the sensor types array
+	 * @return The device's sensor types integer array
+	 */
 	public int[] getSensorTypes(){
 		return sensorTypes;
 	}
 
+	/**
+	 * Get the number of vertical cells fro the map to fit in the device's screen
+	 * @return Number of cells
+	 */
 	public int getMapHeight(){
 		return mapHeight;
 	}
 
+	/**
+	 * Get the number of horizontal cells fro the map to fit in the device's screen
+	 * @return Number of cells
+	 */
 	public int getMapWidth(){
 		return mapWidth;
 	}

@@ -20,6 +20,9 @@ import android.widget.ToggleButton;
 import tfm.uniovi.pirateseas.R;
 import tfm.uniovi.pirateseas.global.Constants;
 
+/**
+ * Activity to manage the extra settings available form the game
+ */
 public class SettingsExtraActivity extends Activity {
 	
 	private Button btnRestore;
@@ -89,6 +92,9 @@ public class SettingsExtraActivity extends Activity {
 		finish();
 	}
 
+	/**
+	 * Save the modified settings at the preferences
+	 */
 	private void savePreferences() {
 		// Save changes in preferences
 		SharedPreferences.Editor editor = mPreferences.edit();
@@ -98,6 +104,9 @@ public class SettingsExtraActivity extends Activity {
 	}
 
 	@SuppressLint("ValidFragment")
+	/**
+	 * Class to show a Dialog that asks the user if he/she really want to reset all preferences
+	 */
 	public class ResetPreferencesDialogFragment extends DialogFragment {
 		@Override
 		public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -130,7 +139,11 @@ public class SettingsExtraActivity extends Activity {
 			return builder.create();
 		}
 	}
-	
+
+	/**
+	 * Method that resets all saved preferences
+	 * @return
+	 */
 	private boolean resetPreferences() {
 		SharedPreferences.Editor editor = mPreferences.edit();
 		editor.clear();

@@ -11,10 +11,8 @@ import tfm.uniovi.pirateseas.R;
 import tfm.uniovi.pirateseas.model.canvasmodel.game.BasicModel;
 
 /**
+ * Class to manage the Sky object
  *
- * 
- * @author p7166421
- * 
  * @see: https://softwyer.wordpress.com/2012/01/21/1009/
  * @see: http://en.wikipedia.org/wiki/Alpha_compositing
  *
@@ -27,6 +25,9 @@ public class Sky extends BasicModel{
 	
 	@SuppressWarnings("deprecation")
 	@SuppressLint("NewApi")
+	/**
+	 * Constructor
+	 */
 	public Sky(Context context, double x, double y, double mCanvasWidth,
             double mCanvasHeight){
 		super(context, x, y, mCanvasWidth, mCanvasHeight, null);
@@ -41,6 +42,9 @@ public class Sky extends BasicModel{
 	}
 	
 	@Override
+	/**
+	 * Draws on the screen the image of the model
+	 */
 	public void drawOnScreen(Canvas canvas){
 		yUp = (int) y;
 		xLeft = (int) x;
@@ -60,12 +64,19 @@ public class Sky extends BasicModel{
 			mImageAux.draw(canvas);
 		}
 	}
-	
+
+	/**
+	 * Sets the filter to the sky brightness
+	 * @param value Filter value
+	 */
 	public void setFilterValue(int value){
 		this.filterValue = value;
 	}
 
 	@Override
+	/**
+	 * toString
+	 */
 	public String toString() {
 		return "Sky [filterValue=" + filterValue + "]";
 	}

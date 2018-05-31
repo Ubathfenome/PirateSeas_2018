@@ -10,7 +10,7 @@ import tfm.uniovi.pirateseas.model.canvasmodel.game.BasicModel;
 import tfm.uniovi.pirateseas.model.canvasmodel.game.Parallax;
 
 /**
-* Extends from View?
+* Class to manage the Clouds behaviour
 * @see: http://developer.android.com/guide/topics/graphics/prop-animation.html#object-animator
 */
 public class Clouds extends BasicModel{
@@ -21,7 +21,15 @@ public class Clouds extends BasicModel{
 	private double xTop;
 	
 	private int shakeMoveCount;
-		
+
+	/**
+	 * Constructor
+	 * @param context
+	 * @param x
+	 * @param y
+	 * @param mCanvasWidth
+	 * @param mCanvasHeight
+	 */
 	public Clouds(Context context, double x, double y, double mCanvasWidth,
             double mCanvasHeight){
 		super(context, x, y, mCanvasHeight, mCanvasHeight, new Parallax(context, R.mipmap.txtr_clouds_light, R.mipmap.txtr_clouds_almost_none));
@@ -29,11 +37,10 @@ public class Clouds extends BasicModel{
 		this.xTop = x;
 		this.shakeMoveCount = 0;
 	}
-	
-	public void heightReposition(int bottomPadding){
-		y = -(mHeight - bottomPadding);
-	}
-	
+
+	/**
+	 * Move the clouds through the screen
+	 */
 	public void move(){
 		if(x >= (mCanvasWidth * OUTWINDOW_RATIO))
 			x = -(mWidth * OUTWINDOW_RATIO);
@@ -76,11 +83,19 @@ public class Clouds extends BasicModel{
     	}
         
     }
-    
+
+	/**
+	 * Get shake counter
+	 * @return Current shake counter
+	 */
 	public int getShakeMoveCount() {
 		return shakeMoveCount;
 	}
 
+	/**
+	 * Set the shake counter for the clouds to dismiss
+	 * @param shakeMoveCount Shake counter
+	 */
 	public void setShakeMoveCount(int shakeMoveCount) {
 		this.shakeMoveCount = shakeMoveCount;
 		float alphaIndex = (shakeMoveCount / Constants.SHAKE_LIMIT);
@@ -89,12 +104,11 @@ public class Clouds extends BasicModel{
 	}
 
 	@Override
+	/**
+	 * toString
+	 */
 	public String toString() {
 		return "Clouds [shakeMoveCount=" + shakeMoveCount + " / " + Constants.SHAKE_LIMIT + "]";
-	}
-
-	public void resetShakes() {
-		this.shakeMoveCount = 0;
 	}
     
 }

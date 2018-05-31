@@ -8,6 +8,9 @@ import android.graphics.Paint;
 import tfm.uniovi.pirateseas.global.Constants;
 import tfm.uniovi.pirateseas.model.canvasmodel.game.BasicModel;
 
+/**
+ * Class to represent bars on the screen
+ */
 public class StatBar extends BasicModel {
 	
 	private int mType;
@@ -16,13 +19,18 @@ public class StatBar extends BasicModel {
 	private int currentValue;
 
 	private int barLength;
-	
-	public StatBar(Context context, double x, double y, double mCanvasWidth, double mCanvasHeight, int type){
-		super(context, x, y, mCanvasWidth, mCanvasHeight, null);
-		this.barLength = (int)((mCanvasWidth - x) - x);
-		this.mType = type;
-	}
-	
+
+	/**
+	 * Constructor
+	 * @param context
+	 * @param x
+	 * @param y
+	 * @param mCanvasWidth
+	 * @param mCanvasHeight
+	 * @param maxValue
+	 * @param currentValue
+	 * @param type
+	 */
 	public StatBar(Context context, double x, double y, double mCanvasWidth, double mCanvasHeight, int maxValue, int currentValue, int type){
 		super(context, x, y, mCanvasWidth, mCanvasHeight, null);
 		this.maxValue = maxValue;
@@ -33,6 +41,9 @@ public class StatBar extends BasicModel {
 	}
 
 	@Override
+	/**
+	 * Draws on the screen the image of the model
+	 */
 	public void drawOnScreen(Canvas canvas){
 		int startXPoint = (int) x;
 		int yValue = (int) y;
@@ -71,28 +82,43 @@ public class StatBar extends BasicModel {
 		canvas.restore();
 	}
 
-	public int getCurrentValue() {
-		return currentValue;
-	}
-
+	/**
+	 * Set the current value of the bar
+	 * @param currentValue
+	 */
 	public void setCurrentValue(int currentValue) {
 		this.currentValue = currentValue;
 	}
 
+	/**
+	 * Get bar type (HEALTH or EXPERIENCE)
+	 * @return bar type
+	 */
 	public int getType() {
 		return mType;
 	}
 
+	/**
+	 * Get the bar max value
+	 * @return Max value
+	 */
 	public int getMaxValue() {
 		return maxValue;
 	}
 
 	@Override
+	/**
+	 * toString
+	 */
 	public String toString() {
 		return "StatBar [name=" + this.getClass().getName() + ", mType=" + mType + ", maxValue=" + maxValue
 				+ ", currentValue=" + currentValue + "]";
 	}
 
+	/**
+	 * Set the bar's max value
+	 * @param nextLevelThreshold Bar's max value
+	 */
 	public void setMaxValue(int nextLevelThreshold) {
 		this.maxValue = nextLevelThreshold;		
 	}

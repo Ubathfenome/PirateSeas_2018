@@ -6,10 +6,12 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -19,12 +21,16 @@ import tfm.uniovi.pirateseas.global.Constants;
 import tfm.uniovi.pirateseas.model.canvasmodel.game.entity.Ship;
 import tfm.uniovi.pirateseas.model.canvasmodel.game.entity.ShipType;
 
+/**
+ * Activity to manage the behaviour of the game pause button
+ */
 public class PauseActivity extends Activity {
 	private static final String TAG = "PauseActivity";
 
 	private Context context;
 	
 	private TextView txtTitleLabel;
+	private TextView txtTooltip;
 	private Button btnResume;
 	private Button btnExit;
 	private ImageButton btnSettings;
@@ -33,6 +39,10 @@ public class PauseActivity extends Activity {
 	private ProgressBar pgrHealth;
 	private ProgressBar pgrPower;
 	private ProgressBar pgrRange;
+
+	private ImageView imgHealth;
+	private ImageView imgPower;
+	private ImageView imgRange;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -83,11 +93,14 @@ public class PauseActivity extends Activity {
 				Intent mainMenuIntent = new Intent(context, MainMenuActivity.class);
 				MusicManager.getInstance().stopBackgroundMusic();
 				MusicManager.getInstance(context, MusicManager.MUSIC_BATTLE).playBackgroundMusic();
-				mainMenuIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+				mainMenuIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
 				startActivity(mainMenuIntent);
 				finish();
 			}
 		});
+
+		txtTooltip = findViewById(R.id.txtTooltip);
+		txtTooltip.setTypeface(customFont);
 
 		Ship ship = data.getParcelableExtra(Constants.PAUSE_SHIP);
 		ShipType st = ship.getShipType();
@@ -105,6 +118,52 @@ public class PauseActivity extends Activity {
 		pgrRange.setMax(Constants.SHIP_MAX_RANGE);
 		int rProgress = Math.round(ship.getRange() * Constants.DEFAULT_SHIP_BASIC_RANGE);
 		pgrRange.setProgress(rProgress);
+
+        imgHealth = findViewById(R.id.imgHealth);
+        imgHealth.setOnHoverListener(new View.OnHoverListener() {
+            @Override
+            public boolean onHover(View view, MotionEvent motionEvent) {
+                int eventValue = motionEvent.getAction();
+                if(eventValue == MotionEvent.ACTION_HOVER_ENTER){
+                    txtTooltip.setText(getString(R.string.pause_hint_health, pgrHealth.getProgress(), pgrHealth.getMax()));
+                    return true;
+                }else if(eventValue == MotionEvent.ACTION_HOVER_EXIT){
+                    txtTooltip.setText(R.string.pause_hint_default);
+                    return true;
+                }
+                return false;
+            }
+        });
+        imgPower = findViewById(R.id.imgPower);
+        imgPower.setOnHoverListener(new View.OnHoverListener() {
+            @Override
+            public boolean onHover(View view, MotionEvent motionEvent) {
+                int eventValue = motionEvent.getAction();
+                if(eventValue == MotionEvent.ACTION_HOVER_ENTER){
+                    txtTooltip.setText(getString(R.string.pause_hint_power, pgrPower.getProgress(), pgrPower.getMax()));
+                    return true;
+                }else if(eventValue == MotionEvent.ACTION_HOVER_EXIT){
+                    txtTooltip.setText(R.string.pause_hint_default);
+                    return true;
+                }
+                return false;
+            }
+        });
+        imgRange = findViewById(R.id.imgRange);
+        imgRange.setOnHoverListener(new View.OnHoverListener() {
+            @Override
+            public boolean onHover(View view, MotionEvent motionEvent) {
+                int eventValue = motionEvent.getAction();
+                if(eventValue == MotionEvent.ACTION_HOVER_ENTER){
+                    txtTooltip.setText(getString(R.string.pause_hint_range, pgrRange.getProgress(), pgrRange.getMax()));
+                    return true;
+                }else if(eventValue == MotionEvent.ACTION_HOVER_EXIT){
+                    txtTooltip.setText(R.string.pause_hint_default);
+                    return true;
+                }
+                return false;
+            }
+        });
 
 		MusicManager.getInstance().stopBackgroundMusic();
 		MusicManager.getInstance(context, MusicManager.MUSIC_GAME_PAUSED).playBackgroundMusic();

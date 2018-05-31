@@ -5,6 +5,9 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 
+/**
+ * Class to manage the behaviour of objects that have 2 images to represent
+ */
 public class Parallax {
 	
 	Drawable imageBase = null, imageTop = null;
@@ -13,6 +16,9 @@ public class Parallax {
 	
 	@SuppressLint("NewApi")
 	@SuppressWarnings("deprecation")
+	/**
+	 * Constructor
+	 */
 	public Parallax(Context context, int resourceBase, int resourceTop){
 		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
 			if(resourceBase != 0)
@@ -26,7 +32,11 @@ public class Parallax {
 				imageTop = context.getResources().getDrawable(resourceTop);
 		}
 	}
-	
+
+	/**
+	 * Return Drawable array with the 2 images of the Parallax
+	 * @return
+	 */
 	public Drawable[] getLayers(){
 		Drawable[] layers = new Drawable[2];
 		layers[0] = imageBase;
@@ -34,17 +44,29 @@ public class Parallax {
 		return layers;
 	}
 
+	/**
+	 * Sets the alpha value for the parallax
+	 * @param alpha
+	 */
 	public void setAlpha(int alpha) {
 		imageBase.setAlpha(alpha);
 		imageTop.setAlpha(alpha);
 	}
-	
+
+	/**
+	 * Get the height of the taller image on the Parallax
+	 * @return Height
+	 */
 	public int getMaxHeight(){
 		int hBase = imageBase.getIntrinsicHeight();
 		int hTop = imageTop.getIntrinsicHeight();
 		return hBase >= hTop ? hBase : hTop;
 	}
-	
+
+	/**
+	 * Get the top width of the wider image on the Parallax
+	 * @return Width
+	 */
 	public int getMaxWidth(){
 		int wBase = imageBase.getIntrinsicWidth();
 		int wTop = imageTop.getIntrinsicWidth();

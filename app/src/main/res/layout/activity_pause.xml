@@ -73,7 +73,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="5dip"
                     android:contentDescription="@string/icd_help_hud"
-                    android:background="@mipmap/icon_buff_repa"/>
+                    android:background="@mipmap/icon_health"/>
 
             <ProgressBar
                 android:id="@+id/pgrsHealth"
@@ -129,4 +129,10 @@
 
         </LinearLayout>
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/txtTooltip"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/pause_hint_default"/>
 </LinearLayout>

@@ -29,6 +29,9 @@ import tfm.uniovi.pirateseas.controller.sensors.events.EventWeatherLight;
 import tfm.uniovi.pirateseas.controller.sensors.events.EventWeatherMaelstrom;
 import tfm.uniovi.pirateseas.global.Constants;
 
+/**
+ * Activity to retrieve the Devices's sensors
+ */
 public class SensorActivity extends Activity{
 	
 	public static final String TAG = "SensorActivity";
@@ -53,12 +56,12 @@ public class SensorActivity extends Activity{
 		setContentView(R.layout.activity_sensors);
 		Typeface customFont = Typeface.createFromAsset(getAssets(), "fonts/" + Constants.FONT_NAME + ".ttf");
 				
-		iv = (ImageView) findViewById(R.id.img_load_animation);
+		iv = findViewById(R.id.img_load_animation);
 		iv.setBackgroundResource(R.drawable.xml_loading_animation);
 		loadAnimation = (AnimationDrawable) iv.getBackground();
 		enterAnimation = AnimationUtils.loadAnimation(this, R.anim.xml_tween_animation);
 		
-		tv = (TextView) findViewById(R.id.lbl_load_status);
+		tv = findViewById(R.id.lbl_load_status);
 		tv.setTypeface(customFont);
 	
 		mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
@@ -87,6 +90,11 @@ public class SensorActivity extends Activity{
 		super.onResume();
 	}
 
+	/**
+	 * Checks if the sensor array has any value different from 0
+	 * @param sensorList
+	 * @return true if there is any value different from 0, false otherwise
+	 */
 	private boolean hasValidValues(int[] sensorList){
 		for(int i = 0; i < sensorList.length; i++){
 			if(sensorList[i] != 0)
@@ -94,7 +102,11 @@ public class SensorActivity extends Activity{
 		}
 		return false;
 	}
-	
+
+	/**
+	 * Retrieve the sensor array stored in Preferences (if any)
+	 * @return Sensor array
+	 */
 	private int[] getPreferenceSensorList(){
 		String prefStringSensorList = "";
 		String[] stuff = null;
@@ -113,7 +125,11 @@ public class SensorActivity extends Activity{
 		
 		return preferenceIntArray;
 	}
-	
+
+	/**
+	 * Save the sensor array at the preferences
+	 * @return Sensor's array values as concatenated String
+	 */
 	private String putPreferenceSensorList(){
 		String modifiedString = "";
 		Object[] valuesArray =  mDeviceSensorTypes.toArray();
@@ -123,7 +139,11 @@ public class SensorActivity extends Activity{
 		
 		return modifiedString;
 	}
-	
+
+	/**
+	 * Return to calling Activity with the resutls
+	 * @param result true if everything was correct, false otherwise
+	 */
 	private void exitActivity(boolean result){
 		Intent sensorListIntent = new Intent();
 		
@@ -144,7 +164,10 @@ public class SensorActivity extends Activity{
 		
 		finish();
 	}
-	
+
+	/**
+	 * Async class to retrieve the device's sensors
+	 */
 	private class ListSensors extends AsyncTask<Void, Integer, Boolean>{
 		List<SensorType> triggeredSensors = new ArrayList<SensorType>();
 		

@@ -10,14 +10,13 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources.NotFoundException;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -44,8 +43,7 @@ import tfm.uniovi.pirateseas.model.canvasmodel.ui.UIDisplayElement;
 import tfm.uniovi.pirateseas.utils.persistence.GameHelper;
 
 /**
- * 
- * @author p7166421
+ * Activity to buy better mods for the ship
  * @see: http://developer.android.com/guide/topics/ui/layout/listview.html
  * @see: http://developer.android.com/reference/android/app/ListActivity.html
  *
@@ -71,7 +69,7 @@ public class ShopActivity extends ListActivity{
 	ListView listView;
 	ListAdapter mAdapter;
 	
-	TextView txtDescription;
+	TextView txtDescription, lblShopTitle;
 	UIDisplayElement txtAvailableGold;
 
 	Button btnAcceptAll;
@@ -81,6 +79,8 @@ public class ShopActivity extends ListActivity{
 		super.onCreate(savedInstanceState);
 		
 		setContentView(R.layout.activity_shop);
+
+		Typeface customFont = Typeface.createFromAsset(getAssets(), "fonts/" + Constants.FONT_NAME + ".ttf");
 		
 		Intent data = getIntent();
 		mNature = data.getExtras().getString(Constants.ITEMLIST_NATURE, Constants.EMPTY_STRING);
@@ -106,34 +106,24 @@ public class ShopActivity extends ListActivity{
 			// A random list of free items
 			itemList = loader.loadRandom();
 		}
+
+		lblShopTitle = findViewById(R.id.lblShopTitle);
+		lblShopTitle.setTypeface(customFont);
 		
-		listView = (ListView) findViewById(android.R.id.list);
+		listView = findViewById(android.R.id.list);
 		
 		// Assign loaded itemList to ListView Adapter
 		mAdapter = new ItemAdapter(this, R.layout.list_item_layout, itemList);
 		listView.setAdapter(mAdapter);
-				
-		this.getListView().setLongClickable(true);
-		this.getListView().setOnItemLongClickListener(new OnItemLongClickListener() {
-			@Override
-		    public boolean onItemLongClick(AdapterView<?> parent, View v, int position, long id) {
-				// Are you sure you want to buy this?
-				// Affirmative: Purchase Item
-				// Negative: Nothing
-				PurchaseItemDialogFragment purchaseDialog = new PurchaseItemDialogFragment(itemList.get(position));
-				purchaseDialog.show(getFragmentManager(), "ConfirmItemBuyDialog");
-				
-		        return true;
-		    }
-		});
 		
-		txtDescription = (TextView) findViewById(R.id.txtItemDescription);
+		txtDescription = findViewById(R.id.txtItemDescription);
+		txtDescription.setTypeface(customFont);
 		descriptionTip = this.getResources().getString(R.string.shop_purchase_hint);
-		txtAvailableGold = (UIDisplayElement) findViewById(R.id.playerGold);
+		txtAvailableGold = findViewById(R.id.playerGold);
 		txtAvailableGold.setElementValue(dummyPlayer.getGold());
 		
 		// Accept all
-		btnAcceptAll = (Button) findViewById(R.id.btnReceiveAll);
+		btnAcceptAll = findViewById(R.id.btnReceiveAll);
 		if(mNature.equals(Constants.NATURE_SHOP))
 			btnAcceptAll.setVisibility(View.GONE);
 		btnAcceptAll.setOnClickListener(new OnClickListener() {
@@ -154,7 +144,7 @@ public class ShopActivity extends ListActivity{
 		});
 		
 		// Cancel
-		btnClose = (Button) findViewById(R.id.btnClose);
+		btnClose = findViewById(R.id.btnClose);
 		btnClose.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -166,7 +156,12 @@ public class ShopActivity extends ListActivity{
 			}
 		});
 	}
-	
+
+	/**
+	 * Method to buy the selected item
+	 * @param itemPurchased Selected Item
+	 * @return true if the item was bought, false otherwise
+	 */
 	public boolean purchaseItem(Item itemPurchased){
 		
 		boolean purchased = false;
@@ -226,11 +221,21 @@ public class ShopActivity extends ListActivity{
 
 	@Override
 	protected void onListItemClick(ListView l, View v, int position, long id) {
-		// Update item description on TextView
-		txtDescription.setText(itemList.get(position).getDescription() + descriptionTip);
+		if(v.getId() == R.id.imgHelpIcon){
+			txtDescription.setText(itemList.get(position).getDescription() + descriptionTip);
+		} else if(v.getId() == R.id.imgItemIcon) {
+			// Are you sure you want to buy this?
+			// Affirmative: Purchase Item
+			// Negative: Nothing
+			PurchaseItemDialogFragment purchaseDialog = new PurchaseItemDialogFragment(itemList.get(position));
+			purchaseDialog.show(getFragmentManager(), "ConfirmItemBuyDialog");
+		}
 	}
 	
 	@SuppressLint("ValidFragment")
+	/**
+	 * Class to show a dialog that asks the user if he/she wants to leave the activity
+	 */
 	public class LeaveActivityDialogFragment extends DialogFragment {
 		@Override
 		public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -283,6 +288,9 @@ public class ShopActivity extends ListActivity{
 	}
 	
 	@SuppressLint("ValidFragment")
+	/**
+	 * Class to show a Dialog that asks the user if he/she really want to buy an Item
+	 */
 	public class PurchaseItemDialogFragment extends DialogFragment {
 		
 		Item item = null;
@@ -324,14 +332,14 @@ public class ShopActivity extends ListActivity{
 	}
 	
 	/**
-	 * 
-	 * @author p7166421
+	 * Class that holds all available Items on the Shop
 	 * @see: http://stackoverflow.com/questions/2265661/how-to-use-arrayadaptermyclass
 	 *
 	 */
 	private class ItemAdapter extends ArrayAdapter<Item>{
 		
 		private class ViewHolder{
+			private ImageView itemHelpIcon;
 			private ImageView itemIconView;
 			private TextView itemNameView;
 			private TextView itemPriceView;
@@ -351,10 +359,11 @@ public class ShopActivity extends ListActivity{
 						.inflate(R.layout.list_item_layout, parent, false);
 				
 				vHolder = new ViewHolder();
-				vHolder.itemIconView = (ImageView) convertView.findViewById(R.id.imgItemIcon);
-				vHolder.itemNameView = (TextView) convertView.findViewById(R.id.txtItemName);
-				vHolder.itemPriceView = (TextView) convertView.findViewById(R.id.txtItemPrice);
-				vHolder.itemPriceIconView = (ImageView) convertView.findViewById(R.id.imgGoldIcon);
+				vHolder.itemHelpIcon = convertView.findViewById(R.id.imgHelpIcon);
+				vHolder.itemIconView = convertView.findViewById(R.id.imgItemIcon);
+				vHolder.itemNameView = convertView.findViewById(R.id.txtItemName);
+				vHolder.itemPriceView = convertView.findViewById(R.id.txtItemPrice);
+				vHolder.itemPriceIconView = convertView.findViewById(R.id.imgGoldIcon);
 				
 				convertView.setTag(vHolder);
 				

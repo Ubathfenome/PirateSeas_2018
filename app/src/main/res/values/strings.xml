@@ -17,10 +17,11 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
 
     <!-- Global strings -->
-    <string name="app_name">PirateSeas</string>
-    <string name="game_title">PIRATE SEAS</string>
+    <string name="app_name" translatable="false">PirateSeas</string>
+    <string name="game_title" translatable="false">PIRATE SEAS</string>
     <string name="permissions_error">Permissions needed to play the game</string>
     <string name="activity_new_game">New Game</string>
+    <string name="activity_tutorial">Tutorial</string>
     <string name="activity_load_game">Load Game</string>
     <string name="activity_settings">Settings</string>
     <string name="activity_help">Help</string>
@@ -81,8 +82,8 @@
     <string name="shop_item_valuable_name">Valuable</string>
     <string name="shop_item_valuable_desc">It grants you 100 gold coins</string>
     <string name="shop_purchase_hint">\n
-        (Select any item to display its description)\n
-        (Long press any item to purchase it)</string>
+        (Select item help to display its description)\n
+        (Select item to purchase it)</string>
     
     <!-- Shop Purchase Dialog -->
     <string name="shop_purchase_dialog_title">Purchase</string>
@@ -107,6 +108,7 @@
 
     <!-- Exit Tutorial Dialog -->
     <string name="exit_tutorial_dialog_title">Exit Tutorial</string>
+    <string name="exit_tutorial_main_menu_message">You will return to the Main Menu</string>
     <string name="exit_tutorial_dialog_message">The game will begin!</string>
     <string name="exit_tutorial_dialog_positive">Proceed</string>
     
@@ -121,6 +123,12 @@
         Miguel Angel Jiménez Rega - UO179050\n
         For his Master\'s Final Work</string>
     <string name="about_dialog_positive">OK</string>
+
+    <!-- Pause Activity tooltips -->
+    <string name="pause_hint_health">Ship\'s health: %1$d / %2$d</string>
+    <string name="pause_hint_power">Ship\'s power: %1$d / %2$d</string>
+    <string name="pause_hint_range">Ship\'s Range: %1$d / %2$d</string>
+    <string name="pause_hint_default">Hover the icons to see their value</string>
 
     <!-- Screen Slide Content -->
     <string name="title_screen_slide">Screen Slide</string>
@@ -180,7 +188,10 @@
     <string name="tutorial_3">If you find a cloudy day.. Beware! An enemy might be lurking behind it. Shake your mobile device to wipe out the clouds!</string>
     <string name="tutorial_4">Touch the screen to shoot your selected ammo.</string>
     <string name="tutorial_5">Cycle through your ammo types touching the selected ammo icon. (Default setting)</string>
-    <string name="tutorial_6">Collect booty by sinking your enemies or discovering treasures using the maps you will find on the islands in your path.</string>
+    <string name="tutorial_6">Collect booty by sinking your enemies or discovering treasures using the maps you will find on the islands in your path.
+        \r\nRed ships are heavier and slower.
+        \r\nYellow ships have normal speed and health.
+        \r\nGreen ships are the fastest and lightest.</string>
     <string name="tutorial_7">Gain exp when sink your enemies ang unlock better upgrades</string>
     <string name="tutorial_8">Become the greatest pirate king! or walk the plank!</string>
     <string name="gameover_title">Game Over\nYou when to sleep with Davi Jones</string>
@@ -197,6 +208,19 @@
     <string name="message_mapcompleted">Map completed!</string>
     <string name="message_shakesleft">Shake your device %1$d more time(s)!</string>
     <string name="game_exit">Exit</string>
+    <string name="game_message_enemy_defeated">You found %1$d gold coins and gained %2$d xp!</string>
+    <string name="game_message_islands_discovered">All islands have been discovered. We\'ll sell this map for 90 gold coins!</string>
+
+    <!-- Help strings -->
+    <string name="help_message_1">Selected ammution type</string>
+    <string name="help_message_2">Enemy health bar</string>
+    <string name="help_message_3">Pause button</string>
+    <string name="help_message_4">Enemy ship</string>
+    <string name="help_message_5">Player health bar</string>
+    <string name="help_message_6">Player experience bar</string>
+    <string name="help_message_7">Player ship</string>
+    <string name="help_message_8">Player\'s gold</string>
+    <string name="help_message_9">Selected remaining ammo</string>
 
 
 </resources>

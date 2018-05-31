@@ -7,6 +7,9 @@ import android.util.Log;
 
 import tfm.uniovi.pirateseas.global.Constants;
 
+/**
+ * Class to manage the saved data on the app DB
+ */
 public class DBHelper extends SQLiteOpenHelper{
 	
 	private static final String TAG = "DBHelper";
@@ -38,7 +41,11 @@ public class DBHelper extends SQLiteOpenHelper{
             		Constants.TSHIP_KEY + " INTEGER REFERENCES " + Constants.DATABASE_TSHIP + ", " +
             		Constants.TGAME_TIMESTAMP + " TIMESTAMP NOT NULL DEFAULT NOW()" + 
             " );";
-    
+
+	/**
+	 * Constructor
+	 * @param context
+	 */
 	public DBHelper(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
 	}

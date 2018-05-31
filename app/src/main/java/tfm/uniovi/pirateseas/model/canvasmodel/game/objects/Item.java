@@ -1,7 +1,8 @@
 package tfm.uniovi.pirateseas.model.canvasmodel.game.objects;
 
-import java.util.Comparator;
-
+/**
+ * Class for the in-game things to buy
+ */
 public class Item implements Comparable<Item> {
 	
 	private int id;
@@ -10,7 +11,14 @@ public class Item implements Comparable<Item> {
 	private int recommendedLevel;
 	private int level;
 	private int price;
-	
+
+	/**
+	 * Constructor
+	 * @param name
+	 * @param description
+	 * @param level
+	 * @param price
+	 */
 	public Item(String name, String description, int level, int price){
 		this.id = name.hashCode();
 		this.name = name;
@@ -19,7 +27,12 @@ public class Item implements Comparable<Item> {
 		this.recommendedLevel = level - 1;
 		this.price = price;
 	}
-	
+
+	/**
+	 * Compare this Item to another
+	 * @param other Other Item
+	 * @return 1 if this Item has higher level than the other, 0 if their level is equal, -1 if the other Item has higher level
+	 */
 	public int compareTo(Item other){
 		if (level > other.level)
 			return 1;
@@ -28,17 +41,6 @@ public class Item implements Comparable<Item> {
 		else
 			return -1;
 	}
-	
-	public static Comparator<Item> ItemComparator = new Comparator<Item>(){
-		public int compare(Item item1, Item item2){
-			if (item1.price > item2.price)
-				return 1;
-			else if (item1.price == item2.price)
-				return 0;
-			else
-				return -1;
-		}
-	};
 
 	/**
 	 * @return the name
@@ -111,12 +113,10 @@ public class Item implements Comparable<Item> {
 	}
 
 	@Override
+	/**
+	 * toString
+	 */
 	public String toString() {
-		/*
-		return "Item [id=" + id + ", name=" + name + ", description="
-				+ description + ", recommendedLevel=" + recommendedLevel
-				+ ", level=" + level + ", price=" + price + "]";
-		*/
 		return "Item [name=" + name + ", price=" + price + "]";
 	}
 	

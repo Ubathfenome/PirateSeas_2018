@@ -14,6 +14,9 @@ import android.view.View;
 
 import tfm.uniovi.pirateseas.R;
 
+/**
+ * Class to represent values over images
+ */
 public class UIDisplayElement extends View {
 	
 	private int mValue;
@@ -25,6 +28,9 @@ public class UIDisplayElement extends View {
 	
 	@SuppressLint("NewApi")
 	@SuppressWarnings("deprecation")
+	/**
+	 * Constructor
+	 */
 	public UIDisplayElement(Context context, int drawableResource, int value){
 		super(context);
 		
@@ -40,15 +46,30 @@ public class UIDisplayElement extends View {
 			mImageCancel = context.getResources().getDrawable(R.mipmap.ico_cancel);
 		}
 	}
-	
+
+	/**
+	 * Constructor
+	 * @param context
+	 */
 	public UIDisplayElement(Context context) {
 		this(context, null);
 	}
-	
+
+	/**
+	 * Constructor
+	 * @param context
+	 * @param attrs
+	 */
 	public UIDisplayElement(Context context, AttributeSet attrs) {
 		this(context, attrs, 0);
 	}
-	
+
+	/**
+	 * Constructor
+	 * @param context
+	 * @param attrs
+	 * @param defStyle
+	 */
 	public UIDisplayElement(Context context, AttributeSet attrs, int defStyle){
 		super(context, attrs, defStyle);
 		
@@ -61,6 +82,9 @@ public class UIDisplayElement extends View {
 	
 	@SuppressLint("NewApi")
 	@SuppressWarnings("deprecation")
+	/**
+	 * Initialize the UIElement
+	 */
 	private void init(){
 		paint = new Paint();
 		paint.setColor(Color.RED);
@@ -75,11 +99,19 @@ public class UIDisplayElement extends View {
 			this.mImageCancel = getResources().getDrawable(R.mipmap.ico_cancel);
 		}
 	}
-	
+
+	/**
+	 * Get the UIElement value
+	 * @return
+	 */
 	public int getElementValue(){
 		return mValue;
 	}
-	
+
+	/**
+	 * Set the UIElement value
+	 * @param value
+	 */
 	public void setElementValue(int value){
 		this.mValue = value;
 	}
@@ -99,6 +131,9 @@ public class UIDisplayElement extends View {
 	}
 
 	@Override
+	/**
+	 * Draws on the screen the image of the model
+	 */
 	public void onDraw(Canvas canvas){
 		mImage.draw(canvas);
 		if(mReloading)
@@ -107,6 +142,9 @@ public class UIDisplayElement extends View {
 	}
 
 	@Override
+	/**
+	 * toString
+	 */
 	public String toString() {
 		return "UIDisplayElement [name = " + this.getClass().getName() + ", mValue=" + mValue + "]";
 	}

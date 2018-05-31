@@ -15,6 +15,9 @@ import android.os.Build;
 import android.view.Display;
 import android.view.WindowManager;
 
+/**
+ * Utils class with Drawable related methods
+ */
 public class DrawableHelper{
 
 
@@ -67,6 +70,12 @@ public class DrawableHelper{
 		return rotatedBitmap;
 	}
 
+	/**
+	 * Returns the width of a drawable resource
+	 * @param r Resource object
+	 * @param drawableValue Drawable resource index
+	 * @return Width of the image
+	 */
 	public static double getWidth(Resources r, int drawableValue) {
 		BitmapFactory.Options dimensions = new BitmapFactory.Options();
 		dimensions.inJustDecodeBounds = true;
@@ -76,6 +85,12 @@ public class DrawableHelper{
 		return width;
 	}
 
+	/**
+	 * Returns the height of a drawable resource
+	 * @param r Resource object
+	 * @param drawableValue Drawable resource index
+	 * @return Height of the image
+	 */
 	public static double getHeight(Resources r, int drawableValue) {
 		BitmapFactory.Options dimensions = new BitmapFactory.Options();
 		dimensions.inJustDecodeBounds = true;
@@ -85,6 +100,11 @@ public class DrawableHelper{
 		return height;
 	}
 
+	/**
+	 * Returns the screen width
+	 * @param context Calling Activity
+	 * @return Screen width
+	 */
 	public static int getScreenWidth(Context context){
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
 			Point size = new Point();
@@ -98,6 +118,11 @@ public class DrawableHelper{
 		}
 	}
 
+	/**
+	 * Returns the screen height
+	 * @param context Calling Activity
+	 * @return Screen height
+	 */
 	public static int getScreenHeight(Context context){
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
 			Point size = new Point();
@@ -110,8 +135,6 @@ public class DrawableHelper{
 			return display.getHeight();
 		}
 	}
-
-
 
 	/**
 	 * Merge all bitmaps send as param onto one big bitmap, setting one part side to side with the previous
@@ -143,6 +166,12 @@ public class DrawableHelper{
 		return result;
 	}
 
+	/**
+	 * Overlap one Bitmap over the other
+	 * @param back  Background Bitmap
+	 * @param front Top Bitmap
+	 * @return Merged Bitmap
+	 */
 	public static Bitmap overlapBitmaps(Bitmap back, Bitmap front) {
 		Bitmap result = Bitmap.createBitmap(back.getWidth(), back.getHeight(), back.getConfig());
 		Canvas canvas = new Canvas(result);
@@ -154,9 +183,16 @@ public class DrawableHelper{
 		return result;
 	}
 
+	/**
+	 * Returns Bitmap from a Resource within the specified size
+	 * @param res
+	 * @param resId
+	 * @param reqWidth
+	 * @param reqHeight
+	 * @return Bitmap
+	 */
 	public static Bitmap decodeBitmapFromResource(Resources res, int resId,
 														 int reqWidth, int reqHeight) {
-
 		Bitmap bitmap = null;
 		// First decode with inJustDecodeBounds=true to check dimensions
 		final BitmapFactory.Options options = new BitmapFactory.Options();
@@ -177,6 +213,13 @@ public class DrawableHelper{
 		return bitmap;
 	}
 
+	/**
+	 * Calculate the size multiplier for an image to fit on the specified bounds
+	 * @param options
+	 * @param reqWidth
+	 * @param reqHeight
+	 * @return Size multiplier
+	 */
 	public static int calculateInSampleSize(
 			BitmapFactory.Options options, int reqWidth, int reqHeight) {
 		// Raw height and width of image

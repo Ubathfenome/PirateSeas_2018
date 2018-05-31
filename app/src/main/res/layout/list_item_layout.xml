@@ -13,6 +13,13 @@
 	    android:gravity="center_vertical|left"
 	    android:orientation="horizontal"
 	    android:layout_weight="1" >
+
+		<ImageView
+			android:id="@+id/imgHelpIcon"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:contentDescription="@string/icd_item"
+			android:src="@mipmap/ico_help" />
 	    
 	    <ImageView
 	        android:id="@+id/imgItemIcon"

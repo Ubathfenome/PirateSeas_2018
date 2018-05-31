@@ -11,6 +11,9 @@ import android.util.Log;
 
 import java.util.HashMap;
 
+/**
+ * MusicManager class to handler the MediaPlayer object
+ */
 @SuppressLint("UseSparseArrays")
 public class MusicManager{
 	private static final String TAG = "MusicManager";
@@ -65,7 +68,7 @@ public class MusicManager{
 	/**
 	 * Method to get the MusicInstance used for register music tracks and sounds
 	 * @param context
-	 * @return
+	 * @return MusicManager instance
 	 */
 	public static MusicManager getInstance(Context context) {
 		if (mInstance == null) {
@@ -79,7 +82,7 @@ public class MusicManager{
 
 	/**
 	 * Method to get the MusicInstance used to manage the music of the Activities
-	 * @return
+	 * @return MusicManager instance
 	 */
 	public static MusicManager getInstance() {
 		synchronized (MusicManager.class) {
@@ -89,9 +92,16 @@ public class MusicManager{
 			return mInstance;
 		}
 	}
-	
+
+	/**
+	 * Empty constructor
+	 */
 	private MusicManager(){}
-	
+
+	/**
+	 * Initialization method for the MusicManager instance
+	 * @param context
+	 */
 	private void init(Context context) {
 		mSoundPools = new SoundPools();
 		mSoundKeys = new HashMap<Integer,Integer>();
@@ -99,6 +109,9 @@ public class MusicManager{
 	}
 	
 	@SuppressLint("NewApi")
+	/**
+	 * Starts the selected song as background music
+	 */
 	public void initSounds(Context context, int backgroundMusicId) {
 		this.mContext = context;
 		
@@ -125,12 +138,20 @@ public class MusicManager{
 		float dv = getDeviceVolume();
 		mBackgroundMusic.setVolume(dv, dv);
 	}
-	
+
+	/**
+	 * Register a new sound resource
+	 * @param soundId
+	 * @param soundResource
+	 */
 	public void registerSound(int soundId, int soundResource) {
 		mSoundKeys.put(soundId, soundResource);
 		mSoundPools.loadSound(mContext, String.valueOf(soundId), soundResource);
 	}
-	
+
+	/**
+	 * Starts playing the last selected song
+	 */
 	public void playBackgroundMusic() {
 		try{
 			if (mBackgroundMusic == null){
@@ -147,40 +168,66 @@ public class MusicManager{
     		Log.e(TAG, e.getMessage());
     	}
 	}
-	
+
+	/**
+	 * Pauses the selected song
+	 */
 	public void pauseBackgroundMusic(){
 		if(mBackgroundMusic!= null && mBackgroundMusic.isPlaying()){
 			mBackgroundMusic.pause();
 		}
 	}
+
+	/**
+	 * Stops the selected song
+	 */
 	public void stopBackgroundMusic(){
 		if(mBackgroundMusic!= null && mBackgroundMusic.isPlaying()){
 			mBackgroundMusic.stop();
 		}
 	}
 
+	/**
+	 * Resets the MusicManager state to the initial one
+	 */
 	public void resetPlayer(){
 		if(mBackgroundMusic!=null){
 			mBackgroundMusic.reset();
 		}
 	}
-	
+
+	/**
+	 * Plays the selected sounds resource once
+	 * @param index
+	 */
 	public void playSound (int index) {		
 		int resourceId = mSoundKeys.get(index);		
 		mSoundPools.playSound(mContext, String.valueOf(index), resourceId, false);
 	}
 
+	/**
+	 * Plays the selected sounds resource in an infinite loop
+	 * @param index
+	 */
 	public void playSoundLoop (int index) {
 		int resourceId = mSoundKeys.get(index);
 		mSoundPools.playSound(mContext, String.valueOf(index), resourceId, true);
 	}
-	
+
+	/**
+	 * Return the device music volume
+	 * @return Device music volume
+	 */
 	public float getDeviceVolume(){
 		float mCurrVolume = mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
 		float mMaxVolume = mAudioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
 		return (mCurrVolume / mMaxVolume) * 100;
 	}
-	
+
+	/**
+	 * Set the device volume with 'volumeValue'
+	 * @param volumeValue New device volume value
+	 */
 	public void setDeviceVolume(float volumeValue){		
 		float mMaxVolume = mAudioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
 		int streamedVolume = (int) ((volumeValue * mMaxVolume) / 100);
@@ -188,6 +235,9 @@ public class MusicManager{
 		
 	}
 
+	/**
+	 * Release the MusicManager resources
+	 */
 	public void releaseResources(){
 		if(mBackgroundMusic!=null && !mBackgroundMusic.isPlaying()){
 			mBackgroundMusic.release();

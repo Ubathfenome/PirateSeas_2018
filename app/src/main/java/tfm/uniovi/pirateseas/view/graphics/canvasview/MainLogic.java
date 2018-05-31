@@ -37,15 +37,26 @@ public class MainLogic extends Thread {
 		this.setCanvasViewInstance(mainView);
 	}
 
+	/**
+	 * Set the running status of the thread
+	 * @param run
+	 */
 	public void setRunning(boolean run) {
 		MainLogic.running = run;
 	}
 
+	/**
+	 * Get the running status of the thread
+	 * @return
+	 */
 	public boolean getRunning() {
 		return running;
 	}
 
 	@Override
+	/**
+	 * run method for the thread
+	 */
 	public void run() {
 
 		if(!(initialized = this.getCanvasViewInstance().isInitialized())){
@@ -114,10 +125,18 @@ public class MainLogic extends Thread {
 			initialized = false;	
 	}
 
+	/**
+	 * Return the CanvasView object
+	 * @return canvasView object
+	 */
 	public CanvasView getCanvasViewInstance() {
 		return mCanvasView;
 	}
 
+	/**
+	 * Set the CanvasView instance
+	 * @param mCanvasView CanvasView instance
+	 */
 	public void setCanvasViewInstance(CanvasView mCanvasView) {
 		this.mCanvasView = mCanvasView;
 	}

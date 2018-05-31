@@ -15,6 +15,9 @@ import tfm.uniovi.pirateseas.exceptions.NoAmmoException;
 import tfm.uniovi.pirateseas.global.Constants;
 import tfm.uniovi.pirateseas.view.graphics.canvasview.CanvasView;
 
+/**
+ * Class that represents the ships in the game
+ */
 public class Ship extends Entity implements Parcelable{
 	// Crear array de variables para almacenar la cantidad de cada tipo de municion
 	private int nAmmoTypes = Ammunitions.values().length;
@@ -33,7 +36,10 @@ public class Ship extends Entity implements Parcelable{
 	private ShipType sType;
 	
 	private Context context;
-	
+
+	/**
+	 * Default constructor
+	 */
 	public Ship(){
 		super(null, 0, 0, 0, 0, new Point(0, 0), Constants.DEFAULT_PLAYER_SHIP_DIRECTION, 0, 0, 0);
 		for(int i = 0; i < nAmmoTypes; i++){
@@ -49,6 +55,9 @@ public class Ship extends Entity implements Parcelable{
 	
 	@SuppressWarnings("deprecation")
 	@SuppressLint("NewApi")
+    /**
+     * Constructor for new ship receiving previous ship data
+     */
 	public Ship(Context context, ShipType sType, double x, double y, double canvasWidth, 
 				double canvasHeight, Point coordinates, int direction, int width, int height, int length, int ammo){
 		super(context, x, y, canvasWidth, canvasHeight, coordinates, direction, width, height, length);
@@ -108,6 +117,9 @@ public class Ship extends Entity implements Parcelable{
 	
 	@SuppressLint("NewApi")
 	@SuppressWarnings("deprecation")
+    /**
+     * Constructor for new ship based on a previous ship's data
+     */
 	public Ship(Context context, Ship baseShip, ShipType sType, Point coordinates, int direction, int width, int height, int length, int health, int ammo){
 		super(context, baseShip.x, baseShip.y, baseShip.mCanvasWidth, baseShip.mCanvasHeight, coordinates, direction, width, height, length);
 		
@@ -136,6 +148,9 @@ public class Ship extends Entity implements Parcelable{
 	
 	@SuppressLint("NewApi")
 	@SuppressWarnings("deprecation")
+    /**
+     * Constructor for new ship specifying ammunition values
+     */
 	public Ship(Context context, Ship baseShip, ShipType sType, Point coordinates, int direction, int width, int height, int length, int health, int[] ammoTypes,
 			int selectedAmmoType) {
 		super(context, baseShip.x, baseShip.y, baseShip.mCanvasWidth, baseShip.mCanvasHeight, coordinates, direction, width, height, length);
@@ -164,6 +179,10 @@ public class Ship extends Entity implements Parcelable{
 		
 	}
 
+    /**
+     * Parcel constructor
+     * @param in Parcel
+     */
 	protected Ship(Parcel in) {
 		this();
 		nAmmoTypes = in.readInt();
@@ -180,6 +199,9 @@ public class Ship extends Entity implements Parcelable{
 		sType = ShipType.values()[in.readInt()];
 	}
 
+    /**
+     * Parcel's CREATOR
+     */
 	public static final Creator<Ship> CREATOR = new Creator<Ship>() {
 		@Override
 		public Ship createFromParcel(Parcel in) {
@@ -192,13 +214,23 @@ public class Ship extends Entity implements Parcelable{
 		}
 	};
 
+    /**
+     * Method to add ammunition of a certian type to the ship
+     * @param ammo Ammunition ammount
+     * @param ammoType Ammunition type
+     */
 	public void gainAmmo(int ammo, Ammunitions ammoType){
 		if(ammo > 0){
 			nAmmunitions[Ammunitions.valueOf(ammoType.getName()).ordinal()] += ammo;
 		} else
 			throw new IllegalArgumentException("Encontrado valor de puntos negativo al modificar mAmmunition");
 	}
-	
+
+    /**
+     * Method to shoot the selected Ammunition forwards
+     * @return Shot entity
+     * @throws NoAmmoException
+     */
 	public Shot shootCannon() throws NoAmmoException {
 		Shot cannonballVector = null;
 
@@ -217,14 +249,6 @@ public class Ship extends Entity implements Parcelable{
 										.powerMultiplier()), timestampLastShot);
 						break;
 					case 1:
-						cannonballVector = new Shot(context, x + (mWidth / 2) - (Shot.shotWidth / 2), y - Shot.shotHeight - 10,
-								this.mCanvasWidth, this.mCanvasHeight, new Point(
-								this.entityCoordinates.x, this.entityCoordinates.y
-								+ entityLength / 2), new Point(this.entityCoordinates.x,
-								Constants.DEFAULT_SHIP_BASIC_RANGE
-										* sType.rangeMultiplier()), Constants.DEFAULT_PLAYER_SHIP_DIRECTION,
-								(int) (Constants.DEFAULT_SHOOT_DAMAGE * sType
-										.powerMultiplier()), timestampLastShot);
 						break;
 					case 2:
 						Shot[] cannonDoubleArray = new Shot[2];
@@ -280,44 +304,12 @@ public class Ship extends Entity implements Parcelable{
 
 		return cannonballVector;
 	}
-
-	public Shot[] shootSide() throws NoAmmoException {
-		Shot[] cannonballArray = new Shot[3];
-		Shot cannonballVector = null;
-
-		if (nAmmunitions[selectedAmmoIndex] >= 3 || nAmmunitions[selectedAmmoIndex] == Constants.SHOT_AMMO_UNLIMITED) {
-			timestampLastShot = SystemClock.elapsedRealtime();
-			for (int i = 0, length = cannonballArray.length; i < length; i++) {
-
-				Point ini = new Point(this.entityCoordinates.x + entityWidth
-						/ 2, this.entityCoordinates.y);
-				Point fin = new Point(Constants.DEFAULT_SHIP_BASIC_RANGE
-						* sType.rangeMultiplier(), i - 1);
-				int num = fin.y - ini.y;
-				int den = fin.x - ini.x;
-				float m = (num * 1.0f) / den;
-				double angM = Math.toDegrees(Math.atan(m));
-				cannonballVector = new Shot(context, x + (mWidth / 2), y
-						+ (mHeight / 4), this.mCanvasWidth, this.mCanvasHeight,
-						ini, fin, (int) (-angM),
-						(int) (Constants.DEFAULT_SHOOT_DAMAGE * sType
-								.powerMultiplier()), timestampLastShot);
-
-				cannonballArray[i] = cannonballVector;
-				if (nAmmunitions[selectedAmmoIndex] != Constants.SHOT_AMMO_UNLIMITED)
-					nAmmunitions[selectedAmmoIndex]--;
-			}
-		} else {
-			cannonballArray = null;
-			throw new NoAmmoException(context.getResources().getString(
-					R.string.exception_ammo));
-		}
-
-		return cannonballArray;
-	}
 	
 	@SuppressLint("NewApi")
 	@SuppressWarnings("deprecation")
+    /**
+     * Update ship's drawable
+     */
 	public void updateImage(){
 		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
 			if(isPlayable){
@@ -334,9 +326,7 @@ public class Ship extends Entity implements Parcelable{
 					} else {
 						setImage(context.getResources().getDrawable(R.mipmap.enemy_light_front, null));
 					}
-					
-					// this.mCanvasWidth = DrawableHelper.getWidth(context.getResources(), ShipType.LIGHT.drawableValue());
-					// this.mCanvasHeight = DrawableHelper.getHeight(context.getResources(), ShipType.LIGHT.drawableValue());
+
 					break;
 				case 1:
 					if(entityDirection == Constants.DIRECTION_LEFT){
@@ -348,9 +338,7 @@ public class Ship extends Entity implements Parcelable{
 					} else {
 						setImage(context.getResources().getDrawable(R.mipmap.enemy_medium_front, null));
 					}
-					
-					// this.mCanvasWidth = DrawableHelper.getWidth(context.getResources(), ShipType.MEDIUM.drawableValue());
-					// this.mCanvasHeight = DrawableHelper.getHeight(context.getResources(), ShipType.MEDIUM.drawableValue());
+
 					break;
 				case 2:
 					if(entityDirection == Constants.DIRECTION_LEFT){
@@ -362,9 +350,7 @@ public class Ship extends Entity implements Parcelable{
 					} else {
 						setImage(context.getResources().getDrawable(R.mipmap.enemy_heavy_front, null));
 					}
-					
-					// this.mCanvasWidth = DrawableHelper.getWidth(context.getResources(), ShipType.HEAVY.drawableValue());
-					// this.mCanvasHeight = DrawableHelper.getHeight(context.getResources(), ShipType.HEAVY.drawableValue());
+
 					break;
 				}
 			}
@@ -384,9 +370,7 @@ public class Ship extends Entity implements Parcelable{
 					} else {
 						setImage(context.getResources().getDrawable(R.mipmap.enemy_light_front));
 					}
-					
-					// this.mCanvasWidth = DrawableHelper.getWidth(context.getResources(), ShipType.LIGHT.drawableValue());
-					// this.mCanvasHeight = DrawableHelper.getHeight(context.getResources(), ShipType.LIGHT.drawableValue());
+
 					break;
 				case 1:
 					if(entityDirection == Constants.DIRECTION_LEFT){
@@ -398,9 +382,7 @@ public class Ship extends Entity implements Parcelable{
 					} else {
 						setImage(context.getResources().getDrawable(R.mipmap.enemy_medium_front));
 					}
-					
-					// this.mCanvasWidth = DrawableHelper.getWidth(context.getResources(), ShipType.MEDIUM.drawableValue());
-					// this.mCanvasHeight = DrawableHelper.getHeight(context.getResources(), ShipType.MEDIUM.drawableValue());
+
 					break;
 				case 2:
 					if(entityDirection == Constants.DIRECTION_LEFT){
@@ -412,73 +394,16 @@ public class Ship extends Entity implements Parcelable{
 					} else {
 						setImage(context.getResources().getDrawable(R.mipmap.enemy_heavy_front));
 					}
-					
-					// this.mCanvasWidth = DrawableHelper.getWidth(context.getResources(), ShipType.HEAVY.drawableValue());
-					// this.mCanvasHeight = DrawableHelper.getHeight(context.getResources(), ShipType.HEAVY.drawableValue());
+
 					break;
 				}
 			}
-			
 		}		
 	}
-	
-/*
-	public void turn(int degrees){
-		setEntityDirection(degrees);
-		
-		switch(sType){
-			case LIGHT:
-				switch(degrees){
-					case 0:
-						setImage(R.drawable.txtr_ship_light_right);
-						break;
-					case 90:
-						setImage(R.drawable.txtr_ship_light_front);
-						break;
-					case 180:
-						setImage(R.drawable.txtr_ship_light_left);
-						break;
-					case 270:
-						setImage(R.drawable.txtr_ship_light_back);
-						break;
-				}
-				break;
-			case MEDIUM:
-				switch(degrees){
-					case 0:
-						setImage(R.drawable.txtr_ship_medium_right);
-						break;
-					case 90:
-						setImage(R.drawable.txtr_ship_medium_front);
-						break;
-					case 180:
-						setImage(R.drawable.txtr_ship_medium_left);
-						break;
-					case 270:
-						setImage(R.drawable.txtr_ship_medium_back);
-						break;
-				}
-				break;
-			case HEAVY:
-				switch(degrees){
-					case 0:
-						setImage(R.drawable.txtr_ship_heavy_right);
-						break;
-					case 90:
-						setImage(R.drawable.txtr_ship_heavy_front);
-						break;
-					case 180:
-						setImage(R.drawable.txtr_ship_heavy_left);
-						break;
-					case 270:
-						setImage(R.drawable.txtr_ship_heavy_back);
-						break;
-				}
-			break;
-		}
-	}
-*/
-	
+
+    /**
+     * Select the next Ammunition type
+     */
 	public void selectNextAmmo(){
 		int actualAmmoIndex = selectedAmmoIndex;
 		
@@ -490,7 +415,10 @@ public class Ship extends Entity implements Parcelable{
 		this.selectedAmmoIndex = actualAmmoIndex;
 		this.selectedAmmo = Ammunitions.values()[selectedAmmoIndex];
 	}
-	
+
+    /**
+     * Select the previous Ammunition type
+     */
 	public void selectPreviousAmmo(){
 		int actualAmmoIndex = selectedAmmoIndex;
 		
@@ -502,25 +430,12 @@ public class Ship extends Entity implements Parcelable{
 		this.selectedAmmoIndex = actualAmmoIndex;
 		this.selectedAmmo = Ammunitions.values()[selectedAmmoIndex];
 	}
-	
-	/*public boolean changeAmmoType () {
-			// Obtener indice actual
-			int nextIndexWithAmmo = -1; 
-			
-			for (int i = 0 ;i < nAmmoTypes; i++) {
-				if(nAmmunitions[i] > 0 && i != selectedAmmoIndex){
-					nextIndexWithAmmo = i;
-					break;
-				}
-			}
-			
-			if(nextIndexWithAmmo != -1 && nextIndexWithAmmo != selectedAmmoIndex) {
-				selectedAmmoIndex = nextIndexWithAmmo;
-				return true;
-			} else
-				return false;
-	}*/
-	
+
+    /**
+     * Check if the ship is reloaded
+     * @param timestamp Current timestamp
+     * @return true if the cannons are reloaded, false otherwise
+     */
 	public boolean isReloaded(long timestamp){
 		return (timestamp - timestampLastShot) > (mReloadTime * 1000);
 	}
@@ -538,19 +453,27 @@ public class Ship extends Entity implements Parcelable{
 	public void setRange(float mRange) {
 		this.mRange = mRange;
 	}
-	
+
+    /**
+     * Add range to the ship
+     * @param f range to add
+     */
 	public void addRange(float f) {
 		this.mRange += f;
-	}	
+	}
 
+    /**
+     * Get the ship's power
+     * @return Ship's power
+     */
 	public float getPower() {
 		return mPower;
 	}
 
-	public void setPower(float mPower) {
-		this.mPower = mPower;
-	}
-	
+    /**
+     * Add power to the ship
+     * @param f Power to add
+     */
 	public void addPower(float f) {
 		this.mPower += f;		
 	}
@@ -562,27 +485,43 @@ public class Ship extends Entity implements Parcelable{
 		return sType;
 	}
 
+    /**
+     * Get the ship's max health
+     * @return Max health
+     */
 	public int getMaxHealth() {
 		return mMaxHealth;
 	}
 
+    /**
+     * Set the ship's max health
+     * @param maxHealth New max health
+     */
 	public void setMaxHealth(int maxHealth) {
 		this.mMaxHealth = maxHealth;
 	}
 
-	public int[] getAmmunitions() {
-		return nAmmunitions;
-	}
-	
+    /**
+     * Get the remaining ammunition of the specified Ammunition type
+     * @param a AmmunitionType
+     * @return Remaining ammunition
+     */
 	public int getAmmunition(Ammunitions a){
 		return nAmmunitions[a.ordinal()];
 	}
 
+    /**
+     * Checks if the Ship is playable by the Player
+     * @return
+     */
 	public boolean isPlayable() {
 		return isPlayable;
 	}
 
 	@Override
+    /**
+     * toString
+     */
 	public String toString() {
 		return "Ship [sType=" + sType + ", nAmmunitions=" + nAmmunitions[selectedAmmoIndex] + ", mReloadTime="
 				+ mReloadTime + ", mRange=" + mRange + ", timestampLastShot="
@@ -590,18 +529,43 @@ public class Ship extends Entity implements Parcelable{
 				+ ", entityCoordinates=" + entityCoordinates + "]";
 	}
 
+    /**
+     * Get the selected ammunition index
+     * @return Selected ammunition index
+     */
     public int getSelectedAmmunitionIndex() {
         return selectedAmmoIndex;
     }
 
+    /**
+     * Get the remaining ammunition of the selected Ammunition type
+     * @return Remaining ammunition
+     */
 	public int getSelectedAmmunition() {
 		return nAmmunitions[selectedAmmoIndex];
 	}
 
+    /**
+     * Get the selected Ammunition Type
+     * @return Selected ammunition Type
+     */
+	public Ammunitions getSelectedAmmo(){
+		return Ammunitions.values()[selectedAmmoIndex];
+	}
+
+    /**
+     * Get the Ship's type
+     * @return Ship's type
+     */
 	public ShipType getShipType() {
 		return sType;
 	}
 
+    /**
+     * Get the ship's type index of the specified ship type
+     * @param s Ship type
+     * @return Index
+     */
 	public int getShipTypeIndex(ShipType s){
 		int index = 0;
 		ShipType[] sTypes = ShipType.values();
@@ -612,19 +576,19 @@ public class Ship extends Entity implements Parcelable{
 		}
 		return index;
 	}
-	
-	public void setShipTypeDefaultSpeed(){
-		this.mSpeedXLevel = this.sType.getSpeed();
-	}
 
-	public boolean wasIdle() {
-		return wasIdle;
-	}
-
+    /**
+     * Set the ship as Idle (no movement)
+     * @param wasIdle true if stopped, false otherwise
+     */
 	public void setIdle(boolean wasIdle) {
 		this.wasIdle = wasIdle;
 	}
 
+    /**
+     * Select a random ShipType
+     * @return Random ShipType
+     */
 	public static ShipType randomShipType() {
 		ShipType[] types = ShipType.values();
 		int length = types.length;
@@ -632,6 +596,10 @@ public class Ship extends Entity implements Parcelable{
 		return types[randomIndex];
 	}
 
+    /**
+     * Move the ship's coordinates to the destiny Point
+     * @param destiny Destination's point
+     */
 	public void moveShipEntity (Point destiny){
 		int xDiff = 0;
 		int yDiff = 0;
@@ -674,6 +642,19 @@ public class Ship extends Entity implements Parcelable{
 		entityCoordinates = new Point(next.x, next.y);
 	}
 
+    /**
+     * Set the remaining selected ammunition's value
+     * @param ammo New remaining ammunition value
+     */
+	public void setSelectedAmmunition(int ammo){
+		nAmmunitions[selectedAmmoIndex] = ammo;
+	}
+
+    /**
+     * Update ship type
+     * (Light > Medium > Heavy)
+     * @param newShipType New ShipType
+     */
 	public void updateShipType(ShipType newShipType) {
 		this.sType = newShipType;
 		this.mRange = sType.rangeMultiplier();
@@ -683,11 +664,17 @@ public class Ship extends Entity implements Parcelable{
 	}
 
 	@Override
+    /**
+     * Ignore this method
+     */
 	public int describeContents() {
 		return 0;
 	}
 
 	@Override
+    /**
+     * Method to save Ship's values to the Parcel
+     */
 	public void writeToParcel(Parcel parcel, int i) {
 
 		parcel.writeInt(nAmmoTypes);
@@ -705,6 +692,10 @@ public class Ship extends Entity implements Parcelable{
 		parcel.writeInt(shipEnum);
 	}
 
+    /**
+     * Set whether the ship is Playable or not
+     * @param playable
+     */
     public void setPlayable(boolean playable) {
         this.isPlayable = playable;
     }
