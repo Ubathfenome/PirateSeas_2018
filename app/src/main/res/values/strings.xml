@@ -17,8 +17,8 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
 
     <!-- Global strings -->
-    <string name="app_name" translatable="false">PirateSeas</string>
-    <string name="game_title" translatable="false">PIRATE SEAS</string>
+    <string name="app_name">PirateSeas</string>
+    <string name="game_title">PIRATE SEAS</string>
     <string name="permissions_error">Permissions needed to play the game</string>
     <string name="activity_new_game">New Game</string>
     <string name="activity_tutorial">Tutorial</string>
@@ -50,8 +50,6 @@
     <string name="settings_change_ammo_mode">Change ammo type mode</string>
     <string name="settings_sensorway">By sensor</string>
     <string name="settings_manual">Manual</string>
-    <string name="settings_pause_mode">Pause game mode</string>
-    <string name="settings_select_mode">Select next level mode</string>
     <string name="settings_extra">Extra settings</string>
     <string name="settings_exit_message">Exit through \'Accept\' or \'Cancel\' buttons</string>
     
@@ -183,15 +181,15 @@
     <string name="empty_string"></string> 
         
     <!-- Game strings -->
-    <string name="tutorial_1">Arrr Mate!! Welcome to PIRATE SEAS!!\r\nYarr want to rule these seas and loot all the booty.</string>
+    <string name="tutorial_1">Arrr Mate!! Welcome to PIRATE SEAS!!\nYarr want to rule these seas and loot all the booty.</string>
     <string name="tutorial_2">Choose wisely your next step mate! Lot\'s of good ol\'men have sunk in these waters.</string>
     <string name="tutorial_3">If you find a cloudy day.. Beware! An enemy might be lurking behind it. Shake your mobile device to wipe out the clouds!</string>
     <string name="tutorial_4">Touch the screen to shoot your selected ammo.</string>
     <string name="tutorial_5">Cycle through your ammo types touching the selected ammo icon. (Default setting)</string>
     <string name="tutorial_6">Collect booty by sinking your enemies or discovering treasures using the maps you will find on the islands in your path.
-        \r\nRed ships are heavier and slower.
-        \r\nYellow ships have normal speed and health.
-        \r\nGreen ships are the fastest and lightest.</string>
+        \nRed ships are heavier and slower.
+        \nYellow ships have normal speed and health.
+        \nGreen ships are the fastest and lightest.</string>
     <string name="tutorial_7">Gain exp when sink your enemies ang unlock better upgrades</string>
     <string name="tutorial_8">Become the greatest pirate king! or walk the plank!</string>
     <string name="gameover_title">Game Over\nYou when to sleep with Davi Jones</string>
@@ -212,15 +210,15 @@
     <string name="game_message_islands_discovered">All islands have been discovered. We\'ll sell this map for 90 gold coins!</string>
 
     <!-- Help strings -->
-    <string name="help_message_1">Selected ammution type</string>
-    <string name="help_message_2">Enemy health bar</string>
-    <string name="help_message_3">Pause button</string>
-    <string name="help_message_4">Enemy ship</string>
-    <string name="help_message_5">Player health bar</string>
-    <string name="help_message_6">Player experience bar</string>
-    <string name="help_message_7">Player ship</string>
-    <string name="help_message_8">Player\'s gold</string>
-    <string name="help_message_9">Selected remaining ammo</string>
+    <string name="help_message_1">1. Selected ammution type</string>
+    <string name="help_message_2">2. Enemy health bar</string>
+    <string name="help_message_3">3. Pause button</string>
+    <string name="help_message_4">4. Enemy ship</string>
+    <string name="help_message_5">5. Player health bar</string>
+    <string name="help_message_6">6. Player experience bar</string>
+    <string name="help_message_7">7. Player ship</string>
+    <string name="help_message_8">8. Player\'s gold</string>
+    <string name="help_message_9">9. Selected remaining ammo</string>
 
 
 </resources>

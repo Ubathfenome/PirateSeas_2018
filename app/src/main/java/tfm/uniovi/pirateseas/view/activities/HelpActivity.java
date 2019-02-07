@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.TextView;
 
 import tfm.uniovi.pirateseas.R;
 import tfm.uniovi.pirateseas.global.Constants;
@@ -32,6 +33,25 @@ public class HelpActivity extends Activity {
 		setContentView(R.layout.activity_help);
 
 		Typeface customFont = Typeface.createFromAsset(getAssets(), "fonts/" + Constants.FONT_NAME + ".ttf");
+
+		TextView txtHelp1 = findViewById(R.id.txtHelp1);
+		txtHelp1.setTypeface(customFont);
+		TextView txtHelp2 = findViewById(R.id.txtHelp2);
+		txtHelp2.setTypeface(customFont);
+		TextView txtHelp3 = findViewById(R.id.txtHelp3);
+		txtHelp3.setTypeface(customFont);
+		TextView txtHelp4 = findViewById(R.id.txtHelp4);
+		txtHelp4.setTypeface(customFont);
+		TextView txtHelp5 = findViewById(R.id.txtHelp5);
+		txtHelp5.setTypeface(customFont);
+		TextView txtHelp6 = findViewById(R.id.txtHelp6);
+		txtHelp6.setTypeface(customFont);
+		TextView txtHelp7 = findViewById(R.id.txtHelp7);
+		txtHelp7.setTypeface(customFont);
+		TextView txtHelp8 = findViewById(R.id.txtHelp8);
+		txtHelp8.setTypeface(customFont);
+		TextView txtHelp9 = findViewById(R.id.txtHelp9);
+		txtHelp9.setTypeface(customFont);
 
 		btnNext = findViewById(R.id.btnBarNext);
 		btnNext.setTypeface(customFont);

@@ -351,7 +351,7 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 								MusicManager.getInstance().playSound(MusicManager.SOUND_SHOT_FIRED);
 							} catch (NoAmmoException e) {
 								Log.e(EXCEPTION_TAG, e.getMessage());
-								((GameActivity)nContext).showText(e.getMessage(), 2);
+								((GameActivity)nContext).showText(e.getMessage());
 							}
 						} else if (direction.equals(Constants.RIGHT)) {
 							if (nShipControlMode) {
@@ -379,7 +379,7 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 						} catch (CannonReloadingException e) {
 							Log.e(EXCEPTION_TAG, e.getMessage());
 							MusicManager.getInstance().playSound(MusicManager.SOUND_SHOT_RELOADING);
-							((GameActivity)nContext).showText(e.getMessage(), 2);
+							((GameActivity)nContext).showText(e.getMessage());
 						}
 					}
 					break;
@@ -502,7 +502,7 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 		    int xp = nEnemyShip.getType().defaultHealthPoints() / 2;
             nPlayer.addGold(gold);
             nPlayer.addExperience(xp);
-			((GameActivity)nContext).showText(String.format(getResources().getString(R.string.game_message_enemy_defeated), gold, xp), 2);
+			((GameActivity)nContext).showText(String.format(getResources().getString(R.string.game_message_enemy_defeated), gold, xp));
         }
 	}
 
@@ -519,7 +519,7 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 				if(index != -1) {
 					nMap.clearMapCell(index);
 				} else {
-					((GameActivity)nContext).showText(getResources().getString(R.string.game_message_islands_discovered), 2);
+					((GameActivity)nContext).showText(getResources().getString(R.string.game_message_islands_discovered));
 					nPlayer.addGold(90);
 				}
 
@@ -695,7 +695,7 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
                         MusicManager.getInstance().playSound(MusicManager.SOUND_SHOT_FIRED);
                     } catch (NoAmmoException e) {
                         Log.e(EXCEPTION_TAG, e.getMessage());
-						((GameActivity)nContext).showText(e.getMessage(), 2);
+						((GameActivity)nContext).showText(e.getMessage());
                     }
                 }
 				// Establecer comportamiento enemigo con movimiento en circulo

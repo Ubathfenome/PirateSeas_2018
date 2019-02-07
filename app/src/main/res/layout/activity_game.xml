@@ -14,13 +14,4 @@
 	    android:id="@+id/guiLayer"
 	    layout="@layout/custom_ui_layout" />
 
-	<TextView
-		android:id="@+id/txtCanvasMsg"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:layout_gravity="bottom|center_horizontal"
-        android:padding="@dimen/small_padding_size"
-        android:layout_marginBottom="@dimen/large_padding_size"
-        android:background="@drawable/xml_border"/>
-
 </FrameLayout>

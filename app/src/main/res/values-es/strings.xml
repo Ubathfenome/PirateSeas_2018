@@ -116,7 +116,7 @@
 
     <!-- Screen Slide Content -->
     <string name="title_screen_slide">Diapositivas</string>
-    <string name="action_finish">Teminar</string>
+    <string name="action_finish">Terminar</string>
     <string name="action_previous">Anterior</string>
     <string name="action_next">Siguiente</string>
     <string name="title_template_step">Tutorial: Paso <xliff:g id="step_number">%1$d</xliff:g></string>
@@ -167,15 +167,15 @@
     <string name="empty_string"></string>
 
     <!-- Game strings -->
-    <string name="tutorial_1">Arrr Grumete!! Bienvenido a PIRATE SEAS!!\r\nArr quieres dominar los siete mares? Pues conquista todas las islas y hazte rico.</string>
+    <string name="tutorial_1">Arrr Grumete!! Bienvenido a PIRATE SEAS!!\nArr quieres dominar los siete mares? Pues conquista todas las islas y hazte rico.</string>
     <string name="tutorial_2">Escoge tu siguiente paso con cuidado grumetillo! Muchos buenos hombres se han hundido en estas aguas.</string>
     <string name="tutorial_3">Si te encuentras con neblina en le mar.. Cuidado! Seguro que hay un enemigo tras la niebla. Agita tu dispositivo para aclarar el cielo!</string>
     <string name="tutorial_4">Toca la pantalla hacia arriba para disparar la munición seleccionada.</string>
     <string name="tutorial_5">Cambia el tipo de munición seleccionada pulsando en el icono de la munición (por defecto) o pulsando las teclas de volumen.</string>
     <string name="tutorial_6">Consigue riquezas hundiendo a tus enemigos o descubriendo tesoros con los mapas que encontraras en tu camino.
-        \r\nLos barcos rojos son mas resistentes y lentos.
-        \r\nLos barcos amarillos tienen una vida y velocidad normales.
-        \r\Los barcos verdes son los mas debiles, pero tambien los mas rapidos.</string>
+        \nLos barcos rojos son mas resistentes y lentos.
+        \nLos barcos amarillos tienen una vida y velocidad normales.
+        \Los barcos verdes son los mas debiles, pero tambien los mas rapidos.</string>
     <string name="tutorial_7">Gana experiencia hundiendo a tus enemigos y desbloquea mejores actualizaciones.</string>
     <string name="tutorial_8">Conviertete en el mayor Rey Pirata! o caminaras por la plancha!</string>
     <string name="gameover_title">Fin de la partida\nA dormir con los tiburones</string>
@@ -183,6 +183,7 @@
     <string name="gameover_score">Puntuacion</string>
     <string name="gameover_days">Dias transcurridos</string>
     <string name="app_about">Acerca de&#8230;</string>
+    <string name="tutorial_content">Contenido del tutorial</string>
     <string name="message_screenselection">Que direccion tomamos ahora, Capi?</string>
     <string name="message_screenselection_detail">Por favor, selecciona la siguiente dirección a la que quieres navegar</string>
     <string name="message_islanddetected">Capi! Tierra a la vista!</string>
@@ -195,14 +196,14 @@
     <string name="game_message_islands_discovered">Ya hemos encontrado todas las islas de este mar. Venderemos este mapa por 90 monedas de oro!</string>
 
     <!-- Help strings -->
-    <string name="help_message_1">Selected ammution type</string>
-    <string name="help_message_2">Enemy health bar</string>
-    <string name="help_message_3">Pause button</string>
-    <string name="help_message_4">Enemy ship</string>
-    <string name="help_message_5">Player health bar</string>
-    <string name="help_message_6">Player experience bar</string>
-    <string name="help_message_7">Player ship</string>
-    <string name="help_message_8">Player\'s gold</string>
-    <string name="help_message_9">Selected remaining ammo</string>
+    <string name="help_message_1">1. Tipo de municion seleccionada</string>
+    <string name="help_message_2">2. Barra de vida del enemigo</string>
+    <string name="help_message_3">3. Boton de pausa</string>
+    <string name="help_message_4">4. Barco enemigo</string>
+    <string name="help_message_5">5. Barra de vida del jugador</string>
+    <string name="help_message_6">6. Barra de experiencia del jugador</string>
+    <string name="help_message_7">7. Barco del jugador</string>
+    <string name="help_message_8">8. Oro del jugador</string>
+    <string name="help_message_9">9. Municion restante</string>
 
 </resources>

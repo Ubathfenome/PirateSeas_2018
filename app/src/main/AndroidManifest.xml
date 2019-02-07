@@ -2,10 +2,6 @@
     package="tfm.uniovi.pirateseas"
     android:installLocation="auto" >
 
-    <uses-sdk
-        android:minSdkVersion="16"
-        android:targetSdkVersion="23" />
-
     <!-- Ask for WRITE_PERMISSION to the user -->
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
 

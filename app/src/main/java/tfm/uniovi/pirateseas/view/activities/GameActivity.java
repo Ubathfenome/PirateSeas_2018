@@ -15,13 +15,13 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
 import android.widget.ImageButton;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -73,7 +73,6 @@ public class GameActivity extends Activity implements SensorEventListener {
 	protected SensorManager mSensorManager;
 	protected List<Sensor> triggeringSensors;
 
-	public TextView txtMsg;
 	public ImageButton btnPause, btnChangeAmmo;
 	public UIDisplayElement mGold, mAmmo;
 
@@ -149,24 +148,15 @@ public class GameActivity extends Activity implements SensorEventListener {
 		mAmmo = findViewById(R.id.playerAmmunition);
 		mAmmo.setElementValue(0);
 
-		txtMsg = findViewById(R.id.txtCanvasMsg);
 	}
 
 	/**
 	 * Show temporary descriptions (like a tooltip)
 	 * @param text
-	 * @param seconds
 	 */
-	public void showText(String text, int seconds){
-		long initStamp = System.currentTimeMillis();
-		long endStamp = initStamp;
-		txtMsg.setText(text);
-		txtMsg.setVisibility(View.VISIBLE);
-		while((endStamp-initStamp)<seconds){
-			endStamp = System.currentTimeMillis();
-		}
-		txtMsg.setVisibility(View.GONE);
-		txtMsg.setText(R.string.empty_string);
+	public void showText(String text){
+		Snackbar gameSnackbar = Snackbar.make(findViewById(R.id.rootLayoutGame), text, Snackbar.LENGTH_SHORT);
+		gameSnackbar.show();
 	}
 
 	@Override

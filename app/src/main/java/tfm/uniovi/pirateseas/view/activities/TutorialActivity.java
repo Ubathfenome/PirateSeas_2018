@@ -51,7 +51,7 @@ public class TutorialActivity extends FragmentActivity{
 		sensorTypes = data.getIntArrayExtra(Constants.TAG_SENSOR_LIST);
 		loadGame = data.getBooleanExtra(Constants.TAG_LOAD_GAME, true);
 
-		if(sensorTypes==null)
+		if(sensorTypes==null || emptySensors(sensorTypes))
 			returnToMain=true;
 
 		// Instantiate a ViewPager and a PagerAdapter.
@@ -73,7 +73,21 @@ public class TutorialActivity extends FragmentActivity{
 			}
         });
     }
-	
+
+	/**
+	 * Check if the sensorTypes array is empty (sensors have not been loaded yet)
+	 * @param sensorTypes
+	 * @return true if sensors have not been loaded, false otherwise
+	 */
+	private boolean emptySensors(int[] sensorTypes) {
+		boolean empty = false;
+		for(int sensor : sensorTypes){
+			if(sensor != 0)
+				empty = true;
+		}
+		return empty;
+	}
+
 	@Override
 	protected void onResume() {
 		findViewById(R.id.pager).setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE);
