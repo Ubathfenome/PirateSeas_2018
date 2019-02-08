@@ -14,15 +14,19 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageButton;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,6 +51,7 @@ import tfm.uniovi.pirateseas.view.graphics.canvasview.CanvasView;
 public class GameActivity extends Activity implements SensorEventListener {
 
 	private static final String TAG = "GameActivity";
+	private static final long DURATION_MILLIS = 1500;
 
 	private Context context;
 
@@ -155,8 +160,19 @@ public class GameActivity extends Activity implements SensorEventListener {
 	 * @param text
 	 */
 	public void showText(String text){
-		Snackbar gameSnackbar = Snackbar.make(findViewById(R.id.rootLayoutGame), text, Snackbar.LENGTH_SHORT);
-		gameSnackbar.show();
+		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+			Snackbar gameSnackbar = Snackbar.make(findViewById(R.id.rootLayoutGame), text, Snackbar.LENGTH_SHORT);
+			gameSnackbar.show();
+		} else {
+			LayoutInflater mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			ViewGroup layoutGroup = getWindow().getDecorView().findViewById(android.R.id.content);
+			mInflater.inflate(R.layout.custom_snackbar, layoutGroup);
+			TextView txtMessage = findViewById(R.id.txtCanvasMsg);
+			txtMessage.setAlpha(0f);
+			txtMessage.setText(text);
+			txtMessage.animate().alpha(1f).setDuration(DURATION_MILLIS);
+			txtMessage.animate().alpha(0f).setDuration(DURATION_MILLIS);
+		}
 	}
 
 	@Override
@@ -259,7 +275,7 @@ public class GameActivity extends Activity implements SensorEventListener {
 					if (EventWeatherMaelstrom.generateMaelstrom(axisSpeedY, axisSpeedZ)) {
 						// Notify CanvasView to damage the ships
 						if (cView.getGamemode() == Constants.GAMEMODE_BATTLE) {
-							Toast.makeText(context, "Maelstorm inbound!", Toast.LENGTH_SHORT).show();
+							showText("Maelstorm inbound!");
 							cView.maelstorm();
 						}
 					}
@@ -521,7 +537,7 @@ public class GameActivity extends Activity implements SensorEventListener {
 		if(mCanvasView != null) {
 			int shakeCount = mCanvasView.getShakeMoveCount();
 			mCanvasView.setShakeMoveCount(shakeCount + 1);
-			Toast.makeText(context, String.format(getResources().getString(R.string.message_shakesleft), (Constants.SHAKE_LIMIT - (shakeCount + 1))), Toast.LENGTH_SHORT).show();
+			showText(String.format(getResources().getString(R.string.message_shakesleft), (Constants.SHAKE_LIMIT - (shakeCount + 1))));
 		}
 	}
 
@@ -556,5 +572,4 @@ public class GameActivity extends Activity implements SensorEventListener {
 	public int getMapWidth(){
 		return mapWidth;
 	}
-
 }
