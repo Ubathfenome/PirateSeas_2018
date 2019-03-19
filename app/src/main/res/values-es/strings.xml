@@ -31,7 +31,7 @@
     <string name="tb_control_sensor">Control por sensores</string>
     <string name="tb_control_touch">Control tactil</string>
     <string name="lbl_control_mode">Modo de control del barco</string>
-    <string name="settings_change_ammo_volume">Con teclas de volumenWith volume keys</string>
+    <string name="settings_change_ammo_volume">Con teclas de volumen</string>
     <string name="settings_change_ammo_touch">Tactil</string>
     <string name="settings_change_ammo_mode">Modo de seleccion de la municion</string>
     <string name="settings_sensorway">Por sensores</string>

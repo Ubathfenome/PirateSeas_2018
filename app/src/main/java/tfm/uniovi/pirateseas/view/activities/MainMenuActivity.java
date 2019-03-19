@@ -21,24 +21,22 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.Display;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.Locale;
+
 import tfm.uniovi.pirateseas.R;
-import tfm.uniovi.pirateseas.controller.androidGameAPI.Map;
-import tfm.uniovi.pirateseas.controller.androidGameAPI.Player;
 import tfm.uniovi.pirateseas.controller.audio.MusicManager;
 import tfm.uniovi.pirateseas.global.Constants;
-import tfm.uniovi.pirateseas.model.canvasmodel.game.entity.Ship;
 
 /**
  * Main menu activity
@@ -57,13 +55,7 @@ public class MainMenuActivity extends Activity {
 	protected static int screenResolutionWidth;
 	protected static int screenResolutionHeight;
 
-	private TextView txtTitle;
-	private Button btnNewGame;
-	private Button btnTutorial;
 	private Button btnLoadGame;
-	private ImageButton btnSettings;
-	private ImageButton btnHelp;
-	private Button btnExit;
 
 	@SuppressWarnings("deprecation")
 	@Override
@@ -77,18 +69,10 @@ public class MainMenuActivity extends Activity {
 		mMode = Constants.MODE;
 
 		// Get Screen
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-			Point size = new Point();
-			getWindowManager().getDefaultDisplay().getSize(size);
-			screenResolutionWidth = size.x;
-			screenResolutionHeight = size.y;
-		} else {
-			Display display = ((WindowManager) context
-					.getSystemService(Context.WINDOW_SERVICE))
-					.getDefaultDisplay();
-			screenResolutionWidth = display.getWidth();
-			screenResolutionHeight = display.getHeight();
-		}
+		Point size = new Point();
+		getWindowManager().getDefaultDisplay().getSize(size);
+		screenResolutionWidth = size.x;
+		screenResolutionHeight = size.y;
 
 		mPreferences = context.getSharedPreferences(Constants.TAG_PREF_NAME,
 				Context.MODE_PRIVATE);
@@ -100,12 +84,12 @@ public class MainMenuActivity extends Activity {
 		editor.putBoolean(Constants.PREF_LEVEL_CONTROL_MODE, Constants.PREF_GAME_TOUCH);
 		editor.putBoolean(Constants.PREF_PAUSE_CONTROL_MODE, Constants.PREF_GAME_TOUCH);
 		editor.putBoolean(Constants.TAG_EXE_MODE, Constants.isInDebugMode(mMode));
-		editor.commit();
+		editor.apply();
 
-		txtTitle = findViewById(R.id.txtTitleLabel);
+		TextView txtTitle = findViewById(R.id.txtTitleLabel);
 		txtTitle.setTypeface(customFont);
 
-		btnNewGame = findViewById(R.id.btn_newgame);
+		Button btnNewGame = findViewById(R.id.btn_newgame);
 		btnNewGame.setTypeface(customFont);
 		btnNewGame.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
@@ -119,7 +103,7 @@ public class MainMenuActivity extends Activity {
 			}
 		});
 
-		btnTutorial = findViewById(R.id.btn_tutorial);
+		Button btnTutorial = findViewById(R.id.btn_tutorial);
 		btnTutorial.setTypeface(customFont);
 		btnTutorial.setOnClickListener(new OnClickListener() {
 			@Override
@@ -137,7 +121,7 @@ public class MainMenuActivity extends Activity {
 			}
 		});
 
-		btnSettings = findViewById(R.id.btn_settings);
+		ImageButton btnSettings = findViewById(R.id.btn_settings);
 		btnSettings.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				Intent settingsIntent = new Intent(context,
@@ -146,7 +130,7 @@ public class MainMenuActivity extends Activity {
 			}
 		});
 
-		btnHelp = findViewById(R.id.btn_help);
+		ImageButton btnHelp = findViewById(R.id.btn_help);
 		btnHelp.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				Intent helpIntent = new Intent(context, HelpActivity.class);
@@ -154,7 +138,7 @@ public class MainMenuActivity extends Activity {
 			}
 		});
 
-		btnExit = findViewById(R.id.btn_exit);
+		Button btnExit = findViewById(R.id.btn_exit);
 		btnExit.setTypeface(customFont);
 		btnExit.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
@@ -162,25 +146,21 @@ public class MainMenuActivity extends Activity {
 			}
 		});
 
-		AsyncTask<Void, Integer, Boolean> loadSoundsTask = new LoadSounds();
+		AsyncTask<Void, Integer, Boolean> loadSoundsTask = new LoadSounds(this);
 		loadSoundsTask.execute();
 	}
 
 	/**
 	 * Launch the next activity in the starting game flow
-	 * @param displayTutorial
-	 * @param sensorTypes
+	 * @param displayTutorial Sets if the launching game process should show the tutorial or not
+	 * @param sensorTypes Set the sensor values as an array to be handled
 	 */
 	private void launchGame(boolean displayTutorial, int[] sensorTypes) {
-		Player dummyPlayer;
-		Ship dummyShip;
-		Map dummyMap;
-
-		if (displayTutorial == false) {
+		if (!displayTutorial) {
 			// Load game
 			Intent screenIntent = new Intent(context, ScreenSelectionActivity.class);
 			screenIntent.putExtra(Constants.TAG_SENSOR_LIST, sensorTypes);
-			screenIntent.putExtra(Constants.TAG_LOAD_GAME, !displayTutorial);
+			screenIntent.putExtra(Constants.TAG_LOAD_GAME, false);
 			screenIntent.putExtra(Constants.TAG_SCREEN_SELECTION_MAP_HEIGHT, calculateMapHeight());
 			screenIntent.putExtra(Constants.TAG_SCREEN_SELECTION_MAP_WIDTH, calculateMapWidth());
 			startActivity(screenIntent);
@@ -188,7 +168,7 @@ public class MainMenuActivity extends Activity {
 			//	New game
 			Intent tutorialIntent = new Intent(context, TutorialActivity.class);
 			tutorialIntent.putExtra(Constants.TAG_SENSOR_LIST, sensorTypes);
-			tutorialIntent.putExtra(Constants.TAG_LOAD_GAME, !displayTutorial);
+			tutorialIntent.putExtra(Constants.TAG_LOAD_GAME, true);
 			startActivity(tutorialIntent);
 		}
 	}
@@ -221,22 +201,24 @@ public class MainMenuActivity extends Activity {
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 			if (Settings.System.canWrite(context)) {
 				if(!hasPermission(INITIAL_PERMS[0])) {
-					if(!shouldShowRequestPermissionRationale(INITIAL_PERMS[0]))
+					if(shouldShowRequestPermissionRationale(INITIAL_PERMS[0]))
 						requestPermissions(INITIAL_PERMS, Constants.REQUEST_PERMISSIONS);
 				}
 			}
 			else {
-				Intent intent = new Intent(android.provider.Settings.ACTION_MANAGE_WRITE_SETTINGS);
-				intent.setData(Uri.parse("package:" + this.getPackageName()));
-				intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-				startActivity(intent);
+				if(!hasPermission(INITIAL_PERMS[0])) {
+					Intent intent = new Intent(android.provider.Settings.ACTION_MANAGE_WRITE_SETTINGS);
+					intent.setData(Uri.parse("package:" + this.getPackageName()));
+					intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+					startActivity(intent);
+				}
 			}
 		}
 	}
 
 	/**
 	 * Checks the app version
-	 * @sourcec: http://blog.cubeactive.com/app-version-number-android-tutorial/
+	 * @see: http://blog.cubeactive.com/app-version-number-android-tutorial/
 	 * @see: https://developer.android.com/studio/publish/versioning.html?hl=es-419
 	 */
 	private void checkAppVersion() {
@@ -245,24 +227,25 @@ public class MainMenuActivity extends Activity {
 		if (oldAppVersion < currentAppVersionCode) {
 			try {
 				if (oldAppVersion > 0)
-					Toast.makeText(this, String.format("App updated from version %d", oldAppVersion), Toast.LENGTH_SHORT).show();
+					Toast.makeText(this, String.format(Locale.ENGLISH, "App updated from version %d", oldAppVersion), Toast.LENGTH_SHORT).show();
 				else
 					requestPermissionsFirstTime();
 				//Toast.makeText(this, String.format("App started for the first time", oldAppVersion), Toast.LENGTH_SHORT).show();
 			} finally {
 				SharedPreferences.Editor preferencesEditor = mPreferences.edit();
 				preferencesEditor.putInt(Constants.APP_VERSION, currentAppVersionCode);
-				preferencesEditor.commit();
+				preferencesEditor.apply();
 			}
 		} else {
-			loadSettings();
+			// If is not the first time and still does not have permissions ask again for them
+			requestPermissionsFirstTime();
 		}
 	}
 
 	/**
 	 * Get the current app version
 	 * @return App version
-	 * @source: http://blog.cubeactive.com/app-version-number-android-tutorial/
+	 * @see: http://blog.cubeactive.com/app-version-number-android-tutorial/
 	 */
 	private int getCurrentAppVersionCode() {
 		int versionCode = -1;
@@ -276,15 +259,14 @@ public class MainMenuActivity extends Activity {
 	}
 
 	@Override
-	public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+	public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
 		switch (requestCode) {
 			case Constants.REQUEST_PERMISSIONS: {
 				// If request is cancelled, the result arrays are empty.
 				if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-					// Permission was granted, yay! Do the contacts-related task you need to do.
+					// Permission was granted, yay!
 					loadSettings();
 				}
-				return;
 			}
 		}
 	}
@@ -300,9 +282,8 @@ public class MainMenuActivity extends Activity {
 
 		int screenHeight = displayMetrics.heightPixels;
 		int fragmentHeight = bmpCover.getHeight();
-		int mapHeight = screenHeight / fragmentHeight;
 
-		return mapHeight;
+		return screenHeight / fragmentHeight;
 	}
 
 	/**
@@ -316,9 +297,8 @@ public class MainMenuActivity extends Activity {
 
 		int screenWidth = displayMetrics.widthPixels;
 		int fragmentWidth = bmpCover.getWidth();
-		int mapWidth = screenWidth / fragmentWidth;
 
-		return mapWidth;
+		return screenWidth / fragmentWidth;
 	}
 
 	/**
@@ -342,7 +322,7 @@ public class MainMenuActivity extends Activity {
 		try {
 			MusicManager.getInstance().stopBackgroundMusic();
 			MusicManager.getInstance().releaseResources();
-		}catch (IllegalStateException e){
+		}catch (IllegalStateException ignored){
 
 		}
 		super.onDestroy();
@@ -357,15 +337,15 @@ public class MainMenuActivity extends Activity {
 							.getIntArrayExtra(Constants.TAG_SENSOR_LIST);
 
 					boolean emptyList = true;
-					for(int i = 0, length = sensorTypes.length; i< length; i++){
-						if(sensorTypes[i] != 0)
+					for (int sensorType : sensorTypes) {
+						if (sensorType != 0)
 							emptyList = false;
 					}
 					if(emptyList){
 						Toast.makeText(context, "No sensors have been detected. No events will be triggered.", Toast.LENGTH_LONG).show();
 						SharedPreferences.Editor editor = mPreferences.edit();
 						editor.putBoolean(Constants.PREF_DEVICE_NOSENSORS, true);
-						editor.commit();
+						editor.apply();
 					}
 
 					launchGame(newGame, sensorTypes);
@@ -375,16 +355,16 @@ public class MainMenuActivity extends Activity {
 	}
 
 	@RequiresApi(api = Build.VERSION_CODES.M)
-	/**
-	 * Checks if the app has the valid permission active in the device
+	/*
+	  Checks if the app has the valid permission active in the device
 	 */
 	private boolean hasPermission(String perm) {
 		return(PackageManager.PERMISSION_GRANTED==checkSelfPermission(perm));
 	}
 
 	@SuppressLint("ValidFragment")
-	/**
-	 * Class to show a dialog that asks the player if he/she is sure to overwrite the last saved game
+	/*
+	  Class to show a dialog that asks the player if he/she is sure to overwrite the last saved game
 	 */
 	public class OverwriteGameDialogFragment extends DialogFragment {
 		@Override
@@ -412,7 +392,7 @@ public class MainMenuActivity extends Activity {
 									editor.putBoolean(Constants.PREF_LEVEL_CONTROL_MODE, levelControlMode);
 									editor.putBoolean(Constants.PREF_PAUSE_CONTROL_MODE, pauseControlMode);
 									editor.putBoolean(Constants.TAG_EXE_MODE, Constants.isInDebugMode(mMode));
-									editor.commit();
+									editor.apply();
 
 									if(!noSensors)
 										launchSensorActivity();
@@ -439,7 +419,14 @@ public class MainMenuActivity extends Activity {
 	 * @see: http://stackoverflow.com/questions/7428448/android-soundpool-heapsize-overflow
 	 *
 	 */
-	private class LoadSounds extends AsyncTask<Void, Integer, Boolean>{
+	private static class LoadSounds extends AsyncTask<Void, Integer, Boolean>{
+
+		@SuppressLint("StaticFieldLeak")
+		Context context;
+
+		LoadSounds(Context c) {
+			context = c;
+		}
 
         @Override
         protected void onPreExecute() {
@@ -484,7 +471,7 @@ public class MainMenuActivity extends Activity {
 			Log.d(TAG,"AudioPool loaded");
 			try {
 				MusicManager.getInstance(context, MusicManager.MUSIC_GAME_MENU).playBackgroundMusic();
-			} catch (IllegalStateException e) {
+			} catch (IllegalStateException ignored) {
 			}
 		}
 	}

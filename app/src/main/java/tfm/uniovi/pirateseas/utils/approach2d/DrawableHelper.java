@@ -11,9 +11,6 @@ import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
-import android.view.Display;
-import android.view.WindowManager;
 
 /**
  * Utils class with Drawable related methods
@@ -106,16 +103,9 @@ public class DrawableHelper{
 	 * @return Screen width
 	 */
 	public static int getScreenWidth(Context context){
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-			Point size = new Point();
-			((Activity)context).getWindowManager().getDefaultDisplay().getSize(size);
-			return size.x;
-		} else {
-			Display display = ((WindowManager) context
-					.getSystemService(Context.WINDOW_SERVICE))
-					.getDefaultDisplay();
-			return display.getWidth();
-		}
+		Point size = new Point();
+		((Activity)context).getWindowManager().getDefaultDisplay().getSize(size);
+		return size.x;
 	}
 
 	/**
@@ -124,16 +114,9 @@ public class DrawableHelper{
 	 * @return Screen height
 	 */
 	public static int getScreenHeight(Context context){
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-			Point size = new Point();
-			((Activity)context).getWindowManager().getDefaultDisplay().getSize(size);
-			return size.y;
-		} else {
-			Display display = ((WindowManager) context
-					.getSystemService(Context.WINDOW_SERVICE))
-					.getDefaultDisplay();
-			return display.getHeight();
-		}
+		Point size = new Point();
+		((Activity)context).getWindowManager().getDefaultDisplay().getSize(size);
+		return size.y;
 	}
 
 	/**

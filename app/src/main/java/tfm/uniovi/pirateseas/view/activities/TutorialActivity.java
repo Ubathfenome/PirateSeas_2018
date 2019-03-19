@@ -22,19 +22,9 @@ import tfm.uniovi.pirateseas.global.Constants;
 /**
  * Tutorial activity that shows the basics of the game. Can be shown the first time the game is launched or anytime from the Main menu
  */
-public class TutorialActivity extends FragmentActivity{
-	/**
-     * The pager widget, which handles animation and allows swiping horizontally to access previous
-     * and next wizard steps.
-     */
-    private ViewPager mPager;
-	
-	/**
-     * The pager adapter, which provides the pages to the view pager widget.
-     */
-    private PagerAdapter mPagerAdapter;
-    
-    Context context;
+public class TutorialActivity extends FragmentActivity {
+
+	Context context;
 	
 	int[] sensorTypes = null;
 	boolean returnToMain = false;
@@ -55,8 +45,15 @@ public class TutorialActivity extends FragmentActivity{
 			returnToMain=true;
 
 		// Instantiate a ViewPager and a PagerAdapter.
-        mPager = (ViewPager) findViewById(R.id.pager);
-        mPagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
+		/*
+		  The pager widget, which handles animation and allows swiping horizontally to access previous
+		  and next wizard steps.
+		 */
+		ViewPager mPager = findViewById(R.id.pager);
+		/*
+		 * The pager adapter, which provides the pages to the view pager widget.
+		 */
+		PagerAdapter mPagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
         mPager.setAdapter(mPagerAdapter);
         mPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
 			int tmpPosition = 0;
@@ -76,7 +73,7 @@ public class TutorialActivity extends FragmentActivity{
 
 	/**
 	 * Check if the sensorTypes array is empty (sensors have not been loaded yet)
-	 * @param sensorTypes
+	 * @param sensorTypes Set the sensor values as an array to be handled
 	 * @return true if sensors have not been loaded, false otherwise
 	 */
 	private boolean emptySensors(int[] sensorTypes) {
@@ -103,7 +100,7 @@ public class TutorialActivity extends FragmentActivity{
 	}
 	
 	@SuppressLint("ValidFragment")
-	/**
+	/*
 	 * Class to show a Dialog that asks the user if he/she really want to leave the tutorial
 	 */
 	public class LeaveTutorialDialogFragment extends DialogFragment {
@@ -167,7 +164,7 @@ public class TutorialActivity extends FragmentActivity{
      * sequence.
      */
     private class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
-        public ScreenSlidePagerAdapter(FragmentManager fragmentManager) {
+        ScreenSlidePagerAdapter(FragmentManager fragmentManager) {
             super(fragmentManager);
         }
 

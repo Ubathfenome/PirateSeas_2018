@@ -62,12 +62,13 @@ public class GameHelper {
 		editor.putLong(Constants.PREF_MAP_SEED, map.getMapSeed());
 		editor.putInt(Constants.PREF_MAP_ACTIVECELL, map.getActiveCell());
 		String[] mapContent = map.getMapContent();
-		String mapJointContent = "";
+		StringBuilder mapJointContent = new StringBuilder();
 
 		for(String s : mapContent){
-			mapJointContent += s + ";";
+			mapJointContent.append(s);
+			mapJointContent.append(";");
 		}
-		editor.putString(Constants.PREF_MAP_CONTENT, mapJointContent);
+		editor.putString(Constants.PREF_MAP_CONTENT, mapJointContent.toString());
 		editor.putInt(Constants.PREF_MAP_HEIGHT, map.getMapHeight());
 		editor.putInt(Constants.PREF_MAP_WIDTH, map.getMapWidth());
 		

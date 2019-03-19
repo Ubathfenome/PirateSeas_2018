@@ -5,6 +5,9 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.app.VoiceInteractor;
+import android.app.VoiceInteractor.PickOptionRequest;
+import android.app.VoiceInteractor.PickOptionRequest.Option;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -14,9 +17,12 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Message;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -209,6 +215,44 @@ public class GameActivity extends Activity implements SensorEventListener {
 		mCanvasView.nUpdateThread.getCanvasViewInstance().loadSettings();
 
 		super.onResume();
+
+		if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+			if (isVoiceInteraction()) {
+				startVoiceTrigger();
+			}
+		}
+	}
+
+	@RequiresApi(api = Build.VERSION_CODES.M)
+	private void startVoiceTrigger() {
+		Log.d(TAG, "startVoiceTrigger: ");
+		Option option = null;
+
+		option = new Option("fuego", 0);
+
+		option.addSynonym("dispara");
+		option.addSynonym("ok");
+		option.addSynonym("ya");
+		option.addSynonym("fire");
+		option.addSynonym("shoot");
+
+		getVoiceInteractor()
+				.submitRequest(new PickOptionRequest(new VoiceInteractor.Prompt("go"), new Option[]{option}, null) {
+					@Override
+					public void onPickOptionResult(boolean finished, Option[] selections, Bundle result) {
+						if (finished && selections.length == 1) {
+							Message message = Message.obtain();
+							message.obj = result;
+							// TODO Do action
+						} else {
+							getActivity().finish();
+						}
+					}
+					@Override
+					public void onCancel() {
+						getActivity().finish();
+					}
+				});
 	}
 
 	@Override
@@ -276,6 +320,16 @@ public class GameActivity extends Activity implements SensorEventListener {
 						// Notify CanvasView to damage the ships
 						if (cView.getGamemode() == Constants.GAMEMODE_BATTLE) {
 							showText("Maelstorm inbound!");
+
+							Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+							// Vibrate for 500 milliseconds
+							if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+								v.vibrate(VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE));
+							} else {
+								//deprecated in API 26
+								v.vibrate(500);
+							}
+
 							cView.maelstorm();
 						}
 					}
