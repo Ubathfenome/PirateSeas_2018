@@ -43,6 +43,7 @@ import tfm.uniovi.pirateseas.controller.androidGameAPI.Player;
 import tfm.uniovi.pirateseas.controller.sensors.events.EventDayNightCycle;
 import tfm.uniovi.pirateseas.controller.sensors.events.EventShakeClouds;
 import tfm.uniovi.pirateseas.controller.sensors.events.EventWeatherMaelstrom;
+import tfm.uniovi.pirateseas.exceptions.NoAmmoException;
 import tfm.uniovi.pirateseas.global.Constants;
 import tfm.uniovi.pirateseas.model.canvasmodel.game.entity.Ammunitions;
 import tfm.uniovi.pirateseas.model.canvasmodel.game.entity.Ship;
@@ -167,7 +168,9 @@ public class GameActivity extends Activity implements SensorEventListener {
 	 */
 	public void showText(String text){
 		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-			Snackbar gameSnackbar = Snackbar.make(findViewById(R.id.rootLayoutGame), text, Snackbar.LENGTH_SHORT);
+			// FIXME: InflateException on Snackbar.make
+            View v = findViewById(R.id.rootLayoutGame);
+			Snackbar gameSnackbar = Snackbar.make(v, text, Snackbar.LENGTH_SHORT);
 			gameSnackbar.show();
 		} else {
 			LayoutInflater mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -243,8 +246,13 @@ public class GameActivity extends Activity implements SensorEventListener {
 						if (finished && selections.length == 1) {
 							Message message = Message.obtain();
 							message.obj = result;
-							// TODO Do action
-						} else {
+							// Shoot action
+                            try {
+                                mCanvasView.nShotList.add(mCanvasView.nPlayerShip.shootCannon());
+                            } catch (NoAmmoException e) {
+                                showText(e.getMessage());
+                            }
+                        } else {
 							getActivity().finish();
 						}
 					}

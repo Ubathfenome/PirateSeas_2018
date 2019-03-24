@@ -164,12 +164,12 @@
         tristique auctor. Duis sit amet varius odio. Vestibulum eu dui justo. Phasellus tellus tortor,
         molestie sollicitudin porta ac, maximus vitae orci. Nulla nibh massa, convallis egestas orci
         quis, efficitur ultricies erat.</string>
-    <string name="empty_string"></string>
+    <string name="empty_string"/>
 
     <!-- Game strings -->
     <string name="tutorial_1">Arrr Grumete!! Bienvenido a PIRATE SEAS!!\nArr quieres dominar los siete mares? Pues conquista todas las islas y hazte rico.</string>
     <string name="tutorial_2">Escoge tu siguiente paso con cuidado grumetillo! Muchos buenos hombres se han hundido en estas aguas.</string>
-    <string name="tutorial_3">Si te encuentras con neblina en le mar.. Cuidado! Seguro que hay un enemigo tras la niebla. Agita tu dispositivo para aclarar el cielo!</string>
+    <string name="tutorial_3">Si te encuentras con neblina en el mar.. Cuidado! Seguro que hay un enemigo tras la niebla. Agita tu dispositivo para aclarar el cielo!</string>
     <string name="tutorial_4">Toca la pantalla hacia arriba para disparar la munición seleccionada.</string>
     <string name="tutorial_5">Cambia el tipo de munición seleccionada pulsando en el icono de la munición (por defecto) o pulsando las teclas de volumen.</string>
     <string name="tutorial_6">Consigue riquezas hundiendo a tus enemigos o descubriendo tesoros con los mapas que encontraras en tu camino.
@@ -186,6 +186,7 @@
     <string name="tutorial_content">Contenido del tutorial</string>
     <string name="message_screenselection">Que direccion tomamos ahora, Capi?</string>
     <string name="message_screenselection_detail">Por favor, selecciona la siguiente dirección a la que quieres navegar</string>
+    <string name="message_islandvisited">Capi! Ya hemos estado en esa isla!</string>
     <string name="message_islanddetected">Capi! Tierra a la vista!</string>
     <string name="message_nothinghere">Capi! No hay nada ahi! Que direccion debemos tomar?</string>
     <string name="message_wrongway">Capi! No podemos ir por ahi!</string>

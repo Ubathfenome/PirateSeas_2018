@@ -334,6 +334,8 @@ public class ScreenSelectionActivity extends Activity {
 	 */
 	private void enterVisitedIsland() {
 		GameHelper.saveGameAtPreferences(this, p, ship, map);
+		// Notify that the island has already been visited and cannot be visited twice
+        txtScreenSelectionLabel.setText(getText(R.string.message_islandvisited) + "\n" + txtScreenSelectionLabel.getText());
 	}
 
 	/**

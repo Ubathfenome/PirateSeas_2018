@@ -93,6 +93,7 @@ public class MainLogic extends Thread {
 							try { // Save battery
 								Thread.sleep(waitTime);
 							} catch (InterruptedException e) {
+								Log.e(TAG, e.getMessage());
 							}
 						}
 	

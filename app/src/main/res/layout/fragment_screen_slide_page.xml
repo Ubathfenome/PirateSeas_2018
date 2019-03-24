@@ -26,6 +26,7 @@
         android:background="@drawable/xml_border"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:padding="@dimen/small_padding_size"
         android:layout_marginBottom="16dp" />
 
     <TextView android:id="@+id/text2"
@@ -35,6 +36,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="top"
+        android:padding="@dimen/small_padding_size"
         android:text="@string/tutorial_content" />
 
     <ImageView android:id="@+id/imgDisplayed"

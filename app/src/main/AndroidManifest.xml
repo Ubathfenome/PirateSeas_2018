@@ -65,8 +65,7 @@
         </activity>
         <activity
             android:name=".view.activities.PauseActivity"
-            android:screenOrientation="landscape"
-            android:theme="@style/NoTitleDialog">
+            android:screenOrientation="landscape">
         </activity>
         <activity
             android:name=".view.activities.GameOverActivity"

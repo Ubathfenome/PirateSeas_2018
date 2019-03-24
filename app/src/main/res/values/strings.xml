@@ -200,6 +200,7 @@
     <string name="tutorial_content">This is some tutorial content</string>
     <string name="message_screenselection">Which direction go next, capt\'n?</string>
     <string name="message_screenselection_detail">Please, select the next direction you want to go</string>
+    <string name="message_islandvisited">Capt\'n! We\'ve been already there!</string>
     <string name="message_islanddetected">Capt\'n! Land in sight!</string>
     <string name="message_nothinghere">Capt\'n! There\s nothing here! Which direction we go next?</string>
     <string name="message_wrongway">Capt\'n! We can\'t go that way!</string>

@@ -134,5 +134,6 @@
         android:id="@+id/txtTooltip"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:padding="@dimen/small_padding_size"
         android:text="@string/pause_hint_default"/>
 </LinearLayout>

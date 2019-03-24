@@ -79,7 +79,7 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 
 	public Ship nPlayerShip;
 	public Ship nEnemyShip;
-	private List<Shot> nShotList;
+	public List<Shot> nShotList;
 
 	private StatBar nPlayerHBar, nPlayerXPBar;
 	private StatBar nEnemyHBar;

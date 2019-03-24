@@ -221,15 +221,11 @@ public class ShopActivity extends ListActivity{
 
 	@Override
 	protected void onListItemClick(ListView l, View v, int position, long id) {
-		if(v.getId() == R.id.imgHelpIcon){
-			txtDescription.setText(itemList.get(position).getDescription() + descriptionTip);
-		} else if(v.getId() == R.id.imgItemIcon) {
-			// Are you sure you want to buy this?
-			// Affirmative: Purchase Item
-			// Negative: Nothing
-			PurchaseItemDialogFragment purchaseDialog = new PurchaseItemDialogFragment(itemList.get(position));
-			purchaseDialog.show(getFragmentManager(), "ConfirmItemBuyDialog");
-		}
+        // Are you sure you want to buy this?
+        // Affirmative: Purchase Item
+        // Negative: Nothing
+        PurchaseItemDialogFragment purchaseDialog = new PurchaseItemDialogFragment(itemList.get(position));
+        purchaseDialog.show(getFragmentManager(), "ConfirmItemBuyDialog");
 	}
 	
 	@SuppressLint("ValidFragment")
@@ -353,13 +349,19 @@ public class ShopActivity extends ListActivity{
 		}
 
 		@Override
-		public View getView(int position, View convertView, ViewGroup parent) {
+		public View getView(final int position, View convertView, ViewGroup parent) {
 			if(convertView == null){
 				convertView = LayoutInflater.from(this.getContext())
 						.inflate(R.layout.list_item_layout, parent, false);
 				
 				vHolder = new ViewHolder();
 				vHolder.itemHelpIcon = convertView.findViewById(R.id.imgHelpIcon);
+				vHolder.itemHelpIcon.setOnClickListener(new OnClickListener() {
+					@Override
+					public void onClick(View view) {
+                        txtDescription.setText(itemList.get(position).getDescription() + descriptionTip);
+					}
+				});
 				vHolder.itemIconView = convertView.findViewById(R.id.imgItemIcon);
 				vHolder.itemNameView = convertView.findViewById(R.id.txtItemName);
 				vHolder.itemPriceView = convertView.findViewById(R.id.txtItemPrice);

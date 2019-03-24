@@ -28,7 +28,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical|center_horizontal"
                 android:background="@mipmap/ico_arrow_left"
-                android:contentDescription="@string/icd_btn_arrow"></ImageButton>
+                android:contentDescription="@string/icd_btn_arrow"/>
         </LinearLayout>
 
         <LinearLayout
@@ -70,7 +70,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical|center_horizontal"
                 android:background="@mipmap/ico_arrow_right"
-                android:contentDescription="@string/icd_btn_arrow"></ImageButton>
+                android:contentDescription="@string/icd_btn_arrow"/>
         </LinearLayout>
     </LinearLayout>
 

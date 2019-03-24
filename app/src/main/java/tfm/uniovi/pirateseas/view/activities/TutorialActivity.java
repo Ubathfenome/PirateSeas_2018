@@ -108,7 +108,7 @@ public class TutorialActivity extends FragmentActivity {
 	    public Dialog onCreateDialog(Bundle savedInstanceState) {
 	        // Use the Builder class for convenient dialog construction
 	        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-	        if(!returnToMain)
+	        if(returnToMain)
 	        	builder.setTitle(getResources().getString(R.string.exit_tutorial_dialog_title))
 				   .setMessage(R.string.exit_tutorial_main_menu_message)
 	               .setPositiveButton(R.string.exit_tutorial_dialog_positive, new DialogInterface.OnClickListener() {

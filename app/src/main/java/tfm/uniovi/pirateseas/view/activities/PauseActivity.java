@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -19,7 +18,6 @@ import tfm.uniovi.pirateseas.R;
 import tfm.uniovi.pirateseas.controller.audio.MusicManager;
 import tfm.uniovi.pirateseas.global.Constants;
 import tfm.uniovi.pirateseas.model.canvasmodel.game.entity.Ship;
-import tfm.uniovi.pirateseas.model.canvasmodel.game.entity.ShipType;
 
 /**
  * Activity to manage the behaviour of the game pause button
@@ -103,7 +101,6 @@ public class PauseActivity extends Activity {
 		txtTooltip.setTypeface(customFont);
 
 		Ship ship = data.getParcelableExtra(Constants.PAUSE_SHIP);
-		ShipType st = ship.getShipType();
 
 		pgrHealth = findViewById(R.id.pgrsHealth);
 		pgrHealth.setMax(ship.getMaxHealth());
@@ -120,50 +117,26 @@ public class PauseActivity extends Activity {
 		pgrRange.setProgress(rProgress);
 
         imgHealth = findViewById(R.id.imgHealth);
-        imgHealth.setOnHoverListener(new View.OnHoverListener() {
-            @Override
-            public boolean onHover(View view, MotionEvent motionEvent) {
-                int eventValue = motionEvent.getAction();
-                if(eventValue == MotionEvent.ACTION_HOVER_ENTER){
-                    txtTooltip.setText(getString(R.string.pause_hint_health, pgrHealth.getProgress(), pgrHealth.getMax()));
-                    return true;
-                }else if(eventValue == MotionEvent.ACTION_HOVER_EXIT){
-                    txtTooltip.setText(R.string.pause_hint_default);
-                    return true;
-                }
-                return false;
-            }
-        });
+        imgHealth.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				txtTooltip.setText(getString(R.string.pause_hint_health, pgrHealth.getProgress(), pgrHealth.getMax()));
+			}
+		});
         imgPower = findViewById(R.id.imgPower);
-        imgPower.setOnHoverListener(new View.OnHoverListener() {
-            @Override
-            public boolean onHover(View view, MotionEvent motionEvent) {
-                int eventValue = motionEvent.getAction();
-                if(eventValue == MotionEvent.ACTION_HOVER_ENTER){
-                    txtTooltip.setText(getString(R.string.pause_hint_power, pgrPower.getProgress(), pgrPower.getMax()));
-                    return true;
-                }else if(eventValue == MotionEvent.ACTION_HOVER_EXIT){
-                    txtTooltip.setText(R.string.pause_hint_default);
-                    return true;
-                }
-                return false;
-            }
-        });
+        imgPower.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				txtTooltip.setText(getString(R.string.pause_hint_power, pgrPower.getProgress(), pgrPower.getMax()));
+			}
+		});
         imgRange = findViewById(R.id.imgRange);
-        imgRange.setOnHoverListener(new View.OnHoverListener() {
-            @Override
-            public boolean onHover(View view, MotionEvent motionEvent) {
-                int eventValue = motionEvent.getAction();
-                if(eventValue == MotionEvent.ACTION_HOVER_ENTER){
-                    txtTooltip.setText(getString(R.string.pause_hint_range, pgrRange.getProgress(), pgrRange.getMax()));
-                    return true;
-                }else if(eventValue == MotionEvent.ACTION_HOVER_EXIT){
-                    txtTooltip.setText(R.string.pause_hint_default);
-                    return true;
-                }
-                return false;
-            }
-        });
+        imgRange.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				txtTooltip.setText(getString(R.string.pause_hint_range, pgrRange.getProgress(), pgrRange.getMax()));
+			}
+		});
 
 		MusicManager.getInstance().stopBackgroundMusic();
 		MusicManager.getInstance(context, MusicManager.MUSIC_GAME_PAUSED).playBackgroundMusic();
