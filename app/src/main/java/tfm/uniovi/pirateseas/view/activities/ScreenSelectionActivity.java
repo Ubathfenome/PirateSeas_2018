@@ -282,8 +282,6 @@ public class ScreenSelectionActivity extends Activity {
 			ShipType sType = sTypes[i];
 			if(sType.name().equals(st.name()) && ((i + 1)<=(sTypes.length-1))){
 				return sTypes[i+1];
-			} else {
-				return st;
 			}
 		}
 		return st;
@@ -405,14 +403,8 @@ public class ScreenSelectionActivity extends Activity {
 
 		bitmap = DrawableHelper.mergeBitmaps(bmpContent, screenHeight, screenWidth);
 		Resources res = this.getResources();
-		BitmapDrawable bd = new BitmapDrawable(res, bitmap);
 
-		return bd;
-	}
-
-	@Override
-	protected void onResume() {
-		super.onResume();
+		return new BitmapDrawable(res, bitmap);
 	}
 
 	/**

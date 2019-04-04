@@ -24,6 +24,7 @@ import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -55,7 +56,7 @@ import tfm.uniovi.pirateseas.view.graphics.canvasview.CanvasView;
  *
  * @see: http://android-developers.blogspot.com.es/2011/11/making-android-games-that-play-nice.html
  */
-public class GameActivity extends Activity implements SensorEventListener {
+public class GameActivity extends AppCompatActivity implements SensorEventListener {
 
 	private static final String TAG = "GameActivity";
 	private static final long DURATION_MILLIS = 1500;
@@ -168,7 +169,6 @@ public class GameActivity extends Activity implements SensorEventListener {
 	 */
 	public void showText(String text){
 		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-			// FIXME: InflateException on Snackbar.make
             View v = findViewById(R.id.rootLayoutGame);
 			Snackbar gameSnackbar = Snackbar.make(v, text, Snackbar.LENGTH_SHORT);
 			gameSnackbar.show();
@@ -263,10 +263,6 @@ public class GameActivity extends Activity implements SensorEventListener {
 				});
 	}
 
-	@Override
-	protected void onDestroy() {
-		super.onDestroy();
-	}
 
 	@Override
 	public void onBackPressed() {
@@ -351,7 +347,7 @@ public class GameActivity extends Activity implements SensorEventListener {
 					float axisSpeedY = event.values[1];
 					float axisSpeedZ = event.values[2];
 
-					if (shipControlMode == false && battleIsGoing(cView)) {
+					if (!shipControlMode && battleIsGoing(cView)) {
 						if (Math.abs(axisSpeedY) >= ACCELEROMETER_THRESHOLD) {
 							int shipSpeed = cView.nPlayerShip.getShipType().getSpeed();
 							float speed = Math.abs(axisSpeedX + axisSpeedY + axisSpeedZ - lastX - lastY - lastZ);

@@ -372,37 +372,24 @@ public class ShopActivity extends ListActivity{
 			} else {
 				vHolder = (ViewHolder) convertView.getTag();
 			}
-			
+
 			Item item = getItem(position);
 			if(item != null) {
-				if (item.getName().equals(Constants.ITEM_KEY_CREW)) {
-					vHolder.itemIconView.setImageDrawable(getResources().getDrawable(R.mipmap.icon_buff_crew));
-				} else if (item.getName().equals(Constants.ITEM_KEY_REPAIRMAN)) {
-					vHolder.itemIconView.setImageDrawable(getResources().getDrawable(R.mipmap.icon_buff_repa));
-				} else if (item.getName().equals(Constants.ITEM_KEY_AMMO_SIMPLE)) {
-					vHolder.itemIconView.setImageDrawable(getResources().getDrawable(R.mipmap.txtr_ammo_default));
-				} else if (item.getName().equals(Constants.ITEM_KEY_AMMO_AIMED)) {
-					vHolder.itemIconView.setImageDrawable(getResources().getDrawable(R.mipmap.txtr_ammo_aimed));
-				} else if (item.getName().equals(Constants.ITEM_KEY_AMMO_DOUBLE)) {
-					vHolder.itemIconView.setImageDrawable(getResources().getDrawable(R.mipmap.txtr_ammo_double));
-				} else if (item.getName().equals(Constants.ITEM_KEY_AMMO_SWEEP)) {
-					vHolder.itemIconView.setImageDrawable(getResources().getDrawable(R.mipmap.txtr_ammo_sweep));
-				} else if (item.getName().equals(Constants.ITEM_KEY_NEST)){
-					vHolder.itemIconView.setImageDrawable(getResources().getDrawable(R.mipmap.icon_buff_occu));
-				}else if(item.getName().equals(Constants.ITEM_KEY_MATERIALS)) {
-					vHolder.itemIconView.setImageDrawable(getResources().getDrawable(R.mipmap.icon_buff_wood));
-				}else if(item.getName().equals(Constants.ITEM_KEY_MAPPIECE)) {
-					vHolder.itemIconView.setImageDrawable(getResources().getDrawable(R.mipmap.icon_buff_mapp));
-				}else if(item.getName().equals(Constants.ITEM_KEY_MAP)) {
-					vHolder.itemIconView.setImageDrawable(getResources().getDrawable(R.mipmap.icon_buff_mapp));
-				}else if(item.getName().equals(Constants.ITEM_KEY_BLACKPOWDER)) {
-					vHolder.itemIconView.setImageDrawable(getResources().getDrawable(R.mipmap.icon_buff_bpow));
-				}else if(item.getName().equals(Constants.ITEM_KEY_VALUABLE)) {
-					vHolder.itemIconView.setImageDrawable(getResources().getDrawable(R.mipmap.ico_gold));
-				}
+				if(getString(R.string.shop_item_crew_name).equals(item.getName())){ vHolder.itemIconView.setBackgroundResource(R.mipmap.icon_buff_crew); }
+				else if(getString(R.string.shop_item_repairman_name).equals(item.getName())){ vHolder.itemIconView.setBackgroundResource(R.mipmap.icon_buff_repa); }
+				else if(getString(R.string.shop_item_ammo_simple_name).equals(item.getName())){ vHolder.itemIconView.setBackgroundResource(R.mipmap.txtr_ammo_default); }
+				else if(getString(R.string.shop_item_ammo_aimed_name).equals(item.getName())){ vHolder.itemIconView.setBackgroundResource(R.mipmap.txtr_ammo_aimed); }
+				else if(getString(R.string.shop_item_ammo_double_name).equals(item.getName())){ vHolder.itemIconView.setBackgroundResource(R.mipmap.txtr_ammo_double); }
+				else if(getString(R.string.shop_item_ammo_sweep_name).equals(item.getName())){ vHolder.itemIconView.setBackgroundResource(R.mipmap.txtr_ammo_sweep); }
+				else if(getString(R.string.shop_item_nest_name).equals(item.getName())){ vHolder.itemIconView.setBackgroundResource(R.mipmap.icon_buff_occu); }
+				else if(getString(R.string.shop_item_mats_name).equals(item.getName())){ vHolder.itemIconView.setBackgroundResource(R.mipmap.icon_buff_wood); }
+				else if(getString(R.string.shop_item_mpiece_name).equals(item.getName())){ vHolder.itemIconView.setBackgroundResource(R.mipmap.icon_buff_mapp); }
+				else if(getString(R.string.shop_item_map_name).equals(item.getName())){ vHolder.itemIconView.setBackgroundResource(R.mipmap.icon_buff_mapp); }
+				else if(getString(R.string.shop_item_bpowder_name).equals(item.getName())){ vHolder.itemIconView.setBackgroundResource(R.mipmap.icon_buff_bpow); }
+				else if(getString(R.string.shop_item_valuable_name).equals(item.getName())){ vHolder.itemIconView.setBackgroundResource(R.mipmap.ico_gold); }
 
 				vHolder.itemNameView.setText(item.getName());
-				vHolder.itemPriceView.setText("" + item.getPrice());
+				vHolder.itemPriceView.setText(String.valueOf(item.getPrice()));
 				vHolder.itemPriceIconView.setBackgroundResource(R.mipmap.ico_gold);
 			}
 

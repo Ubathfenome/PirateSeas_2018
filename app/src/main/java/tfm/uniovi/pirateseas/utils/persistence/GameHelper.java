@@ -84,9 +84,8 @@ public class GameHelper {
 	 * @param player
 	 * @param ship
 	 * @param map
-	 * @return
 	 */
-	public static boolean loadGameAtPreferences(Context context, Player player, Ship ship, Map map){
+	public static void loadGameAtPreferences(Context context, Player player, Ship ship, Map map){
 		
 		SharedPreferences mPreferences = context.getSharedPreferences(Constants.TAG_PREF_NAME, Context.MODE_PRIVATE);
 
@@ -115,8 +114,6 @@ public class GameHelper {
 		map.setMapContent(mPreferences.getString(Constants.PREF_MAP_CONTENT,Constants.EMPTY_STRING).split(";"));
 
 		helperMap = map;
-		
-		return true;
 	}
 
 }

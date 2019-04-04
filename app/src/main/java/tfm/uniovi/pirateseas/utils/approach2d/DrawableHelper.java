@@ -24,8 +24,7 @@ public class DrawableHelper{
 	 */
 	public Bitmap getFirstHalf(Drawable image){
 		Bitmap bmp = ((BitmapDrawable)image).getBitmap();
-		Bitmap croppedBmp = Bitmap.createBitmap(bmp, 0, 0, bmp.getWidth(), bmp.getHeight() / 2);
-		return croppedBmp;
+		return Bitmap.createBitmap(bmp, 0, 0, bmp.getWidth(), bmp.getHeight() / 2);
 	}
 
 	/**
@@ -34,8 +33,7 @@ public class DrawableHelper{
 	 */
 	public Bitmap getLastHalf(Drawable image){
 		Bitmap bmp = ((BitmapDrawable)image).getBitmap();
-		Bitmap croppedBmp = Bitmap.createBitmap(bmp, 0, bmp.getHeight() / 2, bmp.getWidth(), bmp.getHeight() / 2);
-		return croppedBmp;
+		return Bitmap.createBitmap(bmp, 0, bmp.getHeight() / 2, bmp.getWidth(), bmp.getHeight() / 2);
 	}
 
 	/**
@@ -62,9 +60,8 @@ public class DrawableHelper{
 	public static Bitmap rotateBitmap(Bitmap bmp, float degrees) {
 		Matrix matrix = new Matrix();
 		matrix.postRotate(degrees);
-		Bitmap rotatedBitmap = Bitmap.createBitmap(bmp, 0, 0, bmp.getWidth(),
+		return Bitmap.createBitmap(bmp, 0, 0, bmp.getWidth(),
 				bmp.getHeight(), matrix, true);
-		return rotatedBitmap;
 	}
 
 	/**
@@ -78,8 +75,7 @@ public class DrawableHelper{
 		dimensions.inJustDecodeBounds = true;
 		@SuppressWarnings("unused")
 		Bitmap mBitmap = BitmapFactory.decodeResource(r, drawableValue, dimensions);
-		int width =  dimensions.outWidth;
-		return width;
+		return dimensions.outWidth;
 	}
 
 	/**
@@ -93,8 +89,7 @@ public class DrawableHelper{
 		dimensions.inJustDecodeBounds = true;
 		@SuppressWarnings("unused")
 		Bitmap mBitmap = BitmapFactory.decodeResource(r, drawableValue, dimensions);
-		int height =  dimensions.outHeight;
-		return height;
+		return dimensions.outHeight;
 	}
 
 	/**

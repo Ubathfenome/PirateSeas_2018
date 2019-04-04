@@ -469,7 +469,7 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 		if (baseTs2Save != 0 && nBaseTimestamp == 0) {
 			SharedPreferences.Editor editor = nPreferences.edit();
 			editor.putLong(Constants.PREF_PLAYER_TIMESTAMP, baseTs2Save);
-			editor.commit();
+			editor.apply();
 		}
 	}
 
@@ -755,8 +755,7 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 	 */
 	private double randomXSpawnValue(int shipWidth) {
 		Random r = new Random();
-		double d = r.nextDouble() * (nScreenWidth - shipWidth);
-		return d;
+		return r.nextDouble() * (nScreenWidth - shipWidth);
 	}
 
 	/**

@@ -100,7 +100,7 @@ public class SettingsExtraActivity extends Activity {
 		SharedPreferences.Editor editor = mPreferences.edit();
 		editor.putBoolean(Constants.PREF_SHIP_CONTROL_MODE, tglControlMode.isChecked());
 		editor.putBoolean(Constants.PREF_AMMO_CONTROL_MODE, tglChangeAmmo.isChecked());
-		editor.commit();
+		editor.apply();
 	}
 
 	@SuppressLint("ValidFragment")

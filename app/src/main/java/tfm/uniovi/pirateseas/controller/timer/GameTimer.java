@@ -62,8 +62,7 @@ public class GameTimer {
 	 * @return In-game hour
 	 */
 	private int getGameHoursFromSeconds(double realSecs) {
-		int inGameHour = (int) (realSecs % Constants.HOURS_PER_DAY);
-		return inGameHour;
+		return (int) (realSecs % Constants.HOURS_PER_DAY);
 	}
 
 	/**
@@ -73,8 +72,7 @@ public class GameTimer {
 	 */
 	private int getGameDayFromGameHours(double realSecs) {
 		float inGameHours = (float) (realSecs / Constants.HOURS_PER_DAY);
-		int inGameDays = (int) (inGameHours / Constants.GAME_MPIGD);
-		return inGameDays;
+		return (int) (inGameHours / Constants.GAME_MPIGD);
 	}
 
 	/**

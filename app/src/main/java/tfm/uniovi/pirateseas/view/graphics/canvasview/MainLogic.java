@@ -1,7 +1,6 @@
 package tfm.uniovi.pirateseas.view.graphics.canvasview;
 
 import android.graphics.Canvas;
-import android.util.Log;
 import android.view.SurfaceHolder;
 
 import tfm.uniovi.pirateseas.global.Constants;
@@ -62,7 +61,7 @@ public class MainLogic extends Thread {
 		if(!(initialized = this.getCanvasViewInstance().isInitialized())){
 			this.getCanvasViewInstance().initialize();
 			initialized = this.getCanvasViewInstance().isInitialized();
-			Log.d(TAG, "Starting logic thread");
+			// Log.d(TAG, "Starting logic thread");
 		}
 
 		long initTime; // Loop initial time
@@ -93,7 +92,7 @@ public class MainLogic extends Thread {
 							try { // Save battery
 								Thread.sleep(waitTime);
 							} catch (InterruptedException e) {
-								Log.e(TAG, e.getMessage());
+								// Log.e(TAG, e.getMessage());
 							}
 						}
 	
@@ -108,19 +107,20 @@ public class MainLogic extends Thread {
 					setRunning(false);
 				}
 			} catch (ArithmeticException arex){
-				Log.e(TAG, arex.getMessage());
+				// Log.e(TAG, arex.getMessage());
 			} catch (Exception ex) {
 				if(canvas == null){
-					Log.e(TAG, "Canvas is not created or cannot be edited");
-				} else 
-					Log.e(TAG, "Canvas not available");
+					// Log.e(TAG, "Canvas is not created or cannot be edited");
+				} else {
+					// Log.e(TAG, "Canvas not available");
+				}
 			} finally {
 				if (canvas != null) {
 					surface.unlockCanvasAndPost(canvas);
 				}
 			}
 		}
-		Log.d(TAG, "Stopping logic thread. De-initializing...");
+		// Log.d(TAG, "Stopping logic thread. De-initializing...");
 		// mCanvasView instance gets destroyed
 		if(getCanvasViewInstance().isInitialized())
 			initialized = false;	

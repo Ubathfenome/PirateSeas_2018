@@ -23,12 +23,12 @@ public class Player implements Parcelable {
 	private static final int MAP_PIECES_LIMIT = 6;
 	private static final int[] LOG_BASES = {0, 400, 1900, 4500, 8200, 13000, 18900, 24900};
 
-	private int level = 0;
-	private int gold = 0;
-	private int experience = 0;
-	private int mapPieces = 0;
+	private int level;
+	private int gold;
+	private int experience;
+	private int mapPieces;
 	
-	private boolean hasCompleteMap = false;
+	private boolean hasCompleteMap;
 
 	/**
 	 * Dummy constructor for the Player class.

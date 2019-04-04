@@ -158,7 +158,7 @@ public class SensorActivity extends Activity{
 		
 		SharedPreferences.Editor editor = mPreferences.edit();
 		editor.putString(Constants.PREF_SENSOR_LIST, putPreferenceSensorList());
-		editor.commit();
+		editor.apply();
 		
 		setResult(RESULT_OK, sensorListIntent);
 		
