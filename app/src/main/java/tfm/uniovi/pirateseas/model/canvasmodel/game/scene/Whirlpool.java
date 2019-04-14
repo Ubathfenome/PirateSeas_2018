@@ -20,36 +20,32 @@ import tfm.uniovi.pirateseas.model.canvasmodel.game.Parallax;
 public class Whirlpool extends BasicModel {
     private int frameWidth = 67;
     private int frameHeight = 67;
-    private int frameCount = 7;
-    private int frameAcceleration = 23;
-    int currentFrame;
-    Rect frameToDraw = new Rect(
+    private int currentFrame;
+    private Rect frameToDraw = new Rect(
             0,
             0,
             frameWidth,
             frameHeight);
-    RectF whereToDraw = new RectF(
+    private RectF whereToDraw = new RectF(
             xLeft, 0,
             xLeft + frameWidth,
             frameHeight);
-    Bitmap bitmap;
-    Paint paint = new Paint();
+    private Bitmap bitmap;
+    private Paint paint = new Paint();
 
     // What time was it when we last changed frames
     private long lastFrameChangeTime = 0;
-    // How long should each frame last
-    private int frameLengthInMilliseconds = 100;
 
 
     /**
      * Constructor
      *
-     * @param context
-     * @param x
-     * @param y
-     * @param mCanvasWidth
-     * @param mCanvasHeight
-     * @param parallax
+     * @param context Context
+     * @param x X Coordinate of the Whirlpool
+     * @param y Y Coordinate of the Whirlpool
+     * @param mCanvasWidth Canvas Width
+     * @param mCanvasHeight Canvas Height
+     * @param parallax Parallax (Nullable)
      */
     public Whirlpool(Context context, double x, double y, double mCanvasWidth, double mCanvasHeight, Parallax parallax) {
         super(context, x, y, mCanvasWidth, mCanvasHeight, parallax);
@@ -62,16 +58,19 @@ public class Whirlpool extends BasicModel {
      */
     public void getCurrentFrame(){
         long timestamp = System.currentTimeMillis();
+        // How long should each frame last
+        int frameLengthInMilliseconds = 100;
         if ( timestamp > lastFrameChangeTime + frameLengthInMilliseconds) {
             lastFrameChangeTime = timestamp;
             currentFrame++;
+            int frameCount = 7;
             if (currentFrame >= frameCount) {
                 currentFrame = 0;
             }
         }
 
         //update the left and right values of the source of
-        //the next frame on the spritesheet
+        //the next frame on the sprite sheet
         frameToDraw.left = currentFrame * frameWidth;
         frameToDraw.right = frameToDraw.left + frameWidth;
 
@@ -82,7 +81,8 @@ public class Whirlpool extends BasicModel {
      */
     public void move(){
         if (x+frameWidth<mCanvasWidth){
-            x+=frameAcceleration;
+            int frameAcceleration = 23;
+            x+= frameAcceleration;
         }
     }
 

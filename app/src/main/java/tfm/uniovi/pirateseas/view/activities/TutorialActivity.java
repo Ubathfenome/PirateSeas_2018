@@ -77,10 +77,10 @@ public class TutorialActivity extends FragmentActivity {
 	 * @return true if sensors have not been loaded, false otherwise
 	 */
 	private boolean emptySensors(int[] sensorTypes) {
-		boolean empty = false;
+		boolean empty = true;
 		for(int sensor : sensorTypes){
 			if(sensor != 0)
-				empty = true;
+				empty = false;
 		}
 		return empty;
 	}

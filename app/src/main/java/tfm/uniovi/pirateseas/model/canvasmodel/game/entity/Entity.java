@@ -10,42 +10,34 @@ import tfm.uniovi.pirateseas.model.canvasmodel.game.BasicModel;
  * Class to add living attributes to the in-game objects
  */
 public class Entity extends BasicModel{
-		
-	// Entity Attribs
-	protected int entityWidth;
-	protected int entityHeight;
-	protected int entityLength;
+
+	int entityLength;
 	
-	protected int entityDirection; // 0..359 degrees
+	int entityDirection; // 0..359 degrees
 	
-	protected Point entityCoordinates;
+	Point entityCoordinates;
 	
 	private int mStatus = Constants.STATE_DEAD;
 		
 	// Common attribs
-	protected int mHealthPoints = 0;
-	protected int mMaxHealth = 0;
-	protected int mSpeedXLevel = 0;
-	protected int mSpeedY = 0;
+	int mHealthPoints = 0;
+	int mMaxHealth = 0;
 
 	/**
 	 * Constructor
-	 * @param context
-	 * @param x
-	 * @param y
-	 * @param canvasWidth
-	 * @param canvasHeight
-	 * @param eCoords
-	 * @param eDirection
-	 * @param eWidth
-	 * @param eHeight
-	 * @param eLength
+	 * @param context Context
+	 * @param x X Coordinate of the image
+	 * @param y Y Coordinate of the image
+	 * @param canvasWidth Canvas width
+	 * @param canvasHeight Canvas height
+	 * @param eCoords Entity coordinates
+	 * @param eDirection Entity direction
+	 * @param eLength Entity length
 	 */
-	public Entity(Context context, double x, double y, double canvasWidth, double canvasHeight, Point eCoords, int eDirection, int eWidth, int eHeight, int eLength){
+	Entity(Context context, double x, double y, double canvasWidth, double canvasHeight, Point eCoords, int eDirection, int eLength){
 		super(context, x, y, canvasWidth, canvasHeight, null);
-		
-		this.entityWidth = eWidth;
-		this.entityHeight = eHeight;
+
+		// Entity Attribs
 		this.entityLength = eLength;
 		
 		this.entityCoordinates = eCoords;
@@ -56,9 +48,6 @@ public class Entity extends BasicModel{
 			entityDirection = eDirection - 360;
 		else
 			entityDirection = eDirection;
-		
-		mSpeedXLevel = 0;
-		mSpeedY = 0;
 	}
 
 	/**
@@ -101,7 +90,7 @@ public class Entity extends BasicModel{
 
 	/**
 	 * Method to substract health from the entity
-	 * @param points
+	 * @param points Health points to be subtracted
 	 */
 	public void looseHealth(int points){
 		if(points > 0)

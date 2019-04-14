@@ -3,6 +3,7 @@ package tfm.uniovi.pirateseas.model.canvasmodel.game.scene;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.NonNull;
 
 import tfm.uniovi.pirateseas.R;
 import tfm.uniovi.pirateseas.global.Constants;
@@ -24,15 +25,14 @@ public class Clouds extends BasicModel{
 
 	/**
 	 * Constructor
-	 * @param context
-	 * @param x
-	 * @param y
-	 * @param mCanvasWidth
-	 * @param mCanvasHeight
+	 * @param context Context
+	 * @param x X Coordinate of the image
+	 * @param y Y Coordinate of the image
+	 * @param mCanvasWidth Canvas width
+	 * @param mCanvasHeight Canvas height
 	 */
-	public Clouds(Context context, double x, double y, double mCanvasWidth,
-            double mCanvasHeight){
-		super(context, x, y, mCanvasHeight, mCanvasHeight, new Parallax(context, R.mipmap.txtr_clouds_light, R.mipmap.txtr_clouds_almost_none));
+	public Clouds(Context context, double x, double y, double mCanvasWidth, double mCanvasHeight){
+		super(context, x, y, mCanvasWidth, mCanvasHeight, new Parallax(context, R.mipmap.txtr_clouds_light, R.mipmap.txtr_clouds_almost_none));
 		
 		this.xTop = x;
 		this.shakeMoveCount = 0;
@@ -54,7 +54,7 @@ public class Clouds extends BasicModel{
 	/**
      * Draws on the screen the image of the model
      * 
-     * @param canvas
+     * @param canvas Canvas
      */
     public void drawOnScreen(Canvas canvas) {
         yUp = (int) y;
@@ -98,13 +98,15 @@ public class Clouds extends BasicModel{
 	 */
 	public void setShakeMoveCount(int shakeMoveCount) {
 		this.shakeMoveCount = shakeMoveCount;
+		@SuppressWarnings("IntegerDivisionInFloatingPointContext")
 		float alphaIndex = (shakeMoveCount / Constants.SHAKE_LIMIT);
 		int alpha = (int) ((1 - alphaIndex) * ALPHA_LIMIT);
 		this.getParallax().setAlpha(alpha);
 	}
 
+	@NonNull
 	@Override
-	/**
+	/*
 	 * toString
 	 */
 	public String toString() {

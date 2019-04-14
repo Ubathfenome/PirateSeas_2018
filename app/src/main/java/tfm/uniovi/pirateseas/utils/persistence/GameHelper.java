@@ -23,10 +23,6 @@ public class GameHelper {
 	public static Ship helperShip;
 	public static Map helperMap;
 	
-	private static long lastPlayerRow = 0;
-	private static long lastShipRow = 0;
-	private static long lastGameRow = 0;
-	
 	private static final int DEFAULT_DIRECTION = 90;
 	private static final int DEFAULT_SHIP_WIDTH = 2;
 	private static final int DEFAULT_SHIP_HEIGHT = 3;
@@ -34,15 +30,15 @@ public class GameHelper {
 
 	/**
 	 * Method to save the game at preferences
-	 * @param context
-	 * @param player
-	 * @param ship
-	 * @param map
-	 * @return
+	 * @param context context to know which activity is calling the method
+	 * @param player player
+	 * @param ship ship
+	 * @param map map
+	 * @return true if data got saved on preferences, false otherwise
 	 */
 	public static boolean saveGameAtPreferences(Context context, Player player, Ship ship, Map map){
 		
-		boolean res = false;
+		boolean res;
 		
 		SharedPreferences mPreferences = context.getSharedPreferences(Constants.TAG_PREF_NAME, Context.MODE_PRIVATE);
 		
@@ -57,7 +53,7 @@ public class GameHelper {
 			editor.putInt(a.getName(), ship.getAmmunition(a));
 		}
 		editor.putInt(Constants.PREF_SHIP_HEALTH, ship.getHealth());
-		editor.putInt(Constants.PREF_SHIP_TYPE, ship.getType().ordinal());
+		editor.putInt(Constants.PREF_SHIP_TYPE, ship.getShipType().ordinal());
 
 		editor.putLong(Constants.PREF_MAP_SEED, map.getMapSeed());
 		editor.putInt(Constants.PREF_MAP_ACTIVECELL, map.getActiveCell());
@@ -80,10 +76,10 @@ public class GameHelper {
 
 	/**
 	 * Method to load the game at preferences
-	 * @param context
-	 * @param player
-	 * @param ship
-	 * @param map
+	 * @param context context to know which activity is calling the method
+	 * @param player player
+	 * @param ship ship
+	 * @param map map
 	 */
 	public static void loadGameAtPreferences(Context context, Player player, Ship ship, Map map){
 		
@@ -99,7 +95,7 @@ public class GameHelper {
 		int ammo = mPreferences.getInt(Constants.PREF_SHIP_AMMUNITIONS, 20);
 		ShipType st = ShipType.values()[mPreferences.getInt(Constants.PREF_SHIP_TYPE, 0)];
 		int hp = mPreferences.getInt(Constants.PREF_SHIP_HEALTH, st.defaultHealthPoints());
-		ship = new Ship(context, ship, st, p, DEFAULT_DIRECTION, DEFAULT_SHIP_WIDTH, DEFAULT_SHIP_HEIGHT, DEFAULT_SHIP_LENGTH, hp, ammo);
+		ship = new Ship(context, ship, st, p, DEFAULT_DIRECTION, DEFAULT_SHIP_LENGTH, hp, ammo);
 		ship.setPlayable(true);
 			
 		helperShip = ship;

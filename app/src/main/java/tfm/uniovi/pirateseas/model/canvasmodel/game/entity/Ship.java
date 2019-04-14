@@ -7,6 +7,7 @@ import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.os.SystemClock;
+import android.support.annotation.NonNull;
 
 import java.util.Random;
 
@@ -23,7 +24,7 @@ public class Ship extends Entity implements Parcelable{
 	private int nAmmoTypes = Ammunitions.values().length;
 	private int[] nAmmunitions = new int[nAmmoTypes];
 	private Ammunitions selectedAmmo;
-	private int selectedAmmoIndex= 0;
+	private int selectedAmmoIndex;
 	
 	private int mReloadTime;
 	private float mPower;
@@ -41,7 +42,7 @@ public class Ship extends Entity implements Parcelable{
 	 * Default constructor
 	 */
 	public Ship(){
-		super(null, 0, 0, 0, 0, new Point(0, 0), Constants.DEFAULT_PLAYER_SHIP_DIRECTION, 0, 0, 0);
+		super(null, 0, 0, 0, 0, new Point(0, 0), Constants.DEFAULT_PLAYER_SHIP_DIRECTION, 0);
 		for(int i = 0; i < nAmmoTypes; i++){
 			nAmmunitions[i] = 0;
 		}
@@ -55,12 +56,12 @@ public class Ship extends Entity implements Parcelable{
 	
 	@SuppressWarnings("deprecation")
 	@SuppressLint("NewApi")
-    /**
+    /*
      * Constructor for new ship receiving previous ship data
      */
 	public Ship(Context context, ShipType sType, double x, double y, double canvasWidth, 
-				double canvasHeight, Point coordinates, int direction, int width, int height, int length, int ammo){
-		super(context, x, y, canvasWidth, canvasHeight, coordinates, direction, width, height, length);
+				double canvasHeight, Point coordinates, int direction, int length, int ammo){
+		super(context, x, y, canvasWidth, canvasHeight, coordinates, direction, length);
 		
 		this.context = context;
 		
@@ -114,76 +115,43 @@ public class Ship extends Entity implements Parcelable{
 			setStatus(Constants.STATE_ALIVE);
 		
 	}
-	
+
 	@SuppressLint("NewApi")
 	@SuppressWarnings("deprecation")
-    /**
+    /*
      * Constructor for new ship based on a previous ship's data
      */
-	public Ship(Context context, Ship baseShip, ShipType sType, Point coordinates, int direction, int width, int height, int length, int health, int ammo){
-		super(context, baseShip.x, baseShip.y, baseShip.mCanvasWidth, baseShip.mCanvasHeight, coordinates, direction, width, height, length);
-		
+	public Ship(Context context, Ship baseShip, ShipType sType, Point coordinates, int direction, int length, int health, int ammo){
+		super(context, baseShip.x, baseShip.y, baseShip.mCanvasWidth, baseShip.mCanvasHeight, coordinates, direction, length);
+
 		this.context = context;
-		
+
 		this.nAmmunitions[0] = ammo;
 		this.selectedAmmo = Ammunitions.DEFAULT;
 		this.selectedAmmoIndex = Ammunitions.valueOf(selectedAmmo.getName()).ordinal();
-		
+
 		this.sType = sType;
 		this.mRange = sType.rangeMultiplier();
 		this.mPower = sType.powerMultiplier();
 		this.mReloadTime = (int) sType.powerMultiplier() * Constants.DEFAULT_SHIP_RELOAD;
 		this.mMaxHealth = sType.defaultHealthPoints() > health ? sType.defaultHealthPoints() : health;
 		gainHealth(health);
-		
+
 		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
 			setImage(context.getResources().getDrawable(sType.drawableValue(), null));
 		} else {
 			setImage(context.getResources().getDrawable(sType.drawableValue()));
 		}
-		
+
 		if(mHealthPoints > 0)
 			setStatus(Constants.STATE_ALIVE);
-	}
-	
-	@SuppressLint("NewApi")
-	@SuppressWarnings("deprecation")
-    /**
-     * Constructor for new ship specifying ammunition values
-     */
-	public Ship(Context context, Ship baseShip, ShipType sType, Point coordinates, int direction, int width, int height, int length, int health, int[] ammoTypes,
-			int selectedAmmoType) {
-		super(context, baseShip.x, baseShip.y, baseShip.mCanvasWidth, baseShip.mCanvasHeight, coordinates, direction, width, height, length);
-		
-		this.context = context;
-		
-		this.nAmmunitions = ammoTypes;
-		this.selectedAmmo = Ammunitions.values()[selectedAmmoType];
-		this.selectedAmmoIndex = selectedAmmoType;
-		
-		this.sType = sType;
-		this.mRange = sType.rangeMultiplier();
-		this.mPower = sType.powerMultiplier();
-		this.mReloadTime = (int) sType.powerMultiplier() * Constants.DEFAULT_SHIP_RELOAD;
-		this.mMaxHealth = sType.defaultHealthPoints() > health ? sType.defaultHealthPoints() : health;
-		gainHealth(health);
-		
-		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
-			setImage(context.getResources().getDrawable(sType.drawableValue(), null));
-		} else {
-			setImage(context.getResources().getDrawable(sType.drawableValue()));
-		}
-		
-		if(mHealthPoints > 0)
-			setStatus(Constants.STATE_ALIVE);
-		
 	}
 
     /**
      * Parcel constructor
      * @param in Parcel
      */
-	protected Ship(Parcel in) {
+	private Ship(Parcel in) {
 		this();
 		nAmmoTypes = in.readInt();
 		nAmmunitions = in.createIntArray();
@@ -229,7 +197,7 @@ public class Ship extends Entity implements Parcelable{
     /**
      * Method to shoot the selected Ammunition forwards
      * @return Shot entity
-     * @throws NoAmmoException
+     * @throws NoAmmoException Exception triggers when the ship tries to shoot and does not have ammo fir it
      */
 	public Shot shootCannon() throws NoAmmoException {
 		Shot cannonballVector = null;
@@ -307,7 +275,7 @@ public class Ship extends Entity implements Parcelable{
 	
 	@SuppressLint("NewApi")
 	@SuppressWarnings("deprecation")
-    /**
+    /*
      * Update ship's drawable
      */
 	public void updateImage(){
@@ -478,13 +446,6 @@ public class Ship extends Entity implements Parcelable{
 		this.mPower += f;		
 	}
 
-	/**
-	 * @return the sType
-	 */
-	public ShipType getType() {
-		return sType;
-	}
-
     /**
      * Get the ship's max health
      * @return Max health
@@ -512,14 +473,15 @@ public class Ship extends Entity implements Parcelable{
 
     /**
      * Checks if the Ship is playable by the Player
-     * @return
+     * @return true if the ship is playable by the user
      */
-	public boolean isPlayable() {
+	private boolean isPlayable() {
 		return isPlayable;
 	}
 
+	@NonNull
 	@Override
-    /**
+    /*
      * toString
      */
 	public String toString() {
@@ -566,7 +528,7 @@ public class Ship extends Entity implements Parcelable{
      * @param s Ship type
      * @return Index
      */
-	public int getShipTypeIndex(ShipType s){
+	private int getShipTypeIndex(ShipType s){
 		int index = 0;
 		ShipType[] sTypes = ShipType.values();
 		for(int i = 0; i < sTypes.length; i++){
@@ -581,7 +543,7 @@ public class Ship extends Entity implements Parcelable{
      * Set the ship as Idle (no movement)
      * @param wasIdle true if stopped, false otherwise
      */
-	public void setIdle(boolean wasIdle) {
+	private void setIdle(boolean wasIdle) {
 		this.wasIdle = wasIdle;
 	}
 
@@ -664,7 +626,7 @@ public class Ship extends Entity implements Parcelable{
 	}
 
 	@Override
-    /**
+    /*
      * Ignore this method
      */
 	public int describeContents() {
@@ -672,7 +634,7 @@ public class Ship extends Entity implements Parcelable{
 	}
 
 	@Override
-    /**
+    /*
      * Method to save Ship's values to the Parcel
      */
 	public void writeToParcel(Parcel parcel, int i) {
@@ -694,7 +656,7 @@ public class Ship extends Entity implements Parcelable{
 
     /**
      * Set whether the ship is Playable or not
-     * @param playable
+     * @param playable True if the ship is Playable by the user, false otherwise
      */
     public void setPlayable(boolean playable) {
         this.isPlayable = playable;

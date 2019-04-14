@@ -206,5 +206,10 @@
     <string name="help_message_7">7. Barco del jugador</string>
     <string name="help_message_8">8. Oro del jugador</string>
     <string name="help_message_9">9. Municion restante</string>
+    <string name="lang">es</string>
+    <string name="command_fire">fuego</string>
+    <string name="command_ok">OK</string>
+    <string name="command_go">vamos</string>
+    <string name="command_shoot">dispara</string>
 
 </resources>

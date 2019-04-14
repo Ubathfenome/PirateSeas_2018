@@ -1,29 +1,33 @@
 package tfm.uniovi.pirateseas.view.activities;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
-import android.app.VoiceInteractor;
-import android.app.VoiceInteractor.PickOptionRequest;
-import android.app.VoiceInteractor.PickOptionRequest.Option;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.graphics.Point;
+import android.graphics.PorterDuff;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Message;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
-import android.support.annotation.RequiresApi;
+import android.speech.RecognitionListener;
+import android.speech.RecognizerIntent;
+import android.speech.SpeechRecognizer;
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -33,6 +37,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -41,6 +46,7 @@ import java.util.List;
 import tfm.uniovi.pirateseas.R;
 import tfm.uniovi.pirateseas.controller.androidGameAPI.Map;
 import tfm.uniovi.pirateseas.controller.androidGameAPI.Player;
+import tfm.uniovi.pirateseas.controller.audio.MusicManager;
 import tfm.uniovi.pirateseas.controller.sensors.events.EventDayNightCycle;
 import tfm.uniovi.pirateseas.controller.sensors.events.EventShakeClouds;
 import tfm.uniovi.pirateseas.controller.sensors.events.EventWeatherMaelstrom;
@@ -66,28 +72,36 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 	private CanvasView mCanvasView;
 	private static final int SENSOR_UPDATE_SECONDS = 2;
 	private static final int ACCELEROMETER_THRESHOLD = 2;
+    private static final int REQUEST_RECORD_PERMISSION = 100;
 
-	protected int[] sensorTypes = null;
-	protected long sensorLastTimestamp;
+    protected int[] sensorTypes = null;
+    protected long sensorLastTimestamp;
 
-	boolean loadGame = false;
+    boolean loadGame = false;
 
-	private int lightLevel;
-	private int mapHeight;
-	private int mapWidth;
+    private int mapHeight;
+    private int mapWidth;
 
-	SharedPreferences mPreferences;
+    SharedPreferences mPreferences;
 
-	private boolean shipControlMode;
-	private boolean ammoControlMode;
+    private boolean shipControlMode;
+    private boolean ammoControlMode;
 
-	private float lastX, lastY, lastZ;
+    private float lastX, lastY, lastZ;
 
-	protected SensorManager mSensorManager;
-	protected List<Sensor> triggeringSensors;
+    protected SensorManager mSensorManager;
+    protected List<Sensor> triggeringSensors;
 
-	public ImageButton btnPause, btnChangeAmmo;
-	public UIDisplayElement mGold, mAmmo;
+    public ImageButton btnPause, btnChangeAmmo;
+    public UIDisplayElement mGold, mAmmo;
+
+    public ProgressBar nPlayerHealthBar;
+    public ProgressBar nPlayerExperienceBar;
+
+    private SpeechRecognizer mSpeechRecognizer;
+    private Intent mSpeechRecognizerIntent;
+    private boolean mIsListening;
+
 
 	@SuppressLint("ClickableViewAccessibility")
 	@Override
@@ -97,10 +111,23 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 		context = this;
 		mCanvasView = new CanvasView(this);
 
+        SpeechRecognitionListener listener = new SpeechRecognitionListener();
+        mSpeechRecognizer = SpeechRecognizer.createSpeechRecognizer(this);
+        Log.i(TAG, "isRecognitionAvailable: " + SpeechRecognizer.isRecognitionAvailable(this));
+        mSpeechRecognizer.setRecognitionListener(listener);
+        mSpeechRecognizerIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        mSpeechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+                RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+        mSpeechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE,
+                this.getPackageName());
+        mSpeechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_PREFERENCE,
+                getString(R.string.lang));
+        mSpeechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 3);
+
 		Intent data = getIntent();
 
 		// Receive the device event triggering sensor list
-		triggeringSensors = new ArrayList<Sensor>();
+		triggeringSensors = new ArrayList<>();
 		sensorTypes = data.getIntArrayExtra(Constants.TAG_SENSOR_LIST);
 		mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
 
@@ -161,11 +188,48 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 		mAmmo = findViewById(R.id.playerAmmunition);
 		mAmmo.setElementValue(0);
 
+        nPlayerHealthBar = findViewById(R.id.prgHealthBar);
+        nPlayerHealthBar.getProgressDrawable().setColorFilter(Color.RED, PorterDuff.Mode.SRC_IN);
+        nPlayerExperienceBar = findViewById(R.id.prgXpBar);
+        nPlayerExperienceBar.getProgressDrawable().setColorFilter(Color.GREEN, PorterDuff.Mode.SRC_IN);
+
+		if(MusicManager.getInstance().getDeviceVolume() == 0){
+            if(!mIsListening) {
+                ActivityCompat.requestPermissions
+                        (GameActivity.this,
+                                new String[]{Manifest.permission.RECORD_AUDIO},
+                                REQUEST_RECORD_PERMISSION);
+                mIsListening = true;
+            } else {
+                mSpeechRecognizer.stopListening();
+                mIsListening = false;
+            }
+        }
+
 	}
+
+    /**
+     * Method called with the result of the permissions request
+     * @param requestCode requested code
+     * @param permissions requested permissions
+     * @param grantResults granted permissions
+     */
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case REQUEST_RECORD_PERMISSION:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    mSpeechRecognizer.startListening(mSpeechRecognizerIntent);
+                } else {
+                    showText("Permission Denied!");
+                }
+        }
+    }
 
 	/**
 	 * Show temporary descriptions (like a tooltip)
-	 * @param text
+	 * @param text Text string to show
 	 */
 	public void showText(String text){
 		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -195,6 +259,15 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 		super.onPause();
 	}
 
+    @Override
+    protected void onDestroy() {
+        if (mSpeechRecognizer != null)
+        {
+            mSpeechRecognizer.destroy();
+        }
+        super.onDestroy();
+    }
+
 	@Override
 	protected void onResume() {
 		findViewById(R.id.rootLayoutGame).setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE);
@@ -218,58 +291,24 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 		mCanvasView.nUpdateThread.getCanvasViewInstance().loadSettings();
 
 		super.onResume();
-
-		if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-			if (isVoiceInteraction()) {
-				startVoiceTrigger();
-			}
-		}
 	}
-
-	@RequiresApi(api = Build.VERSION_CODES.M)
-	private void startVoiceTrigger() {
-		Log.d(TAG, "startVoiceTrigger: ");
-		Option option = null;
-
-		option = new Option("fuego", 0);
-
-		option.addSynonym("dispara");
-		option.addSynonym("ok");
-		option.addSynonym("ya");
-		option.addSynonym("fire");
-		option.addSynonym("shoot");
-
-		getVoiceInteractor()
-				.submitRequest(new PickOptionRequest(new VoiceInteractor.Prompt("go"), new Option[]{option}, null) {
-					@Override
-					public void onPickOptionResult(boolean finished, Option[] selections, Bundle result) {
-						if (finished && selections.length == 1) {
-							Message message = Message.obtain();
-							message.obj = result;
-							// Shoot action
-                            try {
-                                mCanvasView.nShotList.add(mCanvasView.nPlayerShip.shootCannon());
-                            } catch (NoAmmoException e) {
-                                showText(e.getMessage());
-                            }
-                        } else {
-							getActivity().finish();
-						}
-					}
-					@Override
-					public void onCancel() {
-						getActivity().finish();
-					}
-				});
-	}
-
 
 	@Override
 	public void onBackPressed() {
 		exitGame();
 	}
 
-	/**
+    public void updateHealthBar(int health, int max) {
+	    nPlayerHealthBar.setProgress(health);
+	    nPlayerHealthBar.setMax(max);
+    }
+
+    public void updateExperienceBar(int experience, int max) {
+	    nPlayerExperienceBar.setProgress(experience);
+	    nPlayerExperienceBar.setMax(max);
+    }
+
+    /**
 	 * Class to create a Dialog that asks the player if he/she is sure of leaving the game activity
 	 */
 	public static class LeaveGameDialogFragment extends DialogFragment {
@@ -318,7 +357,7 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 					double angleY = Math.toDegrees(Math.asin (axisSpeedY / SensorManager.GRAVITY_EARTH));
 					double angleZ = Math.toDegrees(Math.asin (axisSpeedZ / SensorManager.GRAVITY_EARTH));
 
-					Log.d(TAG, "TYPE_ACCELEROMETER: Acc:angle = "+axisSpeedX+":"+angleX+"º / "+axisSpeedY+":"+angleY+"º / "+axisSpeedZ+":"+angleZ+"º	");
+					// Log.d(TAG, "TYPE_ACCELEROMETER: Acc:angle = "+axisSpeedX+":"+angleX+"º / "+axisSpeedY+":"+angleY+"º / "+axisSpeedZ+":"+angleZ+"º	");
 					// Event
 					if (EventWeatherMaelstrom.generateMaelstrom(axisSpeedY, axisSpeedZ)) {
 						// Notify CanvasView to damage the ships
@@ -352,8 +391,7 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 							int shipSpeed = cView.nPlayerShip.getShipType().getSpeed();
 							float speed = Math.abs(axisSpeedX + axisSpeedY + axisSpeedZ - lastX - lastY - lastZ);
 
-							Log.d(TAG, "TYPE_ACCELEROMETER: Ship movement would be: " + shipSpeed + " + " + speed + " = " + (shipSpeed + speed)
-									+ " to the " + (axisSpeedY < 0 ? "left" : "right"));
+							// Log.d(TAG, "TYPE_ACCELEROMETER: Ship movement would be: " + shipSpeed + " + " + speed + " = " + (shipSpeed + speed) + " to the " + (axisSpeedY < 0 ? "left" : "right"));
 							if (axisSpeedY < 0) {
 								cView.nPlayerShip.move((shipSpeed + speed), 0, true);
 								cView.nPlayerShip.moveShipEntity(new Point(cView.nPlayerShip.getCoordinates().x - 1, cView.nPlayerShip.getCoordinates().y));
@@ -377,9 +415,10 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 					float microTeslaY = event.values[1];
 					float microTeslaZ = event.values[2];
 
+					/*
 					if (!Constants.isInDebugMode(Constants.MODE))
-						Log.d(TAG, "TYPE_MAGNETIC_FIELD: Magnetic field (uT): " + microTeslaX + " / " + microTeslaY
-								+ " / " + microTeslaZ);
+						Log.d(TAG, "TYPE_MAGNETIC_FIELD: Magnetic field (uT): " + microTeslaX + " / " + microTeslaY + " / " + microTeslaZ);
+					*/
 
 					// Event
 					// Establish an event in a future version of the game
@@ -395,9 +434,10 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 					float axisGyroSpeedY = event.values[1];
 					float axisGyroSpeedZ = event.values[2];
 
+					/*
 					if (!Constants.isInDebugMode(Constants.MODE))
-						Log.d(TAG, "TYPE_GYROSCOPE: Gyroscope (rad/s): x = " + axisGyroSpeedX + "; y = " + axisGyroSpeedY
-								+ "; z = " + axisGyroSpeedZ);
+						Log.d(TAG, "TYPE_GYROSCOPE: Gyroscope (rad/s): x = " + axisGyroSpeedX + "; y = " + axisGyroSpeedY 	+ "; z = " + axisGyroSpeedZ);
+					*/
 
 					// Event
 					// Establish an event in a future version of the game
@@ -411,12 +451,14 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 					// Parameters
 					float lux = event.values[0];
 
+					/*
 					if (!Constants.isInDebugMode(Constants.MODE))
 						Log.d(TAG, "TYPE_LIGHT: Light (l): " + lux);
+					*/
 
 					// Event
 					// Save light level as global variable
-					lightLevel = (int) lux;
+                    int lightLevel = (int) lux;
 
 					sensorLastTimestamp = event.timestamp;
 				}
@@ -438,9 +480,10 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 					// Parameters
 					float centimeters = event.values[0];
 
+					/*
 					if (!Constants.isInDebugMode(Constants.MODE))
-						Log.d(TAG,
-								"TYPE_PROXIMITY: Proximity (cm): " + centimeters + " // " + sensor.getMaximumRange());
+						Log.d(TAG, "TYPE_PROXIMITY: Proximity (cm): " + centimeters + " // " + sensor.getMaximumRange());
+					*/
 
 					// Event
 					// Establish an event in a future version of the game
@@ -458,12 +501,14 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 					float linearAccelerationY = event.values[1];
 					float linearAccelerationZ = event.values[2];
 
+					/*
 					if (!Constants.isInDebugMode(Constants.MODE))
 						Log.d(TAG, "TYPE_LINEAR_ACCELERATION: Acceleration force (m/s^2): " + linearAccelerationX
 								+ " / " + linearAccelerationY + " / " + linearAccelerationZ);
+					*/
 
 					// Event
-					Log.d(TAG, "TYPE_LINEAR_ACCELERATION: Acceleration force (m/s^2): " + linearAccelerationX  + " < " + EventShakeClouds.threshold);
+					// Log.d(TAG, "TYPE_LINEAR_ACCELERATION: Acceleration force (m/s^2): " + linearAccelerationX  + " < " + EventShakeClouds.threshold);
 					if (Math.abs(linearAccelerationX) > EventShakeClouds.threshold){
 						shakeClouds();
 					}
@@ -479,9 +524,11 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 					// Parameters
 					float airHumidityPercent = event.values[0];
 
+					/*
 					if (!Constants.isInDebugMode(Constants.MODE))
 						Log.d(TAG, "TYPE_RELATIVE_HUMIDITY: Humidity (%): " + airHumidityPercent + " // "
 								+ sensor.getMaximumRange());
+					*/
 
 					// Event
 					// Establish an event in a future version of the game
@@ -497,7 +544,7 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 
 	/**
 	 * Checks whether an active battle is taking place
-	 * @param cView
+	 * @param cView canvas view
 	 * @return true if there is an alive enemy and the player is still alive
 	 */
 	private boolean battleIsGoing(CanvasView cView) {
@@ -536,28 +583,30 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 
 	@Override
 	public void onAccuracyChanged(Sensor sensor, int accuracy) {
+	    /*
 		if (!Constants.isInDebugMode(Constants.MODE))
 			Log.d(TAG, "Sensor " + sensor.getName() + " got changed in " + accuracy);
+		*/
 	}
 
 	/**
 	 * Checks if an integer array has a certain value in it
-	 * @param array
-	 * @param value
+	 * @param array array
+	 * @param value value to look for inside the array
 	 * @return true if it hold it, false otherwise
 	 */
 	private boolean arrayContainsValue(int[] array, int value) {
-		for (int i = 0; i < array.length; i++) {
-			if (array[i] == value)
-				return true;
-		}
+        for (int anArray : array) {
+            if (anArray == value)
+                return true;
+        }
 		return false;
 	}
 
 	/**
 	 * Calls the activity to end the game
-	 * @param nPlayer
-	 * @param map
+	 * @param nPlayer player object
+	 * @param map map object
 	 */
 	public void gameOver(Player nPlayer, Map map) {
 		Intent gameOverIntent = new Intent(this, GameOverActivity.class);
@@ -629,5 +678,146 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 	 */
 	public int getMapWidth(){
 		return mapWidth;
+	}
+
+    /**
+     * Speech Recognition Listener
+     */
+	protected class SpeechRecognitionListener implements RecognitionListener
+	{
+
+		@Override
+		public void onBeginningOfSpeech()
+		{
+			Log.d(TAG, "onBeginningOfSpeech");
+		}
+
+		@Override
+		public void onBufferReceived(byte[] buffer)
+		{
+			Log.d(TAG, "onBufferReceived");
+		}
+
+		@Override
+		public void onEndOfSpeech()
+		{
+			Log.d(TAG, "onEndOfSpeech");
+		}
+
+		@Override
+		public void onError(int error)
+		{
+			mSpeechRecognizer.startListening(mSpeechRecognizerIntent);
+			Log.e(TAG, "onError = " + getErrorText(error));
+		}
+
+		@Override
+		public void onEvent(int eventType, Bundle params)
+		{
+			Log.d(TAG, "onEvent");
+		}
+
+		@Override
+		public void onPartialResults(Bundle partialResults)
+		{
+			Log.d(TAG, "onPartialResults");
+		}
+
+		@Override
+		public void onReadyForSpeech(Bundle params)
+		{
+			Log.d(TAG, "onReadyForSpeech"); //$NON-NLS-1$
+		}
+
+		@Override
+		public void onResults(Bundle results)
+		{
+			Log.d(TAG, "onResults"); //$NON-NLS-1$
+			ArrayList<String> matches = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
+			// matches are the return values of speech recognition engine
+			// Use these values for whatever you wish to do
+
+            if(matches!=null && checkMatches(matches))
+                doAction();
+		}
+
+        /**
+         * Method that checks the spoken results with the key words list and returns if any of them match
+         * @param matches spoken words
+         * @return true if spoken words are within key words list
+         */
+        private boolean checkMatches(ArrayList<String> matches) {
+		    for(String match : matches) {
+		        if(match.equals(getString(R.string.command_fire))){
+		            return true;
+                } else if(match.equals(getString(R.string.command_shoot))){
+                    return true;
+                } else if(match.equals(getString(R.string.command_ok))){
+		            return true;
+                } else if(match.equals(getString(R.string.command_go))){
+		            return true;
+                }
+            }
+		    return false;
+        }
+
+        @Override
+		public void onRmsChanged(float rmsdB)
+		{
+			Log.d(TAG, "onRmsChanged");
+		}
+
+        /**
+         * Method called when the recognized words match any of the key words list
+         */
+        private void doAction() {
+            try {
+                mCanvasView.nShotList.add(mCanvasView.nPlayerShip.shootCannon());
+            } catch (NoAmmoException e) {
+                showText(e.getMessage());
+            }
+        }
+
+        /**
+         * Returns info feedback over the possible errors of the speech recognizer
+         * @param errorCode error code
+         * @return Error string associated with the error code
+         */
+        String getErrorText(int errorCode) {
+            String message;
+            switch (errorCode) {
+                case SpeechRecognizer.ERROR_AUDIO:
+                    message = "Audio recording error";
+                    break;
+                case SpeechRecognizer.ERROR_CLIENT:
+                    message = "Client side error";
+                    break;
+                case SpeechRecognizer.ERROR_INSUFFICIENT_PERMISSIONS:
+                    message = "Insufficient permissions";
+                    break;
+                case SpeechRecognizer.ERROR_NETWORK:
+                    message = "Network error";
+                    break;
+                case SpeechRecognizer.ERROR_NETWORK_TIMEOUT:
+                    message = "Network timeout";
+                    break;
+                case SpeechRecognizer.ERROR_NO_MATCH:
+                    message = "No match";
+                    break;
+                case SpeechRecognizer.ERROR_RECOGNIZER_BUSY:
+                    message = "RecognitionService busy";
+                    break;
+                case SpeechRecognizer.ERROR_SERVER:
+                    message = "error from server";
+                    break;
+                case SpeechRecognizer.ERROR_SPEECH_TIMEOUT:
+                    message = "No speech input";
+                    break;
+                default:
+                    message = "Didn't understand, please try again.";
+                    break;
+            }
+            return message;
+        }
 	}
 }

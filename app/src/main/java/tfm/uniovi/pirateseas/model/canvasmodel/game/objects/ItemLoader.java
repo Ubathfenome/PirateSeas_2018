@@ -12,41 +12,22 @@ import tfm.uniovi.pirateseas.R;
  * Class for the ItemLoader of the ShopActivity
  */
 public class ItemLoader{
-	
-	List<Item> itemList, defaultList;
-	List<Item> levelOne = new ArrayList<Item>();
-	List<Item> levelTwo = new ArrayList<Item>();
-	List<Item> levelThree = new ArrayList<Item>();
+
+	private List<Item> itemList, defaultList;
+	private List<Item> levelOne = new ArrayList<>();
+	private List<Item> levelTwo = new ArrayList<>();
+	private List<Item> levelThree = new ArrayList<>();
 	
 	private int[] levelProbabilities;
-	
-	Item crew;
-	Item repairman;
-	Item ammoSimple;
-	Item ammoAimed;
-	Item ammoDouble;
-	Item ammoSweep;
-	Item nest;
-	Item materials;
-	Item mapPiece;
-	Item map;
-	Item blackPowder;
-	Item valuable;
-	
-	public static int CREW_ID;
-	public static int REPAIRMAN_ID;
-	public static int AMMO_SIMPLE_ID;
-	public static int AMMO_AIMED_ID;
-	public static int AMMO_DOUBLE_ID;
-	public static int AMMO_SWEEP_ID;
-	public static int NEST_ID;
-	public static int MATERIALS_ID;
-	public static int MAPPIECE_ID;
-	public static int MAP_ID;
-	public static int BLACKPOWDER_ID;
-	public static int VALUABLE_ID;
-	
-	
+
+	private Item crew;
+	private Item repairman;
+	private Item nest;
+	private Item materials;
+	private Item mapPiece;
+	private Item blackPowder;
+	private Item valuable;
+
 	private static final float ITEM_TIER1_PERCENT = 80;
 	private static final float ITEM_TIER2_PERCENT = 15;
 	private static final float ITEM_TIER3_PERCENT = 5;
@@ -54,46 +35,33 @@ public class ItemLoader{
 	private Context context;
 	
 	@SuppressWarnings("unchecked")
-	/**
+	/*
 	 * Constructor
 	 */
 	public ItemLoader(Context c){
-		itemList = new ArrayList<Item>();
+		itemList = new ArrayList<>();
 		
 		this.context = c;
 		
 		crew = new Item(getString(R.string.shop_item_crew_name),
 				getString(R.string.shop_item_crew_desc), 1, 5);
-		CREW_ID = crew.getId();
+
 		repairman = new Item(getString(R.string.shop_item_repairman_name),
 				getString(R.string.shop_item_repairman_desc), 1, 15);
-		REPAIRMAN_ID = repairman.getId();
-		ammoSimple = new Item(getString(R.string.shop_item_ammo_simple_name), getString(R.string.shop_item_ammo_simple_desc),1,1);
-		AMMO_SIMPLE_ID = ammoSimple.getId();
-		ammoAimed = new Item(getString(R.string.shop_item_ammo_aimed_name), getString(R.string.shop_item_ammo_aimed_desc),1,10);
-		AMMO_AIMED_ID = ammoAimed.getId();
-		ammoDouble = new Item(getString(R.string.shop_item_ammo_double_name), getString(R.string.shop_item_ammo_double_desc), 2, 20);
-		AMMO_DOUBLE_ID = ammoDouble.getId();
-		ammoSweep = new Item(getString(R.string.shop_item_ammo_sweep_name), getString(R.string.shop_item_ammo_sweep_desc), 3, 30);
-		AMMO_SWEEP_ID = ammoSweep.getId();
+		Item ammoSimple = new Item(getString(R.string.shop_item_ammo_simple_name), getString(R.string.shop_item_ammo_simple_desc), 1, 1);
+		Item ammoAimed = new Item(getString(R.string.shop_item_ammo_aimed_name), getString(R.string.shop_item_ammo_aimed_desc), 1, 10);
+		Item ammoDouble = new Item(getString(R.string.shop_item_ammo_double_name), getString(R.string.shop_item_ammo_double_desc), 2, 20);
+		Item ammoSweep = new Item(getString(R.string.shop_item_ammo_sweep_name), getString(R.string.shop_item_ammo_sweep_desc), 3, 30);
 		nest = new Item(getString(R.string.shop_item_nest_name),
 				getString(R.string.shop_item_nest_desc), 3, 35);
-		NEST_ID = nest.getId();
 		materials = new Item(getString(R.string.shop_item_mats_name),
 				getString(R.string.shop_item_mats_desc), 2, 40);
-		MATERIALS_ID = materials.getId();
 		mapPiece = new Item(getString(R.string.shop_item_mpiece_name),
 				getString(R.string.shop_item_mpiece_desc), 2, 65);
-		MAPPIECE_ID = mapPiece.getId();
-		map = new Item(getString(R.string.shop_item_map_name),
-				getString(R.string.shop_item_map_desc), 3, 140);
-		MAP_ID = map.getId();
 		blackPowder = new Item(getString(R.string.shop_item_bpowder_name),
 				getString(R.string.shop_item_bpowder_desc), 3, 85);
-		BLACKPOWDER_ID = blackPowder.getId();
 		valuable = new Item(getString(R.string.shop_item_valuable_name),
 				getString(R.string.shop_item_valuable_desc), 3, 101);
-		VALUABLE_ID = valuable.getId();
 		
 		defaultList = (ArrayList<Item>) ((ArrayList<Item>) loadAll()).clone();
 		
@@ -121,7 +89,7 @@ public class ItemLoader{
 	 * Method to load all the Items on the Shop
 	 * @return List with all the loaded Items
 	 */
-	public List<Item> loadAll(){
+	private List<Item> loadAll(){
 		itemList.clear();
 		
 		itemList.add(crew);
@@ -182,18 +150,18 @@ public class ItemLoader{
 	 * @return Random Item
 	 */
 	private Item getRandomItem(){
-		int randomProbability = (int) Math.random() * 100;
+		int randomProbability = (int) (Math.random() * 100);
 		Item item = null;
 		
 		switch(levelProbabilities[randomProbability]){
-			case 1:
-				item = levelOne.get((int) Math.random() * (levelOne.size() - 1));
+			case 3:
+				item = levelThree.get((int) (Math.random() * (levelThree.size() - 1)));
 				break;
 			case 2:
-				item = levelTwo.get((int) Math.random() * (levelTwo.size() - 1));
+				item = levelTwo.get((int) (Math.random() * (levelTwo.size() - 1)));
 				break;
-			case 3:
-				item = levelThree.get((int) Math.random() * (levelThree.size() - 1));
+			default:
+				item = levelOne.get((int) (Math.random() * (levelOne.size() - 1)));
 				break;
 		}
 		

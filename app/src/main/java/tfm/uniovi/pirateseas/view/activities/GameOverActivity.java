@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Typeface;
-import android.os.Build;
 import android.os.Bundle;
 import android.transition.Fade;
 import android.transition.Transition;
@@ -72,10 +71,8 @@ public class GameOverActivity extends Activity {
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
 		if(event.getAction() == MotionEvent.ACTION_DOWN){
-			if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT){
-				Transition mFadeTransition = new Fade();			
-				TransitionManager.beginDelayedTransition((ViewGroup) findViewById(R.id.rootLayoutGameOver), mFadeTransition);
-			}
+			Transition mFadeTransition = new Fade();
+			TransitionManager.beginDelayedTransition((ViewGroup) findViewById(R.id.rootLayoutGameOver), mFadeTransition);
 			
 			Intent newGameTaskIntent = new Intent(this, MainMenuActivity.class);
 			newGameTaskIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);

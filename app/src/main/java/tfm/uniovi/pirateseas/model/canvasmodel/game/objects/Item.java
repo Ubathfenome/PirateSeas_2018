@@ -19,7 +19,7 @@ public class Item implements Comparable<Item> {
 	 * @param level
 	 * @param price
 	 */
-	public Item(String name, String description, int level, int price){
+	Item(String name, String description, int level, int price){
 		this.id = name.hashCode();
 		this.name = name;
 		this.description = description;

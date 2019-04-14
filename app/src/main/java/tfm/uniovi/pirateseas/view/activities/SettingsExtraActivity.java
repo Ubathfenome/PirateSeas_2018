@@ -24,13 +24,9 @@ import tfm.uniovi.pirateseas.global.Constants;
  * Activity to manage the extra settings available form the game
  */
 public class SettingsExtraActivity extends Activity {
-	
-	private Button btnRestore;
-	private TextView txtSettingsLabel;
+
 	private ToggleButton tglControlMode;
-	private TextView txtControlMode;
 	private ToggleButton tglChangeAmmo;
-	private TextView txtAmmoMode;
 
 	private boolean mDebugMode;
 
@@ -49,7 +45,7 @@ public class SettingsExtraActivity extends Activity {
 
 		mDebugMode = mPreferences.getBoolean(Constants.TAG_EXE_MODE, false);
 
-		txtSettingsLabel = 	findViewById(R.id.txtSettingsLabel);
+		TextView txtSettingsLabel = findViewById(R.id.txtSettingsLabel);
 		txtSettingsLabel.setTypeface(customFont);
 		
 		tglControlMode = findViewById(R.id.tglControlMode);
@@ -57,17 +53,17 @@ public class SettingsExtraActivity extends Activity {
 		tglControlMode.setChecked(controlCheck);
 		tglControlMode.setTypeface(customFont);
 
-		txtControlMode = findViewById(R.id.txtControlMode);
+		TextView txtControlMode = findViewById(R.id.txtControlMode);
 		txtControlMode.setTypeface(customFont);
 		
 		tglChangeAmmo = findViewById(R.id.tglChangeAmmo);
 		tglChangeAmmo.setChecked(mPreferences.getBoolean(Constants.PREF_AMMO_CONTROL_MODE, Constants.PREF_GAME_TOUCH));
 		tglChangeAmmo.setTypeface(customFont);
 
-		txtAmmoMode = findViewById(R.id.txtAmmoMode);
+		TextView txtAmmoMode = findViewById(R.id.txtAmmoMode);
 		txtAmmoMode.setTypeface(customFont);
 
-		btnRestore = findViewById(R.id.btnSettingsRestore);
+		Button btnRestore = findViewById(R.id.btnSettingsRestore);
 		btnRestore.setTypeface(customFont);
 		btnRestore.setOnClickListener(new OnClickListener() {
 
@@ -104,7 +100,7 @@ public class SettingsExtraActivity extends Activity {
 	}
 
 	@SuppressLint("ValidFragment")
-	/**
+	/*
 	 * Class to show a Dialog that asks the user if he/she really want to reset all preferences
 	 */
 	public class ResetPreferencesDialogFragment extends DialogFragment {
@@ -142,7 +138,7 @@ public class SettingsExtraActivity extends Activity {
 
 	/**
 	 * Method that resets all saved preferences
-	 * @return
+	 * @return true if the preferences got reset, false otherwise
 	 */
 	private boolean resetPreferences() {
 		SharedPreferences.Editor editor = mPreferences.edit();

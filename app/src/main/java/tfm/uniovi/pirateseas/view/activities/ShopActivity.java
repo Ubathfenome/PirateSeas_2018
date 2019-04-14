@@ -12,6 +12,7 @@ import android.content.Intent;
 import android.content.res.Resources.NotFoundException;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -59,8 +60,6 @@ public class ShopActivity extends ListActivity{
 	private int mapHeight;
 	private int mapWidth;
 
-	boolean mDebug = false;
-	
 	Player dummyPlayer;
 	Ship dummyShip;
 	Map dummyMap;
@@ -229,7 +228,7 @@ public class ShopActivity extends ListActivity{
 	}
 	
 	@SuppressLint("ValidFragment")
-	/**
+	/*
 	 * Class to show a dialog that asks the user if he/she wants to leave the activity
 	 */
 	public class LeaveActivityDialogFragment extends DialogFragment {
@@ -284,12 +283,12 @@ public class ShopActivity extends ListActivity{
 	}
 	
 	@SuppressLint("ValidFragment")
-	/**
+	/*
 	 * Class to show a Dialog that asks the user if he/she really want to buy an Item
 	 */
 	public class PurchaseItemDialogFragment extends DialogFragment {
 		
-		Item item = null;
+		Item item;
 		
 		public PurchaseItemDialogFragment(Item pressedItem) {
 			this.item = pressedItem;
@@ -344,12 +343,13 @@ public class ShopActivity extends ListActivity{
 		
 		ViewHolder vHolder;
 		
-		public ItemAdapter(Context context, int resource, List<Item> objects) {
+		ItemAdapter(Context context, int resource, List<Item> objects) {
 			super(context, resource, objects);
 		}
 
+		@NonNull
 		@Override
-		public View getView(final int position, View convertView, ViewGroup parent) {
+		public View getView(final int position, View convertView, @NonNull ViewGroup parent) {
 			if(convertView == null){
 				convertView = LayoutInflater.from(this.getContext())
 						.inflate(R.layout.list_item_layout, parent, false);
@@ -375,18 +375,30 @@ public class ShopActivity extends ListActivity{
 
 			Item item = getItem(position);
 			if(item != null) {
-				if(getString(R.string.shop_item_crew_name).equals(item.getName())){ vHolder.itemIconView.setBackgroundResource(R.mipmap.icon_buff_crew); }
-				else if(getString(R.string.shop_item_repairman_name).equals(item.getName())){ vHolder.itemIconView.setBackgroundResource(R.mipmap.icon_buff_repa); }
-				else if(getString(R.string.shop_item_ammo_simple_name).equals(item.getName())){ vHolder.itemIconView.setBackgroundResource(R.mipmap.txtr_ammo_default); }
-				else if(getString(R.string.shop_item_ammo_aimed_name).equals(item.getName())){ vHolder.itemIconView.setBackgroundResource(R.mipmap.txtr_ammo_aimed); }
-				else if(getString(R.string.shop_item_ammo_double_name).equals(item.getName())){ vHolder.itemIconView.setBackgroundResource(R.mipmap.txtr_ammo_double); }
-				else if(getString(R.string.shop_item_ammo_sweep_name).equals(item.getName())){ vHolder.itemIconView.setBackgroundResource(R.mipmap.txtr_ammo_sweep); }
-				else if(getString(R.string.shop_item_nest_name).equals(item.getName())){ vHolder.itemIconView.setBackgroundResource(R.mipmap.icon_buff_occu); }
-				else if(getString(R.string.shop_item_mats_name).equals(item.getName())){ vHolder.itemIconView.setBackgroundResource(R.mipmap.icon_buff_wood); }
-				else if(getString(R.string.shop_item_mpiece_name).equals(item.getName())){ vHolder.itemIconView.setBackgroundResource(R.mipmap.icon_buff_mapp); }
-				else if(getString(R.string.shop_item_map_name).equals(item.getName())){ vHolder.itemIconView.setBackgroundResource(R.mipmap.icon_buff_mapp); }
-				else if(getString(R.string.shop_item_bpowder_name).equals(item.getName())){ vHolder.itemIconView.setBackgroundResource(R.mipmap.icon_buff_bpow); }
-				else if(getString(R.string.shop_item_valuable_name).equals(item.getName())){ vHolder.itemIconView.setBackgroundResource(R.mipmap.ico_gold); }
+				if(getString(R.string.shop_item_crew_name).equals(item.getName())){
+				    vHolder.itemIconView.setImageResource(R.mipmap.icon_buff_crew); }
+				else if(getString(R.string.shop_item_repairman_name).equals(item.getName())){
+				    vHolder.itemIconView.setImageResource(R.mipmap.icon_buff_repa); }
+				else if(getString(R.string.shop_item_ammo_simple_name).equals(item.getName())){
+				    vHolder.itemIconView.setImageResource(R.mipmap.txtr_ammo_default); }
+				else if(getString(R.string.shop_item_ammo_aimed_name).equals(item.getName())){
+				    vHolder.itemIconView.setImageResource(R.mipmap.txtr_ammo_aimed); }
+				else if(getString(R.string.shop_item_ammo_double_name).equals(item.getName())){
+				    vHolder.itemIconView.setImageResource(R.mipmap.txtr_ammo_double); }
+				else if(getString(R.string.shop_item_ammo_sweep_name).equals(item.getName())){
+				    vHolder.itemIconView.setImageResource(R.mipmap.txtr_ammo_sweep); }
+				else if(getString(R.string.shop_item_nest_name).equals(item.getName())){
+				    vHolder.itemIconView.setImageResource(R.mipmap.icon_buff_occu); }
+				else if(getString(R.string.shop_item_mats_name).equals(item.getName())){
+				    vHolder.itemIconView.setImageResource(R.mipmap.icon_buff_wood); }
+				else if(getString(R.string.shop_item_mpiece_name).equals(item.getName())){
+				    vHolder.itemIconView.setImageResource(R.mipmap.icon_buff_mapp); }
+				else if(getString(R.string.shop_item_map_name).equals(item.getName())){
+				    vHolder.itemIconView.setImageResource(R.mipmap.icon_buff_mapp); }
+				else if(getString(R.string.shop_item_bpowder_name).equals(item.getName())){
+				    vHolder.itemIconView.setImageResource(R.mipmap.icon_buff_bpow); }
+				else if(getString(R.string.shop_item_valuable_name).equals(item.getName())){
+				    vHolder.itemIconView.setImageResource(R.mipmap.ico_gold); }
 
 				vHolder.itemNameView.setText(item.getName());
 				vHolder.itemPriceView.setText(String.valueOf(item.getPrice()));

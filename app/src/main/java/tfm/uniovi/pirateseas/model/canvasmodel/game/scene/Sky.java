@@ -6,6 +6,7 @@ import android.graphics.Canvas;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.support.annotation.NonNull;
 
 import tfm.uniovi.pirateseas.R;
 import tfm.uniovi.pirateseas.model.canvasmodel.game.BasicModel;
@@ -25,7 +26,7 @@ public class Sky extends BasicModel{
 	
 	@SuppressWarnings("deprecation")
 	@SuppressLint("NewApi")
-	/**
+	/*
 	 * Constructor
 	 */
 	public Sky(Context context, double x, double y, double mCanvasWidth,
@@ -42,7 +43,7 @@ public class Sky extends BasicModel{
 	}
 	
 	@Override
-	/**
+	/*
 	 * Draws on the screen the image of the model
 	 */
 	public void drawOnScreen(Canvas canvas){
@@ -73,8 +74,9 @@ public class Sky extends BasicModel{
 		this.filterValue = value;
 	}
 
+	@NonNull
 	@Override
-	/**
+	/*
 	 * toString
 	 */
 	public String toString() {

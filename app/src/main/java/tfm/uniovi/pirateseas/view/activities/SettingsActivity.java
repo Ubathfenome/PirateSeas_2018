@@ -22,13 +22,7 @@ import tfm.uniovi.pirateseas.global.Constants;
  * Activity to manage the app settings
  */
 public class SettingsActivity extends Activity {
-	private TextView txtTitleLabel;
 	private TextView txtVolumeLabel;
-	private SeekBar skbVolume;
-
-	private Button btnSettingsExtra;
-	
-	private Button btnSettingsAccept;
 
 	private float volumeValue = 0f;
 	private String labelValue;
@@ -47,7 +41,7 @@ public class SettingsActivity extends Activity {
 		
 		context = this;
 
-		txtTitleLabel = findViewById(R.id.txtSettingsLabel);
+		TextView txtTitleLabel = findViewById(R.id.txtSettingsLabel);
 		Typeface customFont = Typeface.createFromAsset(getAssets(), "fonts/"
 				+ Constants.FONT_NAME + ".ttf");
 		txtTitleLabel.setTypeface(customFont);
@@ -59,7 +53,7 @@ public class SettingsActivity extends Activity {
 		labelValue = (String) txtVolumeLabel.getText();
 		txtVolumeLabel.setText(labelValue + " " + (int) volumeValue);
 
-		skbVolume = findViewById(R.id.sbVolume);
+		SeekBar skbVolume = findViewById(R.id.sbVolume);
 		skbVolume.setProgress((int) volumeValue);
 		skbVolume.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
 
@@ -80,8 +74,8 @@ public class SettingsActivity extends Activity {
 				txtVolumeLabel.setText(labelValue + " " + progress);
 			}
 		});
-		
-		btnSettingsExtra = findViewById(R.id.btnExtraSettings);
+
+		Button btnSettingsExtra = findViewById(R.id.btnExtraSettings);
 		btnSettingsExtra.setTypeface(customFont);
 		btnSettingsExtra.setOnClickListener(new OnClickListener() {
 			
@@ -92,7 +86,7 @@ public class SettingsActivity extends Activity {
 			}
 		});
 
-		btnSettingsAccept = findViewById(R.id.btnSettingsAccept);
+		Button btnSettingsAccept = findViewById(R.id.btnSettingsAccept);
 		btnSettingsAccept.setTypeface(customFont);
 		btnSettingsAccept.setOnClickListener(new OnClickListener() {
 

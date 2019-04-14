@@ -201,8 +201,11 @@ public class MainMenuActivity extends Activity {
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 			if (Settings.System.canWrite(context)) {
 				if(!hasPermission(INITIAL_PERMS[0])) {
-					if(shouldShowRequestPermissionRationale(INITIAL_PERMS[0]))
+					if(shouldShowRequestPermissionRationale(INITIAL_PERMS[0])) {
 						requestPermissions(INITIAL_PERMS, Constants.REQUEST_PERMISSIONS);
+					}else {
+						loadSettings();
+					}
 				}
 			}
 			else {

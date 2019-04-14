@@ -40,21 +40,12 @@ public class ScreenSelectionActivity extends Activity {
 
 	private static final String TAG = "ScreenSelectionActivity";
 
-	private LinearLayout layoutBackground;
-
-	private ImageButton btnLeft;
-	private ImageButton btnUp;
-	private ImageButton btnDown;
-	private ImageButton btnRight;
-
 	private TextView txtScreenSelectionLabel;
 
 	private Player p = null;
 	private Ship ship = null;
 	private Map map = null;
-	private Date date;
 
-	private Drawable currentMapDrawable;
 	int mapWidth;
 	int mapHeight;
 	int mapLength;
@@ -63,7 +54,6 @@ public class ScreenSelectionActivity extends Activity {
 	int[] sensorTypes = null;
 	boolean loadGame;
 
-	@SuppressWarnings("unused")
 	private Context context;
 
 	@SuppressLint("NewApi")
@@ -84,7 +74,7 @@ public class ScreenSelectionActivity extends Activity {
 		mapHeight = intent.getIntExtra(Constants.TAG_SCREEN_SELECTION_MAP_HEIGHT, Constants.MAP_MIN_HEIGHT);
 		mapWidth = intent.getIntExtra(Constants.TAG_SCREEN_SELECTION_MAP_WIDTH, Constants.MAP_MIN_WIDTH);
 
-		date = new Date();
+		Date date = new Date();
 		GameHelper.loadGameAtPreferences(this,p = new Player(), ship = new Ship(), map = new Map(date, mapHeight, mapWidth));
 		p = GameHelper.helperPlayer;
 		ship = GameHelper.helperShip;
@@ -93,8 +83,8 @@ public class ScreenSelectionActivity extends Activity {
 		if(map.getMapLength() == Constants.MAP_MIN_LENGTH)
 			map = null;
 
-		layoutBackground = findViewById(R.id.layoutBackground);
-		currentMapDrawable = getCurrentMap(date);
+		LinearLayout layoutBackground = findViewById(R.id.layoutBackground);
+		Drawable currentMapDrawable = getCurrentMap(date);
 		layoutBackground.setBackground(currentMapDrawable);
 
 		mapWidth = map.getMapWidth();
@@ -104,7 +94,7 @@ public class ScreenSelectionActivity extends Activity {
 
 		final boolean encounter = randomEncounter();
 
-		btnLeft = findViewById(R.id.btnLeft);
+		ImageButton btnLeft = findViewById(R.id.btnLeft);
 		btnLeft.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -142,7 +132,7 @@ public class ScreenSelectionActivity extends Activity {
 			}
 		});
 
-		btnUp = findViewById(R.id.btnFront);
+		ImageButton btnUp = findViewById(R.id.btnFront);
 		btnUp.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -180,7 +170,7 @@ public class ScreenSelectionActivity extends Activity {
 			}
 		});
 
-		btnRight = findViewById(R.id.btnRight);
+		ImageButton btnRight = findViewById(R.id.btnRight);
 		btnRight.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -218,7 +208,7 @@ public class ScreenSelectionActivity extends Activity {
 			}
 		});
 
-		btnDown = findViewById(R.id.btnDown);
+		ImageButton btnDown = findViewById(R.id.btnDown);
 		btnDown.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -421,5 +411,16 @@ public class ScreenSelectionActivity extends Activity {
 
 		double logarythm = Math.log(playerLevel);
 		return logarythm % 2 == 0;
+	}
+
+	@Override
+	public void onBackPressed() {
+		// Exit game. Return to main menu
+		Intent mainMenuIntent = new Intent(context, MainMenuActivity.class);
+		MusicManager.getInstance().stopBackgroundMusic();
+		MusicManager.getInstance(context, MusicManager.MUSIC_BATTLE).playBackgroundMusic();
+		mainMenuIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		startActivity(mainMenuIntent);
+		finish();
 	}
 }

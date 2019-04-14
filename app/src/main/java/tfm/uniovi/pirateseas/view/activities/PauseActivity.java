@@ -26,23 +26,14 @@ public class PauseActivity extends Activity {
 	private static final String TAG = "PauseActivity";
 
 	private Context context;
-	
-	private TextView txtTitleLabel;
-	private TextView txtTooltip;
-	private Button btnResume;
-	private Button btnExit;
-	private ImageButton btnSettings;
-	private ImageButton btnHelp;
 
-	private ProgressBar pgrHealth;
+    private TextView txtTooltip;
+
+    private ProgressBar pgrHealth;
 	private ProgressBar pgrPower;
 	private ProgressBar pgrRange;
 
-	private ImageView imgHealth;
-	private ImageView imgPower;
-	private ImageView imgRange;
-
-	@Override
+    @Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_pause);
@@ -50,13 +41,13 @@ public class PauseActivity extends Activity {
 		
 		context = this;
 
-		txtTitleLabel = findViewById (R.id.txtPauseLabel);
+        TextView txtTitleLabel = findViewById(R.id.txtPauseLabel);
 		Typeface customFont = Typeface.createFromAsset(getAssets(), "fonts/" + Constants.FONT_NAME + ".ttf");
 		txtTitleLabel.setTypeface(customFont);
 
 		Intent data = getIntent();
 
-		btnResume = findViewById(R.id.btnPauseResume);
+        Button btnResume = findViewById(R.id.btnPauseResume);
 		btnResume.setTypeface(customFont);
 		btnResume.setOnClickListener(new OnClickListener(){
 			public void onClick(View v){
@@ -65,24 +56,24 @@ public class PauseActivity extends Activity {
 				finish();
 			}
 		});
-		
-		btnSettings = findViewById(R.id.btnPauseSettings);
+
+        ImageButton btnSettings = findViewById(R.id.btnPauseSettings);
 		btnSettings.setOnClickListener(new OnClickListener(){
 			public void onClick(View v){
 				Intent settingsIntent = new Intent(context, SettingsActivity.class);
 				startActivity(settingsIntent);
 			}
 		});
-		
-		btnHelp = findViewById(R.id.btnPauseHelp);
+
+        ImageButton btnHelp = findViewById(R.id.btnPauseHelp);
 		btnHelp.setOnClickListener(new OnClickListener(){
 			public void onClick(View v){
 				Intent helpIntent = new Intent(context, HelpActivity.class);
 				startActivity(helpIntent);
 			}
 		});
-		
-		btnExit = findViewById(R.id.btnPauseExit);
+
+        Button btnExit = findViewById(R.id.btnPauseExit);
 		btnExit.setTypeface(customFont);
 		btnExit.setOnClickListener(new OnClickListener() {
 			@Override
@@ -116,21 +107,21 @@ public class PauseActivity extends Activity {
 		int rProgress = Math.round(ship.getRange() * Constants.DEFAULT_SHIP_BASIC_RANGE);
 		pgrRange.setProgress(rProgress);
 
-        imgHealth = findViewById(R.id.imgHealth);
+        ImageView imgHealth = findViewById(R.id.imgHealth);
         imgHealth.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
 				txtTooltip.setText(getString(R.string.pause_hint_health, pgrHealth.getProgress(), pgrHealth.getMax()));
 			}
 		});
-        imgPower = findViewById(R.id.imgPower);
+        ImageView imgPower = findViewById(R.id.imgPower);
         imgPower.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
 				txtTooltip.setText(getString(R.string.pause_hint_power, pgrPower.getProgress(), pgrPower.getMax()));
 			}
 		});
-        imgRange = findViewById(R.id.imgRange);
+        ImageView imgRange = findViewById(R.id.imgRange);
         imgRange.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
@@ -143,6 +134,5 @@ public class PauseActivity extends Activity {
 
 		Log.d(TAG,"PauseActivity Ship H=" + pgrHealth.getProgress() + "/" + pgrHealth.getMax() + " P=" + pgrPower.getProgress() + "/" + pgrPower.getMax() + " R=" + pgrRange.getProgress() + "/" + pgrRange.getMax());
 
-	}	
-	
+	}
 }

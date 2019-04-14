@@ -10,13 +10,13 @@ import android.os.Build;
  */
 public class Parallax {
 	
-	Drawable imageBase = null, imageTop = null;
+	private Drawable imageBase = null, imageTop = null;
 	public static final float SPEED_BASE = 1.2f;
 	public static final float SPEED_TOP = 8f;
 	
 	@SuppressLint("NewApi")
 	@SuppressWarnings("deprecation")
-	/**
+	/*
 	 * Constructor
 	 */
 	public Parallax(Context context, int resourceBase, int resourceTop){
@@ -35,7 +35,7 @@ public class Parallax {
 
 	/**
 	 * Return Drawable array with the 2 images of the Parallax
-	 * @return
+	 * @return Drawable array with the 2 images of the Parallax
 	 */
 	public Drawable[] getLayers(){
 		Drawable[] layers = new Drawable[2];
@@ -46,7 +46,7 @@ public class Parallax {
 
 	/**
 	 * Sets the alpha value for the parallax
-	 * @param alpha
+	 * @param alpha alpha
 	 */
 	public void setAlpha(int alpha) {
 		imageBase.setAlpha(alpha);
@@ -57,7 +57,7 @@ public class Parallax {
 	 * Get the height of the taller image on the Parallax
 	 * @return Height
 	 */
-	public int getMaxHeight(){
+	int getMaxHeight(){
 		int hBase = imageBase.getIntrinsicHeight();
 		int hTop = imageTop.getIntrinsicHeight();
 		return hBase >= hTop ? hBase : hTop;
@@ -67,7 +67,7 @@ public class Parallax {
 	 * Get the top width of the wider image on the Parallax
 	 * @return Width
 	 */
-	public int getMaxWidth(){
+	int getMaxWidth(){
 		int wBase = imageBase.getIntrinsicWidth();
 		int wTop = imageTop.getIntrinsicWidth();
 		return wBase >= wTop ? wBase : wTop;

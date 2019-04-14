@@ -178,7 +178,7 @@
         tristique auctor. Duis sit amet varius odio. Vestibulum eu dui justo. Phasellus tellus tortor, 
         molestie sollicitudin porta ac, maximus vitae orci. Nulla nibh massa, convallis egestas orci 
         quis, efficitur ultricies erat.</string>
-    <string name="empty_string"></string> 
+    <string name="empty_string" />
         
     <!-- Game strings -->
     <string name="tutorial_1">Arrr Mate!! Welcome to PIRATE SEAS!!\nYarr want to rule these seas and loot all the booty.</string>
@@ -220,6 +220,11 @@
     <string name="help_message_7">7. Player ship</string>
     <string name="help_message_8">8. Player\'s gold</string>
     <string name="help_message_9">9. Selected remaining ammo</string>
+    <string name="lang">en</string>
+    <string name="command_fire">fire</string>
+    <string name="command_ok">OK</string>
+    <string name="command_go">go</string>
+    <string name="command_shoot">shoot</string>
 
 
 </resources>

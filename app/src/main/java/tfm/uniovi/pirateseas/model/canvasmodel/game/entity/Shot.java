@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Point;
 import android.os.Build;
+import android.support.annotation.NonNull;
 
 import tfm.uniovi.pirateseas.R;
 import tfm.uniovi.pirateseas.global.Constants;
@@ -20,20 +21,18 @@ public class Shot extends Entity{
 	private Point endPoint;
 	
 	private float pathLength;
-	private float mFlyingTime;
-	private float mCurrentTime;
-	
-	private long mTimestamp;
+
+    private long mTimestamp;
 	
 	private int mDamage;
 	
 	private int mShotStatus;
 
-	protected static int shotWidth, shotHeight;
+	static int shotWidth, shotHeight;
 	
 	@SuppressWarnings("deprecation")
 	@SuppressLint("NewApi")
-	/**
+	/*
 	 * Constructor
 	 * @param Context context: Activity where the object is loaded
 	 * @param double screenX: x coordinate of the object image
@@ -46,8 +45,8 @@ public class Shot extends Entity{
 	 * @param int power: Damage the shot will deal
 	 * @param long timestampLastShot: Timestamp of the previous shot
 	 */
-	public Shot(Context context, double screenX, double screenY, double mCanvasWidth, double mCanvasHeight, Point entityBeginning, Point entityDestiny, int eDirection, int power, long timestampLastShot){
-		super(context, screenX, screenY, mCanvasWidth, mCanvasHeight, entityBeginning, eDirection, 1, 1, 1);
+	Shot(Context context, double screenX, double screenY, double mCanvasWidth, double mCanvasHeight, Point entityBeginning, Point entityDestiny, int eDirection, int power, long timestampLastShot){
+		super(context, screenX, screenY, mCanvasWidth, mCanvasHeight, entityBeginning, eDirection, 1);
 		
 		mContext = context;
 		
@@ -71,8 +70,7 @@ public class Shot extends Entity{
 		setTimestamp(timestampLastShot);
 
 		mHealthPoints = 1;
-		if(mHealthPoints > 0)
-			setStatus(Constants.STATE_ALIVE);
+		setStatus(Constants.STATE_ALIVE);
 	}
 
 	/**
@@ -97,15 +95,14 @@ public class Shot extends Entity{
 	 * Set the path's length
 	 * @param pathLength New path's length
 	 */
-	public void setPathLength(float pathLength) {
+    private void setPathLength(float pathLength) {
 		this.pathLength = pathLength;
-		this.setFlyingTime(Constants.FLYING_TIME_MULTIPLIER * pathLength);
 	}
 	
 	@SuppressLint("NewApi")
 	@SuppressWarnings("deprecation")
 	@Override
-	/**
+	/*
 	 * Draw the Shot on the screen Canvas
 	 */
 	public void drawOnScreen(Canvas canvas) {
@@ -162,7 +159,7 @@ public class Shot extends Entity{
 
 	/**
 	 * Get the starting timestamp of the Shot
-	 * @return
+	 * @return timestamp
 	 */
 	public long getTimestamp() {
 		return mTimestamp;
@@ -170,9 +167,9 @@ public class Shot extends Entity{
 
 	/**
 	 * Set the timestamp of the Shot
-	 * @param mTimestamp
+	 * @param mTimestamp timestamp
 	 */
-	public void setTimestamp(long mTimestamp) {
+    private void setTimestamp(long mTimestamp) {
 		this.mTimestamp = mTimestamp;
 	}
 
@@ -184,16 +181,9 @@ public class Shot extends Entity{
 		return endPoint;
 	}
 
-	/**
-	 * Set the flying time for the shot
-	 * @param mFlyingTime Flying time in seconds
-	 */
-	public void setFlyingTime(float mFlyingTime) {
-		this.mFlyingTime = mFlyingTime;
-	}
-
-	@Override
-	/**
+	@NonNull
+    @Override
+	/*
 	 * toString
 	 */
 	public String toString() {
@@ -206,7 +196,7 @@ public class Shot extends Entity{
 
 	/**
 	 * Check if the Shot is in-bounds of the screen
-	 * @param initialHeight
+	 * @param initialHeight Initial height
 	 * @return true if is within bounds, false otherwise
 	 */
 	public boolean isInBounds(float initialHeight) {
@@ -215,9 +205,9 @@ public class Shot extends Entity{
 
 	/**
 	 * Move the Shot closer to its destiny Point
-	 * @param destiny
-	 * @param xDelta
-	 * @param yDelta
+	 * @param destiny Destiny Point
+	 * @param xDelta X delta
+	 * @param yDelta Y delta
 	 */
 	public void moveShotEntity(Point destiny, int xDelta, int yDelta){
 		int xDiff = 0;

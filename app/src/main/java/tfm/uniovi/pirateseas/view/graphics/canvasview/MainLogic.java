@@ -18,19 +18,16 @@ public class MainLogic extends Thread {
 
 	private SurfaceHolder surface;
 	private CanvasView mCanvasView;
-	
-	private Canvas canvas;
 
 	private static boolean running;
-	private static boolean initialized;
 
 	/**
 	 * Constructor
 	 * 
-	 * @param surface
-	 * @param mainView
+	 * @param surface Surface holder
+	 * @param mainView Canvas view
 	 */
-	public MainLogic(SurfaceHolder surface, CanvasView mainView) {
+	MainLogic(SurfaceHolder surface, CanvasView mainView) {
 		super();
 		this.surface = surface;
 		this.setCanvasViewInstance(mainView);
@@ -38,26 +35,27 @@ public class MainLogic extends Thread {
 
 	/**
 	 * Set the running status of the thread
-	 * @param run
+	 * @param run Thread status
 	 */
-	public void setRunning(boolean run) {
+	void setRunning(boolean run) {
 		MainLogic.running = run;
 	}
 
 	/**
 	 * Get the running status of the thread
-	 * @return
+	 * @return Thread status
 	 */
-	public boolean getRunning() {
+	boolean getRunning() {
 		return running;
 	}
 
 	@Override
-	/**
+	/*
 	 * run method for the thread
 	 */
 	public void run() {
 
+		boolean initialized;
 		if(!(initialized = this.getCanvasViewInstance().isInitialized())){
 			this.getCanvasViewInstance().initialize();
 			initialized = this.getCanvasViewInstance().isInitialized();
@@ -70,7 +68,7 @@ public class MainLogic extends Thread {
 		int jumpedFrames; // Number of jumped frames
 
 		waitTime = 0;
-		canvas = null;
+		Canvas canvas = null;
 
 		while (running && initialized) {
 			canvas = null;
@@ -109,11 +107,7 @@ public class MainLogic extends Thread {
 			} catch (ArithmeticException arex){
 				// Log.e(TAG, arex.getMessage());
 			} catch (Exception ex) {
-				if(canvas == null){
-					// Log.e(TAG, "Canvas is not created or cannot be edited");
-				} else {
-					// Log.e(TAG, "Canvas not available");
-				}
+				ex.getStackTrace();
 			} finally {
 				if (canvas != null) {
 					surface.unlockCanvasAndPost(canvas);
@@ -138,7 +132,7 @@ public class MainLogic extends Thread {
 	 * Set the CanvasView instance
 	 * @param mCanvasView CanvasView instance
 	 */
-	public void setCanvasViewInstance(CanvasView mCanvasView) {
+	private void setCanvasViewInstance(CanvasView mCanvasView) {
 		this.mCanvasView = mCanvasView;
 	}
 }

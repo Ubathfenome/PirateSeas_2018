@@ -37,9 +37,8 @@ public class SensorActivity extends Activity{
 	public static final String TAG = "SensorActivity";
 	
 	private SharedPreferences mPreferences = null;
-	private int[] preferenceSensorList = null;
-	
-	private SensorManager mSensorManager;
+
+    private SensorManager mSensorManager;
 	private List<Integer> mDeviceSensorTypes;
 	
 	private TextView tv;
@@ -71,10 +70,10 @@ public class SensorActivity extends Activity{
     	mPreferences = getSharedPreferences(Constants.TAG_PREF_NAME, Context.MODE_PRIVATE); 
 		
 		// Check preferences if its already called 
-		preferenceSensorList = getPreferenceSensorList();
+        int[] preferenceSensorList = getPreferenceSensorList();
 		if(hasValidValues(preferenceSensorList)){
-			for(int i = 0; i < preferenceSensorList.length; i++){
-				mDeviceSensorTypes.add(preferenceSensorList[i]); 
+			for (int aPreferenceSensorList : preferenceSensorList) {
+				mDeviceSensorTypes.add(aPreferenceSensorList);
 			}
 			exitActivity(true);
 		} else {
@@ -92,12 +91,12 @@ public class SensorActivity extends Activity{
 
 	/**
 	 * Checks if the sensor array has any value different from 0
-	 * @param sensorList
+	 * @param sensorList Sensors list
 	 * @return true if there is any value different from 0, false otherwise
 	 */
 	private boolean hasValidValues(int[] sensorList){
-		for(int i = 0; i < sensorList.length; i++){
-			if(sensorList[i] != 0)
+		for (int aSensorList : sensorList) {
+			if (aSensorList != 0)
 				return true;
 		}
 		return false;
@@ -133,15 +132,20 @@ public class SensorActivity extends Activity{
 	private String putPreferenceSensorList(){
 		String modifiedString = "";
 		Object[] valuesArray =  mDeviceSensorTypes.toArray();
-		for(int i = 0; i < valuesArray.length; i++){
-			modifiedString += String.valueOf(valuesArray[i]) + ";";
+		if(valuesArray != null) {
+			StringBuilder builder = new StringBuilder();
+			for (Object aValuesArray : valuesArray) {
+				builder.append(String.valueOf(aValuesArray));
+				builder.append(";");
+			}
+			modifiedString = builder.toString();
 		}
 		
 		return modifiedString;
 	}
 
 	/**
-	 * Return to calling Activity with the resutls
+	 * Return to calling Activity with the results
 	 * @param result true if everything was correct, false otherwise
 	 */
 	private void exitActivity(boolean result){

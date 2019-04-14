@@ -54,13 +54,29 @@
 	    android:layout_gravity="center"
 	    android:layout_weight="50"
 	    android:orientation="horizontal" >
-		
-		<Space
-		    android:id="@+id/playerBarsSpace"
-		    android:layout_width="match_parent"
-		    android:layout_height="wrap_content"
-		    android:layout_gravity="fill"
-		    android:layout_weight="1" />
+
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_margin="@dimen/small_padding_size"
+			android:padding="@dimen/small_padding_size"
+			android:orientation="vertical"
+			android:layout_gravity="bottom"
+			android:layout_weight="1">
+
+			<ProgressBar
+				android:id="@+id/prgHealthBar"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				style="@android:style/Widget.Holo.Light.ProgressBar.Horizontal" />
+
+			<ProgressBar
+				android:id="@+id/prgXpBar"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				style="@android:style/Widget.Holo.Light.ProgressBar.Horizontal" />
+
+		</LinearLayout>
 		
 		<Space
 		    android:id="@+id/playerSpace"
@@ -69,19 +85,21 @@
 		    android:layout_gravity="fill"
 		    android:layout_weight="1" />
 		
-		<com.pirateseas.model.canvasmodel.ui.UIDisplayElement
+		<tfm.uniovi.pirateseas.model.canvasmodel.ui.UIDisplayElement
 		    android:id="@+id/playerGold"
 		    android:layout_width="48dp"
 		    android:layout_height="48dp"
 		    android:layout_gravity="bottom"
+			android:layout_margin="@dimen/small_padding_size"
 		    android:background="@mipmap/ico_gold"
 		    custom:defaultValue="0" />
 			
-		<com.pirateseas.model.canvasmodel.ui.UIDisplayElement
+		<tfm.uniovi.pirateseas.model.canvasmodel.ui.UIDisplayElement
 		    android:id="@+id/playerAmmunition"
 		    android:layout_width="48dp"
 		    android:layout_height="48dp"
 		    android:layout_gravity="bottom"
+			android:layout_margin="@dimen/small_padding_size"
 		    android:background="@mipmap/ico_ammo"
 		    custom:defaultValue="0" />		
 	</LinearLayout>

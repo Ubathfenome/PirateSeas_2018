@@ -19,11 +19,10 @@ public class Sea extends BasicModel{
 	
 	@SuppressWarnings("deprecation")
 	@SuppressLint("NewApi")
-    /**
+    /*
      * Constructor
      */
-	public Sea(Context context, double x, double y, double mCanvasWidth,
-            double mCanvasHeight){
+	public Sea(Context context, double x, double y, double mCanvasWidth, double mCanvasHeight){
 		super(context, x, y, mCanvasWidth, mCanvasHeight, null);
 		
 		startingHeight = (int) y;
@@ -38,7 +37,7 @@ public class Sea extends BasicModel{
 	}
 	
 	@Override
-    /**
+    /*
      * Draws on the screen the image of the model
      */
 	public void drawOnScreen(Canvas canvas){
@@ -70,7 +69,7 @@ public class Sea extends BasicModel{
 	}
 		
 	@Override
-    /**
+    /*
      * Move the sea image
      */
 	public void move(double xLength, double yLength, boolean bounce){
