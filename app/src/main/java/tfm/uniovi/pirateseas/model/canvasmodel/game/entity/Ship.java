@@ -260,7 +260,11 @@ public class Ship extends Entity implements Parcelable{
 						Constants.DEFAULT_SHIP_BASIC_RANGE
 								* sType.rangeMultiplier());
 				// Set shot image coordinates within horizon bounds
-				cannonballVector = new Shot(context, x + (mWidth / 2) - (Shot.shotWidth / 2), y + mHeight + 10,
+				// FIXME: Shot Y coordinates are not being updated when the enemy ship is closest to the player
+				int halfShipWidth = mWidth / 2;
+				int halfShotWidth = Shot.shotWidth / 2;
+				int halfShotHeight = Shot.shotHeight / 2;
+				cannonballVector = new Shot(context, x + halfShipWidth - halfShotWidth, y + mHeight + halfShotHeight,
 						this.mCanvasWidth, this.mCanvasHeight, origin, destination, Constants.DIRECTION_DOWN,
 						(int) (Constants.DEFAULT_SHOOT_DAMAGE * sType
 								.powerMultiplier()), timestampLastShot);
@@ -272,9 +276,7 @@ public class Ship extends Entity implements Parcelable{
 
 		return cannonballVector;
 	}
-	
-	@SuppressLint("NewApi")
-	@SuppressWarnings("deprecation")
+
     /*
      * Update ship's drawable
      */

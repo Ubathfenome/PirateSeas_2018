@@ -265,7 +265,11 @@ public class ShopActivity extends ListActivity{
 									screenSelectionIntent.putExtra(Constants.TAG_SCREEN_SELECTION_MAP_WIDTH, mapWidth);
 									screenSelectionIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP);
 									startActivity(screenSelectionIntent);
-									MusicManager.getInstance().stopBackgroundMusic();
+									try {
+										MusicManager.getInstance().stopBackgroundMusic();
+									} catch(IllegalStateException e){
+										MusicManager.getInstance().resetPlayer();
+									}
 									MusicManager.getInstance(dummyActivity, MusicManager.MUSIC_GAME_MENU).playBackgroundMusic();
 									dummyActivity.finish();
 								}

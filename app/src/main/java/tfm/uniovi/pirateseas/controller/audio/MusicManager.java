@@ -50,9 +50,9 @@ public class MusicManager{
 
 	/**
 	 * Method to get the MusicInstance to start music tracks
-	 * @param context
-	 * @param backgroundMusicId
-	 * @return
+	 * @param context Context
+	 * @param backgroundMusicId Music resource id
+	 * @return MusicManager instance
 	 */
 	public static MusicManager getInstance(Context context,
 			int backgroundMusicId) {
@@ -67,7 +67,7 @@ public class MusicManager{
 
 	/**
 	 * Method to get the MusicInstance used for register music tracks and sounds
-	 * @param context
+	 * @param context Context
 	 * @return MusicManager instance
 	 */
 	public static MusicManager getInstance(Context context) {
@@ -100,19 +100,21 @@ public class MusicManager{
 
 	/**
 	 * Initialization method for the MusicManager instance
-	 * @param context
+	 * @param context Context
 	 */
 	private void init(Context context) {
 		mSoundPools = new SoundPools();
-		mSoundKeys = new HashMap<Integer,Integer>();
+		mSoundKeys = new HashMap<>();
 		mAudioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
 	}
-	
-	@SuppressLint("NewApi")
+
+
 	/**
 	 * Starts the selected song as background music
+ 	 * @param context Context
+	 * @param backgroundMusicId Music resource id
 	 */
-	public void initSounds(Context context, int backgroundMusicId) {
+	private void initSounds(Context context, int backgroundMusicId) {
 		this.mContext = context;
 		
 		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
@@ -123,13 +125,20 @@ public class MusicManager{
 		}
 		
 		if(mAudioManager == null)
-			init(context);
+			init(mContext);
 		
 		mBackgroundMusic = MediaPlayer.create(context, mSoundKeys.get(backgroundMusicId));
 		mBackgroundMusic.setOnPreparedListener(new OnPreparedListener() {
 			@Override
 			public void onPrepared(MediaPlayer mp) {
 				mp.start();				
+			}
+		});
+		mBackgroundMusic.setOnErrorListener(new MediaPlayer.OnErrorListener() {
+			@Override
+			public boolean onError(MediaPlayer mediaPlayer, int what, int extra) {
+				mediaPlayer.reset();
+				return true;
 			}
 		});
 
@@ -141,8 +150,8 @@ public class MusicManager{
 
 	/**
 	 * Register a new sound resource
-	 * @param soundId
-	 * @param soundResource
+	 * @param soundId Sound id
+	 * @param soundResource Sound resource
 	 */
 	public void registerSound(int soundId, int soundResource) {
 		mSoundKeys.put(soundId, soundResource);
@@ -184,6 +193,8 @@ public class MusicManager{
 	public void stopBackgroundMusic(){
 		if(mBackgroundMusic!= null && mBackgroundMusic.isPlaying()){
 			mBackgroundMusic.stop();
+			mBackgroundMusic.release();
+			mBackgroundMusic = null;
 		}
 	}
 
@@ -192,13 +203,17 @@ public class MusicManager{
 	 */
 	public void resetPlayer(){
 		if(mBackgroundMusic!=null){
-			mBackgroundMusic.reset();
+			try {
+				mBackgroundMusic.reset();
+			} catch(IllegalStateException e){
+				Log.e(TAG, "MusicManager has not the resources yet/anymore");
+			}
 		}
 	}
 
 	/**
 	 * Plays the selected sounds resource once
-	 * @param index
+	 * @param index Sound resource id
 	 */
 	public void playSound (int index) {		
 		int resourceId = mSoundKeys.get(index);		
@@ -207,7 +222,7 @@ public class MusicManager{
 
 	/**
 	 * Plays the selected sounds resource in an infinite loop
-	 * @param index
+	 * @param index Sound resource id
 	 */
 	public void playSoundLoop (int index) {
 		int resourceId = mSoundKeys.get(index);

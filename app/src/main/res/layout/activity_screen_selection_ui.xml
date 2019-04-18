@@ -1,87 +1,115 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/layoutBackground"
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rootLayoutScreenSelection"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@mipmap/txtr_map_cover"
-    android:gravity="center_vertical"
-    android:orientation="vertical">
+    android:background="@drawable/txtr_pergamino">
+
+    <ImageView
+        android:id="@+id/imgCellReveal"
+        android:layout_width="148dp"
+        android:layout_height="148dp"
+        android:layout_gravity="center"
+        android:contentDescription="@string/cd_map_cover"
+        android:background="@mipmap/txtr_map_cover"
+        android:visibility="invisible"/>
+
+    <ImageView
+        android:id="@+id/imgCellRevealed"
+        android:layout_width="148dp"
+        android:layout_height="148dp"
+        android:layout_gravity="center"
+        android:contentDescription="@string/cd_map_cover"
+        android:background="@mipmap/txtr_map_cover"
+        android:visibility="invisible"/>
 
     <LinearLayout
+        android:id="@+id/layoutMapBackground"
+        android:layout_margin="@dimen/small_padding_size"
+        android:layout_gravity="center"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:orientation="horizontal">
+        android:layout_height="match_parent"
+        android:background="@mipmap/txtr_map_cover"
+        android:gravity="center_vertical"
+        android:orientation="vertical">
 
         <LinearLayout
-            android:id="@+id/left_zone"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_vertical|center_horizontal"
-            android:layout_margin="@dimen/padding_size"
-            android:gravity="center_vertical"
-            android:orientation="vertical">
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal">
 
-            <ImageButton
-                android:id="@+id/btnLeft"
+            <LinearLayout
+                android:id="@+id/left_zone"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_gravity="center_vertical|center_horizontal"
-                android:background="@mipmap/ico_arrow_left"
-                android:contentDescription="@string/icd_btn_arrow"/>
+                android:layout_margin="@dimen/padding_size"
+                android:gravity="center_vertical"
+                android:orientation="vertical">
+
+                <ImageButton
+                    android:id="@+id/btnLeft"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical|center_horizontal"
+                    android:background="@mipmap/ico_arrow_left"
+                    android:contentDescription="@string/icd_btn_arrow"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/front_zone"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical|center_horizontal"
+                android:layout_margin="@dimen/padding_size"
+                android:orientation="vertical">
+
+                <ImageButton
+                    android:id="@+id/btnFront"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical|center_horizontal"
+                    android:background="@mipmap/ico_arrow_front"
+                    android:contentDescription="@string/icd_btn_arrow"/>
+
+                <ImageButton
+                    android:id="@+id/btnDown"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@mipmap/ico_arrow_down"
+                    android:contentDescription="@string/icd_btn_arrow"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/right_zone"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical|center_horizontal"
+                android:layout_margin="@dimen/padding_size"
+                android:gravity="center_vertical"
+                android:orientation="vertical">
+
+                <ImageButton
+                    android:id="@+id/btnRight"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical|center_horizontal"
+                    android:background="@mipmap/ico_arrow_right"
+                    android:contentDescription="@string/icd_btn_arrow"/>
+            </LinearLayout>
         </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/front_zone"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_vertical|center_horizontal"
-            android:layout_margin="@dimen/padding_size"
-            android:orientation="vertical">
-
-            <ImageButton
-                android:id="@+id/btnFront"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical|center_horizontal"
-                android:background="@mipmap/ico_arrow_front"
-                android:contentDescription="@string/icd_btn_arrow"/>
-
-            <ImageButton
-                android:id="@+id/btnDown"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@mipmap/ico_arrow_down"
-                android:contentDescription="@string/icd_btn_arrow"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/right_zone"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_vertical|center_horizontal"
-            android:layout_margin="@dimen/padding_size"
-            android:gravity="center_vertical"
-            android:orientation="vertical">
-
-            <ImageButton
-                android:id="@+id/btnRight"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical|center_horizontal"
-                android:background="@mipmap/ico_arrow_right"
-                android:contentDescription="@string/icd_btn_arrow"/>
-        </LinearLayout>
+        <TextView
+            android:id="@+id/txtScreenSelectionLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:alpha="0.7"
+            android:background="@drawable/xml_border"
+            android:gravity="center"
+            android:padding="@dimen/large_padding_size"
+            android:text="@string/message_screenselection_detail"
+            android:textSize="@dimen/title_size" />
     </LinearLayout>
-
-    <TextView
-        android:id="@+id/txtScreenSelectionLabel"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:alpha="0.7"
-        android:background="@drawable/xml_border"
-        android:gravity="center"
-        android:padding="@dimen/large_padding_size"
-        android:text="@string/message_screenselection_detail"
-        android:textSize="@dimen/title_size" />
-</LinearLayout>
+</FrameLayout>

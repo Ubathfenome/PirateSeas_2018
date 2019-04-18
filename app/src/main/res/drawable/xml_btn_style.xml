@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE selector>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:drawable="@mipmap/btn_pressed" android:state_pressed="true" />
-	<item android:drawable="@mipmap/btn_focused" android:state_focused="true" />
-    <item android:drawable="@mipmap/btn_disabled" android:state_enabled="false" />
-    <item android:drawable="@mipmap/btn_default" />
+    <item android:drawable="@drawable/btn_pressed" android:state_pressed="true" />
+	<item android:drawable="@drawable/btn_focused" android:state_focused="true" />
+    <item android:drawable="@drawable/btn_disabled" android:state_enabled="false" />
+    <item android:drawable="@drawable/btn_default" />
 </selector>

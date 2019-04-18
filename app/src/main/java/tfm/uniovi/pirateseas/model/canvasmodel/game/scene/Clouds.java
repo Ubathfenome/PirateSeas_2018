@@ -32,7 +32,7 @@ public class Clouds extends BasicModel{
 	 * @param mCanvasHeight Canvas height
 	 */
 	public Clouds(Context context, double x, double y, double mCanvasWidth, double mCanvasHeight){
-		super(context, x, y, mCanvasWidth, mCanvasHeight, new Parallax(context, R.mipmap.txtr_clouds_light, R.mipmap.txtr_clouds_almost_none));
+		super(context, x, y, mCanvasWidth, mCanvasHeight, new Parallax(context, R.mipmap.txtr_clouds_almost_none, R.mipmap.txtr_clouds_almost_none));
 		
 		this.xTop = x;
 		this.shakeMoveCount = 0;

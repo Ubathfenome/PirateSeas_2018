@@ -225,6 +225,11 @@
     <string name="command_ok">OK</string>
     <string name="command_go">go</string>
     <string name="command_shoot">shoot</string>
+    <string name="cd_map_cover">Obscured map cell</string>
+
+    <string name="generic_number">%1$d</string>
+    <string name="reset_preferences_ok">Preferences successfully restored</string>
+    <string name="reset_preferences_error">Error while restoring preferences</string>
 
 
 </resources>

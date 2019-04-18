@@ -1,5 +1,7 @@
 package tfm.uniovi.pirateseas.view.activities;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
@@ -16,6 +18,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -41,6 +44,7 @@ public class ScreenSelectionActivity extends Activity {
 	private static final String TAG = "ScreenSelectionActivity";
 
 	private TextView txtScreenSelectionLabel;
+	private LinearLayout layoutMapBackground;
 
 	private Player p = null;
 	private Ship ship = null;
@@ -50,6 +54,9 @@ public class ScreenSelectionActivity extends Activity {
 	int mapHeight;
 	int mapLength;
 	int active;
+
+    private float heightRatio;
+    private float widthRatio;
 
 	int[] sensorTypes = null;
 	boolean loadGame;
@@ -83,9 +90,9 @@ public class ScreenSelectionActivity extends Activity {
 		if(map.getMapLength() == Constants.MAP_MIN_LENGTH)
 			map = null;
 
-		LinearLayout layoutBackground = findViewById(R.id.layoutBackground);
+		layoutMapBackground = findViewById(R.id.layoutMapBackground);
 		Drawable currentMapDrawable = getCurrentMap(date);
-		layoutBackground.setBackground(currentMapDrawable);
+		layoutMapBackground.setBackground(currentMapDrawable);
 
 		mapWidth = map.getMapWidth();
 		mapHeight = map.getMapHeight();
@@ -103,7 +110,11 @@ public class ScreenSelectionActivity extends Activity {
 				if(active%mapWidth != 0){
 					map.setActiveCell(active-1);
 					if(map.isActiveCellCleared() && map.isActiveCellIsland()){
-						MusicManager.getInstance().stopBackgroundMusic();
+						try {
+							MusicManager.getInstance().stopBackgroundMusic();
+						} catch(IllegalStateException e){
+							MusicManager.getInstance().resetPlayer();
+						}
 						MusicManager.getInstance(context, MusicManager.MUSIC_ISLAND).playBackgroundMusic();
 						enterVisitedIsland();
 					} else {
@@ -111,7 +122,11 @@ public class ScreenSelectionActivity extends Activity {
 						if (!map.isActiveCellIsland()) {
 							if (encounter) {
 								// Game activity
-								MusicManager.getInstance().stopBackgroundMusic();
+								try {
+									MusicManager.getInstance().stopBackgroundMusic();
+								} catch(IllegalStateException e){
+									MusicManager.getInstance().resetPlayer();
+								}
 								MusicManager.getInstance(context, MusicManager.MUSIC_BATTLE).playBackgroundMusic();
 								startBattleGame();
 							} else {
@@ -121,7 +136,11 @@ public class ScreenSelectionActivity extends Activity {
 							}
 						} else {
 							// Shop activity
-							MusicManager.getInstance().stopBackgroundMusic();
+							try {
+								MusicManager.getInstance().stopBackgroundMusic();
+							} catch(IllegalStateException e){
+								MusicManager.getInstance().resetPlayer();
+							}
 							MusicManager.getInstance(context, MusicManager.MUSIC_ISLAND).playBackgroundMusic();
 							enterRandomIsland();
 						}
@@ -141,7 +160,11 @@ public class ScreenSelectionActivity extends Activity {
 				if(active-mapWidth>=0){
 					map.setActiveCell(active-mapWidth);
 					if(map.isActiveCellCleared() && map.isActiveCellIsland()){
-						MusicManager.getInstance().stopBackgroundMusic();
+						try {
+							MusicManager.getInstance().stopBackgroundMusic();
+						} catch(IllegalStateException e){
+							MusicManager.getInstance().resetPlayer();
+						}
 						MusicManager.getInstance(context, MusicManager.MUSIC_ISLAND).playBackgroundMusic();
 						enterVisitedIsland();
 					} else {
@@ -149,7 +172,11 @@ public class ScreenSelectionActivity extends Activity {
 						if (!map.isActiveCellIsland()) {
 							if (encounter) {
 								// Game activity
-								MusicManager.getInstance().stopBackgroundMusic();
+								try {
+									MusicManager.getInstance().stopBackgroundMusic();
+								} catch(IllegalStateException e){
+									MusicManager.getInstance().resetPlayer();
+								}
 								MusicManager.getInstance(context, MusicManager.MUSIC_BATTLE).playBackgroundMusic();
 								startBattleGame();
 							} else {
@@ -159,7 +186,11 @@ public class ScreenSelectionActivity extends Activity {
 							}
 						} else {
 							// Shop activity
-							MusicManager.getInstance().stopBackgroundMusic();
+							try {
+								MusicManager.getInstance().stopBackgroundMusic();
+							} catch(IllegalStateException e){
+								MusicManager.getInstance().resetPlayer();
+							}
 							MusicManager.getInstance(context, MusicManager.MUSIC_ISLAND).playBackgroundMusic();
 							enterRandomIsland();
 						}
@@ -179,7 +210,11 @@ public class ScreenSelectionActivity extends Activity {
 				if((active+1)%mapWidth != 0){
 					map.setActiveCell(active+1);
 					if(map.isActiveCellCleared() && map.isActiveCellIsland()){
-						MusicManager.getInstance().stopBackgroundMusic();
+						try {
+							MusicManager.getInstance().stopBackgroundMusic();
+						} catch(IllegalStateException e){
+							MusicManager.getInstance().resetPlayer();
+						}
 						MusicManager.getInstance(context, MusicManager.MUSIC_ISLAND).playBackgroundMusic();
 						enterVisitedIsland();
 					} else {
@@ -187,7 +222,11 @@ public class ScreenSelectionActivity extends Activity {
 						if (!map.isActiveCellIsland()) {
 							if (encounter) {
 								// Game activity
-								MusicManager.getInstance().stopBackgroundMusic();
+								try {
+									MusicManager.getInstance().stopBackgroundMusic();
+								} catch(IllegalStateException e){
+									MusicManager.getInstance().resetPlayer();
+								}
 								MusicManager.getInstance(context, MusicManager.MUSIC_BATTLE).playBackgroundMusic();
 								startBattleGame();
 							} else {
@@ -197,7 +236,11 @@ public class ScreenSelectionActivity extends Activity {
 							}
 						} else {
 							// Shop activity
-							MusicManager.getInstance().stopBackgroundMusic();
+							try {
+								MusicManager.getInstance().stopBackgroundMusic();
+							} catch(IllegalStateException e){
+								MusicManager.getInstance().resetPlayer();
+							}
 							MusicManager.getInstance(context, MusicManager.MUSIC_ISLAND).playBackgroundMusic();
 							enterRandomIsland();
 						}
@@ -217,7 +260,11 @@ public class ScreenSelectionActivity extends Activity {
 				if((active+mapWidth)<mapLength){
 					map.setActiveCell(active+mapWidth);
 					if(map.isActiveCellCleared() && map.isActiveCellIsland()){
-						MusicManager.getInstance().stopBackgroundMusic();
+						try {
+							MusicManager.getInstance().stopBackgroundMusic();
+						} catch(IllegalStateException e){
+							MusicManager.getInstance().resetPlayer();
+						}
 						MusicManager.getInstance(context, MusicManager.MUSIC_ISLAND).playBackgroundMusic();
 						enterVisitedIsland();
 					} else {
@@ -225,7 +272,11 @@ public class ScreenSelectionActivity extends Activity {
 						if (!map.isActiveCellIsland()) {
 							if (encounter) {
 								// Game activity
-								MusicManager.getInstance().stopBackgroundMusic();
+								try {
+									MusicManager.getInstance().stopBackgroundMusic();
+								} catch(IllegalStateException e){
+									MusicManager.getInstance().resetPlayer();
+								}
 								MusicManager.getInstance(context, MusicManager.MUSIC_BATTLE).playBackgroundMusic();
 								startBattleGame();
 							} else {
@@ -235,7 +286,11 @@ public class ScreenSelectionActivity extends Activity {
 							}
 						} else {
 							// Shop activity
-							MusicManager.getInstance().stopBackgroundMusic();
+							try {
+								MusicManager.getInstance().stopBackgroundMusic();
+							} catch(IllegalStateException e){
+								MusicManager.getInstance().resetPlayer();
+							}
 							MusicManager.getInstance(context, MusicManager.MUSIC_ISLAND).playBackgroundMusic();
 							enterRandomIsland();
 						}
@@ -296,16 +351,15 @@ public class ScreenSelectionActivity extends Activity {
 		newGameIntent.putExtra(Constants.TAG_SCREEN_SELECTION_MAP_HEIGHT, mapHeight);
 		newGameIntent.putExtra(Constants.TAG_SCREEN_SELECTION_MAP_WIDTH, mapWidth);
 		newGameIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP);
-		Log.d(TAG,"Start GameActivity Intent");
-		startActivity(newGameIntent);
-		finish();
+		revealCellAnimation(R.mipmap.txtr_map_water, newGameIntent);
 	}
 
 	/**
 	 * Relaunch the select screen activity
 	 */
 	private void reloadSelection(){
-		Toast.makeText(this, getResources().getString(R.string.message_nothinghere), Toast.LENGTH_SHORT).show();
+        String message = getResources().getString(R.string.message_nothinghere);
+        txtScreenSelectionLabel.setText(message);
 		GameHelper.saveGameAtPreferences(this, p, ship, map);
 
 		Intent resetIntent = new Intent(this, ScreenSelectionActivity.class);
@@ -322,8 +376,9 @@ public class ScreenSelectionActivity extends Activity {
 	 */
 	private void enterVisitedIsland() {
 		GameHelper.saveGameAtPreferences(this, p, ship, map);
+		String message = getText(R.string.message_islandvisited) + "\n" + txtScreenSelectionLabel.getText();
 		// Notify that the island has already been visited and cannot be visited twice
-        txtScreenSelectionLabel.setText(getText(R.string.message_islandvisited) + "\n" + txtScreenSelectionLabel.getText());
+        txtScreenSelectionLabel.setText(message);
 	}
 
 	/**
@@ -331,6 +386,7 @@ public class ScreenSelectionActivity extends Activity {
 	 */
 	private void enterRandomIsland() {
 		GameHelper.saveGameAtPreferences(this, p, ship, map);
+
 		Random rand = new Random();
 		boolean yesNo = rand.nextBoolean();
 		Intent shopIntent = new Intent(this, ShopActivity.class);
@@ -338,9 +394,9 @@ public class ScreenSelectionActivity extends Activity {
 		shopIntent.putExtra(Constants.TAG_LOAD_GAME, loadGame);
 		shopIntent.putExtra(Constants.ITEMLIST_NATURE, yesNo ? Constants.NATURE_SHOP : Constants.NATURE_TREASURE);
 		shopIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP);
-		Log.d(TAG,"Start Shop Intent");
-		startActivity(shopIntent);
-		finish();
+
+		revealCellAnimation(R.mipmap.txtr_map_island, shopIntent);
+
 	}
 
 	/**
@@ -356,15 +412,18 @@ public class ScreenSelectionActivity extends Activity {
 
 		DisplayMetrics displayMetrics = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-		int screenHeight = displayMetrics.heightPixels;
-		int screenWidth = displayMetrics.widthPixels;
+		int screenHeight = displayMetrics.heightPixels - (2 * (int) getResources().getDimension(R.dimen.small_padding_size));
+		int screenWidth = displayMetrics.widthPixels - (2 * (int) getResources().getDimension(R.dimen.small_padding_size));
 		Bitmap bitmap = Bitmap.createBitmap(screenWidth, screenHeight, Bitmap.Config.ARGB_8888);
 
 		int fragmentHeight = bmpCover.getHeight();
 		int fragmentWidth = bmpCover.getWidth();
 
-		int mapHeight = screenHeight / fragmentHeight;
-		int mapWidth = screenWidth / fragmentWidth;
+		heightRatio = screenHeight / (float) fragmentHeight;
+        widthRatio = screenWidth / (float) fragmentWidth;
+
+		int mapHeight = (int) heightRatio;
+		int mapWidth = (int) widthRatio;
 
 		if(map == null) {
 			map = new Map(date, mapHeight, mapWidth);
@@ -414,13 +473,46 @@ public class ScreenSelectionActivity extends Activity {
 	}
 
 	@Override
+    /*
+     * Method called when the back button of the device is pressed
+     */
 	public void onBackPressed() {
 		// Exit game. Return to main menu
 		Intent mainMenuIntent = new Intent(context, MainMenuActivity.class);
-		MusicManager.getInstance().stopBackgroundMusic();
+		try {
+			MusicManager.getInstance().stopBackgroundMusic();
+		} catch(IllegalStateException e){
+			MusicManager.getInstance().resetPlayer();
+		}
 		MusicManager.getInstance(context, MusicManager.MUSIC_BATTLE).playBackgroundMusic();
 		mainMenuIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		startActivity(mainMenuIntent);
 		finish();
+	}
+
+    /**
+     * Animates an imageView to show the player the newly selected map cell content
+     * @param revealedResource Drawable resource to be shown
+     */
+	private void revealCellAnimation(int revealedResource, final Intent intent){
+		layoutMapBackground.setVisibility(View.GONE);
+		ImageView imgCellReveal = findViewById(R.id.imgCellReveal);
+        ImageView imgCellRevealed = findViewById(R.id.imgCellRevealed);
+        imgCellReveal.setVisibility(View.VISIBLE);
+		imgCellRevealed.setVisibility(View.VISIBLE);
+		imgCellReveal.setAlpha(1f);
+		imgCellRevealed.setAlpha(0f);
+		imgCellRevealed.setBackgroundResource(revealedResource);
+
+		long animDuration = 5000;
+
+		imgCellReveal.animate().alpha(0f).setDuration(animDuration);
+		imgCellRevealed.animate().alpha(1f).setDuration(animDuration).setListener(new AnimatorListenerAdapter() {
+			@Override
+			public void onAnimationEnd(Animator animation) {
+				startActivity(intent);
+				finish();
+			}
+		});
 	}
 }

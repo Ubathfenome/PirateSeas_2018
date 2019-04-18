@@ -140,7 +140,7 @@
     <!-- Image Content descriptors -->
     <string name="icd_anim_background">Animation background image</string>
     <string name="icd_loading_animation">Loading animation image</string>
-    <string name="icd_rest_preferences">Restore preferences</string>
+    <string name="icd_rest_preferences">Borrar memoria</string>
     <string name="icd_help_hud">Game hud image</string>
     <string name="icd_item">Item icon</string>
     <string name="icd_gold">Gold icon</string>
@@ -175,21 +175,21 @@
     <string name="tutorial_6">Consigue riquezas hundiendo a tus enemigos o descubriendo tesoros con los mapas que encontraras en tu camino.
         \nLos barcos rojos son mas resistentes y lentos.
         \nLos barcos amarillos tienen una vida y velocidad normales.
-        \Los barcos verdes son los mas debiles, pero tambien los mas rapidos.</string>
+        \Los barcos verdes son los mas debiles, pero también los mas rapidos.</string>
     <string name="tutorial_7">Gana experiencia hundiendo a tus enemigos y desbloquea mejores actualizaciones.</string>
     <string name="tutorial_8">Conviertete en el mayor Rey Pirata! o caminaras por la plancha!</string>
     <string name="gameover_title">Fin de la partida\nA dormir con los tiburones</string>
     <string name="gameover_hint">(Pulsa en cualquier lugar para reiniciar el juego&#8230;)</string>
     <string name="gameover_score">Puntuacion</string>
-    <string name="gameover_days">Dias transcurridos</string>
+    <string name="gameover_days">Días transcurridos</string>
     <string name="app_about">Acerca de&#8230;</string>
     <string name="tutorial_content">Contenido del tutorial</string>
     <string name="message_screenselection">Que direccion tomamos ahora, Capi?</string>
     <string name="message_screenselection_detail">Por favor, selecciona la siguiente dirección a la que quieres navegar</string>
     <string name="message_islandvisited">Capi! Ya hemos estado en esa isla!</string>
     <string name="message_islanddetected">Capi! Tierra a la vista!</string>
-    <string name="message_nothinghere">Capi! No hay nada ahi! Que direccion debemos tomar?</string>
-    <string name="message_wrongway">Capi! No podemos ir por ahi!</string>
+    <string name="message_nothinghere">Capi! No hay nada ahí! Que direccion debemos tomar?</string>
+    <string name="message_wrongway">Capi! No podemos ir por ahí!</string>
     <string name="message_mapcompleted">Mapa completado!</string>
     <string name="message_shakesleft">Agita tu dispositivo %1$d veces mas!</string>
     <string name="game_exit">Salir</string>
@@ -211,5 +211,9 @@
     <string name="command_ok">OK</string>
     <string name="command_go">vamos</string>
     <string name="command_shoot">dispara</string>
+    <string name="cd_map_cover">Celda del mapa oscurecida</string>
+    <string name="generic_number">%1$d</string>
+    <string name="reset_preferences_error">Error al borrar la memoria</string>
+    <string name="reset_preferences_ok">Memoria borrada con exito</string>
 
 </resources>

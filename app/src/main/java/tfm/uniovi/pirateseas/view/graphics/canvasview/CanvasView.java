@@ -175,8 +175,7 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 		Date date = new Date();
 		nMap = new Map(date, Constants.MAP_MIN_HEIGHT, Constants.MAP_MIN_WIDTH);
 
-		if (((GameActivity) nContext).hasToLoadGame())
-			loadGame();
+		loadGame();
 
 		nGameTimestamp = 0;
 		nShotLastTimeChecked = null;
@@ -610,14 +609,12 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 								if (s.intersection(nEnemyShip)) {
 									nEnemyShip.looseHealth(s.getDamage());
 									s.setShotStatus(Constants.SHOT_HIT);
-                                    s.setY(s.getY()-s.getHeight());
 								}
 							}
 							if(nPlayerShip != null && nPlayerShip.isAlive()){
 								if(s.intersection(nPlayerShip)){
 									nPlayerShip.looseHealth(s.getDamage());
 									s.setShotStatus(Constants.SHOT_HIT);
-                                    s.setY(s.getY()+s.getHeight());
 								}
 							}
 
@@ -738,7 +735,11 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 	private void managePlayer() {
 		if (!nPlayerShip.isAlive()) {
 			// Display "Game Over" Screen with calculated score
-			MusicManager.getInstance().stopBackgroundMusic();
+			try {
+				MusicManager.getInstance().stopBackgroundMusic();
+			} catch(IllegalStateException e){
+				MusicManager.getInstance().resetPlayer();
+			}
 			MusicManager.getInstance(nContext,MusicManager.MUSIC_GAME_OVER).playBackgroundMusic();
 			((GameActivity) nContext).gameOver(nPlayer, nMap);
 			nStatus = Constants.GAME_STATE_END;
@@ -777,7 +778,11 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 		if (!Constants.isInDebugMode(Constants.MODE))
 			Log.d(TAG, "Enemy spawned");
 		MusicManager.getInstance().playSound(MusicManager.SOUND_ENEMY_APPEAR);
-		MusicManager.getInstance().stopBackgroundMusic();
+		try {
+			MusicManager.getInstance().stopBackgroundMusic();
+		} catch(IllegalStateException e){
+			MusicManager.getInstance().resetPlayer();
+		}
 		MusicManager.getInstance(nContext, MusicManager.MUSIC_BATTLE).playBackgroundMusic();
 
 		ShipType sType = Ship.randomShipType();
@@ -815,6 +820,12 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 		Log.d(TAG, "Start ScreenSelection Intent");
 		nContext.startActivity(screenSelectionIntent);
 		nStatus = Constants.GAME_STATE_END;
+		try {
+			MusicManager.getInstance().stopBackgroundMusic();
+		} catch(IllegalStateException e){
+			MusicManager.getInstance().resetPlayer();
+		}
+		MusicManager.getInstance(nContext, MusicManager.MUSIC_GAME_MENU).playBackgroundMusic();
 	}
 
 	/**

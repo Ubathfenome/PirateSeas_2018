@@ -51,7 +51,11 @@ public class PauseActivity extends Activity {
 		btnResume.setTypeface(customFont);
 		btnResume.setOnClickListener(new OnClickListener(){
 			public void onClick(View v){
-				MusicManager.getInstance().stopBackgroundMusic();
+				try {
+					MusicManager.getInstance().stopBackgroundMusic();
+				} catch(IllegalStateException e){
+					MusicManager.getInstance().resetPlayer();
+				}
 				MusicManager.getInstance(context, MusicManager.MUSIC_BATTLE).playBackgroundMusic();
 				finish();
 			}
@@ -80,7 +84,11 @@ public class PauseActivity extends Activity {
 			public void onClick(View view) {
 				// Exit game. Return to main menu
 				Intent mainMenuIntent = new Intent(context, MainMenuActivity.class);
-				MusicManager.getInstance().stopBackgroundMusic();
+				try {
+					MusicManager.getInstance().stopBackgroundMusic();
+				} catch(IllegalStateException e){
+					MusicManager.getInstance().resetPlayer();
+				}
 				MusicManager.getInstance(context, MusicManager.MUSIC_BATTLE).playBackgroundMusic();
 				mainMenuIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
 				startActivity(mainMenuIntent);
@@ -129,7 +137,11 @@ public class PauseActivity extends Activity {
 			}
 		});
 
-		MusicManager.getInstance().stopBackgroundMusic();
+		try {
+			MusicManager.getInstance().stopBackgroundMusic();
+		} catch(IllegalStateException e){
+			MusicManager.getInstance().resetPlayer();
+		}
 		MusicManager.getInstance(context, MusicManager.MUSIC_GAME_PAUSED).playBackgroundMusic();
 
 		Log.d(TAG,"PauseActivity Ship H=" + pgrHealth.getProgress() + "/" + pgrHealth.getMax() + " P=" + pgrPower.getProgress() + "/" + pgrPower.getMax() + " R=" + pgrRange.getProgress() + "/" + pgrRange.getMax());

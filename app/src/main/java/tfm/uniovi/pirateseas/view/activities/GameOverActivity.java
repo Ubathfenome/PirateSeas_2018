@@ -14,7 +14,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import tfm.uniovi.pirateseas.R;
-import tfm.uniovi.pirateseas.controller.androidGameAPI.Map;
 import tfm.uniovi.pirateseas.controller.androidGameAPI.Player;
 import tfm.uniovi.pirateseas.global.Constants;
 
@@ -24,7 +23,6 @@ import tfm.uniovi.pirateseas.global.Constants;
 public class GameOverActivity extends Activity {
 	
 	Player  p = null;
-	Map m = null;
 	
 	TextView lblGameOver, txtDays, txtScore, lblRestartHint;
 
@@ -40,7 +38,7 @@ public class GameOverActivity extends Activity {
 		// GetIntent Extras
 		Intent intent = getIntent();
 		p = intent.getParcelableExtra(Constants.TAG_GAME_OVER_PLAYER);
-		m = intent.getParcelableExtra(Constants.TAG_GAME_OVER_MAP);
+		int clearedMapCells = intent.getIntExtra(Constants.TAG_GAME_OVER_MAP, 1);
 
 		lblGameOver = findViewById(R.id.lblGameOver);
 		lblGameOver.setTypeface(customFont);
@@ -55,8 +53,8 @@ public class GameOverActivity extends Activity {
 		if(score == 0)
 			score = p.getExperience() + p.getGold();
 		
-		txtDays.setText(m.getClearedCells());
-		txtScore.setText("" + score);
+		txtDays.setText(getString(R.string.generic_number,clearedMapCells));
+		txtScore.setText(getString(R.string.generic_number,score));
 	}
 
 	@Override

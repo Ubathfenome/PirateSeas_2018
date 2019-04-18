@@ -283,7 +283,7 @@ public class MainMenuActivity extends Activity {
 		DisplayMetrics displayMetrics = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
 
-		int screenHeight = displayMetrics.heightPixels;
+		int screenHeight = displayMetrics.heightPixels - (2 * (int) getResources().getDimension(R.dimen.small_padding_size));
 		int fragmentHeight = bmpCover.getHeight();
 
 		return screenHeight / fragmentHeight;
@@ -298,7 +298,7 @@ public class MainMenuActivity extends Activity {
 		DisplayMetrics displayMetrics = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
 
-		int screenWidth = displayMetrics.widthPixels;
+		int screenWidth = displayMetrics.widthPixels - (2 * (int) getResources().getDimension(R.dimen.small_padding_size));
 		int fragmentWidth = bmpCover.getWidth();
 
 		return screenWidth / fragmentWidth;

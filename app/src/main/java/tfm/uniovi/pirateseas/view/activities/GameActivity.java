@@ -612,7 +612,7 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 		Intent gameOverIntent = new Intent(this, GameOverActivity.class);
 		// Parcelable Extra with Player object content
 		gameOverIntent.putExtra(Constants.TAG_GAME_OVER_PLAYER, Player.clonePlayer(nPlayer));
-		gameOverIntent.putExtra(Constants.TAG_GAME_OVER_MAP, map);
+		gameOverIntent.putExtra(Constants.TAG_GAME_OVER_MAP, map.getClearedCells());
 		Log.d(TAG, "Start GameOver Intent");
 		this.startActivity(gameOverIntent);
 		shutdownGame();

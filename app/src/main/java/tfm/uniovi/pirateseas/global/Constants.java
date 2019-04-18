@@ -30,9 +30,6 @@ public class Constants{
 	public static final String TAG_SCREEN_SELECTION_MAP_HEIGHT = "tfm.uniovi.pirateseas.SCREEN_SELECTION_MAP_HEIGHT";
 	public static final String TAG_SCREEN_SELECTION_MAP_WIDTH = "tfm.uniovi.pirateseas.SCREEN_SELECTION_MAP_WIDTH";
 	
-	// Math factors	
-	public static final int BYTES_PER_FLOAT = 4;
-	
 	// Requests
 	public static final int REQUEST_SENSOR_LIST = 0x00;
 	public static final int REQUEST_PERMISSIONS = 0x01;
@@ -54,8 +51,6 @@ public class Constants{
 
 	public static final int DEFAULT_PLAYER_SHIP_DIRECTION = DIRECTION_UP;
 	public static final int DEFAULT_PLAYER_SHIP_AMMO = 200;
-	public static final int DEFAULT_SHIP_WIDTH = 2;
-	public static final int DEFAULT_SHIP_HEIGHT = 3;
 	public static final int DEFAULT_SHIP_LENGTH = 5;
 	
 	public static final int DEFAULT_SHIP_RELOAD = 4;
@@ -76,7 +71,7 @@ public class Constants{
 	public static final int BAR_EXPERIENCE = 1;
 	
 	// Global variables	
-	public static final int GAME_FPS = 30;				// FPS = Frames-Per-Second
+	public static final int GAME_FPS = 60;				// FPS = Frames-Per-Second
 	public static final int GAME_MPIGD = 10;			// MPIGD = Minutes-Per-In-Game-Day
 	public static final int ISLAND_SPAWN_RATE = 80;
 
@@ -88,11 +83,9 @@ public class Constants{
 	public static final int GAME_STATE_PAUSE = 1;
 	public static final int GAME_STATE_END = 2;
 
-	public static final int LIGHT_THRESHOLD = 600;
-	
-	public static final int SECONDS_PER_IN_GAME_HOUR = 60;
+	private static final int SECONDS_PER_IN_GAME_HOUR = 60;
 	public static final int HOURS_PER_DAY = GAME_MPIGD * SECONDS_PER_IN_GAME_HOUR;
-	public static final int MILLIS_TO_SECONDS = 1000;
+	private static final int MILLIS_TO_SECONDS = 1000;
 	public static final double MILLIS_TO_SECONDS_INV = Math.pow(MILLIS_TO_SECONDS, -1); 
 	public static final double NANOS_TO_SECONDS = Math.pow(10, -9);
 
@@ -103,7 +96,6 @@ public class Constants{
 
     public static final int MAX_ENTITY_WIDTH = 15;
     public static final int MAX_ENTITY_HEIGHT = 15;
-    public static final int MIN_ENTITY_HEIGHT = 10;
 
 	public static final String EMPTY_STRING = "";
 	public static final String PREF_SENSOR_LIST = "sensorListPref";
@@ -122,8 +114,7 @@ public class Constants{
 	public static final String PREF_MAP_CONTENT = "mapContent";
 	public static final String PREF_MAP_HEIGHT = "mapHeight";
 	public static final String PREF_MAP_WIDTH = "mapWidth";
-	
-	public static final String PREF_DEVICE_VOLUME = "deviceVolumePref";
+
 	public static final String PREF_DEVICE_HEIGHT_RES = "deviceHeightPref";
 	public static final String PREF_DEVICE_WIDTH_RES = "deviceWidthPref";
 	public static final String PREF_DEVICE_NOSENSORS = "deviceNoSensorsPref";
@@ -145,31 +136,6 @@ public class Constants{
 	public static final String ITEMLIST_NATURE = "Nature";
 	public static final String NATURE_SHOP = "Shop";
 	public static final String NATURE_TREASURE = "Treasure";
-	
-	// Database
-    public static final String DATABASE_TGAME = "t_game";
-    public static final String DATABASE_TSHIP = "t_ship";
-    public static final String DATABASE_TPLAYER = "t_player";
-    
-    public static final String TGAME_KEY = "codg";
-    public static final String TGAME_TIMESTAMP = "startTime";
-    
-    public static final String TPLAYER_KEY = "codp";
-    public static final String TPLAYER_DAYS = "days";
-    public static final String TPLAYER_GOLD = "gold";
-    public static final String TPLAYER_EXP = "experience";
-    public static final String TPLAYER_MAP_PIECES = "mapPieces";
-    
-    public static final String TSHIP_KEY = "cods";
-    public static final String TSHIP_COORD_X = "coordX";
-    public static final String TSHIP_COORD_Y = "coordY";
-    public static final String TSHIP_TYPE = "type";
-    public static final String TSHIP_HEALTH = "health";
-    public static final String TSHIP_AMMO_DEFAULT = "ammoDefault";
-    public static final String TSHIP_AMMO_AIMED = "ammoAimed";
-    public static final String TSHIP_AMMO_DOUBLE = "ammoDouble";
-    public static final String TSHIP_AMMO_SWEEP = "ammoSweep";
-	public static final String TSHIP_SELECTED_AMMO = "ammoSelection";
 
 	public static final String ITEM_KEY_CREW = "Crew";
 	public static final String ITEM_KEY_REPAIRMAN = "Repairman";
@@ -187,7 +153,7 @@ public class Constants{
 
 	/**
 	 * Method that evaluates if the game is in debugging mode or not
-	 * @param mMode
+	 * @param mMode Execution mode
 	 * @return true if the game is in debug mode, false otherwise
 	 */
 	public static boolean isInDebugMode(int mMode) {

@@ -20,7 +20,7 @@
 	        android:alpha="0.45"
 	        android:background="@drawable/xml_btn_style"
 	        android:contentDescription="@string/icd_btn_change_ammo"
-	        android:paddingLeft="10dp"
+	        android:paddingStart="10dp"
 	        android:src="@mipmap/txtr_ammo_default" />
 	    
 		<Space
@@ -34,7 +34,7 @@
 			android:id="@+id/btnPause"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:paddingLeft="10dp"
+			android:paddingStart="10dp"
 			android:contentDescription="@string/btn_pause"
 			android:src="@mipmap/ico_pause"
 			android:background="@drawable/xml_btn_style" />

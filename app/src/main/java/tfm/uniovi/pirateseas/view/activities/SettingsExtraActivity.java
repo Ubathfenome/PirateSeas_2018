@@ -118,8 +118,8 @@ public class SettingsExtraActivity extends Activity {
 							new DialogInterface.OnClickListener() {
 								public void onClick(DialogInterface dialog,
 										int id) {
-									String message = resetPreferences() ? "Preferences sucessfully restored"
-											: "Error while restoring preferences";
+									String message = resetPreferences() ? getString(R.string.reset_preferences_ok)
+											: getString(R.string.reset_preferences_error);
 									Toast.makeText(getActivity(), message,
 											Toast.LENGTH_SHORT).show();
 								}
