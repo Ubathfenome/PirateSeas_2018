@@ -29,21 +29,19 @@ public class Shot extends Entity{
 	private int mShotStatus;
 
 	static int shotWidth, shotHeight;
-	
-	@SuppressWarnings("deprecation")
-	@SuppressLint("NewApi")
-	/*
+
+	/**
 	 * Constructor
-	 * @param Context context: Activity where the object is loaded
-	 * @param double screenX: x coordinate of the object image
-	 * @param double screenY: y coordinate of the object image
-	 * @param double mCanvasWidth: Object's image width in pixels
-	 * @param double mCanvasHeight: Object's image height in pixels
-	 * @param Point entityBeginning: Object's initial coordinate point
-	 * @param Point entityDestiny: Object's ending coordinate point
-	 * @param int eDirection: Direction of the object in degrees (0..360)
-	 * @param int power: Damage the shot will deal
-	 * @param long timestampLastShot: Timestamp of the previous shot
+	 * @param context: Activity where the object is loaded
+	 * @param screenX: x coordinate of the object image
+	 * @param screenY: y coordinate of the object image
+	 * @param mCanvasWidth: Object's image width in pixels
+	 * @param mCanvasHeight: Object's image height in pixels
+	 * @param entityBeginning: Object's initial coordinate point
+	 * @param entityDestiny: Object's ending coordinate point
+	 * @param eDirection: Direction of the object in degrees (0..360)
+	 * @param power: Damage the shot will deal
+	 * @param timestampLastShot: Timestamp of the previous shot
 	 */
 	Shot(Context context, double screenX, double screenY, double mCanvasWidth, double mCanvasHeight, Point entityBeginning, Point entityDestiny, int eDirection, int power, long timestampLastShot){
 		super(context, screenX, screenY, mCanvasWidth, mCanvasHeight, entityBeginning, eDirection, 1);
@@ -200,7 +198,10 @@ public class Shot extends Entity{
 	 * @return true if is within bounds, false otherwise
 	 */
 	public boolean isInBounds(float initialHeight) {
-		return x >= 0 && x + mWidth <= mCanvasWidth && y >= initialHeight && y + mHeight <= mCanvasHeight;
+		return x >= 0 &&
+				x + mWidth <= mCanvasWidth &&
+				y >= initialHeight &&
+				y + mHeight <= mCanvasHeight;
 	}
 
 	/**

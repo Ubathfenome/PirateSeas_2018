@@ -29,12 +29,12 @@ public class BasicModel{
 
     /**
      * Constructor
-     * @param context
-     * @param x
-     * @param y
-     * @param mCanvasWidth
-     * @param mCanvasHeight
-     * @param parallax
+     * @param context Context
+     * @param x X Coordinate
+     * @param y Y Coordinate
+     * @param mCanvasWidth Image width
+     * @param mCanvasHeight Image height
+     * @param parallax Parallax
      */
 	public BasicModel(Context context, double x, double y, double mCanvasWidth,
             double mCanvasHeight, Parallax parallax){

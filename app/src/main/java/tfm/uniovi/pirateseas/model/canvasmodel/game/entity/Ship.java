@@ -14,6 +14,7 @@ import java.util.Random;
 import tfm.uniovi.pirateseas.R;
 import tfm.uniovi.pirateseas.exceptions.NoAmmoException;
 import tfm.uniovi.pirateseas.global.Constants;
+import tfm.uniovi.pirateseas.utils.approach2d.DrawableHelper;
 import tfm.uniovi.pirateseas.view.graphics.canvasview.CanvasView;
 
 /**
@@ -204,11 +205,15 @@ public class Ship extends Entity implements Parcelable{
 
 		if (nAmmunitions[selectedAmmoIndex] > 0 || nAmmunitions[selectedAmmoIndex] == Constants.SHOT_AMMO_UNLIMITED) {
 			timestampLastShot = SystemClock.elapsedRealtime();
+            int halfShipWidth = mWidth / 2;
+            int halfShotWidth = Shot.shotWidth / 2;
+            double shotCanvasWidth = DrawableHelper.getWidth(context.getResources(), R.mipmap.txtr_ammo_default);
+            double shotCanvasHeight = DrawableHelper.getHeight(context.getResources(), R.mipmap.txtr_ammo_default);
 			if(this.isPlayable()) {
 				switch (selectedAmmoIndex) {
 					case 0:
-						cannonballVector = new Shot(context, x + (mWidth / 2) - (Shot.shotWidth / 2), y - Shot.shotHeight - 10,
-								this.mCanvasWidth, this.mCanvasHeight, new Point(
+						cannonballVector = new Shot(context, x + halfShipWidth - halfShotWidth, y - Shot.shotHeight - 10,
+                                shotCanvasWidth, shotCanvasHeight, new Point(
 								this.entityCoordinates.x, this.entityCoordinates.y
 								+ entityLength / 2), new Point(this.entityCoordinates.x,
 								Constants.DEFAULT_SHIP_BASIC_RANGE
@@ -223,8 +228,8 @@ public class Ship extends Entity implements Parcelable{
 						for (int i = 0, length = cannonDoubleArray.length; i < length; i++) {
 							// Calculate value -1 when id is 0, +1 when id is 1
 							int xValue = i==0?-1:1;
-							cannonballVector = new Shot(context, x + (mWidth / 2) - (Shot.shotWidth / 2), y - Shot.shotHeight - 10,
-									this.mCanvasWidth, this.mCanvasHeight, new Point(
+							cannonballVector = new Shot(context, x + halfShipWidth - halfShotWidth, y - Shot.shotHeight - 10,
+                                    shotCanvasWidth, shotCanvasHeight, new Point(
 									this.entityCoordinates.x, this.entityCoordinates.y
 									+ entityLength / 2), new Point(xValue,
 									Constants.DEFAULT_SHIP_BASIC_RANGE
@@ -238,8 +243,8 @@ public class Ship extends Entity implements Parcelable{
 						Shot[] cannonSweepArray = new Shot[shotsOnScreen - 1];
 						for (int i = 0, length = cannonSweepArray.length; i < length; i++) {
 							int xValue = i - (shotsOnScreen/2);
-							cannonballVector = new Shot(context, x + (mWidth / 2) - (Shot.shotWidth / 2), y - Shot.shotHeight - 10,
-									this.mCanvasWidth, this.mCanvasHeight, new Point(
+							cannonballVector = new Shot(context, x + halfShipWidth - halfShotWidth, y - Shot.shotHeight - 10,
+                                    shotCanvasWidth, shotCanvasHeight, new Point(
 									this.entityCoordinates.x, this.entityCoordinates.y
 									+ entityLength / 2), new Point(xValue,
 									Constants.DEFAULT_SHIP_BASIC_RANGE
@@ -260,12 +265,9 @@ public class Ship extends Entity implements Parcelable{
 						Constants.DEFAULT_SHIP_BASIC_RANGE
 								* sType.rangeMultiplier());
 				// Set shot image coordinates within horizon bounds
-				// FIXME: Shot Y coordinates are not being updated when the enemy ship is closest to the player
-				int halfShipWidth = mWidth / 2;
-				int halfShotWidth = Shot.shotWidth / 2;
-				int halfShotHeight = Shot.shotHeight / 2;
-				cannonballVector = new Shot(context, x + halfShipWidth - halfShotWidth, y + mHeight + halfShotHeight,
-						this.mCanvasWidth, this.mCanvasHeight, origin, destination, Constants.DIRECTION_DOWN,
+				// FIXME: Shot canvas bounds are set with Ship canvas bounds - Check solution
+				cannonballVector = new Shot(context, x + halfShipWidth - halfShotWidth, y + mHeight + 10,
+                        mCanvasWidth, mCanvasHeight, origin, destination, Constants.DIRECTION_DOWN,
 						(int) (Constants.DEFAULT_SHOOT_DAMAGE * sType
 								.powerMultiplier()), timestampLastShot);
 			}
