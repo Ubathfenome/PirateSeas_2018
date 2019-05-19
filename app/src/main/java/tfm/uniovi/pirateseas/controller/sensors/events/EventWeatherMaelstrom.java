@@ -9,7 +9,7 @@ import tfm.uniovi.pirateseas.controller.sensors.SensorType;
 public class EventWeatherMaelstrom {
 	private static final String TAG = "EventWeatherMaelstrom";
 	private static final int AVERAGE = 10;
-	private static final int THRESHOLD = 9;
+	private static final int THRESHOLD = 8;
 
 	/**
 	 * Return SensorType used on this event
@@ -30,6 +30,7 @@ public class EventWeatherMaelstrom {
 
         return Math.abs(gHypot - AVERAGE) >= THRESHOLD;
 		*/
+
 		return Math.abs(ySpeed) >= THRESHOLD;
     }
 }

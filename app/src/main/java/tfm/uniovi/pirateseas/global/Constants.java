@@ -71,7 +71,7 @@ public class Constants{
 	public static final int BAR_EXPERIENCE = 1;
 	
 	// Global variables	
-	public static final int GAME_FPS = 45;				// FPS = Frames-Per-Second
+	public static final int GAME_FPS = 30;				// FPS = Frames-Per-Second
 	public static final int GAME_MPIGD = 10;			// MPIGD = Minutes-Per-In-Game-Day
 	public static final int ISLAND_SPAWN_RATE = 80;
 

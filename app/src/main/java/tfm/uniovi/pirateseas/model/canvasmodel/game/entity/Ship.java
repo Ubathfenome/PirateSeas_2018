@@ -265,7 +265,6 @@ public class Ship extends Entity implements Parcelable{
 						Constants.DEFAULT_SHIP_BASIC_RANGE
 								* sType.rangeMultiplier());
 				// Set shot image coordinates within horizon bounds
-				// FIXME: Shot canvas bounds are set with Ship canvas bounds - Check solution
 				cannonballVector = new Shot(context, x + halfShipWidth - halfShotWidth, y + mHeight + 10,
                         mCanvasWidth, mCanvasHeight, origin, destination, Constants.DIRECTION_DOWN,
 						(int) (Constants.DEFAULT_SHOOT_DAMAGE * sType

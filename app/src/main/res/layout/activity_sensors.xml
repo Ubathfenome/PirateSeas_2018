@@ -21,16 +21,16 @@
 			android:id="@+id/img_load_animation"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
+			android:padding="1dp"
 			android:contentDescription="@string/icd_loading_animation"
 			android:background="@drawable/xml_loading_animation" />
     </FrameLayout>
-    
-    
-				
+
 	<TextView
 		android:id="@+id/lbl_load_status"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
+		android:padding="1dp"
 		android:text="@array/loading_messages"
 		android:textSize="@dimen/text_size" />
     

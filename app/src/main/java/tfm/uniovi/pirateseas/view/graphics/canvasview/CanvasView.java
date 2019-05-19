@@ -202,7 +202,6 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 		GameHelper.loadGameAtPreferences(nContext, nPlayer, nPlayerShip, nMap);
 		nPlayer = GameHelper.helperPlayer;
 		nPlayerShip = GameHelper.helperShip;
-		// TODO: Check updated players ship health
 		nMap = GameHelper.helperMap;
 	}
 
