@@ -167,7 +167,7 @@ public class Shot extends Entity{
 	 * Set the timestamp of the Shot
 	 * @param mTimestamp timestamp
 	 */
-    private void setTimestamp(long mTimestamp) {
+	public void setTimestamp(long mTimestamp) {
 		this.mTimestamp = mTimestamp;
 	}
 
@@ -236,7 +236,7 @@ public class Shot extends Entity{
 			if(destiny.x > curr.x){			// Destiny to the right
 				nextX = curr.x + 1;			// Next point moved 1 position to the side
 				x += xDelta;		// Move Bitmap coordinates relative to next Point movement
-			} else if(destiny.x < curr.x) {	// Destiny to the left
+			} else {	// Destiny to the left
 				nextX = curr.x - 1;			// Next point moved 1 position to the side
 				x -= xDelta;		// Move Bitmap coordinates relative to next Point movement
 			}
@@ -244,10 +244,10 @@ public class Shot extends Entity{
 		if(yDiff > 0){
 			if(destiny.y > curr.y){			// Destiny to the front
 				nextY = curr.y + 1;			// Next point moved 1 position to the front
-				y -= yDelta;		// Move Bitmap coordinates relative to next Point movement
-			} else if(destiny.y < curr.y) {	// Destiny to the back
-				nextY = curr.y - 1;			// Next point moved 1 position to the back
 				y += yDelta;		// Move Bitmap coordinates relative to next Point movement
+			} else {	// Destiny to the back
+				nextY = curr.y - 1;			// Next point moved 1 position to the back
+				y -= yDelta;		// Move Bitmap coordinates relative to next Point movement
 			}
 		}
 

@@ -89,7 +89,7 @@ public class Constants{
 	public static final double MILLIS_TO_SECONDS_INV = Math.pow(MILLIS_TO_SECONDS, -1); 
 	public static final double NANOS_TO_SECONDS = Math.pow(10, -9);
 
-	public static final int FLYING_TIME_MULTIPLIER = 6;
+	public static final int FLYING_TIME_MULTIPLIER = 18;
 
     public static final int SHAKE_LIMIT = 2;
     public static final int TUTORIAL_NUM_PAGES = 8;

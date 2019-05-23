@@ -213,7 +213,7 @@ public class Ship extends Entity implements Parcelable{
 				switch (selectedAmmoIndex) {
 					case 0:
 						cannonballVector = new Shot(context, x + halfShipWidth - halfShotWidth, y - Shot.shotHeight - 10,
-                                shotCanvasWidth, shotCanvasHeight, new Point(
+								mCanvasWidth, mCanvasHeight, new Point(
 								this.entityCoordinates.x, this.entityCoordinates.y
 								+ entityLength / 2), new Point(this.entityCoordinates.x,
 								Constants.DEFAULT_SHIP_BASIC_RANGE
@@ -229,7 +229,7 @@ public class Ship extends Entity implements Parcelable{
 							// Calculate value -1 when id is 0, +1 when id is 1
 							int xValue = i==0?-1:1;
 							cannonballVector = new Shot(context, x + halfShipWidth - halfShotWidth, y - Shot.shotHeight - 10,
-                                    shotCanvasWidth, shotCanvasHeight, new Point(
+									mCanvasWidth, mCanvasHeight, new Point(
 									this.entityCoordinates.x, this.entityCoordinates.y
 									+ entityLength / 2), new Point(xValue,
 									Constants.DEFAULT_SHIP_BASIC_RANGE
@@ -244,7 +244,7 @@ public class Ship extends Entity implements Parcelable{
 						for (int i = 0, length = cannonSweepArray.length; i < length; i++) {
 							int xValue = i - (shotsOnScreen/2);
 							cannonballVector = new Shot(context, x + halfShipWidth - halfShotWidth, y - Shot.shotHeight - 10,
-                                    shotCanvasWidth, shotCanvasHeight, new Point(
+									mCanvasWidth, mCanvasHeight, new Point(
 									this.entityCoordinates.x, this.entityCoordinates.y
 									+ entityLength / 2), new Point(xValue,
 									Constants.DEFAULT_SHIP_BASIC_RANGE

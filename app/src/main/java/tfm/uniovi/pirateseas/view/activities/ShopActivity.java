@@ -169,6 +169,7 @@ public class ShopActivity extends ListActivity{
 		try {
 			dummyPlayer.useGold(this, itemPurchased.getPrice());
 			txtAvailableGold.setElementValue(dummyPlayer.getGold());
+			txtAvailableGold.invalidate();
 			purchased = true;
 			
 			// Add item effects

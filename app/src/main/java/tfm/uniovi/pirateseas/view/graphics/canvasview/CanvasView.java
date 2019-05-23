@@ -49,7 +49,7 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 	private static final String TAG = "CanvasView";
 	private static final String EXCEPTION_TAG = "CustomException";
 
-	private static final int SHOT_CHK_DELAY = 75;
+	private static final int SHOT_CHK_DELAY = 50;
 
 	private int HORIZON_Y_VALUE = 200;
 
@@ -81,7 +81,6 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 	private SharedPreferences nPreferences;
 	private long nBaseTimestamp;
 	private long nGameTimestamp;
-	private long[] nShotLastTimeChecked;
 
 	private boolean nInitialized = false;
 
@@ -178,7 +177,6 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 		loadGame();
 
 		nGameTimestamp = 0;
-		nShotLastTimeChecked = null;
 		nCheatCounter = 0;
 		nGameMode = Constants.GAMEMODE_IDLE;
 		Log.d(TAG, "Initialization: GameMode set to IDLE");
@@ -588,10 +586,7 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 		int size = nShotList.size();
 
 		if (nGameMode == Constants.GAMEMODE_BATTLE && size > 0) {
-			boolean[] deadShots = new boolean[size];
-			nShotLastTimeChecked = new long[size];
 			for (int i = 0; i < size; i++) {
-				deadShots[i] = false;
 				Shot s = nShotList.get(i);
 				if (s.isAlive() && s.isInBounds(HORIZON_Y_VALUE)) {
 					switch (s.getShotStatus()) {
@@ -599,22 +594,24 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 						if (nGameTimestamp - s.getTimestamp() >= SHOT_CHK_DELAY) {
 							MusicManager.getInstance().playSound(MusicManager.SOUND_SHOT_FIRED);
 							s.setShotStatus(Constants.SHOT_FLYING);
-							nShotLastTimeChecked[i] = nGameTimestamp;
 						}
 						break;
 					case Constants.SHOT_FLYING:
-						if (nGameTimestamp - nShotLastTimeChecked[i] >= SHOT_CHK_DELAY) {
+						long timestampDiff = nGameTimestamp - s.getTimestamp();
+						if (timestampDiff >= SHOT_CHK_DELAY) {
 
 							if (nEnemyShip != null && nEnemyShip.isAlive()) {
-								if (s.intersection(nEnemyShip)) {
+								if (s.getEntityDirection() == Constants.DIRECTION_UP && s.intersection(nEnemyShip)) {
 									nEnemyShip.looseHealth(s.getDamage());
 									s.setShotStatus(Constants.SHOT_HIT);
+									s.looseHealth(s.getDamage());
 								}
 							}
 							if(nPlayerShip != null && nPlayerShip.isAlive()){
-								if(s.intersection(nPlayerShip)){
+								if(s.getEntityDirection() == Constants.DIRECTION_DOWN && s.intersection(nPlayerShip)){
 									nPlayerShip.looseHealth(s.getDamage());
 									s.setShotStatus(Constants.SHOT_HIT);
+									s.looseHealth(s.getDamage());
 								}
 							}
 
@@ -622,50 +619,45 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 							if(s.getEntityDirection() == Constants.DIRECTION_UP) {
 								switch (nPlayerShip.getSelectedAmmunitionIndex()) {
 									case 0:
-										s.moveShotEntity(s.getEndPoint(), nPixelsWidth, nPixelsHeight);
+										s.moveShotEntity(s.getEndPoint(), nPixelsWidth, -nPixelsHeight);
 										break;
 									case 1:
-										s.moveShotEntity(s.getEndPoint(), nPixelsWidth, nPixelsHeight);
+										s.moveShotEntity(s.getEndPoint(), nPixelsWidth, -nPixelsHeight);
 										break;
 									case 2:
-										s.moveShotEntity(s.getEndPoint(), nPixelsWidth, nPixelsHeight);
+										s.moveShotEntity(s.getEndPoint(), nPixelsWidth, -nPixelsHeight);
 										break;
 									case 3:
-										s.moveShotEntity(s.getEndPoint(), nPixelsWidth, nPixelsHeight);
+										s.moveShotEntity(s.getEndPoint(), nPixelsWidth, -nPixelsHeight);
 										break;
 								}
 							} else {
 								s.moveShotEntity(s.getEndPoint(), nPixelsWidth, nPixelsHeight);
 							}
 
-							nShotLastTimeChecked[i] = nGameTimestamp;
+							s.setTimestamp(nGameTimestamp);
 
-							if (s.getCoordinates().x == s.getEndPoint().x && s.getCoordinates().y == s.getEndPoint().y)
+							if (s.getCoordinates().x == s.getEndPoint().x && s.getCoordinates().y == s.getEndPoint().y) {
 								s.setShotStatus(Constants.SHOT_MISSED);
+								s.looseHealth(s.getDamage());
+							}
 						}
 						break;
 					case Constants.SHOT_HIT:
 						// Play hit sound
-						if (nGameTimestamp - nShotLastTimeChecked[i] >= SHOT_CHK_DELAY) {
 							MusicManager.getInstance().playSound(MusicManager.SOUND_SHOT_HIT);
 							s.looseHealth(s.getDamage());
-							deadShots[i] = true;
-						}
 						break;
 					case Constants.SHOT_MISSED:
 						// Play missed sound
-						if (nGameTimestamp - nShotLastTimeChecked[i] >= SHOT_CHK_DELAY) {
 							MusicManager.getInstance().playSound(MusicManager.SOUND_SHOT_MISSED);
 							s.looseHealth(s.getDamage());
-							deadShots[i] = true;
-						}
 						break;
 					}
 				} else if(s.isAlive() && !s.isInBounds(HORIZON_Y_VALUE)){
 					s.setShotStatus(Constants.SHOT_MISSED);
 				} else { // If Shot is dead
 				    nShotList.remove(s);
-				    nShotLastTimeChecked[i] = 0;
                 }
 			}
 		}
