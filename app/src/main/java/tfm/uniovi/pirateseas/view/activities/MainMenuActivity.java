@@ -57,7 +57,6 @@ public class MainMenuActivity extends Activity {
 
 	private Button btnLoadGame;
 
-	@SuppressWarnings("deprecation")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -200,16 +199,10 @@ public class MainMenuActivity extends Activity {
 		// @see: https://stackoverflow.com/questions/32266425/android-6-0-permission-denial-requires-permission-android-permission-write-sett
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 			if (Settings.System.canWrite(context)) {
-				if(!hasPermission(INITIAL_PERMS[0])) {
-					if(shouldShowRequestPermissionRationale(INITIAL_PERMS[0])) {
-						requestPermissions(INITIAL_PERMS, Constants.REQUEST_PERMISSIONS);
-					}else {
 						loadSettings();
-					}
-				}
-			}
-			else {
+			} else {
 				if(!hasPermission(INITIAL_PERMS[0])) {
+					// requestPermissions(INITIAL_PERMS, Constants.REQUEST_PERMISSIONS);
 					Intent intent = new Intent(android.provider.Settings.ACTION_MANAGE_WRITE_SETTINGS);
 					intent.setData(Uri.parse("package:" + this.getPackageName()));
 					intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -239,9 +232,6 @@ public class MainMenuActivity extends Activity {
 				preferencesEditor.putInt(Constants.APP_VERSION, currentAppVersionCode);
 				preferencesEditor.apply();
 			}
-		} else {
-			// If is not the first time and still does not have permissions ask again for them
-			requestPermissionsFirstTime();
 		}
 	}
 
