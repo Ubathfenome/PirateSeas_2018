@@ -111,6 +111,8 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 		context = this;
 		mCanvasView = new CanvasView(this);
 
+		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
         SpeechRecognitionListener listener = new SpeechRecognitionListener();
         mSpeechRecognizer = SpeechRecognizer.createSpeechRecognizer(this);
         Log.i(TAG, "isRecognitionAvailable: " + SpeechRecognizer.isRecognitionAvailable(this));

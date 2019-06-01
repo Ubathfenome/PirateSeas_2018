@@ -20,10 +20,12 @@
         android:supportsRtl="true"
         android:theme="@style/FullscreenTheme"
         android:hardwareAccelerated="true"
-        android:isGame="true">
+        android:debuggable="true"
+        android:isGame="true"
+        tools:ignore="HardcodedDebugMode">
         <activity
             android:name=".view.activities.MainMenuActivity"
-            android:screenOrientation="landscape">
+            android:screenOrientation="sensorLandscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VIEW" />
@@ -43,39 +45,39 @@
         </activity>
         <activity
             android:name=".view.activities.TutorialActivity"
-            android:screenOrientation="landscape">
+            android:screenOrientation="sensorLandscape">
         </activity>
         <activity
             android:name=".view.activities.ScreenSelectionActivity"
-            android:screenOrientation="landscape">
+            android:screenOrientation="sensorLandscape">
         </activity>
         <activity
             android:name=".view.activities.SettingsActivity"
-            android:screenOrientation="landscape">
+            android:screenOrientation="sensorLandscape">
         </activity>
         <activity
             android:name=".view.activities.SettingsExtraActivity"
-            android:screenOrientation="landscape">
+            android:screenOrientation="sensorLandscape">
         </activity>
         <activity
             android:name=".view.activities.HelpActivity"
-            android:screenOrientation="landscape">
+            android:screenOrientation="sensorLandscape">
         </activity>
         <activity
             android:name=".view.activities.SensorActivity"
-            android:screenOrientation="landscape">
+            android:screenOrientation="sensorLandscape">
         </activity>
         <activity
             android:name=".view.activities.ShopActivity"
-            android:screenOrientation="landscape">
+            android:screenOrientation="sensorLandscape">
         </activity>
         <activity
             android:name=".view.activities.PauseActivity"
-            android:screenOrientation="landscape">
+            android:screenOrientation="sensorLandscape">
         </activity>
         <activity
             android:name=".view.activities.GameOverActivity"
-            android:screenOrientation="landscape">
+            android:screenOrientation="sensorLandscape">
         </activity>
     </application>
 </manifest>

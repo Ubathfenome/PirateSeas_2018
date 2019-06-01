@@ -8,6 +8,7 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
@@ -45,6 +46,8 @@ public class SettingsActivity extends Activity {
 		Typeface customFont = Typeface.createFromAsset(getAssets(), "fonts/"
 				+ Constants.FONT_NAME + ".ttf");
 		txtTitleLabel.setTypeface(customFont);
+
+		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 		
 		volumeValue = MusicManager
 				.getInstance(this).getDeviceVolume();

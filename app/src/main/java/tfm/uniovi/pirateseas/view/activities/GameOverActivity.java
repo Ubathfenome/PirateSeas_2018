@@ -11,6 +11,7 @@ import android.transition.TransitionManager;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.TextView;
 
 import tfm.uniovi.pirateseas.R;
@@ -34,6 +35,8 @@ public class GameOverActivity extends Activity {
 		
 		setContentView(R.layout.activity_gameover);
 		Typeface customFont = Typeface.createFromAsset(getAssets(), "fonts/" + Constants.FONT_NAME + ".ttf");
+
+		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 		
 		// GetIntent Extras
 		Intent intent = getIntent();

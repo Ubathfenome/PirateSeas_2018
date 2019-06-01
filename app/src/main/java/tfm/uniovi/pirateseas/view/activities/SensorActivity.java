@@ -13,6 +13,7 @@ import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
@@ -54,6 +55,8 @@ public class SensorActivity extends Activity{
 		// Set animation layout while loading
 		setContentView(R.layout.activity_sensors);
 		Typeface customFont = Typeface.createFromAsset(getAssets(), "fonts/" + Constants.FONT_NAME + ".ttf");
+
+		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 				
 		iv = findViewById(R.id.img_load_animation);
 		iv.setBackgroundResource(R.drawable.xml_loading_animation);

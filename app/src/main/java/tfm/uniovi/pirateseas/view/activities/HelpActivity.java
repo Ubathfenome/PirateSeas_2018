@@ -12,6 +12,7 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -33,6 +34,8 @@ public class HelpActivity extends Activity {
 		setContentView(R.layout.activity_help);
 
 		Typeface customFont = Typeface.createFromAsset(getAssets(), "fonts/" + Constants.FONT_NAME + ".ttf");
+
+		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
 		TextView txtHelp1 = findViewById(R.id.txtHelp1);
 		txtHelp1.setTypeface(customFont);

@@ -27,6 +27,7 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -70,6 +71,7 @@ public class MainMenuActivity extends Activity {
 		// Get Screen
 		Point size = new Point();
 		getWindowManager().getDefaultDisplay().getSize(size);
+		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 		screenResolutionWidth = size.x;
 		screenResolutionHeight = size.y;
 
