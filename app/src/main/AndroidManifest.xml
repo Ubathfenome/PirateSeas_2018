@@ -19,7 +19,6 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/FullscreenTheme"
-        android:hardwareAccelerated="true"
         android:debuggable="true"
         android:isGame="true"
         tools:ignore="HardcodedDebugMode">

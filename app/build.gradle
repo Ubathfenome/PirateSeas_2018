@@ -7,12 +7,13 @@ android {
         minSdkVersion 21
         targetSdkVersion 28
         versionCode 1
-        versionName "Beta 20190601.2000"
+        versionName "Beta 20190613.2000"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }

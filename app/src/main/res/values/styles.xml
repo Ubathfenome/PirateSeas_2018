@@ -4,7 +4,7 @@
     <!-- Application Theme -->
     <style name="FullscreenTheme" parent="android:Theme.NoTitleBar">
         <item name="android:windowContentOverlay">@null</item>
-        <item name="android:windowBackground">@null</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
         <item name="metaButtonBarStyle">@style/ButtonBar</item>
         <item name="metaButtonBarButtonStyle">@style/ButtonBarButton</item>
         <item name="defaultValue">@style/DefaultValue</item>
