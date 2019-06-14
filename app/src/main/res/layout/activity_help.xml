@@ -1,10 +1,11 @@
 <!DOCTYPE LinearLayout>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/rootLayoutHelp"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@drawable/xml_border">
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:id="@+id/rootLayoutHelp"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:orientation="vertical"
+	android:background="@drawable/xml_border">
 			
 	<LinearLayout 
 	    android:layout_width="match_parent"
@@ -20,13 +21,15 @@
     		android:layout_margin="5dip"
     		android:contentDescription="@string/icd_help_hud"
     		android:background="@mipmap/img_game_help_hud"/>
-	    
+
 	    <LinearLayout
 	        android:id="@+id/lstScreenItems"
 	        android:layout_width="0dp"
     		android:layout_height="match_parent"
 			android:orientation="vertical"
-            android:layout_weight="1">
+            android:layout_weight="1"
+			app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
 			<TextView
 				android:id="@+id/txtHelp1"
 				android:layout_width="match_parent"
@@ -72,8 +75,9 @@
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
                 android:text="@string/help_message_9"/>
-	        
+
 	    </LinearLayout>
+
 	    
 	</LinearLayout>
 	

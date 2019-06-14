@@ -17,7 +17,7 @@
 
     <!-- Exception's messages -->
     <string name="exception_gold">No hay suficiente oro para comprar eso!</string>
-    <string name="exception_ammo">No hay suficiente municion para disparar!</string>
+    <string name="exception_ammo">No hay suficiente munición para disparar!</string>
     <string name="exception_reloading">Recargando cañones!</string>
     <string name="exception_save">Error al guardar</string>
 
@@ -29,29 +29,29 @@
     <string name="btn_pause">Botón de pausa</string>
     <string name="lbl_volume">Volumen</string>
     <string name="tb_control_sensor">Control por sensores</string>
-    <string name="tb_control_touch">Control tactil</string>
+    <string name="tb_control_touch">Control táctil</string>
     <string name="lbl_control_mode">Modo de control del barco</string>
     <string name="settings_change_ammo_volume">Con teclas de volumen</string>
-    <string name="settings_change_ammo_touch">Tactil</string>
-    <string name="settings_change_ammo_mode">Modo de seleccion de la municion</string>
+    <string name="settings_change_ammo_touch">Táctil</string>
+    <string name="settings_change_ammo_mode">Modo de seleccion de la munición</string>
     <string name="settings_sensorway">Por sensores</string>
-    <string name="settings_manual">Tactil</string>
-    <string name="settings_extra">Configuracion Extra</string>
+    <string name="settings_manual">Táctil</string>
+    <string name="settings_extra">Configuración Extra</string>
     <string name="settings_exit_message">Salir mediante los botones de \'Aceptar\' o \'Cancelar\'</string>
 
     <!-- Shop strings -->
     <string name="shop_item_name">Nombre del objeto</string>
-    <string name="shop_item_crew_name">Tripulacion</string>
+    <string name="shop_item_crew_name">Tripulación</string>
     <string name="shop_item_crew_desc">Recupera 5 puntos de salud</string>
     <string name="shop_item_repairman_name">Reparador</string>
     <string name="shop_item_repairman_desc">Recupera 15 puntos de vida</string>
-    <string name="shop_item_ammo_simple_name">Municion basica</string>
+    <string name="shop_item_ammo_simple_name">Munición basica</string>
     <string name="shop_item_ammo_simple_desc">Gana 10 balas de municion basica</string>
     <string name="shop_item_ammo_aimed_name">Bala teledirigida</string>
     <string name="shop_item_ammo_aimed_desc">Gana 5 balas autodirigidas</string>
-    <string name="shop_item_ammo_double_name">Municion doble</string>
+    <string name="shop_item_ammo_double_name">Munición doble</string>
     <string name="shop_item_ammo_double_desc">Gana 5 disparos de municion doble</string>
-    <string name="shop_item_ammo_sweep_name">Municion barrido</string>
+    <string name="shop_item_ammo_sweep_name">Munición barrido</string>
     <string name="shop_item_ammo_sweep_desc">Gana 2 disparos de barrido de pantalla</string>
     <string name="shop_item_nest_name">Vigia</string>
     <string name="shop_item_nest_desc">Incrementa el rango por 1.15</string>
@@ -61,22 +61,22 @@
     <string name="shop_item_mpiece_desc">1/6 parte de un mapa</string>
     <string name="shop_item_map_name">Mapa</string>
     <string name="shop_item_map_desc">Muestra la isla del tesoro más cercana</string>
-    <string name="shop_item_bpowder_name">Polvora</string>
+    <string name="shop_item_bpowder_name">Pólvora</string>
     <string name="shop_item_bpowder_desc">Incrementa la fuerza por 0.5</string>
     <string name="shop_item_valuable_name">Gemas preciosas</string>
     <string name="shop_item_valuable_desc">Las puedes vender por 100 monedas</string>
     <string name="shop_purchase_hint">\n
-        (Seleccionar la ayuda de un objeto para mostrar su descripcion)\n
+        (Seleccionar la ayuda de un objeto para mostrar su descripción)\n
         (Seleccionar el objeto para comprarlo)</string>
 
     <!-- Shop Purchase Dialog -->
     <string name="shop_purchase_dialog_title">Comprar</string>
-    <string name="shop_purchase_dialog_message">Compraras este objeto!</string>
+    <string name="shop_purchase_dialog_message">Comprarás este objeto!</string>
     <string name="shop_purchase_dialog_positive">Confirmar</string>
 
     <!-- Restore Preferences Dialog -->
     <string name="settings_restore_dialog_title">Restaurar Preferencias</string>
-    <string name="settings_restore_dialog_message">Borraras todos los  datos guardados!</string>
+    <string name="settings_restore_dialog_message">Borrarás todos los  datos guardados!</string>
     <string name="settings_restore_dialog_positive">Confirmar</string>
 
     <!-- Overwrite Game Dialog -->
@@ -92,7 +92,7 @@
 
     <!-- Exit Tutorial Dialog -->
     <string name="exit_tutorial_dialog_title">Salir del Tutorial</string>
-    <string name="exit_tutorial_main_menu_message">Volveras al Menu Principal</string>
+    <string name="exit_tutorial_main_menu_message">Volverás al Menu Principal</string>
     <string name="exit_tutorial_dialog_message">El juego dara comienzo!</string>
     <string name="exit_tutorial_dialog_positive">Continuar</string>
 
@@ -167,45 +167,48 @@
     <string name="empty_string"/>
 
     <!-- Game strings -->
-    <string name="tutorial_1">Arrr Grumete!! Bienvenido a PIRATE SEAS!!\nArr quieres dominar los siete mares? Pues conquista todas las islas y hazte rico.</string>
+    <string name="tutorial_1">Arrr Grumete!! Bienvenido a PIRATE SEAS!!\nArr, quieres dominar los siete mares? Pues conquista todas las islas y hazte rico.</string>
     <string name="tutorial_2">Escoge tu siguiente paso con cuidado grumetillo! Muchos buenos hombres se han hundido en estas aguas.</string>
     <string name="tutorial_3">Si te encuentras con neblina en el mar.. Cuidado! Seguro que hay un enemigo tras la niebla. Agita tu dispositivo para aclarar el cielo!</string>
     <string name="tutorial_4">Toca la pantalla hacia arriba para disparar la munición seleccionada.</string>
     <string name="tutorial_5">Cambia el tipo de munición seleccionada pulsando en el icono de la munición (por defecto) o pulsando las teclas de volumen.</string>
     <string name="tutorial_6">Consigue riquezas hundiendo a tus enemigos o descubriendo tesoros con los mapas que encontraras en tu camino.
-        \nLos barcos rojos son mas resistentes y lentos.
+        \nLos barcos rojos son más resistentes y lentos.
         \nLos barcos amarillos tienen una vida y velocidad normales.
-        \Los barcos verdes son los mas debiles, pero también los mas rapidos.</string>
+        \Los barcos verdes son los mas débiles, pero también los mas rapidos.</string>
     <string name="tutorial_7">Gana experiencia hundiendo a tus enemigos y desbloquea mejores actualizaciones.</string>
-    <string name="tutorial_8">Conviertete en el mayor Rey Pirata! o caminaras por la plancha!</string>
+    <string name="tutorial_8">Conviertete en el mayor Rey Pirata! o caminarás por la plancha!</string>
+
     <string name="gameover_title">Fin de la partida\nA dormir con los tiburones</string>
     <string name="gameover_hint">(Pulsa en cualquier lugar para reiniciar el juego&#8230;)</string>
-    <string name="gameover_score">Puntuacion</string>
+    <string name="gameover_score">Puntuación</string>
     <string name="gameover_days">Días transcurridos</string>
+
     <string name="app_about">Acerca de&#8230;</string>
     <string name="tutorial_content">Contenido del tutorial</string>
-    <string name="message_screenselection">Que direccion tomamos ahora, Capi?</string>
+    <string name="message_screenselection">Que dirección tomamos ahora, Capi?</string>
     <string name="message_screenselection_detail">Por favor, selecciona la siguiente dirección a la que quieres navegar</string>
     <string name="message_islandvisited">Capi! Ya hemos estado en esa isla!</string>
     <string name="message_islanddetected">Capi! Tierra a la vista!</string>
-    <string name="message_nothinghere">Capi! No hay nada ahí! Que direccion debemos tomar?</string>
+    <string name="message_nothinghere">Capi! No hay nada ahí! Que dirección debemos tomar?</string>
     <string name="message_wrongway">Capi! No podemos ir por ahí!</string>
     <string name="message_mapcompleted">Mapa completado!</string>
-    <string name="message_shakesleft">Agita tu dispositivo %1$d veces mas!</string>
+    <string name="message_shakesleft">Agita tu dispositivo %1$d veces más!</string>
     <string name="game_exit">Salir</string>
     <string name="game_message_enemy_defeated">Has encontrado %1$d monedas de oro y conseguido %2$d xp!</string>
     <string name="game_message_islands_discovered">Ya hemos encontrado todas las islas de este mar. Venderemos este mapa por 90 monedas de oro!</string>
 
     <!-- Help strings -->
-    <string name="help_message_1">1. Tipo de municion seleccionada</string>
+    <string name="help_message_1">1. Tipo de munición seleccionada</string>
     <string name="help_message_2">2. Barra de vida del enemigo</string>
-    <string name="help_message_3">3. Boton de pausa</string>
+    <string name="help_message_3">3. Botón de pausa</string>
     <string name="help_message_4">4. Barco enemigo</string>
     <string name="help_message_5">5. Barra de vida del jugador</string>
     <string name="help_message_6">6. Barra de experiencia del jugador</string>
     <string name="help_message_7">7. Barco del jugador</string>
     <string name="help_message_8">8. Oro del jugador</string>
     <string name="help_message_9">9. Municion restante</string>
+
     <string name="lang">es</string>
     <string name="command_fire">fuego</string>
     <string name="command_ok">OK</string>
@@ -214,6 +217,6 @@
     <string name="cd_map_cover">Celda del mapa oscurecida</string>
     <string name="generic_number">%1$d</string>
     <string name="reset_preferences_error">Error al borrar la memoria</string>
-    <string name="reset_preferences_ok">Memoria borrada con exito</string>
+    <string name="reset_preferences_ok">Memoria borrada con éxito</string>
 
 </resources>
