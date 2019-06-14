@@ -200,9 +200,7 @@ public class MainMenuActivity extends Activity {
 		// @see: https://stackoverflow.com/questions/32083913/android-gps-requires-access-fine-location-error-even-though-my-manifest-file
 		// @see: https://stackoverflow.com/questions/32266425/android-6-0-permission-denial-requires-permission-android-permission-write-sett
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-			if (Settings.System.canWrite(context)) {
-						loadSettings();
-			} else {
+			if (!Settings.System.canWrite(context)) {
 				if(!hasPermission(INITIAL_PERMS[0])) {
 					// requestPermissions(INITIAL_PERMS, Constants.REQUEST_PERMISSIONS);
 					Intent intent = new Intent(android.provider.Settings.ACTION_MANAGE_WRITE_SETTINGS);
@@ -211,6 +209,7 @@ public class MainMenuActivity extends Activity {
 					startActivity(intent);
 				}
 			}
+			loadSettings();
 		}
 	}
 
@@ -300,8 +299,11 @@ public class MainMenuActivity extends Activity {
 	 * Load the settings
 	 */
 	private void loadSettings() {
-		Settings.System.putInt(getContentResolver(), Settings.System.SCREEN_BRIGHTNESS_MODE,
-				Settings.System.SCREEN_BRIGHTNESS_MODE_AUTOMATIC);
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+			if(Settings.System.canWrite(context))
+				Settings.System.putInt(getContentResolver(), Settings.System.SCREEN_BRIGHTNESS_MODE,
+					Settings.System.SCREEN_BRIGHTNESS_MODE_AUTOMATIC);
+		}
 
 		if (mPreferences.getLong(Constants.PREF_PLAYER_TIMESTAMP, 0) == 0) {
 			btnLoadGame.setEnabled(false);
@@ -361,7 +363,7 @@ public class MainMenuActivity extends Activity {
 	/*
 	  Class to show a dialog that asks the player if he/she is sure to overwrite the last saved game
 	 */
-	public class OverwriteGameDialogFragment extends DialogFragment {
+	public static class OverwriteGameDialogFragment extends DialogFragment {
 		@Override
 		public Dialog onCreateDialog(Bundle savedInstanceState) {
 			final Activity dummyActivity = getActivity();
@@ -374,26 +376,26 @@ public class MainMenuActivity extends Activity {
 							new DialogInterface.OnClickListener() {
 								public void onClick(DialogInterface dialog,
 													int id) {
-									boolean noSensors = mPreferences.getBoolean(Constants.PREF_DEVICE_NOSENSORS, false);
-									boolean shipControlMode = mPreferences.getBoolean(Constants.PREF_SHIP_CONTROL_MODE, Constants.PREF_GAME_TOUCH);
-									boolean ammoControlMode = mPreferences.getBoolean(Constants.PREF_AMMO_CONTROL_MODE, Constants.PREF_GAME_TOUCH);
-									boolean levelControlMode = mPreferences.getBoolean(Constants.PREF_LEVEL_CONTROL_MODE, Constants.PREF_GAME_TOUCH);
-									boolean pauseControlMode = mPreferences.getBoolean(Constants.PREF_PAUSE_CONTROL_MODE, Constants.PREF_GAME_TOUCH);
+									boolean noSensors = ((MainMenuActivity)getActivity()).mPreferences.getBoolean(Constants.PREF_DEVICE_NOSENSORS, false);
+									boolean shipControlMode = ((MainMenuActivity)getActivity()).mPreferences.getBoolean(Constants.PREF_SHIP_CONTROL_MODE, Constants.PREF_GAME_TOUCH);
+									boolean ammoControlMode = ((MainMenuActivity)getActivity()).mPreferences.getBoolean(Constants.PREF_AMMO_CONTROL_MODE, Constants.PREF_GAME_TOUCH);
+									boolean levelControlMode = ((MainMenuActivity)getActivity()).mPreferences.getBoolean(Constants.PREF_LEVEL_CONTROL_MODE, Constants.PREF_GAME_TOUCH);
+									boolean pauseControlMode = ((MainMenuActivity)getActivity()).mPreferences.getBoolean(Constants.PREF_PAUSE_CONTROL_MODE, Constants.PREF_GAME_TOUCH);
 
-									SharedPreferences.Editor editor = mPreferences.edit();
+									SharedPreferences.Editor editor = ((MainMenuActivity)getActivity()).mPreferences.edit();
 									editor.clear();
 									editor.putBoolean(Constants.PREF_SHIP_CONTROL_MODE, shipControlMode);
 									editor.putBoolean(Constants.PREF_AMMO_CONTROL_MODE, ammoControlMode);
 									editor.putBoolean(Constants.PREF_LEVEL_CONTROL_MODE, levelControlMode);
 									editor.putBoolean(Constants.PREF_PAUSE_CONTROL_MODE, pauseControlMode);
-									editor.putBoolean(Constants.TAG_EXE_MODE, Constants.isInDebugMode(mMode));
+									editor.putBoolean(Constants.TAG_EXE_MODE, Constants.isInDebugMode(((MainMenuActivity)getActivity()).mMode));
 									editor.apply();
 
 									if(!noSensors)
-										launchSensorActivity();
+										((MainMenuActivity)getActivity()).launchSensorActivity();
 									else{
 										int[] emptySensorList = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
-										launchGame(!mOverwriteWarning, emptySensorList);
+										((MainMenuActivity)getActivity()).launchGame(!((MainMenuActivity)getActivity()).mOverwriteWarning, emptySensorList);
 									}
 								}
 							})

@@ -106,17 +106,20 @@ public class TutorialActivity extends FragmentActivity {
 	/*
 	 * Class to show a Dialog that asks the user if he/she really want to leave the tutorial
 	 */
-	public class LeaveTutorialDialogFragment extends DialogFragment {
+	public static class LeaveTutorialDialogFragment extends DialogFragment {
+
+
+
 	    @Override
 	    public Dialog onCreateDialog(Bundle savedInstanceState) {
 	        // Use the Builder class for convenient dialog construction
 	        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-	        if(returnToMain)
+	        if(((TutorialActivity)getActivity()).returnToMain)
 	        	builder.setTitle(getResources().getString(R.string.exit_tutorial_dialog_title))
 				   .setMessage(R.string.exit_tutorial_main_menu_message)
 	               .setPositiveButton(R.string.exit_tutorial_dialog_positive, new DialogInterface.OnClickListener() {
 	                   public void onClick(DialogInterface dialog, int id) {
-	                       returnToMainMenu();
+						   ((TutorialActivity)getActivity()).returnToMainMenu();
 	                   }
 	               })
 	               .setNegativeButton(R.string.exit_dialog_negative, new DialogInterface.OnClickListener() {
@@ -129,7 +132,7 @@ public class TutorialActivity extends FragmentActivity {
 						.setMessage(R.string.exit_tutorial_dialog_message)
 						.setPositiveButton(R.string.exit_tutorial_dialog_positive, new DialogInterface.OnClickListener() {
 							public void onClick(DialogInterface dialog, int id) {
-								startGame();
+								((TutorialActivity)getActivity()).startGame();
 							}
 						})
 						.setNegativeButton(R.string.exit_dialog_negative, new DialogInterface.OnClickListener() {

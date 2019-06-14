@@ -106,7 +106,7 @@ public class SettingsExtraActivity extends Activity {
 	/*
 	 * Class to show a Dialog that asks the user if he/she really want to reset all preferences
 	 */
-	public class ResetPreferencesDialogFragment extends DialogFragment {
+	public static class ResetPreferencesDialogFragment extends DialogFragment {
 		@Override
 		public Dialog onCreateDialog(Bundle savedInstanceState) {
 			final Activity dummyActivity = getActivity();
@@ -121,7 +121,7 @@ public class SettingsExtraActivity extends Activity {
 							new DialogInterface.OnClickListener() {
 								public void onClick(DialogInterface dialog,
 										int id) {
-									String message = resetPreferences() ? getString(R.string.reset_preferences_ok)
+									String message = ((SettingsExtraActivity)getActivity()).resetPreferences() ? getString(R.string.reset_preferences_ok)
 											: getString(R.string.reset_preferences_error);
 									Toast.makeText(getActivity(), message,
 											Toast.LENGTH_SHORT).show();

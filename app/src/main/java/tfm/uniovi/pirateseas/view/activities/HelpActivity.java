@@ -86,7 +86,7 @@ public class HelpActivity extends Activity {
 	}
 	
 	@SuppressLint("ValidFragment")
-	public class DisplayInfoDialogFragment extends DialogFragment {
+	public static class DisplayInfoDialogFragment extends DialogFragment {
 		@Override
 		public Dialog onCreateDialog(Bundle savedInstanceState) {
 			final Activity dummyActivity = getActivity();
@@ -98,7 +98,7 @@ public class HelpActivity extends Activity {
 							getResources().getString(
 									R.string.about_dialog_message)
 									+ "\n"
-									+ versionName)
+									+ ((HelpActivity)getActivity()).versionName)
 					.setPositiveButton(R.string.about_dialog_positive,
 							new DialogInterface.OnClickListener() {
 								public void onClick(DialogInterface dialog,

@@ -235,7 +235,7 @@ public class ShopActivity extends ListActivity{
 	/*
 	 * Class to show a dialog that asks the user if he/she wants to leave the activity
 	 */
-	public class LeaveActivityDialogFragment extends DialogFragment {
+	public static class LeaveActivityDialogFragment extends DialogFragment {
 		@Override
 		public Dialog onCreateDialog(Bundle savedInstanceState) {
 			final Activity dummyActivity = getActivity();
@@ -248,7 +248,7 @@ public class ShopActivity extends ListActivity{
 							new DialogInterface.OnClickListener() {
 								public void onClick(DialogInterface dialog,
 										int id) {
-									if (GameHelper.saveGameAtPreferences(dummyActivity, dummyPlayer, dummyShip, dummyMap))
+									if (GameHelper.saveGameAtPreferences(dummyActivity, ((ShopActivity)getActivity()).dummyPlayer, ((ShopActivity)getActivity()).dummyShip, ((ShopActivity)getActivity()).dummyMap))
 										Log.v(TAG, "Game saved");
 									else {
 										try {
@@ -263,10 +263,10 @@ public class ShopActivity extends ListActivity{
 									}
 									// Create ScreenSelection Intent, populate extras + flags & start Activity
 									Intent screenSelectionIntent = new Intent(dummyActivity, ScreenSelectionActivity.class);
-									screenSelectionIntent.putExtra(Constants.TAG_SENSOR_LIST, sensorTypes);
-									screenSelectionIntent.putExtra(Constants.TAG_LOAD_GAME, loadGame);
-									screenSelectionIntent.putExtra(Constants.TAG_SCREEN_SELECTION_MAP_HEIGHT, mapHeight);
-									screenSelectionIntent.putExtra(Constants.TAG_SCREEN_SELECTION_MAP_WIDTH, mapWidth);
+									screenSelectionIntent.putExtra(Constants.TAG_SENSOR_LIST, ((ShopActivity)getActivity()).sensorTypes);
+									screenSelectionIntent.putExtra(Constants.TAG_LOAD_GAME, ((ShopActivity)getActivity()).loadGame);
+									screenSelectionIntent.putExtra(Constants.TAG_SCREEN_SELECTION_MAP_HEIGHT, ((ShopActivity)getActivity()).mapHeight);
+									screenSelectionIntent.putExtra(Constants.TAG_SCREEN_SELECTION_MAP_WIDTH, ((ShopActivity)getActivity()).mapWidth);
 									screenSelectionIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP);
 									startActivity(screenSelectionIntent);
 									try {
@@ -294,7 +294,7 @@ public class ShopActivity extends ListActivity{
 	/*
 	 * Class to show a Dialog that asks the user if he/she really want to buy an Item
 	 */
-	public class PurchaseItemDialogFragment extends DialogFragment {
+	public static class PurchaseItemDialogFragment extends DialogFragment {
 		
 		Item item;
 		
@@ -315,9 +315,9 @@ public class ShopActivity extends ListActivity{
 								public void onClick(DialogInterface dialog,
 										int id) {
 									if(item != null){
-										if(purchaseItem(item)){
-											itemList.remove(item);
-											listView.setAdapter(mAdapter);
+										if(((ShopActivity)getActivity()).purchaseItem(item)){
+											((ShopActivity)getActivity()).itemList.remove(item);
+											((ShopActivity)getActivity()).listView.setAdapter(((ShopActivity)getActivity()).mAdapter);
 										}
 									}
 								}
