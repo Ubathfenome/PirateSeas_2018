@@ -7,7 +7,6 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -36,6 +35,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -317,25 +317,69 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 		@Override
 		public Dialog onCreateDialog(Bundle savedInstanceState) {
 			final Activity dummyActivity = getActivity();
-			// Use the Builder class for convenient dialog construction
 			AlertDialog.Builder builder = new AlertDialog.Builder(dummyActivity);
-			builder.setTitle(getResources().getString(R.string.exit_dialog_title))
-					.setMessage(R.string.exit_dialog_message)
-					.setPositiveButton(R.string.exit_dialog_positive, new DialogInterface.OnClickListener() {
-						public void onClick(DialogInterface dialog, int id) {
-							// Exit
-							// mCanvasView.setStatus(Constants.GAME_STATE_END);
-							// CanvasView.nUpdateThread.setRunning(false);
-							Log.d(TAG,"Finish Game Activity");
-							dummyActivity.finish();
-						}
-					}).setNegativeButton(R.string.exit_dialog_negative, new DialogInterface.OnClickListener() {
-						public void onClick(DialogInterface dialog, int id) {
-							// User cancels the dialog
-						}
-					});
+			LayoutInflater inflater = dummyActivity.getLayoutInflater();
+			View view = inflater.inflate(R.layout.custom_dialog_layout, null);
+			TextView txtTitle = view.findViewById(R.id.txtTitle);
+			TextView txtMessage = view.findViewById(R.id.txtMessage);
+			Button btnPositive = view.findViewById(R.id.btnPositive);
+			Button btnNegative = view.findViewById(R.id.btnNegative);
+			txtTitle.setText(getResources().getString(R.string.exit_dialog_title));
+			txtMessage.setText(getResources().getString(R.string.exit_dialog_message));
+			btnPositive.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View view) {
+					// Exit
+					// canvasView.setStatus(Constants.GAME_STATE_END);
+					// CanvasView.nUpdateThread.setRunning(false);
+					Log.d(TAG,"Finish Game Activity");
+					dummyActivity.finish();
+				}
+			});
+			btnNegative.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View view) {
+					dismiss();
+				}
+			});
+			builder.setView(view);
+
 			// Create the AlertDialog object and return it
 			return builder.create();
+		}
+	}
+
+	public static class EnemyDefeatedFragment extends DialogFragment {
+
+		@Override
+		public Dialog onCreateDialog(Bundle savedInstanceState) {
+			final Activity dummyActivity = getActivity();
+			int gold = getArguments().getInt(Constants.ARG_GOLD, 0);
+			int xp = getArguments().getInt(Constants.ARG_XP, 0);
+			AlertDialog.Builder builder = new AlertDialog.Builder(dummyActivity);
+			LayoutInflater inflater = dummyActivity.getLayoutInflater();
+			View view = inflater.inflate(R.layout.custom_positive_dialog_layout, null);
+			TextView txtTitle = view.findViewById(R.id.txtTitle);
+			TextView txtMessage = view.findViewById(R.id.txtMessage);
+			Button btnPositive = view.findViewById(R.id.btnPositive);
+			txtTitle.setText(getResources().getString(R.string.game_message_enemy_defeated_title));
+			txtMessage.setText(String.format(getResources().getString(R.string.game_message_enemy_defeated), gold, xp));
+			btnPositive.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View view) {
+					// Exit
+					setMessageAsRead(true);
+					dismiss();
+				}
+			});
+			builder.setView(view);
+
+			// Create the AlertDialog object and return it
+			return builder.create();
+		}
+
+		private void setMessageAsRead(boolean b) {
+			((GameActivity)getActivity()).mCanvasView.messageReaded = b;
 		}
 	}
 
@@ -637,6 +681,20 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 		// Pop up messageBox asking if the user is sure to leave
 		LeaveGameDialogFragment exitDialog = new LeaveGameDialogFragment();
 		exitDialog.show(getFragmentManager(), "LeaveGameDialog");
+	}
+
+	/**
+	 * Show a dialog with the enemy loot info
+	 * @param gold Gold gained after defeating the enemy
+	 * @param xp Experience points won after defeating the enemy
+	 */
+	public void enemyDefeated(int gold, int xp){
+		EnemyDefeatedFragment enemyDefeatedDialog = new EnemyDefeatedFragment();
+		Bundle args = new Bundle();
+		args.putInt(Constants.ARG_GOLD, gold);
+		args.putInt(Constants.ARG_XP, xp);
+		enemyDefeatedDialog.setArguments(args);
+		enemyDefeatedDialog.show(getFragmentManager(), "EnemyDefeatedDialog");
 	}
 
 	/**

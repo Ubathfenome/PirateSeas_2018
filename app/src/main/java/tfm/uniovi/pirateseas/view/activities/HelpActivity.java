@@ -5,11 +5,11 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
-import android.content.DialogInterface;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
@@ -90,23 +90,26 @@ public class HelpActivity extends Activity {
 		@Override
 		public Dialog onCreateDialog(Bundle savedInstanceState) {
 			final Activity dummyActivity = getActivity();
+			String message = getResources().getString(
+					R.string.about_dialog_message)
+					+ "\n"
+					+ ((HelpActivity)getActivity()).versionName;
 			// Use the Builder class for convenient dialog construction
 			AlertDialog.Builder builder = new AlertDialog.Builder(dummyActivity);
-			builder.setTitle(
-					getResources().getString(R.string.about_dialog_title))
-					.setMessage(
-							getResources().getString(
-									R.string.about_dialog_message)
-									+ "\n"
-									+ ((HelpActivity)getActivity()).versionName)
-					.setPositiveButton(R.string.about_dialog_positive,
-							new DialogInterface.OnClickListener() {
-								public void onClick(DialogInterface dialog,
-										int id) {
-									// Show info
-									dismiss();
-								}
-							});
+			LayoutInflater inflater = dummyActivity.getLayoutInflater();
+			View view = inflater.inflate(R.layout.custom_positive_dialog_layout, null);
+			TextView txtTitle = view.findViewById(R.id.txtTitle);
+			txtTitle.setText(getResources().getString(R.string.about_dialog_title));
+			TextView txtMessage = view.findViewById(R.id.txtMessage);
+			txtMessage.setText(message);
+			Button btnPositive = view.findViewById(R.id.btnPositive);
+			btnPositive.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View view) {
+					dismiss();
+				}
+			});
+			builder.setView(view);
 			// Create the AlertDialog object and return it
 			return builder.create();
 		}

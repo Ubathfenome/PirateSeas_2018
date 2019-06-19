@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -55,9 +56,6 @@ public class ScreenSelectionActivity extends Activity {
 	int mapHeight;
 	int mapLength;
 	int active;
-
-    private float heightRatio;
-    private float widthRatio;
 
 	int[] sensorTypes = null;
 	boolean loadGame;
@@ -307,6 +305,10 @@ public class ScreenSelectionActivity extends Activity {
 		txtScreenSelectionLabel = findViewById(R.id.txtScreenSelectionLabel);
 		txtScreenSelectionLabel.setTypeface(customFont);
 
+		TextView txtAnimationTitle = findViewById(R.id.txtAnimationTitle);
+		txtAnimationTitle.setTextColor(Color.BLACK);
+		txtAnimationTitle.setTypeface(customFont);
+
 		if(map.isAllClear()){
 			// Map completed! Clear map from preferences and start new map
 			Toast.makeText(context, getString(R.string.message_mapcompleted), Toast.LENGTH_LONG).show();
@@ -422,8 +424,8 @@ public class ScreenSelectionActivity extends Activity {
 		int fragmentHeight = bmpCover.getHeight();
 		int fragmentWidth = bmpCover.getWidth();
 
-		heightRatio = screenHeight / (float) fragmentHeight;
-        widthRatio = screenWidth / (float) fragmentWidth;
+		float heightRatio = screenHeight / (float) fragmentHeight;
+		float widthRatio = screenWidth / (float) fragmentWidth;
 
 		int mapHeight = (int) heightRatio;
 		int mapWidth = (int) widthRatio;
@@ -498,7 +500,9 @@ public class ScreenSelectionActivity extends Activity {
      * @param revealedResource Drawable resource to be shown
      */
 	private void revealCellAnimation(int revealedResource, final Intent intent){
+
 		layoutMapBackground.setVisibility(View.GONE);
+
 		ImageView imgCellReveal = findViewById(R.id.imgCellReveal);
         ImageView imgCellRevealed = findViewById(R.id.imgCellRevealed);
         imgCellReveal.setVisibility(View.VISIBLE);
@@ -510,6 +514,7 @@ public class ScreenSelectionActivity extends Activity {
 		long animDuration = 5000;
 
 		imgCellReveal.animate().alpha(0f).setDuration(animDuration);
+
 		imgCellRevealed.animate().alpha(1f).setDuration(animDuration).setListener(new AnimatorListenerAdapter() {
 			@Override
 			public void onAnimationEnd(Animator animation) {

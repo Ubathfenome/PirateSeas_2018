@@ -5,7 +5,6 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -14,8 +13,11 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.TextView;
 
 import tfm.uniovi.pirateseas.R;
 import tfm.uniovi.pirateseas.global.Constants;
@@ -114,32 +116,49 @@ public class TutorialActivity extends FragmentActivity {
 	    public Dialog onCreateDialog(Bundle savedInstanceState) {
 	        // Use the Builder class for convenient dialog construction
 	        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-	        if(((TutorialActivity)getActivity()).returnToMain)
-	        	builder.setTitle(getResources().getString(R.string.exit_tutorial_dialog_title))
-				   .setMessage(R.string.exit_tutorial_main_menu_message)
-	               .setPositiveButton(R.string.exit_tutorial_dialog_positive, new DialogInterface.OnClickListener() {
-	                   public void onClick(DialogInterface dialog, int id) {
-						   ((TutorialActivity)getActivity()).returnToMainMenu();
-	                   }
-	               })
-	               .setNegativeButton(R.string.exit_dialog_negative, new DialogInterface.OnClickListener() {
-	                   public void onClick(DialogInterface dialog, int id) {
-	                       // User cancels the dialog
-	                   }
-	               });
-	        else
-				builder.setTitle(getResources().getString(R.string.exit_tutorial_dialog_title))
-						.setMessage(R.string.exit_tutorial_dialog_message)
-						.setPositiveButton(R.string.exit_tutorial_dialog_positive, new DialogInterface.OnClickListener() {
-							public void onClick(DialogInterface dialog, int id) {
-								((TutorialActivity)getActivity()).startGame();
-							}
-						})
-						.setNegativeButton(R.string.exit_dialog_negative, new DialogInterface.OnClickListener() {
-							public void onClick(DialogInterface dialog, int id) {
-								// User cancels the dialog
-							}
-						});
+			LayoutInflater inflater = getActivity().getLayoutInflater();
+			View view = inflater.inflate(R.layout.custom_dialog_layout, null);
+			TextView txtTitle = view.findViewById(R.id.txtTitle);
+			TextView txtMessage = view.findViewById(R.id.txtMessage);
+			Button btnPositive = view.findViewById(R.id.btnPositive);
+			Button btnNegative = view.findViewById(R.id.btnNegative);
+
+	        if(((TutorialActivity)getActivity()).returnToMain) {
+
+				txtTitle.setText(getResources().getString(R.string.exit_tutorial_dialog_title));
+
+				txtMessage.setText(getResources().getString(R.string.exit_tutorial_main_menu_message));
+
+				btnPositive.setOnClickListener(new View.OnClickListener() {
+					@Override
+					public void onClick(View view) {
+						((TutorialActivity) getActivity()).returnToMainMenu();
+					}
+				});
+
+				btnNegative.setOnClickListener(null);
+
+			} else {
+
+				txtTitle.setText(getResources().getString(R.string.exit_tutorial_dialog_title));
+
+				txtMessage.setText(getResources().getString(R.string.exit_tutorial_dialog_message));
+
+				btnPositive.setOnClickListener(new View.OnClickListener() {
+					@Override
+					public void onClick(View view) {
+						((TutorialActivity) getActivity()).startGame();
+					}
+				});
+
+				btnNegative.setOnClickListener(new View.OnClickListener() {
+					@Override
+					public void onClick(View view) {
+						dismiss();
+					}
+				});
+			}
+			builder.setView(view);
 	        // Create the AlertDialog object and return it
 	        return builder.create();
 	    }

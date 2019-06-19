@@ -7,7 +7,6 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
@@ -25,6 +24,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
@@ -202,11 +202,10 @@ public class MainMenuActivity extends Activity {
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 			if (!Settings.System.canWrite(context)) {
 				if(!hasPermission(INITIAL_PERMS[0])) {
-					// requestPermissions(INITIAL_PERMS, Constants.REQUEST_PERMISSIONS);
 					Intent intent = new Intent(android.provider.Settings.ACTION_MANAGE_WRITE_SETTINGS);
 					intent.setData(Uri.parse("package:" + this.getPackageName()));
 					intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-					startActivity(intent);
+					startActivityForResult(intent, Constants.REQUEST_PERMISSIONS);
 				}
 			}
 			loadSettings();
@@ -253,14 +252,12 @@ public class MainMenuActivity extends Activity {
 	}
 
 	@Override
-	public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
-		switch (requestCode) {
-			case Constants.REQUEST_PERMISSIONS: {
-				// If request is cancelled, the result arrays are empty.
-				if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-					// Permission was granted, yay!
-					loadSettings();
-				}
+	public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+		// If request is cancelled, the result arrays are empty.
+		if (requestCode == Constants.REQUEST_PERMISSIONS) {
+			if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+				// Permission was granted, yay!
+				loadSettings();
 			}
 		}
 	}
@@ -348,6 +345,9 @@ public class MainMenuActivity extends Activity {
 					launchGame(newGame, sensorTypes);
 				}
 				break;
+			case Constants.REQUEST_PERMISSIONS:
+
+				break;
 		}
 	}
 
@@ -367,45 +367,49 @@ public class MainMenuActivity extends Activity {
 		@Override
 		public Dialog onCreateDialog(Bundle savedInstanceState) {
 			final Activity dummyActivity = getActivity();
-			// Use the Builder class for convenient dialog construction
+
 			AlertDialog.Builder builder = new AlertDialog.Builder(dummyActivity);
-			builder.setTitle(
-					getResources().getString(R.string.overwrite_dialog_title))
-					.setMessage(R.string.overwrite_dialog_message)
-					.setPositiveButton(R.string.overwrite_dialog_positive,
-							new DialogInterface.OnClickListener() {
-								public void onClick(DialogInterface dialog,
-													int id) {
-									boolean noSensors = ((MainMenuActivity)getActivity()).mPreferences.getBoolean(Constants.PREF_DEVICE_NOSENSORS, false);
-									boolean shipControlMode = ((MainMenuActivity)getActivity()).mPreferences.getBoolean(Constants.PREF_SHIP_CONTROL_MODE, Constants.PREF_GAME_TOUCH);
-									boolean ammoControlMode = ((MainMenuActivity)getActivity()).mPreferences.getBoolean(Constants.PREF_AMMO_CONTROL_MODE, Constants.PREF_GAME_TOUCH);
-									boolean levelControlMode = ((MainMenuActivity)getActivity()).mPreferences.getBoolean(Constants.PREF_LEVEL_CONTROL_MODE, Constants.PREF_GAME_TOUCH);
-									boolean pauseControlMode = ((MainMenuActivity)getActivity()).mPreferences.getBoolean(Constants.PREF_PAUSE_CONTROL_MODE, Constants.PREF_GAME_TOUCH);
+			LayoutInflater inflater = dummyActivity.getLayoutInflater();
+			View view = inflater.inflate(R.layout.custom_dialog_layout, null);
+			TextView txtTitle = view.findViewById(R.id.txtTitle);
+			TextView txtMessage = view.findViewById(R.id.txtMessage);
+			Button btnPositive = view.findViewById(R.id.btnPositive);
+			Button btnNegative = view.findViewById(R.id.btnNegative);
+			txtTitle.setText(getResources().getString(R.string.overwrite_dialog_title));
+			txtMessage.setText(getResources().getString(R.string.overwrite_dialog_message));
+			btnPositive.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View view) {
+					boolean noSensors = ((MainMenuActivity)getActivity()).mPreferences.getBoolean(Constants.PREF_DEVICE_NOSENSORS, false);
+					boolean shipControlMode = ((MainMenuActivity)getActivity()).mPreferences.getBoolean(Constants.PREF_SHIP_CONTROL_MODE, Constants.PREF_GAME_TOUCH);
+					boolean ammoControlMode = ((MainMenuActivity)getActivity()).mPreferences.getBoolean(Constants.PREF_AMMO_CONTROL_MODE, Constants.PREF_GAME_TOUCH);
+					boolean levelControlMode = ((MainMenuActivity)getActivity()).mPreferences.getBoolean(Constants.PREF_LEVEL_CONTROL_MODE, Constants.PREF_GAME_TOUCH);
+					boolean pauseControlMode = ((MainMenuActivity)getActivity()).mPreferences.getBoolean(Constants.PREF_PAUSE_CONTROL_MODE, Constants.PREF_GAME_TOUCH);
 
-									SharedPreferences.Editor editor = ((MainMenuActivity)getActivity()).mPreferences.edit();
-									editor.clear();
-									editor.putBoolean(Constants.PREF_SHIP_CONTROL_MODE, shipControlMode);
-									editor.putBoolean(Constants.PREF_AMMO_CONTROL_MODE, ammoControlMode);
-									editor.putBoolean(Constants.PREF_LEVEL_CONTROL_MODE, levelControlMode);
-									editor.putBoolean(Constants.PREF_PAUSE_CONTROL_MODE, pauseControlMode);
-									editor.putBoolean(Constants.TAG_EXE_MODE, Constants.isInDebugMode(((MainMenuActivity)getActivity()).mMode));
-									editor.apply();
+					SharedPreferences.Editor editor = ((MainMenuActivity)getActivity()).mPreferences.edit();
+					editor.clear();
+					editor.putBoolean(Constants.PREF_SHIP_CONTROL_MODE, shipControlMode);
+					editor.putBoolean(Constants.PREF_AMMO_CONTROL_MODE, ammoControlMode);
+					editor.putBoolean(Constants.PREF_LEVEL_CONTROL_MODE, levelControlMode);
+					editor.putBoolean(Constants.PREF_PAUSE_CONTROL_MODE, pauseControlMode);
+					editor.putBoolean(Constants.TAG_EXE_MODE, Constants.isInDebugMode(((MainMenuActivity)getActivity()).mMode));
+					editor.apply();
 
-									if(!noSensors)
-										((MainMenuActivity)getActivity()).launchSensorActivity();
-									else{
-										int[] emptySensorList = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
-										((MainMenuActivity)getActivity()).launchGame(!((MainMenuActivity)getActivity()).mOverwriteWarning, emptySensorList);
-									}
-								}
-							})
-					.setNegativeButton(R.string.exit_dialog_negative,
-							new DialogInterface.OnClickListener() {
-								public void onClick(DialogInterface dialog,
-													int id) {
-									// User cancels the dialog
-								}
-							});
+					if(!noSensors)
+						((MainMenuActivity)getActivity()).launchSensorActivity();
+					else{
+						int[] emptySensorList = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+						((MainMenuActivity)getActivity()).launchGame(!((MainMenuActivity)getActivity()).mOverwriteWarning, emptySensorList);
+					}
+				}
+			});
+			btnNegative.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View view) {
+					dismiss();
+				}
+			});
+			builder.setView(view);
 			// Create the AlertDialog object and return it
 			return builder.create();
 		}

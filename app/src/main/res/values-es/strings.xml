@@ -106,7 +106,6 @@
     <string name="about_dialog_message">Juego desarrollado por \n
         Miguel Angel Jiménez Rega - UO179050\n
         Para el Trabajo de Fin de Master</string>
-    <string name="about_dialog_positive">OK</string>
 
     <!-- Pause Activity tooltips -->
     <string name="pause_hint_health">Salud del barco: %1$d / %2$d</string>
@@ -121,7 +120,6 @@
     <string name="action_next">Siguiente</string>
     <string name="title_template_step">Tutorial: Paso <xliff:g id="step_number">%1$d</xliff:g></string>
     <string name="code_sensor_list">Lista de Sensores</string>
-    <string name="sensor_list_default">-1;</string>
 
     <!-- Loading messages -->
     <string-array name="loading_messages">
@@ -152,7 +150,6 @@
     <string name="icd_btn_arrow">Arrow image</string>
 
     <!-- Numeric values -->
-    <string name="max_value">999</string>
 
     <string name="default_sample_text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut
         gravida, massa nec bibendum maximus, nunc ante viverra enim, sit amet viverra nisi nulla vitae
@@ -211,12 +208,12 @@
 
     <string name="lang">es</string>
     <string name="command_fire">fuego</string>
-    <string name="command_ok">OK</string>
     <string name="command_go">vamos</string>
     <string name="command_shoot">dispara</string>
     <string name="cd_map_cover">Celda del mapa oscurecida</string>
-    <string name="generic_number">%1$d</string>
     <string name="reset_preferences_error">Error al borrar la memoria</string>
     <string name="reset_preferences_ok">Memoria borrada con éxito</string>
+    <string name="revealed_tile_is">El contenido del siguiente nivel es...</string>
+    <string name="game_message_enemy_defeated_title">Enemigo derrotado</string>
 
 </resources>

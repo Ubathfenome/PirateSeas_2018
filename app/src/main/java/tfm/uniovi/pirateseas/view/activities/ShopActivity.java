@@ -7,7 +7,6 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.ListActivity;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources.NotFoundException;
 import android.graphics.Typeface;
@@ -239,52 +238,57 @@ public class ShopActivity extends ListActivity{
 		@Override
 		public Dialog onCreateDialog(Bundle savedInstanceState) {
 			final Activity dummyActivity = getActivity();
-			// Use the Builder class for convenient dialog construction
+
 			AlertDialog.Builder builder = new AlertDialog.Builder(dummyActivity);
-			builder.setTitle(
-					getResources().getString(R.string.exit_shop_dialog_title))
-					.setMessage(R.string.exit_shop_dialog_message)
-					.setPositiveButton(R.string.exit_shop_dialog_positive,
-							new DialogInterface.OnClickListener() {
-								public void onClick(DialogInterface dialog,
-										int id) {
-									if (GameHelper.saveGameAtPreferences(dummyActivity, ((ShopActivity)getActivity()).dummyPlayer, ((ShopActivity)getActivity()).dummyShip, ((ShopActivity)getActivity()).dummyMap))
-										Log.v(TAG, "Game saved");
-									else {
-										try {
-											throw new SaveGameException(getResources().getString(
-													R.string.exception_save));
-										} catch (NotFoundException e) {
-											Log.e(TAG, e.getMessage());
-										} catch (SaveGameException e) {
-											Log.e(TAG, e.getMessage());
-											Toast.makeText(dummyActivity, e.getMessage(), Toast.LENGTH_SHORT).show();
-										}
-									}
-									// Create ScreenSelection Intent, populate extras + flags & start Activity
-									Intent screenSelectionIntent = new Intent(dummyActivity, ScreenSelectionActivity.class);
-									screenSelectionIntent.putExtra(Constants.TAG_SENSOR_LIST, ((ShopActivity)getActivity()).sensorTypes);
-									screenSelectionIntent.putExtra(Constants.TAG_LOAD_GAME, ((ShopActivity)getActivity()).loadGame);
-									screenSelectionIntent.putExtra(Constants.TAG_SCREEN_SELECTION_MAP_HEIGHT, ((ShopActivity)getActivity()).mapHeight);
-									screenSelectionIntent.putExtra(Constants.TAG_SCREEN_SELECTION_MAP_WIDTH, ((ShopActivity)getActivity()).mapWidth);
-									screenSelectionIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP);
-									startActivity(screenSelectionIntent);
-									try {
-										MusicManager.getInstance().stopBackgroundMusic();
-									} catch(IllegalStateException e){
-										MusicManager.getInstance().resetPlayer();
-									}
-									MusicManager.getInstance(dummyActivity, MusicManager.MUSIC_GAME_MENU).playBackgroundMusic();
-									dummyActivity.finish();
-								}
-							})
-					.setNegativeButton(R.string.exit_dialog_negative,
-							new DialogInterface.OnClickListener() {
-								public void onClick(DialogInterface dialog,
-										int id) {
-									// User cancels the dialog
-								}
-							});
+			LayoutInflater inflater = dummyActivity.getLayoutInflater();
+			View view = inflater.inflate(R.layout.custom_dialog_layout, null);
+			TextView txtTitle = view.findViewById(R.id.txtTitle);
+			TextView txtMessage = view.findViewById(R.id.txtMessage);
+			Button btnPositive = view.findViewById(R.id.btnPositive);
+			Button btnNegative = view.findViewById(R.id.btnNegative);
+			txtTitle.setText(getResources().getString(R.string.exit_shop_dialog_title));
+			txtMessage.setText(getResources().getString(R.string.exit_shop_dialog_message));
+			btnPositive.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View view) {
+					if (GameHelper.saveGameAtPreferences(dummyActivity, ((ShopActivity)getActivity()).dummyPlayer, ((ShopActivity)getActivity()).dummyShip, ((ShopActivity)getActivity()).dummyMap))
+						Log.v(TAG, "Game saved");
+					else {
+						try {
+							throw new SaveGameException(getResources().getString(
+									R.string.exception_save));
+						} catch (NotFoundException e) {
+							Log.e(TAG, e.getMessage());
+						} catch (SaveGameException e) {
+							Log.e(TAG, e.getMessage());
+							Toast.makeText(dummyActivity, e.getMessage(), Toast.LENGTH_SHORT).show();
+						}
+					}
+					// Create ScreenSelection Intent, populate extras + flags & start Activity
+					Intent screenSelectionIntent = new Intent(dummyActivity, ScreenSelectionActivity.class);
+					screenSelectionIntent.putExtra(Constants.TAG_SENSOR_LIST, ((ShopActivity)getActivity()).sensorTypes);
+					screenSelectionIntent.putExtra(Constants.TAG_LOAD_GAME, ((ShopActivity)getActivity()).loadGame);
+					screenSelectionIntent.putExtra(Constants.TAG_SCREEN_SELECTION_MAP_HEIGHT, ((ShopActivity)getActivity()).mapHeight);
+					screenSelectionIntent.putExtra(Constants.TAG_SCREEN_SELECTION_MAP_WIDTH, ((ShopActivity)getActivity()).mapWidth);
+					screenSelectionIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP);
+					startActivity(screenSelectionIntent);
+					try {
+						MusicManager.getInstance().stopBackgroundMusic();
+					} catch(IllegalStateException e){
+						MusicManager.getInstance().resetPlayer();
+					}
+					MusicManager.getInstance(dummyActivity, MusicManager.MUSIC_GAME_MENU).playBackgroundMusic();
+					dummyActivity.finish();
+				}
+			});
+			btnNegative.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View view) {
+					dismiss();
+				}
+			});
+			builder.setView(view);
+
 			// Create the AlertDialog object and return it
 			return builder.create();
 		}
@@ -305,30 +309,35 @@ public class ShopActivity extends ListActivity{
 		@Override
 		public Dialog onCreateDialog(Bundle savedInstanceState) {
 			final Activity dummyActivity = getActivity();
-			// Use the Builder class for convenient dialog construction
 			AlertDialog.Builder builder = new AlertDialog.Builder(dummyActivity);
-			builder.setTitle(
-					getResources().getString(R.string.shop_purchase_dialog_title))
-					.setMessage(R.string.shop_purchase_dialog_message)
-					.setPositiveButton(R.string.shop_purchase_dialog_positive,
-							new DialogInterface.OnClickListener() {
-								public void onClick(DialogInterface dialog,
-										int id) {
-									if(item != null){
-										if(((ShopActivity)getActivity()).purchaseItem(item)){
-											((ShopActivity)getActivity()).itemList.remove(item);
-											((ShopActivity)getActivity()).listView.setAdapter(((ShopActivity)getActivity()).mAdapter);
-										}
-									}
-								}
-							})
-					.setNegativeButton(R.string.exit_dialog_negative,
-							new DialogInterface.OnClickListener() {
-								public void onClick(DialogInterface dialog,
-										int id) {
-									// User cancels the dialog
-								}
-							});
+			LayoutInflater inflater = dummyActivity.getLayoutInflater();
+			View view = inflater.inflate(R.layout.custom_dialog_layout, null);
+			TextView txtTitle = view.findViewById(R.id.txtTitle);
+			TextView txtMessage = view.findViewById(R.id.txtMessage);
+			Button btnPositive = view.findViewById(R.id.btnPositive);
+			Button btnNegative = view.findViewById(R.id.btnNegative);
+			txtTitle.setText(getResources().getString(R.string.shop_purchase_dialog_title));
+			txtMessage.setText(getResources().getString(R.string.shop_purchase_dialog_message));
+			btnPositive.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View view) {
+					if(item != null){
+						if(((ShopActivity)getActivity()).purchaseItem(item)){
+							((ShopActivity)getActivity()).itemList.remove(item);
+							((ShopActivity)getActivity()).listView.setAdapter(((ShopActivity)getActivity()).mAdapter);
+						}
+					}
+					dismiss();
+				}
+			});
+			btnNegative.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View view) {
+					dismiss();
+				}
+			});
+			builder.setView(view);
+
 			// Create the AlertDialog object and return it
 			return builder.create();
 		}

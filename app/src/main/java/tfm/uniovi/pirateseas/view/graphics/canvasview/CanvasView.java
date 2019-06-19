@@ -89,6 +89,9 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 
 	private boolean nShipControlMode;
 
+	private boolean messageSent = false;
+	public boolean messageReaded = false;
+
 	int downX = 0, downY = 0;
 
 	double nEnemyShipInitialXcoord;
@@ -487,13 +490,7 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 				((GameActivity) nContext).mAmmo.setReloading(true);
 
 			((GameActivity) nContext).mAmmo.postInvalidate();
-		} else if(nGameMode == Constants.GAMEMODE_ADVANCE){
-		    int gold = nEnemyShip.getShipType().defaultHealthPoints() / 5;
-		    int xp = nEnemyShip.getShipType().defaultHealthPoints() / 2;
-            nPlayer.addGold(gold);
-            nPlayer.addExperience(xp);
-			((GameActivity)nContext).showText(String.format(getResources().getString(R.string.game_message_enemy_defeated), gold, xp));
-        } else if(nGameMode == Constants.GAMEMODE_IDLE){
+		} else if(nGameMode == Constants.GAMEMODE_IDLE){
             ((GameActivity) nContext).updateHealthBar(nPlayerShip.getHealth(), nPlayerShip.getMaxHealth());
             ((GameActivity) nContext).updateExperienceBar(nPlayer.getExperience(), nPlayer.getNextLevelThreshold());
         }
@@ -505,24 +502,36 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 	 */
 	private void manageMode() throws SaveGameException {
 		if (nGameMode == Constants.GAMEMODE_ADVANCE) {
-			// Manage Island reveal on map
-			if (nPlayer.hasCompleteMap()) {
-				nPlayer.spendMap();
-				int index = nMap.getIsland();
-				if(index != -1) {
-					nMap.clearMapCell(index);
+			if(messageReaded) {
+				// Manage Island reveal on map
+				if (nPlayer.hasCompleteMap()) {
+					nPlayer.spendMap();
+					int index = nMap.getIsland();
+					if (index != -1) {
+						nMap.clearMapCell(index);
+					} else {
+						((GameActivity) nContext).showText(getResources().getString(R.string.game_message_islands_discovered));
+						nPlayer.addGold(90);
+					}
+
+					selectScreen();
 				} else {
-					((GameActivity)nContext).showText(getResources().getString(R.string.game_message_islands_discovered));
-					nPlayer.addGold(90);
+					selectScreen();
 				}
 
-				selectScreen();
+				nGameMode = Constants.GAMEMODE_IDLE;
+				Log.d(TAG, "GameMode set to IDLE");
 			} else {
-				selectScreen();
+				if(!messageSent) {
+					int gold = nEnemyShip.getShipType().defaultHealthPoints() / 5;
+					int xp = nEnemyShip.getShipType().defaultHealthPoints() / 2;
+					nPlayer.addGold(gold);
+					nPlayer.addExperience(xp);
+					messageSent = true;
+					((GameActivity) nContext).enemyDefeated(gold, xp);
+					// ((GameActivity)nContext).showText(String.format(getResources().getString(R.string.game_message_enemy_defeated), gold, xp));
+				}
 			}
-
-			nGameMode = Constants.GAMEMODE_IDLE;
-			Log.d(TAG, "GameMode set to IDLE");
 		}
 	}
 

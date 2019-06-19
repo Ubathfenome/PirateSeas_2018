@@ -6,7 +6,7 @@ import android.content.Context;
  * Class to set all project's global variables
  */
 public class Constants{
-	// Modes
+    // Modes
 	private static final int MODE_DEBUG = 0x0;
 	@SuppressWarnings("unused")
 	private static final int MODE_RELEASE = 0x1;
@@ -71,7 +71,7 @@ public class Constants{
 	public static final int BAR_EXPERIENCE = 1;
 	
 	// Global variables	
-	public static final int GAME_FPS = 30;				// FPS = Frames-Per-Second
+	public static final int GAME_FPS = 60;				// FPS = Frames-Per-Second
 	public static final int GAME_MPIGD = 10;			// MPIGD = Minutes-Per-In-Game-Day
 	public static final int ISLAND_SPAWN_RATE = 80;
 
@@ -96,6 +96,9 @@ public class Constants{
 
     public static final int MAX_ENTITY_WIDTH = 15;
     public static final int MAX_ENTITY_HEIGHT = 15;
+
+	public static final String ARG_GOLD = "argumentGold";
+	public static final String ARG_XP = "argumentXp";
 
 	public static final String EMPTY_STRING = "";
 	public static final String PREF_SENSOR_LIST = "sensorListPref";

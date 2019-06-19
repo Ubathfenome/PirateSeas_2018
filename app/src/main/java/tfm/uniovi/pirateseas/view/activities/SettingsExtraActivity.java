@@ -6,10 +6,10 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
@@ -110,30 +110,32 @@ public class SettingsExtraActivity extends Activity {
 		@Override
 		public Dialog onCreateDialog(Bundle savedInstanceState) {
 			final Activity dummyActivity = getActivity();
-			// Use the Builder class for convenient dialog construction
 			AlertDialog.Builder builder = new AlertDialog.Builder(dummyActivity);
-			builder.setTitle(
-					getResources().getString(
-							R.string.settings_restore_dialog_title))
-					.setMessage(R.string.settings_restore_dialog_message)
-					.setPositiveButton(
-							R.string.settings_restore_dialog_positive,
-							new DialogInterface.OnClickListener() {
-								public void onClick(DialogInterface dialog,
-										int id) {
-									String message = ((SettingsExtraActivity)getActivity()).resetPreferences() ? getString(R.string.reset_preferences_ok)
-											: getString(R.string.reset_preferences_error);
-									Toast.makeText(getActivity(), message,
-											Toast.LENGTH_SHORT).show();
-								}
-							})
-					.setNegativeButton(R.string.exit_dialog_negative,
-							new DialogInterface.OnClickListener() {
-								public void onClick(DialogInterface dialog,
-										int id) {
-									// User cancels the dialog
-								}
-							});
+			LayoutInflater inflater = dummyActivity.getLayoutInflater();
+			View view = inflater.inflate(R.layout.custom_dialog_layout, null);
+			TextView txtTitle = view.findViewById(R.id.txtTitle);
+			TextView txtMessage = view.findViewById(R.id.txtMessage);
+			Button btnPositive = view.findViewById(R.id.btnPositive);
+			Button btnNegative = view.findViewById(R.id.btnNegative);
+			txtTitle.setText(getResources().getString(R.string.settings_restore_dialog_title));
+			txtMessage.setText(getResources().getString(R.string.settings_restore_dialog_message));
+			btnPositive.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View view) {
+					String message = ((SettingsExtraActivity)getActivity()).resetPreferences() ? getString(R.string.reset_preferences_ok)
+							: getString(R.string.reset_preferences_error);
+					Toast.makeText(getActivity(), message,
+							Toast.LENGTH_SHORT).show();
+					dismiss();
+				}
+			});
+			btnNegative.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View view) {
+					dismiss();
+				}
+			});
+			builder.setView(view);
 			// Create the AlertDialog object and return it
 			return builder.create();
 		}
