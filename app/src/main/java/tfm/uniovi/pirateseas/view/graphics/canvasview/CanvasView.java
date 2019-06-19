@@ -90,7 +90,7 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 	private boolean nShipControlMode;
 
 	private boolean messageSent = false;
-	public boolean messageReaded = false;
+	private boolean messageReaded = false;
 
 	int downX = 0, downY = 0;
 
@@ -900,5 +900,13 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 		if(nPreferences==null)
 			nPreferences = nContext.getSharedPreferences(Constants.TAG_PREF_NAME, Context.MODE_PRIVATE);
 		nShipControlMode = nPreferences.getBoolean(Constants.PREF_SHIP_CONTROL_MODE, Constants.PREF_GAME_TOUCH);
+	}
+
+	/**
+	 * Sets the enemy defeated message status
+	 * @param readed True if the user has accepted the dialog and read the message, false otherwise
+	 */
+	public void setMessageReaded(boolean readed){
+		messageReaded = readed;
 	}
 }

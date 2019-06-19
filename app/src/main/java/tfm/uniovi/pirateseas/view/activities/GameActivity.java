@@ -379,7 +379,7 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 		}
 
 		private void setMessageAsRead(boolean b) {
-			((GameActivity)getActivity()).mCanvasView.messageReaded = b;
+			((GameActivity)getActivity()).mCanvasView.setMessageReaded(b);
 		}
 	}
 
