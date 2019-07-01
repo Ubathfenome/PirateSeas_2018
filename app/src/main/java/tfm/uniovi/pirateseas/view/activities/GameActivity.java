@@ -799,6 +799,8 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 
             if(matches!=null && checkMatches(matches))
                 doAction();
+
+			mSpeechRecognizer.startListening(mSpeechRecognizerIntent);
 		}
 
         /**
@@ -808,13 +810,13 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
          */
         private boolean checkMatches(ArrayList<String> matches) {
 		    for(String match : matches) {
-		        if(match.equals(getString(R.string.command_fire))){
+		        if(match.contains(getString(R.string.command_fire))){
 		            return true;
-                } else if(match.equals(getString(R.string.command_shoot))){
+                } else if(match.contains(getString(R.string.command_shoot))){
                     return true;
-                } else if(match.equals(getString(R.string.command_ok))){
+                } else if(match.contains(getString(R.string.command_ok))){
 		            return true;
-                } else if(match.equals(getString(R.string.command_go))){
+                } else if(match.contains(getString(R.string.command_go))){
 		            return true;
                 }
             }
@@ -824,7 +826,7 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
         @Override
 		public void onRmsChanged(float rmsdB)
 		{
-			Log.d(TAG, "onRmsChanged");
+			// Log.d(TAG, "onRmsChanged");
 		}
 
         /**

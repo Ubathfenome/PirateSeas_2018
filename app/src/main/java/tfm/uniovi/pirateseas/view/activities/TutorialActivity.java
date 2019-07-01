@@ -136,7 +136,12 @@ public class TutorialActivity extends FragmentActivity {
 					}
 				});
 
-				btnNegative.setOnClickListener(null);
+				btnNegative.setOnClickListener(new View.OnClickListener() {
+					@Override
+					public void onClick(View view) {
+						dismiss();
+					}
+				});
 
 			} else {
 
