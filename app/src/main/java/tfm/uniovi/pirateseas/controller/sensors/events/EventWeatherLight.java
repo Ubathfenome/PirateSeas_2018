@@ -11,14 +11,10 @@ import tfm.uniovi.pirateseas.controller.sensors.SensorType;
 /**
  * Event for the screen brightness adjustments
  */
-public class EventWeatherLight {
+public class EventWeatherLight extends AppSensorEvent{
 
-	/**
-	 * Return SensorType used on this event
-	 * @return SensorType code
-	 */
-	public static SensorType getSensorType() {
-		return SensorType.TYPE_LIGHT;
+	public EventWeatherLight(String name, SensorType sensorType, int imageResource, int thumbnailResource) {
+		super(name, sensorType, imageResource, thumbnailResource);
 	}
 
 	/**

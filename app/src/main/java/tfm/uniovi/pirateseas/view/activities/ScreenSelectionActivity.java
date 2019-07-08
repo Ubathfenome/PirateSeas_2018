@@ -119,7 +119,6 @@ public class ScreenSelectionActivity extends Activity {
 						MusicManager.getInstance(context, MusicManager.MUSIC_ISLAND).playBackgroundMusic();
 						enterVisitedIsland();
 					} else {
-						map.clearActiveMapCell();
 						if (!map.isActiveCellIsland()) {
 							if (encounter) {
 								// Game activity
@@ -169,7 +168,6 @@ public class ScreenSelectionActivity extends Activity {
 						MusicManager.getInstance(context, MusicManager.MUSIC_ISLAND).playBackgroundMusic();
 						enterVisitedIsland();
 					} else {
-						map.clearActiveMapCell();
 						if (!map.isActiveCellIsland()) {
 							if (encounter) {
 								// Game activity
@@ -219,7 +217,6 @@ public class ScreenSelectionActivity extends Activity {
 						MusicManager.getInstance(context, MusicManager.MUSIC_ISLAND).playBackgroundMusic();
 						enterVisitedIsland();
 					} else {
-						map.clearActiveMapCell();
 						if (!map.isActiveCellIsland()) {
 							if (encounter) {
 								// Game activity
@@ -269,7 +266,6 @@ public class ScreenSelectionActivity extends Activity {
 						MusicManager.getInstance(context, MusicManager.MUSIC_ISLAND).playBackgroundMusic();
 						enterVisitedIsland();
 					} else {
-						map.clearActiveMapCell();
 						if (!map.isActiveCellIsland()) {
 							if (encounter) {
 								// Game activity

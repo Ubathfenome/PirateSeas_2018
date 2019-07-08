@@ -215,5 +215,12 @@
     <string name="reset_preferences_ok">Memoria borrada con éxito</string>
     <string name="revealed_tile_is">El contenido del siguiente nivel es...</string>
     <string name="game_message_enemy_defeated_title">Enemigo derrotado</string>
+    <string name="btn_continue">Continuar</string>
+    <string name="cd_event_image">Imagen del evento</string>
+    <string name="cd_event_thumb">Imagen de muestra del evento</string>
+    <string name="cd_mic_icon">Icono del microfono</string>
+    <string name="sensor_list_title">Lista de Eventos por Sensor</string>
+    <string name="toast_event_disabled">No se ha detectado el sensor %1$s en su dispositivo. El evento %2$s se ha deshabilitado.</string>
+    <string name="toast_event_enabled">Su dispositivo tiene el sensor %1$s. El evento %2$s está habilitado.</string>
 
 </resources>

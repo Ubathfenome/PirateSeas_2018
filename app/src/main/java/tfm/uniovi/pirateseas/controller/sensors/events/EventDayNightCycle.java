@@ -8,7 +8,7 @@ import tfm.uniovi.pirateseas.global.Constants;
 /**
  * Event for the Day Night cycle that obscures the screen at night and brightens it al day
  */
-public class EventDayNightCycle {
+public class EventDayNightCycle extends AppSensorEvent {
 	private static final String TAG = "EventDayNightCycle";
 	
 	private static final int MAX_SHADOW_VALUE = 255;
@@ -16,12 +16,8 @@ public class EventDayNightCycle {
 	private static final float HOUR_VALUE_RATIO = (MAX_SHADOW_VALUE * 2) / (Constants.HOURS_PER_DAY * PSA); // Ratio = 510 values / 60 hours per day; -> X values per hour
 	public static float pressure = PSA;
 
-	/**
-	 * Return SensorType used on this event
-	 * @return SensorType code
-	 */
-	public static SensorType getSensorType() {
-		return SensorType.TYPE_PRESSURE;
+	public EventDayNightCycle(String name, SensorType sensorType, int imageResource, int thumbnailResource) {
+		super(name, sensorType, imageResource, thumbnailResource);
 	}
 
 	/**

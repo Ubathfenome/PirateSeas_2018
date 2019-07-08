@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE LinearLayout>
-<LinearLayout 
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:custom="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:background="@drawable/xml_border"
-    android:padding="8dp" >
+    android:padding="8dp">
 
     <TextView
         android:id="@+id/lblShopTitle"
@@ -20,7 +20,8 @@
         android:id="@android:id/list"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1" >
+        android:layout_weight="1"
+        tools:listitem="@layout/list_item_layout">
     </ListView>
     
     <TextView 

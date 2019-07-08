@@ -232,6 +232,14 @@
     <string name="reset_preferences_error">Error while restoring preferences</string>
     <string name="revealed_tile_is">Reveled tile is...</string>
     <string name="game_message_enemy_defeated_title">Enemy defeated</string>
+    <string name="cd_mic_icon">Mic icon</string>
+    <string name="btn_continue">Continue</string>
+    <string name="dummy_text" translatable="false">Dummy text</string>
+    <string name="cd_event_thumb">Event thumbnail</string>
+    <string name="cd_event_image">Event image</string>
+    <string name="sensor_list_title">Event Sensor List</string>
+    <string name="toast_event_enabled">Your device has a %1$s  sensor. The event %2$s will be triggered.</string>
+    <string name="toast_event_disabled">No %1$s sensor detected on your device. The event %2$s will be disabled.</string>
 
 
 </resources>

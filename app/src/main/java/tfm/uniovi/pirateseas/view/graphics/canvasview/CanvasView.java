@@ -810,6 +810,9 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 	 * @throws SaveGameException Exception if an error happens while saving the game
 	 */
 	public void selectScreen() throws SaveGameException {
+		// ISSUE #8 (Test pending)
+		nMap.clearActiveMapCell();
+
 		saveGame();
 
 		Intent screenSelectionIntent = new Intent(nContext, ScreenSelectionActivity.class);

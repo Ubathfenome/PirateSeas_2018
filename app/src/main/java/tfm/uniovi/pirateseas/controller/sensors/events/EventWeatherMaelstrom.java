@@ -6,17 +6,13 @@ import tfm.uniovi.pirateseas.controller.sensors.SensorType;
 /**
  * Event to generate the maelstorm that damages every ship on the screen
  */
-public class EventWeatherMaelstrom {
+public class EventWeatherMaelstrom extends AppSensorEvent{
 	private static final String TAG = "EventWeatherMaelstrom";
 	private static final int AVERAGE = 10;
 	private static final int THRESHOLD = 8;
 
-	/**
-	 * Return SensorType used on this event
-	 * @return SensorType code
-	 */
-	public static SensorType getSensorType() {
-		return SensorType.TYPE_ACCELEROMETER;
+	public EventWeatherMaelstrom(String name, SensorType sensorType, int imageResource, int thumbnailResource) {
+		super(name, sensorType, imageResource, thumbnailResource);
 	}
 
 	/**

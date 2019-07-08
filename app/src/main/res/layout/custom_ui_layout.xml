@@ -1,11 +1,10 @@
 <!DOCTYPE LinearLayout>
-<LinearLayout 
-	xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:custom="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:custom="http://schemas.android.com/apk/res-auto"
 	android:id="@+id/UIFrame"
 	android:orientation="vertical"
 	android:layout_width="match_parent"
-    android:layout_height="match_parent">
+	android:layout_height="match_parent">
 	
 	<LinearLayout
 		android:id="@+id/topFrame"
@@ -20,7 +19,6 @@
 	        android:alpha="0.45"
 	        android:background="@drawable/xml_btn_style"
 	        android:contentDescription="@string/icd_btn_change_ammo"
-	        android:paddingStart="10dp"
 	        android:src="@mipmap/txtr_ammo_default" />
 		
 		<Space
@@ -29,14 +27,22 @@
 		    android:layout_height="wrap_content"
 		    android:layout_gravity="fill"
 		    android:layout_weight="1" />
+
+		<ImageView
+			android:id="@+id/imgMicStatus"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:contentDescription="@string/cd_mic_icon"
+			android:padding="12dp"
+			android:src="@drawable/ic_mic_disabled"
+			android:background="@color/light_gray"/>
 			
 		<ImageButton
 			android:id="@+id/btnPause"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:paddingStart="10dp"
 			android:contentDescription="@string/btn_pause"
-			android:src="@mipmap/ico_pause"
+			android:src="@drawable/ic_pause"
 			android:background="@drawable/xml_btn_style" />
 	</LinearLayout>
 	

@@ -37,6 +37,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -70,6 +71,7 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 	private Context context;
 
 	private CanvasView mCanvasView;
+	private ImageView imgMicStatus;
 	private static final int SENSOR_UPDATE_SECONDS = 2;
 	private static final int ACCELEROMETER_THRESHOLD = 2;
     private static final int REQUEST_RECORD_PERMISSION = 100;
@@ -185,6 +187,9 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 			}
 		});
 
+		imgMicStatus = findViewById(R.id.imgMicStatus);
+
+
 		mGold = findViewById(R.id.playerGold);
 		mGold.setElementValue(0);
 		mAmmo = findViewById(R.id.playerAmmunition);
@@ -201,9 +206,11 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
                         (GameActivity.this,
                                 new String[]{Manifest.permission.RECORD_AUDIO},
                                 REQUEST_RECORD_PERMISSION);
+				imgMicStatus.setImageResource(R.drawable.ic_mic_enabled);
                 mIsListening = true;
             } else {
                 mSpeechRecognizer.stopListening();
+				imgMicStatus.setImageResource(R.drawable.ic_mic_disabled);
                 mIsListening = false;
             }
         }
@@ -219,14 +226,14 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        switch (requestCode) {
-            case REQUEST_RECORD_PERMISSION:
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    mSpeechRecognizer.startListening(mSpeechRecognizerIntent);
-                } else {
-                    showText("Permission Denied!");
-                }
-        }
+		if (requestCode == REQUEST_RECORD_PERMISSION) {
+			if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+				mSpeechRecognizer.startListening(mSpeechRecognizerIntent);
+				imgMicStatus.setImageResource(R.drawable.ic_mic_usage);
+			} else {
+				showText("Permission Denied!");
+			}
+		}
     }
 
 	/**
@@ -768,6 +775,7 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 		public void onError(int error)
 		{
 			mSpeechRecognizer.startListening(mSpeechRecognizerIntent);
+			imgMicStatus.setImageResource(R.drawable.ic_mic_usage);
 			Log.e(TAG, "onError = " + getErrorText(error));
 		}
 
@@ -801,6 +809,7 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
                 doAction();
 
 			mSpeechRecognizer.startListening(mSpeechRecognizerIntent);
+			imgMicStatus.setImageResource(R.drawable.ic_mic_usage);
 		}
 
         /**
