@@ -641,6 +641,9 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 										break;
 								}
 							} else {
+							    Point current = s.getCoordinates();
+							    Point end = s.getEndPoint();
+
 								s.moveShotEntity(s.getEndPoint(), nPixelsWidth, nPixelsHeight);
 							}
 

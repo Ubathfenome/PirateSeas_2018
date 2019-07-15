@@ -2,11 +2,11 @@ package tfm.uniovi.pirateseas.controller.sensors.events;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -71,14 +71,22 @@ public class SensorEventAdapter extends ArrayAdapter<AppSensorEvent> {
             public void onClick(View view) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
                 LayoutInflater inflater = ((SensorActivity)mContext).getLayoutInflater();
-                builder.setView(inflater.inflate(R.layout.event_dialog, null))
-                        .setPositiveButton(R.string.command_ok, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                dialogInterface.dismiss();
-                            }
-                        })
-                        .create().show();
+                View inflatedView = inflater.inflate(R.layout.event_dialog, null);
+                TextView txtEventTitle = inflatedView.findViewById(R.id.txtEventTitle);
+                txtEventTitle.setText(viewHolder.txtEventName.getText().toString());
+                ImageView imgEvent = inflatedView.findViewById(R.id.imgEvent);
+                imgEvent.setImageResource(mSensorEvents.get(position).getImageResource());
+                TextView txtEventMessage = inflatedView.findViewById(R.id.txtEventMessage);
+                txtEventMessage.setText(mSensorEvents.get(position).getMessageResource());
+                Button btnEventDialogOk = inflatedView.findViewById(R.id.btnEventDialogOk);
+                final AlertDialog dialog = builder.setView(inflatedView).create();
+                btnEventDialogOk.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        dialog.dismiss();
+                    }
+                });
+                dialog.show();
             }
         };
 

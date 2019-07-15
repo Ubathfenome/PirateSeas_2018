@@ -3,7 +3,7 @@ apply plugin: 'com.android.application'
 ext.applicationId = "tfm.uniovi.pirateseas"
 ext.versionMajor = 1
 ext.versionMinor = 0
-ext.versionPatch = 1
+ext.versionPatch = 2
 ext.versionClassifier = "Beta"
 ext.isSnapshot = false
 

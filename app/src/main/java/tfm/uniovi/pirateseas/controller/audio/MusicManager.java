@@ -258,4 +258,8 @@ public class MusicManager{
 			mBackgroundMusic.release();
 		}
 	}
+
+    public boolean isPlaying() {
+		return mBackgroundMusic.isPlaying();
+    }
 }

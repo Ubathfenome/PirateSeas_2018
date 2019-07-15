@@ -265,6 +265,9 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 		if (mCanvasView != null)
 			mCanvasView.setStatus(Constants.GAME_STATE_PAUSE);
 
+		if(!isFinishing())
+			MusicManager.getInstance().pauseBackgroundMusic();
+
 		super.onPause();
 	}
 
@@ -298,6 +301,9 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 
 		// Reload saved settings in preferences
 		mCanvasView.nUpdateThread.getCanvasViewInstance().loadSettings();
+
+		if(!MusicManager.getInstance().isPlaying())
+			MusicManager.getInstance().playBackgroundMusic();
 
 		super.onResume();
 	}

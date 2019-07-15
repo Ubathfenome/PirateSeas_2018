@@ -11,6 +11,8 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -23,6 +25,7 @@ import tfm.uniovi.pirateseas.controller.sensors.events.EventDayNightCycle;
 import tfm.uniovi.pirateseas.controller.sensors.events.EventShakeClouds;
 import tfm.uniovi.pirateseas.controller.sensors.events.EventWeatherLight;
 import tfm.uniovi.pirateseas.controller.sensors.events.EventWeatherMaelstrom;
+import tfm.uniovi.pirateseas.controller.sensors.events.SensorEventAdapter;
 import tfm.uniovi.pirateseas.global.Constants;
 
 /**
@@ -63,22 +66,48 @@ public class SensorActivity extends Activity{
 				EventDayNightCycle.class.getSimpleName(),
 				SensorType.TYPE_PRESSURE,
 				R.mipmap.img_event_day_night_cycle,
-				R.mipmap.img_event_day_night_thumb));
+				R.mipmap.img_event_day_night_thumb,
+				R.string.event_day_night_message));
 		sensorEvents.add(new EventWeatherLight(
 				EventWeatherLight.class.getSimpleName(),
 				SensorType.TYPE_LIGHT,
 				R.mipmap.img_event_light,
-				R.mipmap.img_event_light_thumb));
+				R.mipmap.img_event_light_thumb,
+				R.string.event_light_message));
 		sensorEvents.add(new EventWeatherMaelstrom(
 				EventWeatherMaelstrom.class.getSimpleName(),
 				SensorType.TYPE_ACCELEROMETER,
 				R.mipmap.img_event_whirlpool,
-				R.mipmap.img_event_whirlpool_thumb));
+				R.mipmap.img_event_whirlpool_thumb,
+				R.string.event_whirlpool_message));
 		sensorEvents.add(new EventShakeClouds(
 				"EventShakeClouds",
 				SensorType.TYPE_LINEAR_ACCELERATION,
 				R.mipmap.img_movement_spawn,
-				R.mipmap.img_event_clouds_thumb));
+				R.mipmap.img_event_clouds_thumb,
+				R.string.event_clouds_message));
+
+		ListView lstSensorEventList = findViewById(R.id.lstSensorEventsList);
+		SensorEventAdapter mAdapter = new SensorEventAdapter(this, R.layout.list_item_sensor_event, sensorEvents);
+		lstSensorEventList.setAdapter(mAdapter);
+
+		Button btnCancel = findViewById(R.id.btnCancel);
+		btnCancel.setTypeface(customFont);
+		btnCancel.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				exitActivity(false);
+			}
+		});
+
+		Button btnContinue = findViewById(R.id.btnContinue);
+		btnContinue.setTypeface(customFont);
+		btnContinue.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				exitActivity(true);
+			}
+		});
 		
 		// Check preferences if its already called 
         int[] preferenceSensorList = getPreferenceSensorList();
@@ -139,7 +168,7 @@ public class SensorActivity extends Activity{
 
 	@Override
 	protected void onResume() {
-		findViewById(R.id.rootLayoutSensors).setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE);
+		findViewById(R.id.rootLayoutSensorsList).setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE);
 		super.onResume();
 	}
 
@@ -189,7 +218,7 @@ public class SensorActivity extends Activity{
 		if(valuesArray != null) {
 			StringBuilder builder = new StringBuilder();
 			for (Object aValuesArray : valuesArray) {
-				builder.append(String.valueOf(aValuesArray));
+				builder.append(aValuesArray);
 				builder.append(";");
 			}
 			modifiedString = builder.toString();
@@ -217,8 +246,8 @@ public class SensorActivity extends Activity{
 		SharedPreferences.Editor editor = mPreferences.edit();
 		editor.putString(Constants.PREF_SENSOR_LIST, putPreferenceSensorList());
 		editor.apply();
-		
-		setResult(RESULT_OK, sensorListIntent);
+
+		setResult(result?RESULT_OK:RESULT_CANCELED, sensorListIntent);
 		
 		finish();
 	}

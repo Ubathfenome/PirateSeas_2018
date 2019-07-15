@@ -240,6 +240,10 @@
     <string name="sensor_list_title">Event Sensor List</string>
     <string name="toast_event_enabled">Your device has a %1$s  sensor. The event %2$s will be triggered.</string>
     <string name="toast_event_disabled">No %1$s sensor detected on your device. The event %2$s will be disabled.</string>
+    <string name="event_day_night_message">During the batlles the Day/Night cycle will make the enemy harder to see, so the player will have to improve his/her accuracy.</string>
+    <string name="event_light_message">When playing on dark places, the game screen will get darker too. So go find some light!</string>
+    <string name="event_clouds_message">To be able to spawn the enemy ship, the player will have to shake its device a couple of times. Shake it hard!</string>
+    <string name="event_whirlpool_message">When the sensor control mode is set, the payer should not shake its device too hard, or else a whirlpool will appear due to the device shaking and damage both ships.</string>
 
 
 </resources>

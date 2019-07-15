@@ -16,8 +16,8 @@ public class EventDayNightCycle extends AppSensorEvent {
 	private static final float HOUR_VALUE_RATIO = (MAX_SHADOW_VALUE * 2) / (Constants.HOURS_PER_DAY * PSA); // Ratio = 510 values / 60 hours per day; -> X values per hour
 	public static float pressure = PSA;
 
-	public EventDayNightCycle(String name, SensorType sensorType, int imageResource, int thumbnailResource) {
-		super(name, sensorType, imageResource, thumbnailResource);
+	public EventDayNightCycle(String name, SensorType sensorType, int imageResource, int thumbnailResource, int messageResource) {
+		super(name, sensorType, imageResource, thumbnailResource, messageResource);
 	}
 
 	/**
