@@ -14,7 +14,6 @@ import java.util.Random;
 import tfm.uniovi.pirateseas.R;
 import tfm.uniovi.pirateseas.exceptions.NoAmmoException;
 import tfm.uniovi.pirateseas.global.Constants;
-import tfm.uniovi.pirateseas.utils.approach2d.DrawableHelper;
 import tfm.uniovi.pirateseas.view.graphics.canvasview.CanvasView;
 
 /**
@@ -200,55 +199,53 @@ public class Ship extends Entity implements Parcelable{
      * @return Shot entity
      * @throws NoAmmoException Exception triggers when the ship tries to shoot and does not have ammo fir it
      */
-	public Shot shootCannon() throws NoAmmoException {
-		Shot cannonballVector = null;
+	public Shot[] shootCannon() throws NoAmmoException {
+		Shot[] cannonballVector = null;
 
 		if (nAmmunitions[selectedAmmoIndex] > 0 || nAmmunitions[selectedAmmoIndex] == Constants.SHOT_AMMO_UNLIMITED) {
 			timestampLastShot = SystemClock.elapsedRealtime();
             int halfShipWidth = mWidth / 2;
             int halfShotWidth = Shot.shotWidth / 2;
-            double shotCanvasWidth = DrawableHelper.getWidth(context.getResources(), R.mipmap.txtr_ammo_default);
-            double shotCanvasHeight = DrawableHelper.getHeight(context.getResources(), R.mipmap.txtr_ammo_default);
+            int finalPoint = (int) (Constants.DEFAULT_SHIP_BASIC_RANGE * mRange);
+
 			if(this.isPlayable()) {
 				switch (selectedAmmoIndex) {
 					case 0:
-						cannonballVector = new Shot(context, x + halfShipWidth - halfShotWidth, y - Shot.shotHeight - 10,
+						cannonballVector = new Shot[1];
+						cannonballVector[0] = new Shot(context, x + halfShipWidth - halfShotWidth, y - Shot.shotHeight - 10,
 								mCanvasWidth, mCanvasHeight, new Point(
 								this.entityCoordinates.x, this.entityCoordinates.y
 								+ entityLength / 2), new Point(this.entityCoordinates.x,
-								Constants.DEFAULT_SHIP_BASIC_RANGE
-										* sType.rangeMultiplier()), Constants.DEFAULT_PLAYER_SHIP_DIRECTION,
+                                finalPoint), Constants.DEFAULT_PLAYER_SHIP_DIRECTION,
 								(int) (Constants.DEFAULT_SHOOT_DAMAGE * sType
 										.powerMultiplier()), timestampLastShot);
 						break;
 					case 1:
 						break;
 					case 2:
-						Shot[] cannonDoubleArray = new Shot[2];
-						for (int i = 0, length = cannonDoubleArray.length; i < length; i++) {
+						cannonballVector = new Shot[2];
+						for (int i = 0, length = cannonballVector.length; i < length; i++) {
 							// Calculate value -1 when id is 0, +1 when id is 1
 							int xValue = i==0?-1:1;
-							cannonballVector = new Shot(context, x + halfShipWidth - halfShotWidth, y - Shot.shotHeight - 10,
+							cannonballVector [i] = new Shot(context, x + halfShipWidth - halfShotWidth, y - Shot.shotHeight - 10,
 									mCanvasWidth, mCanvasHeight, new Point(
 									this.entityCoordinates.x, this.entityCoordinates.y
 									+ entityLength / 2), new Point(xValue,
-									Constants.DEFAULT_SHIP_BASIC_RANGE
-											* sType.rangeMultiplier()), Constants.DEFAULT_PLAYER_SHIP_DIRECTION,
+									finalPoint), Constants.DEFAULT_PLAYER_SHIP_DIRECTION,
 									(int) (Constants.DEFAULT_SHOOT_DAMAGE * sType
 											.powerMultiplier()), timestampLastShot);
 						}
 						break;
 					case 3:
 						int shotsOnScreen = CanvasView.mScreenWidth / Shot.shotWidth;
-						Shot[] cannonSweepArray = new Shot[shotsOnScreen - 1];
-						for (int i = 0, length = cannonSweepArray.length; i < length; i++) {
+						cannonballVector = new Shot[shotsOnScreen - 1];
+						for (int i = 0, length = cannonballVector.length; i < length; i++) {
 							int xValue = i - (shotsOnScreen/2);
-							cannonballVector = new Shot(context, x + halfShipWidth - halfShotWidth, y - Shot.shotHeight - 10,
+							cannonballVector[i] = new Shot(context, x + halfShipWidth - halfShotWidth, y - Shot.shotHeight - 10,
 									mCanvasWidth, mCanvasHeight, new Point(
 									this.entityCoordinates.x, this.entityCoordinates.y
 									+ entityLength / 2), new Point(xValue,
-									Constants.DEFAULT_SHIP_BASIC_RANGE
-											* sType.rangeMultiplier()), Constants.DEFAULT_PLAYER_SHIP_DIRECTION,
+									finalPoint), Constants.DEFAULT_PLAYER_SHIP_DIRECTION,
 									(int) (Constants.DEFAULT_SHOOT_DAMAGE * sType
 											.powerMultiplier()), timestampLastShot);
 						}
@@ -259,13 +256,15 @@ public class Ship extends Entity implements Parcelable{
 					nAmmunitions[selectedAmmoIndex]--;
 			} else {
 				// Crear constructor de disparos para disparos del barco enemigo
-				Point origin = new Point(this.entityCoordinates.x, this.entityCoordinates.y
-						+ entityLength / 2);
-				Point destination = new Point(this.entityCoordinates.x,
-						Constants.DEFAULT_SHIP_BASIC_RANGE
-								* sType.rangeMultiplier());
+				int originalYCoord = this.entityCoordinates.y
+						+ entityLength / 2;
+				int finalYCoord = originalYCoord - (Constants.DEFAULT_SHIP_BASIC_RANGE * sType.rangeMultiplier());
+				finalYCoord = finalYCoord < 0 ? 0 : finalYCoord;
+				Point origin = new Point(this.entityCoordinates.x, originalYCoord);
+				Point destination = new Point(this.entityCoordinates.x, finalYCoord);
 				// Set shot image coordinates within horizon bounds
-				cannonballVector = new Shot(context, x + halfShipWidth - halfShotWidth, y + mHeight + 10,
+				cannonballVector = new Shot[1];
+				cannonballVector[0] = new Shot(context, x + halfShipWidth - halfShotWidth, y + mHeight + 10,
                         mCanvasWidth, mCanvasHeight, origin, destination, Constants.DIRECTION_DOWN,
 						(int) (Constants.DEFAULT_SHOOT_DAMAGE * sType
 								.powerMultiplier()), timestampLastShot);

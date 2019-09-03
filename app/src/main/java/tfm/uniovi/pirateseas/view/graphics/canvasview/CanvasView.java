@@ -14,6 +14,7 @@ import android.view.SurfaceView;
 import android.view.View;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
@@ -50,6 +51,7 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 	private static final String EXCEPTION_TAG = "CustomException";
 
 	private static final int SHOT_CHK_DELAY = 50;
+	private static final int PLAYER_SHIP_Y_VALUE = 150;
 
 	private int HORIZON_Y_VALUE = 200;
 
@@ -169,7 +171,7 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 		nClouds = new Clouds(nContext, 0, 0, nScreenWidth, nScreenHeight);
 
 		// Entities
-		nPlayerShip = new Ship(nContext, ShipType.LIGHT, nScreenWidth / 2 - 100, nScreenHeight - HORIZON_Y_VALUE,
+		nPlayerShip = new Ship(nContext, ShipType.LIGHT, nScreenWidth / 2 - 100, nScreenHeight - PLAYER_SHIP_Y_VALUE,
 				nScreenWidth, nScreenHeight, new Point(0, 0), Constants.DEFAULT_PLAYER_SHIP_DIRECTION, Constants.DEFAULT_SHIP_LENGTH, Constants.DEFAULT_PLAYER_SHIP_AMMO);
 
 		nShotList = new ArrayList<>();
@@ -336,7 +338,7 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
                                         nEnemyShip.looseHealth((int) (Constants.DEFAULT_SHOOT_DAMAGE * nPlayerShip.getPower()));
                                         nPlayerShip.setSelectedAmmunition(nPlayerShip.getSelectedAmmunition() - 1);
                                     } else {
-                                        nShotList.add(nPlayerShip.shootCannon());
+                                        nShotList.addAll(Arrays.asList(nPlayerShip.shootCannon()));
                                     }
                                     MusicManager.getInstance().playSound(MusicManager.SOUND_SHOT_FIRED);
                                 } catch (NoAmmoException e) {
@@ -641,8 +643,6 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 										break;
 								}
 							} else {
-							    Point current = s.getCoordinates();
-							    Point end = s.getEndPoint();
 
 								s.moveShotEntity(s.getEndPoint(), nPixelsWidth, nPixelsHeight);
 							}
@@ -689,7 +689,7 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 				// EnemyShip shoot
 				if(nEnemyShip.isReloaded(nGameTimestamp)) {
                     try {
-                        nShotList.add(nEnemyShip.shootCannon());
+						nShotList.addAll(Arrays.asList(nEnemyShip.shootCannon()));
                         MusicManager.getInstance().playSound(MusicManager.SOUND_SHOT_FIRED);
                     } catch (NoAmmoException e) {
                         Log.e(EXCEPTION_TAG, e.getMessage());
@@ -744,6 +744,7 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 			} catch(IllegalStateException e){
 				MusicManager.getInstance().resetPlayer();
 			}
+			nMap.setActiveCell(nMap.getLastActiveCell());
 			MusicManager.getInstance(nContext,MusicManager.MUSIC_GAME_OVER).playBackgroundMusic();
 			((GameActivity) nContext).gameOver(nPlayer, nMap);
 			nStatus = Constants.GAME_STATE_END;
@@ -813,7 +814,7 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 	 * @throws SaveGameException Exception if an error happens while saving the game
 	 */
 	public void selectScreen() throws SaveGameException {
-		// ISSUE #8 (Test pending)
+		// ISSUE #8 (Fixed)
 		nMap.clearActiveMapCell();
 
 		saveGame();

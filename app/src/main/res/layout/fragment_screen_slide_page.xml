@@ -13,38 +13,59 @@
   See the License for the specific language governing permissions and
   limitations under the License.
   -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/content"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp">
+    android:layout_height="match_parent">
 
-    <TextView android:id="@android:id/text1"
-        style="?android:textAppearanceLarge"
-        android:textStyle="bold"
-        android:background="@drawable/xml_border"
+    <LinearLayout
+        android:id="@+id/content"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="@dimen/small_padding_size"
-        android:layout_marginBottom="16dp" />
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="16dp">
 
-    <TextView android:id="@+id/text2"
-        style="?android:textAppearanceMedium"
-        android:lineSpacingMultiplier="1.2"
-        android:background="@drawable/xml_border"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="top"
-        android:padding="@dimen/small_padding_size"
-        android:text="@string/tutorial_content" />
+        <TextView android:id="@android:id/text1"
+            style="?android:textAppearanceLarge"
+            android:textStyle="bold"
+            android:background="@drawable/xml_border"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/small_padding_size"
+            android:layout_marginBottom="16dp" />
 
-    <ImageView android:id="@+id/imgDisplayed"
+        <TextView android:id="@+id/text2"
+            style="?android:textAppearanceMedium"
+            android:lineSpacingMultiplier="1.2"
+            android:background="@drawable/xml_border"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top"
+            android:padding="@dimen/small_padding_size"
+            android:text="@string/tutorial_content" />
+
+        <ImageView android:id="@+id/imgDisplayed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:padding="1dp"
+            android:background="@mipmap/img_null_background"
+            android:contentDescription="@string/icd_tutorial_image" />
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/imgLeftArrow"
+        android:src="@drawable/ico_swipe_screen_left"
+        android:contentDescription="@string/cd_swipe_arrow_left"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:padding="1dp"
-        android:background="@mipmap/img_null_background"
-        android:contentDescription="@string/icd_tutorial_image" />
+        android:layout_height="250dp"
+        android:layout_gravity="start|bottom"/>
 
-</LinearLayout>
+    <ImageView
+        android:id="@+id/imgRightArrow"
+        android:src="@drawable/ico_swipe_screen_right"
+        android:contentDescription="@string/cd_swipe_arrow_right"
+        android:layout_width="wrap_content"
+        android:layout_height="250dp"
+        android:layout_gravity="end|bottom"/>
+</FrameLayout>

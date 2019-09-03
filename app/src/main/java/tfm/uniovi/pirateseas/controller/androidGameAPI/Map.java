@@ -21,6 +21,7 @@ import tfm.uniovi.pirateseas.global.Constants;
 public class Map implements Parcelable{
     private long mapSeed;
     private int activeMapCell;
+    private int lastActiveMapCell;
     private int mapHeight;
     private int mapWidth;
     private int mapLength;
@@ -39,6 +40,7 @@ public class Map implements Parcelable{
         this.mapLength = mapHeight * mapWidth;
         mapContent = generateContent(mapSeed);
         activeMapCell = 0;
+        lastActiveMapCell = 0;
     }
 
     /**
@@ -48,6 +50,7 @@ public class Map implements Parcelable{
     public Map (Parcel source){
         this.mapSeed = source.readLong();
         this.activeMapCell = source.readInt();
+        this.lastActiveMapCell = source.readInt();
         this.mapHeight = source.readInt();
         this.mapWidth = source.readInt();
         this.mapLength = mapHeight * mapWidth;
@@ -152,6 +155,22 @@ public class Map implements Parcelable{
      */
     public int getActiveCell(){
         return this.activeMapCell;
+    }
+
+    /**
+     * Set the last active cell to 'index'
+     * @param index New last active cell index
+     */
+    public void setLastActiveCell(int index){
+        this.lastActiveMapCell = index;
+    }
+
+    /**
+     * Return the last active cell index
+     * @return Last active cell index
+     */
+    public int getLastActiveCell(){
+        return this.lastActiveMapCell;
     }
 
     /**
@@ -284,6 +303,7 @@ public class Map implements Parcelable{
     public void writeToParcel(Parcel out, int flags){
         out.writeLong(this.mapSeed);
         out.writeInt(this.activeMapCell);
+        out.writeInt(this.lastActiveMapCell);
         out.writeInt(this.mapHeight);
         out.writeInt(this.mapWidth);
         out.writeStringArray(this.mapContent);

@@ -251,6 +251,9 @@ public class ShopActivity extends ListActivity{
 			btnPositive.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View view) {
+					// ISSUE #8 (Test pending)
+					((ShopActivity)getActivity()).dummyMap.clearActiveMapCell();
+
 					if (GameHelper.saveGameAtPreferences(dummyActivity, ((ShopActivity)getActivity()).dummyPlayer, ((ShopActivity)getActivity()).dummyShip, ((ShopActivity)getActivity()).dummyMap))
 						Log.v(TAG, "Game saved");
 					else {

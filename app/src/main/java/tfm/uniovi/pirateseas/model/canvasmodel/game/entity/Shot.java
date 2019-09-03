@@ -222,33 +222,21 @@ public class Shot extends Entity{
 		// Set difference with destiny Point
 		if(destiny.x > curr.x){			// Destiny to the right
 			xDiff = destiny.x - curr.x;	// Get the positive needed amount to reach the destiny
+			nextX = curr.x + 1;			// Next point moved 1 position to the side
+			x += xDelta;		// Move Bitmap coordinates relative to next Point movement
 		} else if(destiny.x < curr.x) {	// Destiny to the left
 			xDiff = curr.x - destiny.x;	// Get the positive needed amount to reach the destiny
+			nextX = curr.x - 1;			// Next point moved 1 position to the side
+			x -= xDelta;		// Move Bitmap coordinates relative to next Point movement
 		}
 		if(destiny.y > curr.y){			// Destiny to the front
 			yDiff = destiny.y - curr.y;	// Get the positive needed amount to reach the destiny
+			nextY = curr.y + 1;			// Next point moved 1 position to the front
+			y += yDelta;		// Move Bitmap coordinates relative to next Point movement
 		} else if(destiny.y < curr.y) { // Destiny to the back
 			yDiff = curr.y - destiny.y;	// Get the positive needed amount to reach the destiny
-		}
-
-		// Calculate next Point coordinates
-		if(xDiff > 0){
-			if(destiny.x > curr.x){			// Destiny to the right
-				nextX = curr.x + 1;			// Next point moved 1 position to the side
-				x += xDelta;		// Move Bitmap coordinates relative to next Point movement
-			} else {	// Destiny to the left
-				nextX = curr.x - 1;			// Next point moved 1 position to the side
-				x -= xDelta;		// Move Bitmap coordinates relative to next Point movement
-			}
-		}
-		if(yDiff > 0){
-			if(destiny.y > curr.y){			// Destiny to the front
-				nextY = curr.y + 1;			// Next point moved 1 position to the front
-				y += yDelta;		// Move Bitmap coordinates relative to next Point movement
-			} else {	// Destiny to the back
-				nextY = curr.y - 1;			// Next point moved 1 position to the back
-				y -= yDelta;		// Move Bitmap coordinates relative to next Point movement
-			}
+			nextY = curr.y - 1;			// Next point moved 1 position to the back
+			y += yDelta;		// Move Bitmap coordinates relative to next Point movement
 		}
 
 		// Set next Point coordinates

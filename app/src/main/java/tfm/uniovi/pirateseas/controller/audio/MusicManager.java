@@ -2,13 +2,13 @@ package tfm.uniovi.pirateseas.controller.audio;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.media.AudioAttributes;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnPreparedListener;
-import android.os.Build;
+import android.net.Uri;
 import android.util.Log;
 
+import java.io.IOException;
 import java.util.HashMap;
 
 /**
@@ -45,6 +45,8 @@ public class MusicManager{
 
 	// Music
 	private MediaPlayer mBackgroundMusic;
+	private MediaPlayerState mState;
+	private Integer activeSongResource;
 	
 	private static MusicManager mInstance = null;
 
@@ -116,32 +118,31 @@ public class MusicManager{
 	 */
 	private void initSounds(Context context, int backgroundMusicId) {
 		this.mContext = context;
-		
-		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
-			AudioAttributes.Builder attributesBuilder = new AudioAttributes.Builder();
-			attributesBuilder.setContentType(AudioAttributes.CONTENT_TYPE_MUSIC);
-			attributesBuilder.setLegacyStreamType(AudioManager.STREAM_MUSIC);
-			attributesBuilder.setUsage(AudioAttributes.USAGE_GAME);			
-		}
+		this.activeSongResource = mSoundKeys.get(backgroundMusicId);
+		if(activeSongResource == null)
+			initSounds(context, backgroundMusicId);
 		
 		if(mAudioManager == null)
 			init(mContext);
 		
-		mBackgroundMusic = MediaPlayer.create(context, mSoundKeys.get(backgroundMusicId));
+		mBackgroundMusic = MediaPlayer.create(context, activeSongResource);
+		setState(MediaPlayerState.PREPARED);
 		mBackgroundMusic.setOnPreparedListener(new OnPreparedListener() {
 			@Override
 			public void onPrepared(MediaPlayer mp) {
-				mp.start();				
+				setState(MediaPlayerState.PREPARED);
+				mp.start();
+				setState(MediaPlayerState.STARTED);
 			}
 		});
 		mBackgroundMusic.setOnErrorListener(new MediaPlayer.OnErrorListener() {
 			@Override
 			public boolean onError(MediaPlayer mediaPlayer, int what, int extra) {
-				mediaPlayer.reset();
+				setState(MediaPlayerState.ERROR);
+				resetPlayer();
 				return true;
 			}
 		});
-
 		
 		mBackgroundMusic.setLooping(true);
 		float dv = getDeviceVolume();
@@ -169,6 +170,7 @@ public class MusicManager{
 			if(mBackgroundMusic!= null && !mBackgroundMusic.isPlaying()){
 					try {
 						mBackgroundMusic.start();
+						setState(MediaPlayerState.STARTED);
 					} catch (IllegalStateException e){
 						Log.e(TAG, e.getMessage());
 					}
@@ -184,6 +186,7 @@ public class MusicManager{
 	public void pauseBackgroundMusic(){
 		if(mBackgroundMusic!= null && mBackgroundMusic.isPlaying()){
 			mBackgroundMusic.pause();
+			setState(MediaPlayerState.PAUSED);
 		}
 	}
 
@@ -193,9 +196,11 @@ public class MusicManager{
 	public void stopBackgroundMusic(){
 		if(mBackgroundMusic!= null && mBackgroundMusic.isPlaying()){
 			mBackgroundMusic.stop();
-			mBackgroundMusic.release();
-			mBackgroundMusic = null;
+			setState(MediaPlayerState.STOPPED);
+			mBackgroundMusic.prepareAsync();
+			setState(MediaPlayerState.PREPARING);
 		}
+		releaseResources();
 	}
 
 	/**
@@ -205,8 +210,15 @@ public class MusicManager{
 		if(mBackgroundMusic!=null){
 			try {
 				mBackgroundMusic.reset();
+				setState(MediaPlayerState.IDLE);
+				mBackgroundMusic.setDataSource(mContext, Uri.parse("android.resource://tfm.uniovi.pirateseas/raw/" + mContext.getResources().getResourceName(activeSongResource)));
+				setState(MediaPlayerState.INITIALIZED);
+				mBackgroundMusic.prepareAsync();
+				setState(MediaPlayerState.PREPARING);
 			} catch(IllegalStateException e){
 				Log.e(TAG, "MusicManager has not the resources yet/anymore");
+			} catch (IOException e) {
+				Log.e(TAG, "File path not found");
 			}
 		}
 	}
@@ -253,13 +265,42 @@ public class MusicManager{
 	/**
 	 * Release the MusicManager resources
 	 */
-	public void releaseResources(){
+	private void releaseResources(){
 		if(mBackgroundMusic!=null && !mBackgroundMusic.isPlaying()){
 			mBackgroundMusic.release();
+			setState(MediaPlayerState.END);
 		}
 	}
 
-    public boolean isPlaying() {
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
+	public boolean isPlaying() {
+		if(mBackgroundMusic == null)
+			return false;
 		return mBackgroundMusic.isPlaying();
     }
+
+    public boolean isLoaded() {
+		return mBackgroundMusic != null;
+	}
+
+	private enum MediaPlayerState {
+		IDLE,
+		END,
+		ERROR,
+		INITIALIZED,
+		PREPARING,
+		PREPARED,
+		STARTED,
+		STOPPED,
+		PAUSED,
+		COMPLETED
+	}
+
+	public MediaPlayerState getState() {
+		return mState;
+	}
+
+	private void setState(MediaPlayerState state){
+		this.mState = state;
+	}
 }

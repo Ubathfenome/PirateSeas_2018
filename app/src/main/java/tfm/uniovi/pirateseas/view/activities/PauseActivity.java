@@ -150,4 +150,9 @@ public class PauseActivity extends Activity {
 		Log.d(TAG,"PauseActivity Ship H=" + pgrHealth.getProgress() + "/" + pgrHealth.getMax() + " P=" + pgrPower.getProgress() + "/" + pgrPower.getMax() + " R=" + pgrRange.getProgress() + "/" + pgrRange.getMax());
 
 	}
+
+	@Override
+	public void onBackPressed() {
+		finish();
+	}
 }

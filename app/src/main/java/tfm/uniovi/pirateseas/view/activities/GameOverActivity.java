@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import tfm.uniovi.pirateseas.R;
 import tfm.uniovi.pirateseas.controller.androidGameAPI.Player;
+import tfm.uniovi.pirateseas.controller.audio.MusicManager;
 import tfm.uniovi.pirateseas.global.Constants;
 
 /**
@@ -63,8 +64,34 @@ public class GameOverActivity extends Activity {
 	@Override
 	protected void onResume() {
 		findViewById(R.id.rootLayoutGameOver).setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE);
+		try {
+			MusicManager.getInstance().playBackgroundMusic();
+		} catch(IllegalStateException e){
+			MusicManager.getInstance().resetPlayer();
+		}
 		super.onResume();
 	}
+
+	@Override
+	protected void onPause() {
+		try {
+			MusicManager.getInstance().pauseBackgroundMusic();
+		} catch(IllegalStateException e){
+			MusicManager.getInstance().resetPlayer();
+		}
+		super.onPause();
+	}
+
+	@Override
+	protected void onStop() {
+		try {
+			MusicManager.getInstance().stopBackgroundMusic();
+		} catch(IllegalStateException e){
+			MusicManager.getInstance().resetPlayer();
+		}
+		super.onStop();
+	}
+
 	// OnTouch
 	@SuppressLint("NewApi")
 	//: DESTROY EVERYTHING!! Muahahaha!! >:D
@@ -74,6 +101,12 @@ public class GameOverActivity extends Activity {
 		if(event.getAction() == MotionEvent.ACTION_DOWN){
 			Transition mFadeTransition = new Fade();
 			TransitionManager.beginDelayedTransition((ViewGroup) findViewById(R.id.rootLayoutGameOver), mFadeTransition);
+
+			try {
+				MusicManager.getInstance().stopBackgroundMusic();
+			} catch(IllegalStateException e){
+				MusicManager.getInstance().resetPlayer();
+			}
 			
 			Intent newGameTaskIntent = new Intent(this, MainMenuActivity.class);
 			newGameTaskIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);

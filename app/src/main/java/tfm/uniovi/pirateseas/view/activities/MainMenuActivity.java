@@ -189,6 +189,11 @@ public class MainMenuActivity extends Activity {
 		// Run permissions request only the first time
 		checkAppVersion();
 
+		// ISSUE #9 (Test pending)
+
+		if(MusicManager.getInstance() != null && MusicManager.getInstance().isLoaded() && !MusicManager.getInstance().isPlaying())
+            MusicManager.getInstance().playBackgroundMusic();
+
 		super.onResume();
 	}
 
@@ -312,14 +317,23 @@ public class MainMenuActivity extends Activity {
 	}
 
 	@Override
-	protected void onDestroy() {
+	protected void onPause() {
+		try {
+			MusicManager.getInstance().pauseBackgroundMusic();
+		} catch(IllegalStateException e){
+			MusicManager.getInstance().resetPlayer();
+		}
+		super.onPause();
+	}
+
+	@Override
+	protected void onStop() {
 		try {
 			MusicManager.getInstance().stopBackgroundMusic();
-			MusicManager.getInstance().releaseResources();
-		}catch (IllegalStateException ignored){
-
+		} catch(IllegalStateException e){
+			MusicManager.getInstance().resetPlayer();
 		}
-		super.onDestroy();
+		super.onStop();
 	}
 
 	@Override

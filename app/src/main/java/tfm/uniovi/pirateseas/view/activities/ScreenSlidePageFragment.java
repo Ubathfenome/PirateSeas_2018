@@ -85,34 +85,42 @@ public class ScreenSlidePageFragment extends Fragment {
 		switch(mPageNumber){
 			case 0:
 				imageReference = R.mipmap.img_game_activity;
+				rootView.findViewById(R.id.imgLeftArrow).setAlpha(0f);
 				((TextView) rootView.findViewById(R.id.text2)).setText(getResources().getString(R.string.tutorial_1));
 				break;
 			case 1:
 				imageReference = R.mipmap.img_screen_selection;
+                rootView.findViewById(R.id.imgLeftArrow).setAlpha(1f);
 				((TextView) rootView.findViewById(R.id.text2)).setText(getResources().getString(R.string.tutorial_2));
 				break;
 			case 2:
 				imageReference = R.mipmap.img_movement_spawn;
+                rootView.findViewById(R.id.imgLeftArrow).setAlpha(1f);
 				((TextView) rootView.findViewById(R.id.text2)).setText(getResources().getString(R.string.tutorial_3));
 				break;
 			case 3:
 				imageReference = R.mipmap.img_movement_shoot;
+                rootView.findViewById(R.id.imgLeftArrow).setAlpha(1f);
 				((TextView) rootView.findViewById(R.id.text2)).setText(getResources().getString(R.string.tutorial_4));
 				break;
             case 4:
                 imageReference = R.mipmap.img_ammunition;
+                rootView.findViewById(R.id.imgLeftArrow).setAlpha(1f);
                 ((TextView) rootView.findViewById(R.id.text2)).setText(getResources().getString(R.string.tutorial_5));
                 break;
             case 5:
                 imageReference = R.mipmap.enemy_types;
+                rootView.findViewById(R.id.imgLeftArrow).setAlpha(1f);
                 ((TextView) rootView.findViewById(R.id.text2)).setText(getResources().getString(R.string.tutorial_6));
                 break;
             case 6:
                 imageReference = R.mipmap.img_pause;
+                rootView.findViewById(R.id.imgLeftArrow).setAlpha(1f);
                 ((TextView) rootView.findViewById(R.id.text2)).setText(getResources().getString(R.string.tutorial_7));
                 break;
             case 7:
                 imageReference = R.mipmap.img_gameover;
+                rootView.findViewById(R.id.imgLeftArrow).setAlpha(1f);
                 ((TextView) rootView.findViewById(R.id.text2)).setText(getResources().getString(R.string.tutorial_8));
                 break;
 		}

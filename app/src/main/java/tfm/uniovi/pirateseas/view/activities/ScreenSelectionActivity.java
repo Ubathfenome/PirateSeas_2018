@@ -56,6 +56,7 @@ public class ScreenSelectionActivity extends Activity {
 	int mapHeight;
 	int mapLength;
 	int active;
+	int lastActive;
 
 	int[] sensorTypes = null;
 	boolean loadGame;
@@ -99,6 +100,7 @@ public class ScreenSelectionActivity extends Activity {
 		mapHeight = map.getMapHeight();
 		mapLength = map.getMapLength();
 		active = map.getActiveCell();
+		lastActive = map.getLastActiveCell();
 
 		final boolean encounter = randomEncounter();
 
@@ -109,31 +111,30 @@ public class ScreenSelectionActivity extends Activity {
 			public void onClick(View v) {
 				// Get map's left cell content
 				if(active%mapWidth != 0){
+					map.setLastActiveCell(active);
 					map.setActiveCell(active-1);
-					if(map.isActiveCellCleared() && map.isActiveCellIsland()){
+					if(map.isActiveCellCleared() && map.isActiveCellIsland()) {
 						try {
 							MusicManager.getInstance().stopBackgroundMusic();
-						} catch(IllegalStateException e){
+						} catch (IllegalStateException e) {
 							MusicManager.getInstance().resetPlayer();
 						}
 						MusicManager.getInstance(context, MusicManager.MUSIC_ISLAND).playBackgroundMusic();
 						enterVisitedIsland();
+					} else if (map.isActiveCellCleared() && !map.isActiveCellIsland()) {
+						// ScreenSelection activity
+						MusicManager.getInstance(context, MusicManager.MUSIC_GAME_MENU).playBackgroundMusic();
+						reloadSelection();
 					} else {
 						if (!map.isActiveCellIsland()) {
-							if (encounter) {
-								// Game activity
-								try {
-									MusicManager.getInstance().stopBackgroundMusic();
-								} catch(IllegalStateException e){
-									MusicManager.getInstance().resetPlayer();
-								}
-								MusicManager.getInstance(context, MusicManager.MUSIC_BATTLE).playBackgroundMusic();
-								startBattleGame();
-							} else {
-								// ScreenSelection activity
-								MusicManager.getInstance(context, MusicManager.MUSIC_GAME_MENU).playBackgroundMusic();
-								reloadSelection();
+							// Game activity
+							try {
+								MusicManager.getInstance().stopBackgroundMusic();
+							} catch(IllegalStateException e){
+								MusicManager.getInstance().resetPlayer();
 							}
+							MusicManager.getInstance(context, MusicManager.MUSIC_BATTLE).playBackgroundMusic();
+							startBattleGame();
 						} else {
 							// Shop activity
 							try {
@@ -158,31 +159,30 @@ public class ScreenSelectionActivity extends Activity {
 			public void onClick(View v) {
 				// Get map's up cell content
 				if(active-mapWidth>=0){
+					map.setLastActiveCell(active);
 					map.setActiveCell(active-mapWidth);
-					if(map.isActiveCellCleared() && map.isActiveCellIsland()){
+					if(map.isActiveCellCleared() && map.isActiveCellIsland()) {
 						try {
 							MusicManager.getInstance().stopBackgroundMusic();
-						} catch(IllegalStateException e){
+						} catch (IllegalStateException e) {
 							MusicManager.getInstance().resetPlayer();
 						}
 						MusicManager.getInstance(context, MusicManager.MUSIC_ISLAND).playBackgroundMusic();
 						enterVisitedIsland();
+					} else if (map.isActiveCellCleared() && !map.isActiveCellIsland()) {
+						// ScreenSelection activity
+						MusicManager.getInstance(context, MusicManager.MUSIC_GAME_MENU).playBackgroundMusic();
+						reloadSelection();
 					} else {
 						if (!map.isActiveCellIsland()) {
-							if (encounter) {
-								// Game activity
-								try {
-									MusicManager.getInstance().stopBackgroundMusic();
-								} catch(IllegalStateException e){
-									MusicManager.getInstance().resetPlayer();
-								}
-								MusicManager.getInstance(context, MusicManager.MUSIC_BATTLE).playBackgroundMusic();
-								startBattleGame();
-							} else {
-								// ScreenSelection activity
-								MusicManager.getInstance(context, MusicManager.MUSIC_GAME_MENU).playBackgroundMusic();
-								reloadSelection();
+							// Game activity
+							try {
+								MusicManager.getInstance().stopBackgroundMusic();
+							} catch(IllegalStateException e){
+								MusicManager.getInstance().resetPlayer();
 							}
+							MusicManager.getInstance(context, MusicManager.MUSIC_BATTLE).playBackgroundMusic();
+							startBattleGame();
 						} else {
 							// Shop activity
 							try {
@@ -207,31 +207,30 @@ public class ScreenSelectionActivity extends Activity {
 			public void onClick(View v) {
 				// Get map's right cell content
 				if((active+1)%mapWidth != 0){
+					map.setLastActiveCell(active);
 					map.setActiveCell(active+1);
-					if(map.isActiveCellCleared() && map.isActiveCellIsland()){
+					if(map.isActiveCellCleared() && map.isActiveCellIsland()) {
 						try {
 							MusicManager.getInstance().stopBackgroundMusic();
-						} catch(IllegalStateException e){
+						} catch (IllegalStateException e) {
 							MusicManager.getInstance().resetPlayer();
 						}
 						MusicManager.getInstance(context, MusicManager.MUSIC_ISLAND).playBackgroundMusic();
 						enterVisitedIsland();
+					} else if (map.isActiveCellCleared() && !map.isActiveCellIsland()) {
+						// ScreenSelection activity
+						MusicManager.getInstance(context, MusicManager.MUSIC_GAME_MENU).playBackgroundMusic();
+						reloadSelection();
 					} else {
 						if (!map.isActiveCellIsland()) {
-							if (encounter) {
-								// Game activity
-								try {
-									MusicManager.getInstance().stopBackgroundMusic();
-								} catch(IllegalStateException e){
-									MusicManager.getInstance().resetPlayer();
-								}
-								MusicManager.getInstance(context, MusicManager.MUSIC_BATTLE).playBackgroundMusic();
-								startBattleGame();
-							} else {
-								// ScreenSelection activity
-								MusicManager.getInstance(context, MusicManager.MUSIC_GAME_MENU).playBackgroundMusic();
-								reloadSelection();
+							// Game activity
+							try {
+								MusicManager.getInstance().stopBackgroundMusic();
+							} catch(IllegalStateException e){
+								MusicManager.getInstance().resetPlayer();
 							}
+							MusicManager.getInstance(context, MusicManager.MUSIC_BATTLE).playBackgroundMusic();
+							startBattleGame();
 						} else {
 							// Shop activity
 							try {
@@ -256,31 +255,30 @@ public class ScreenSelectionActivity extends Activity {
 			public void onClick(View v) {
 				// Get map's down cell content
 				if((active+mapWidth)<mapLength){
+					map.setLastActiveCell(active);
 					map.setActiveCell(active+mapWidth);
-					if(map.isActiveCellCleared() && map.isActiveCellIsland()){
+					if(map.isActiveCellCleared() && map.isActiveCellIsland()) {
 						try {
 							MusicManager.getInstance().stopBackgroundMusic();
-						} catch(IllegalStateException e){
+						} catch (IllegalStateException e) {
 							MusicManager.getInstance().resetPlayer();
 						}
 						MusicManager.getInstance(context, MusicManager.MUSIC_ISLAND).playBackgroundMusic();
 						enterVisitedIsland();
+					} else if (map.isActiveCellCleared() && !map.isActiveCellIsland()) {
+						// ScreenSelection activity
+						MusicManager.getInstance(context, MusicManager.MUSIC_GAME_MENU).playBackgroundMusic();
+						reloadSelection();
 					} else {
 						if (!map.isActiveCellIsland()) {
-							if (encounter) {
-								// Game activity
-								try {
-									MusicManager.getInstance().stopBackgroundMusic();
-								} catch(IllegalStateException e){
-									MusicManager.getInstance().resetPlayer();
-								}
-								MusicManager.getInstance(context, MusicManager.MUSIC_BATTLE).playBackgroundMusic();
-								startBattleGame();
-							} else {
-								// ScreenSelection activity
-								MusicManager.getInstance(context, MusicManager.MUSIC_GAME_MENU).playBackgroundMusic();
-								reloadSelection();
+							// Game activity
+							try {
+								MusicManager.getInstance().stopBackgroundMusic();
+							} catch(IllegalStateException e){
+								MusicManager.getInstance().resetPlayer();
 							}
+							MusicManager.getInstance(context, MusicManager.MUSIC_BATTLE).playBackgroundMusic();
+							startBattleGame();
 						} else {
 							// Shop activity
 							try {
@@ -446,7 +444,9 @@ public class ScreenSelectionActivity extends Activity {
 			} else {	// Water image
 				bmpContent[i] = bmpWater;
 			}
-			if(active==i){		// Overlap edge image to easier identify of active cell
+			if(active==i && s.contains("0")){		// Overlap edge image to easier identify of active cell
+				bmpContent[i] = DrawableHelper.overlapBitmaps(bmpContent[i], bmpActive);
+			} else if(lastActive == i){
 				bmpContent[i] = DrawableHelper.overlapBitmaps(bmpContent[i], bmpActive);
 			}
 		}

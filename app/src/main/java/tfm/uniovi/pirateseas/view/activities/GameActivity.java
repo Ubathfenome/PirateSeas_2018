@@ -13,6 +13,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.PorterDuff;
+import android.graphics.Typeface;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -42,6 +43,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import tfm.uniovi.pirateseas.R;
@@ -273,6 +275,9 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 
     @Override
     protected void onDestroy() {
+		// TODO: If the game exits without the player winning the battle, update the map activeCell
+		//  value to be the lastActiveCell value 'map.setActiveCell(map.getLastActiveCell());'
+		//  then save map values
         if (mSpeechRecognizer != null)
         {
             mSpeechRecognizer.destroy();
@@ -373,6 +378,8 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 			LayoutInflater inflater = dummyActivity.getLayoutInflater();
 			View view = inflater.inflate(R.layout.custom_positive_dialog_layout, null);
 			TextView txtTitle = view.findViewById(R.id.txtTitle);
+			Typeface customFont = Typeface.createFromAsset(dummyActivity.getAssets(), "fonts/" + Constants.FONT_NAME + ".ttf");
+			txtTitle.setTypeface(customFont);
 			TextView txtMessage = view.findViewById(R.id.txtMessage);
 			Button btnPositive = view.findViewById(R.id.btnPositive);
 			txtTitle.setText(getResources().getString(R.string.game_message_enemy_defeated_title));
@@ -849,7 +856,7 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
          */
         private void doAction() {
             try {
-                mCanvasView.nShotList.add(mCanvasView.nPlayerShip.shootCannon());
+                mCanvasView.nShotList.addAll(Arrays.asList(mCanvasView.nPlayerShip.shootCannon()));
             } catch (NoAmmoException e) {
                 showText(e.getMessage());
             }
