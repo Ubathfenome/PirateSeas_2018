@@ -54,7 +54,8 @@ public class Map implements Parcelable{
         this.mapHeight = source.readInt();
         this.mapWidth = source.readInt();
         this.mapLength = mapHeight * mapWidth;
-        source.readStringArray(mapContent);
+        this.mapContent = source.createStringArray();
+        // source.readStringArray(mapContent);
     }
 
     /**

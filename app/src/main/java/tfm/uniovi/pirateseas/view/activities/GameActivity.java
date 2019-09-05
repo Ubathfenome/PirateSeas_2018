@@ -58,6 +58,7 @@ import tfm.uniovi.pirateseas.global.Constants;
 import tfm.uniovi.pirateseas.model.canvasmodel.game.entity.Ammunitions;
 import tfm.uniovi.pirateseas.model.canvasmodel.game.entity.Ship;
 import tfm.uniovi.pirateseas.model.canvasmodel.ui.UIDisplayElement;
+import tfm.uniovi.pirateseas.utils.persistence.GameHelper;
 import tfm.uniovi.pirateseas.view.graphics.canvasview.CanvasView;
 
 /**
@@ -105,7 +106,6 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
     private SpeechRecognizer mSpeechRecognizer;
     private Intent mSpeechRecognizerIntent;
     private boolean mIsListening;
-
 
 	@SuppressLint("ClickableViewAccessibility")
 	@Override
@@ -163,8 +163,12 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 			public void onClick(View v) {
 				Intent pauseIntent = new Intent(context, PauseActivity.class);
 				CanvasView currentCView = mCanvasView.nUpdateThread.getCanvasViewInstance();
-				Ship playerShip = currentCView.nPlayerShip;
-				pauseIntent.putExtra(Constants.PAUSE_SHIP, playerShip);
+				Ship nPlayerShip = currentCView.nPlayerShip;
+				Player nPlayer = currentCView.nPlayer;
+				Map nMap = currentCView.nMap;
+				pauseIntent.putExtra(Constants.PAUSE_SHIP, nPlayerShip);
+				pauseIntent.putExtra(Constants.PAUSE_PLAYER, nPlayer);
+				pauseIntent.putExtra(Constants.PAUSE_MAP, nMap);
 				context.startActivity(pauseIntent);
 				Log.d(TAG, "Start Pause Intent");
 			}
@@ -275,9 +279,6 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 
     @Override
     protected void onDestroy() {
-		// TODO: If the game exits without the player winning the battle, update the map activeCell
-		//  value to be the lastActiveCell value 'map.setActiveCell(map.getLastActiveCell());'
-		//  then save map values
         if (mSpeechRecognizer != null)
         {
             mSpeechRecognizer.destroy();
@@ -351,6 +352,12 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 					// canvasView.setStatus(Constants.GAME_STATE_END);
 					// CanvasView.nUpdateThread.setRunning(false);
 					Log.d(TAG,"Finish Game Activity");
+					CanvasView currentCanvasView = ((GameActivity)dummyActivity).mCanvasView.nUpdateThread.getCanvasViewInstance();
+					Ship nPlayerShip = currentCanvasView.nPlayerShip;
+					Player nPlayer = currentCanvasView.nPlayer;
+					Map nMap = currentCanvasView.nMap;
+					nMap.setActiveCell(nMap.getLastActiveCell());
+					GameHelper.saveGameAtPreferences(dummyActivity, nPlayer, nPlayerShip, nMap);
 					dummyActivity.finish();
 				}
 			});

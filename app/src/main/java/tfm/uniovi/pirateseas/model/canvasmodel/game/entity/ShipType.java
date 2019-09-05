@@ -6,9 +6,9 @@ import tfm.uniovi.pirateseas.R;
  * Enum with all the possible ShipTypes
  */
 public enum ShipType {
-	LIGHT (R.mipmap.txtr_ship_light, 20, 3, 1f, 10),
+	LIGHT (R.mipmap.txtr_ship_light, 20, 3, 1f, 9),
 	MEDIUM (R.mipmap.txtr_ship_medium, 40, 2, 1.5f, 6),
-	HEAVY (R.mipmap.txtr_ship_heavy, 70, 2, 2f, 3);
+	HEAVY (R.mipmap.txtr_ship_heavy, 60, 2, 2f, 3);
 	
 	private final int mDrawableValue;
 	private final int mDefaultHealthPoints;

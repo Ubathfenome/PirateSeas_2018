@@ -6,7 +6,8 @@ import android.content.Context;
  * Class to set all project's global variables
  */
 public class Constants{
-    // Modes
+
+	// Modes
 	private static final int MODE_DEBUG = 0x0;
 	@SuppressWarnings("unused")
 	private static final int MODE_RELEASE = 0x1;
@@ -54,7 +55,7 @@ public class Constants{
 	public static final int DEFAULT_SHIP_LENGTH = 5;
 	
 	public static final int DEFAULT_SHIP_RELOAD = 4;
-	public static final int DEFAULT_SHIP_BASIC_RANGE = 5;
+	public static final int DEFAULT_SHIP_BASIC_RANGE = 8;
 	public static final float DEFAULT_SHOOT_DAMAGE = 10;
 
 	public static final int SHIP_MAX_POWER = 500;
@@ -89,7 +90,7 @@ public class Constants{
 	public static final double MILLIS_TO_SECONDS_INV = Math.pow(MILLIS_TO_SECONDS, -1); 
 	public static final double NANOS_TO_SECONDS = Math.pow(10, -9);
 
-	public static final int FLYING_TIME_MULTIPLIER = 18;
+	public static final int FLYING_TIME_MULTIPLIER = 8;
 
     public static final int SHAKE_LIMIT = 2;
     public static final int TUTORIAL_NUM_PAGES = 8;
@@ -153,6 +154,8 @@ public class Constants{
 	public static final String ITEM_KEY_AMMO_DOUBLE = "Ammo double";
 	public static final String ITEM_KEY_AMMO_SWEEP = "Ammo sweep";
     public static final String PAUSE_SHIP = "PLAYERSHIP";
+	public static final String PAUSE_PLAYER = "PAUSEPLAYER";
+	public static final String PAUSE_MAP = "PAUSEMAP";
 
 	/**
 	 * Method that evaluates if the game is in debugging mode or not

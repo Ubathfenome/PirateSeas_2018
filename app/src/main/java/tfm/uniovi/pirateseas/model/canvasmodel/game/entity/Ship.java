@@ -576,29 +576,17 @@ public class Ship extends Entity implements Parcelable{
 		// Set difference with destiny Point
 		if(destiny.x > curr.x){			// Destiny to the right
 			xDiff = destiny.x - curr.x;	// Get the positive needed amount to reach the destiny
+			nextX = curr.x + 1;			// Next point moved 1 position to the side
 		} else if(destiny.x < curr.x) {	// Destiny to the left
 			xDiff = curr.x - destiny.x;	// Get the positive needed amount to reach the destiny
+			nextX = curr.x - 1;			// Next point moved 1 position to the side
 		}
 		if(destiny.y > curr.y){			// Destiny to the front
 			yDiff = destiny.y - curr.y;	// Get the positive needed amount to reach the destiny
+			nextY = curr.y + 1;			// Next point moved 1 position to the front
 		} else if(destiny.y < curr.y) { // Destiny to the back
 			yDiff = curr.y - destiny.y;	// Get the positive needed amount to reach the destiny
-		}
-
-		// Calculate next Point coordinates
-		if(xDiff > 0){
-			if(destiny.x > curr.x){			// Destiny to the right
-				nextX = curr.x + 1;			// Next point moved 1 position to the side
-			} else if(destiny.x < curr.x) {	// Destiny to the left
-				nextX = curr.x - 1;			// Next point moved 1 position to the side
-			}
-		}
-		if(yDiff > 0){
-			if(destiny.y > curr.y){			// Destiny to the front
-				nextY = curr.y + 1;			// Next point moved 1 position to the front
-			} else if(destiny.y < curr.y) {	// Destiny to the back
-				nextY = curr.y - 1;			// Next point moved 1 position to the back
-			}
+			nextY = curr.y - 1;			// Next point moved 1 position to the back
 		}
 
 		// Set next Point coordinates

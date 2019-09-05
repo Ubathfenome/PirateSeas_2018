@@ -51,7 +51,7 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 	private static final String EXCEPTION_TAG = "CustomException";
 
 	private static final int SHOT_CHK_DELAY = 50;
-	private static final int PLAYER_SHIP_Y_VALUE = 150;
+	private static final int PLAYER_SHIP_Y_VALUE = 300;
 
 	private int HORIZON_Y_VALUE = 200;
 
@@ -240,7 +240,7 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 
 		for (int i = 0, size = nShotList.size(); i < size; i++) {
 			Shot s = nShotList.get(i);
-			if (s.isAlive() && s.isInBounds(HORIZON_Y_VALUE))
+			if (s.isAlive() && s.isInBounds(0))
 				s.drawOnScreen(canvas);
 		}
 
@@ -599,7 +599,7 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 		if (nGameMode == Constants.GAMEMODE_BATTLE && size > 0) {
 			for (int i = 0; i < size; i++) {
 				Shot s = nShotList.get(i);
-				if (s.isAlive() && s.isInBounds(HORIZON_Y_VALUE)) {
+				if (s.isAlive() && s.isInBounds(0)) {
 					switch (s.getShotStatus()) {
 					case Constants.SHOT_FIRED:
 						if (nGameTimestamp - s.getTimestamp() >= SHOT_CHK_DELAY) {
@@ -628,22 +628,8 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 
 							// Change shot behaviour for the type of ammunition used
 							if(s.getEntityDirection() == Constants.DIRECTION_UP) {
-								switch (nPlayerShip.getSelectedAmmunitionIndex()) {
-									case 0:
-										s.moveShotEntity(s.getEndPoint(), nPixelsWidth, -nPixelsHeight);
-										break;
-									case 1:
-										s.moveShotEntity(s.getEndPoint(), nPixelsWidth, -nPixelsHeight);
-										break;
-									case 2:
-										s.moveShotEntity(s.getEndPoint(), nPixelsWidth, -nPixelsHeight);
-										break;
-									case 3:
-										s.moveShotEntity(s.getEndPoint(), nPixelsWidth, -nPixelsHeight);
-										break;
-								}
+								s.moveShotEntity(s.getEndPoint(), nPixelsWidth, -nPixelsHeight);
 							} else {
-
 								s.moveShotEntity(s.getEndPoint(), nPixelsWidth, nPixelsHeight);
 							}
 
@@ -666,7 +652,7 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 							s.looseHealth(s.getDamage());
 						break;
 					}
-				} else if(s.isAlive() && !s.isInBounds(HORIZON_Y_VALUE)){
+				} else if(s.isAlive() && !s.isInBounds(0)){
 					s.setShotStatus(Constants.SHOT_MISSED);
 				} else { // If Shot is dead
 				    nShotList.remove(s);

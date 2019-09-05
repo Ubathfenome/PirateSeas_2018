@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.util.Log;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
 
 /**
@@ -50,6 +51,15 @@ public class MusicManager{
 	
 	private static MusicManager mInstance = null;
 
+	private static final MediaPlayerState[] ANY_VALID_STATE = {MediaPlayerState.IDLE, MediaPlayerState.END, MediaPlayerState.ERROR, MediaPlayerState.INITIALIZED, MediaPlayerState.PREPARING, MediaPlayerState.PREPARED, MediaPlayerState.STARTED, MediaPlayerState.STOPPED, MediaPlayerState.PAUSED, MediaPlayerState.COMPLETED};
+	private static final MediaPlayerState[] RESET_VALID_STATES = {MediaPlayerState.IDLE, MediaPlayerState.ERROR, MediaPlayerState.INITIALIZED, MediaPlayerState.PREPARED, MediaPlayerState.STARTED, MediaPlayerState.STOPPED, MediaPlayerState.PAUSED, MediaPlayerState.COMPLETED};
+	private static final MediaPlayerState[] OPTIONS_VALID_STATES = {MediaPlayerState.IDLE, MediaPlayerState.INITIALIZED, MediaPlayerState.PREPARED, MediaPlayerState.STARTED, MediaPlayerState.STOPPED, MediaPlayerState.PAUSED, MediaPlayerState.COMPLETED};
+	private static final MediaPlayerState[] STOP_VALID_STATES = {MediaPlayerState.PREPARED, MediaPlayerState.STARTED, MediaPlayerState.STOPPED, MediaPlayerState.PAUSED, MediaPlayerState.COMPLETED};
+	private static final MediaPlayerState[] START_VALID_STATES = {MediaPlayerState.PREPARED, MediaPlayerState.STARTED, MediaPlayerState.PAUSED, MediaPlayerState.COMPLETED};
+	private static final MediaPlayerState[] PAUSE_VALID_STATES = {MediaPlayerState.STARTED, MediaPlayerState.PAUSED, MediaPlayerState.COMPLETED};
+	private static final MediaPlayerState[] ASYNC_PREP_VALID_STATES = {MediaPlayerState.INITIALIZED, MediaPlayerState.STOPPED};
+	private static final MediaPlayerState[] SET_SOURCE_VALID_STATE = {MediaPlayerState.IDLE};
+
 	/**
 	 * Method to get the MusicInstance to start music tracks
 	 * @param context Context
@@ -61,7 +71,7 @@ public class MusicManager{
 		if (mInstance == null) {
 			mInstance = new MusicManager();
 		}
-		if (mInstance.mBackgroundMusic == null || !mInstance.mBackgroundMusic.isPlaying()){
+		if (mInstance.mBackgroundMusic == null || Arrays.asList(OPTIONS_VALID_STATES).contains(mInstance.mState) && !mInstance.mBackgroundMusic.isPlaying()){
 			mInstance.initSounds(context, backgroundMusicId);
 		}
 		return mInstance;
@@ -143,10 +153,12 @@ public class MusicManager{
 				return true;
 			}
 		});
-		
-		mBackgroundMusic.setLooping(true);
+
 		float dv = getDeviceVolume();
-		mBackgroundMusic.setVolume(dv, dv);
+		if(Arrays.asList(OPTIONS_VALID_STATES).contains(mInstance.mState)) {
+			mBackgroundMusic.setLooping(true);
+			mBackgroundMusic.setVolume(dv, dv);
+		}
 	}
 
 	/**
@@ -167,10 +179,12 @@ public class MusicManager{
 			if (mBackgroundMusic == null){
 				mInstance.initSounds(mContext, MUSIC_GAME_MENU);
 			}
-			if(mBackgroundMusic!= null && !mBackgroundMusic.isPlaying()){
+			if(mBackgroundMusic!= null && Arrays.asList(OPTIONS_VALID_STATES).contains(mInstance.mState) && !mBackgroundMusic.isPlaying()){
 					try {
-						mBackgroundMusic.start();
-						setState(MediaPlayerState.STARTED);
+						if(Arrays.asList(START_VALID_STATES).contains(mInstance.mState)) {
+							mBackgroundMusic.start();
+							setState(MediaPlayerState.STARTED);
+						}
 					} catch (IllegalStateException e){
 						Log.e(TAG, e.getMessage());
 					}
@@ -184,7 +198,7 @@ public class MusicManager{
 	 * Pauses the selected song
 	 */
 	public void pauseBackgroundMusic(){
-		if(mBackgroundMusic!= null && mBackgroundMusic.isPlaying()){
+		if(mBackgroundMusic!= null && Arrays.asList(OPTIONS_VALID_STATES).contains(mInstance.mState) && mBackgroundMusic.isPlaying() && Arrays.asList(PAUSE_VALID_STATES).contains(mInstance.mState)){
 			mBackgroundMusic.pause();
 			setState(MediaPlayerState.PAUSED);
 		}
@@ -194,13 +208,12 @@ public class MusicManager{
 	 * Stops the selected song
 	 */
 	public void stopBackgroundMusic(){
-		if(mBackgroundMusic!= null && mBackgroundMusic.isPlaying()){
+		if(mBackgroundMusic!= null && Arrays.asList(OPTIONS_VALID_STATES).contains(mInstance.mState) && mBackgroundMusic.isPlaying() && Arrays.asList(STOP_VALID_STATES).contains(mInstance.mState)){
 			mBackgroundMusic.stop();
 			setState(MediaPlayerState.STOPPED);
 			mBackgroundMusic.prepareAsync();
 			setState(MediaPlayerState.PREPARING);
 		}
-		releaseResources();
 	}
 
 	/**
@@ -209,12 +222,14 @@ public class MusicManager{
 	public void resetPlayer(){
 		if(mBackgroundMusic!=null){
 			try {
-				mBackgroundMusic.reset();
-				setState(MediaPlayerState.IDLE);
-				mBackgroundMusic.setDataSource(mContext, Uri.parse("android.resource://tfm.uniovi.pirateseas/raw/" + mContext.getResources().getResourceName(activeSongResource)));
-				setState(MediaPlayerState.INITIALIZED);
-				mBackgroundMusic.prepareAsync();
-				setState(MediaPlayerState.PREPARING);
+				if(Arrays.asList(RESET_VALID_STATES).contains(mInstance.mState)) {
+					mBackgroundMusic.reset();
+					setState(MediaPlayerState.IDLE);
+					mBackgroundMusic.setDataSource(mContext, Uri.parse("android.resource://tfm.uniovi.pirateseas/raw/" + mContext.getResources().getResourceName(activeSongResource)));
+					setState(MediaPlayerState.INITIALIZED);
+					mBackgroundMusic.prepareAsync();
+					setState(MediaPlayerState.PREPARING);
+				}
 			} catch(IllegalStateException e){
 				Log.e(TAG, "MusicManager has not the resources yet/anymore");
 			} catch (IOException e) {
@@ -259,14 +274,13 @@ public class MusicManager{
 		float mMaxVolume = mAudioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
 		int streamedVolume = (int) ((volumeValue * mMaxVolume) / 100);
 		mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC, streamedVolume, 0);
-		
 	}
 
 	/**
 	 * Release the MusicManager resources
 	 */
-	private void releaseResources(){
-		if(mBackgroundMusic!=null && !mBackgroundMusic.isPlaying()){
+	public void releaseResources(){
+		if(mBackgroundMusic!=null && Arrays.asList(ANY_VALID_STATE).contains(mInstance.mState) && !mBackgroundMusic.isPlaying()){
 			mBackgroundMusic.release();
 			setState(MediaPlayerState.END);
 		}
@@ -274,7 +288,7 @@ public class MusicManager{
 
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
 	public boolean isPlaying() {
-		if(mBackgroundMusic == null)
+		if(mBackgroundMusic == null || !Arrays.asList(OPTIONS_VALID_STATES).contains(mInstance.mState))
 			return false;
 		return mBackgroundMusic.isPlaying();
     }
@@ -301,6 +315,9 @@ public class MusicManager{
 	}
 
 	private void setState(MediaPlayerState state){
+		Log.d(TAG, "MediaState: " + this.mState + " > " + state);
 		this.mState = state;
 	}
+
+
 }

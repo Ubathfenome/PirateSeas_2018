@@ -4,6 +4,9 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -16,9 +19,11 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -114,16 +119,9 @@ public class ScreenSelectionActivity extends Activity {
 					map.setLastActiveCell(active);
 					map.setActiveCell(active-1);
 					if(map.isActiveCellCleared() && map.isActiveCellIsland()) {
-						try {
-							MusicManager.getInstance().stopBackgroundMusic();
-						} catch (IllegalStateException e) {
-							MusicManager.getInstance().resetPlayer();
-						}
-						MusicManager.getInstance(context, MusicManager.MUSIC_ISLAND).playBackgroundMusic();
 						enterVisitedIsland();
 					} else if (map.isActiveCellCleared() && !map.isActiveCellIsland()) {
 						// ScreenSelection activity
-						MusicManager.getInstance(context, MusicManager.MUSIC_GAME_MENU).playBackgroundMusic();
 						reloadSelection();
 					} else {
 						if (!map.isActiveCellIsland()) {
@@ -162,16 +160,9 @@ public class ScreenSelectionActivity extends Activity {
 					map.setLastActiveCell(active);
 					map.setActiveCell(active-mapWidth);
 					if(map.isActiveCellCleared() && map.isActiveCellIsland()) {
-						try {
-							MusicManager.getInstance().stopBackgroundMusic();
-						} catch (IllegalStateException e) {
-							MusicManager.getInstance().resetPlayer();
-						}
-						MusicManager.getInstance(context, MusicManager.MUSIC_ISLAND).playBackgroundMusic();
 						enterVisitedIsland();
 					} else if (map.isActiveCellCleared() && !map.isActiveCellIsland()) {
 						// ScreenSelection activity
-						MusicManager.getInstance(context, MusicManager.MUSIC_GAME_MENU).playBackgroundMusic();
 						reloadSelection();
 					} else {
 						if (!map.isActiveCellIsland()) {
@@ -210,16 +201,9 @@ public class ScreenSelectionActivity extends Activity {
 					map.setLastActiveCell(active);
 					map.setActiveCell(active+1);
 					if(map.isActiveCellCleared() && map.isActiveCellIsland()) {
-						try {
-							MusicManager.getInstance().stopBackgroundMusic();
-						} catch (IllegalStateException e) {
-							MusicManager.getInstance().resetPlayer();
-						}
-						MusicManager.getInstance(context, MusicManager.MUSIC_ISLAND).playBackgroundMusic();
 						enterVisitedIsland();
 					} else if (map.isActiveCellCleared() && !map.isActiveCellIsland()) {
 						// ScreenSelection activity
-						MusicManager.getInstance(context, MusicManager.MUSIC_GAME_MENU).playBackgroundMusic();
 						reloadSelection();
 					} else {
 						if (!map.isActiveCellIsland()) {
@@ -258,16 +242,9 @@ public class ScreenSelectionActivity extends Activity {
 					map.setLastActiveCell(active);
 					map.setActiveCell(active+mapWidth);
 					if(map.isActiveCellCleared() && map.isActiveCellIsland()) {
-						try {
-							MusicManager.getInstance().stopBackgroundMusic();
-						} catch (IllegalStateException e) {
-							MusicManager.getInstance().resetPlayer();
-						}
-						MusicManager.getInstance(context, MusicManager.MUSIC_ISLAND).playBackgroundMusic();
 						enterVisitedIsland();
 					} else if (map.isActiveCellCleared() && !map.isActiveCellIsland()) {
 						// ScreenSelection activity
-						MusicManager.getInstance(context, MusicManager.MUSIC_GAME_MENU).playBackgroundMusic();
 						reloadSelection();
 					} else {
 						if (!map.isActiveCellIsland()) {
@@ -361,6 +338,10 @@ public class ScreenSelectionActivity extends Activity {
         txtScreenSelectionLabel.setText(message);
 		GameHelper.saveGameAtPreferences(this, p, ship, map);
 
+		launchResetIntent();
+	}
+
+	private void launchResetIntent(){
 		Intent resetIntent = new Intent(this, ScreenSelectionActivity.class);
 		resetIntent.putExtra(Constants.TAG_SENSOR_LIST, sensorTypes);
 		resetIntent.putExtra(Constants.TAG_LOAD_GAME, loadGame);
@@ -374,10 +355,12 @@ public class ScreenSelectionActivity extends Activity {
 	 * Save the game when going into an already visited island
 	 */
 	private void enterVisitedIsland() {
-		GameHelper.saveGameAtPreferences(this, p, ship, map);
 		String message = getText(R.string.message_islandvisited) + "\n" + txtScreenSelectionLabel.getText();
 		// Notify that the island has already been visited and cannot be visited twice
-        txtScreenSelectionLabel.setText(message);
+		txtScreenSelectionLabel.setText(message);
+		GameHelper.saveGameAtPreferences(this, p, ship, map);
+
+		launchResetIntent();
 	}
 
 	/**
@@ -479,16 +462,10 @@ public class ScreenSelectionActivity extends Activity {
      */
 	public void onBackPressed() {
 		// Exit game. Return to main menu
-		Intent mainMenuIntent = new Intent(context, MainMenuActivity.class);
-		try {
-			MusicManager.getInstance().stopBackgroundMusic();
-		} catch(IllegalStateException e){
-			MusicManager.getInstance().resetPlayer();
-		}
-		MusicManager.getInstance(context, MusicManager.MUSIC_BATTLE).playBackgroundMusic();
-		mainMenuIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-		startActivity(mainMenuIntent);
-		finish();
+
+		// Pop up messageBox asking if the user is sure to leave
+		LeaveGameDialogFragment exitDialog = new LeaveGameDialogFragment();
+		exitDialog.show(getFragmentManager(), "LeaveGameDialog");
 	}
 
     /**
@@ -518,5 +495,51 @@ public class ScreenSelectionActivity extends Activity {
 				finish();
 			}
 		});
+	}
+
+	/**
+	 * Class to create a Dialog that asks the player if he/she is sure of leaving the game activity
+	 */
+	public static class LeaveGameDialogFragment extends DialogFragment {
+		@Override
+		public Dialog onCreateDialog(Bundle savedInstanceState) {
+			final Activity dummyActivity = getActivity();
+			AlertDialog.Builder builder = new AlertDialog.Builder(dummyActivity);
+			LayoutInflater inflater = dummyActivity.getLayoutInflater();
+			View view = inflater.inflate(R.layout.custom_dialog_layout, null);
+			TextView txtTitle = view.findViewById(R.id.txtTitle);
+			TextView txtMessage = view.findViewById(R.id.txtMessage);
+			Button btnPositive = view.findViewById(R.id.btnPositive);
+			Button btnNegative = view.findViewById(R.id.btnNegative);
+			txtTitle.setText(getResources().getString(R.string.exit_dialog_title));
+			txtMessage.setText(getResources().getString(R.string.exit_dialog_message));
+			btnPositive.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View view) {
+					// Exit
+					Log.d(TAG,"Finish ScreenSelection Activity");
+					Intent mainMenuIntent = new Intent(dummyActivity, MainMenuActivity.class);
+					try {
+						MusicManager.getInstance().stopBackgroundMusic();
+					} catch(IllegalStateException e){
+						MusicManager.getInstance().resetPlayer();
+					}
+					MusicManager.getInstance(dummyActivity, MusicManager.MUSIC_GAME_MENU).playBackgroundMusic();
+					mainMenuIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+					startActivity(mainMenuIntent);
+					dummyActivity.finish();
+				}
+			});
+			btnNegative.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View view) {
+					dismiss();
+				}
+			});
+			builder.setView(view);
+
+			// Create the AlertDialog object and return it
+			return builder.create();
+		}
 	}
 }

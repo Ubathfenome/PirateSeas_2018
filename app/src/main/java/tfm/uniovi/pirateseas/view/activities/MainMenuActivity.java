@@ -143,6 +143,7 @@ public class MainMenuActivity extends Activity {
 		btnExit.setTypeface(customFont);
 		btnExit.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
+				MusicManager.getInstance().releaseResources();
 				finish();
 			}
 		});
