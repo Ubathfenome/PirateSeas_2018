@@ -57,6 +57,7 @@ public class GameHelper {
 
 		editor.putLong(Constants.PREF_MAP_SEED, map.getMapSeed());
 		editor.putInt(Constants.PREF_MAP_ACTIVECELL, map.getActiveCell());
+		editor.putInt(Constants.PREF_MAP_LASTACTIVECELL, map.getLastActiveCell());
 		String[] mapContent = map.getMapContent();
 		StringBuilder mapJointContent = new StringBuilder();
 
@@ -85,23 +86,29 @@ public class GameHelper {
 		
 		SharedPreferences mPreferences = context.getSharedPreferences(Constants.TAG_PREF_NAME, Context.MODE_PRIVATE);
 
-		player.setGold(mPreferences.getInt(Constants.PREF_PLAYER_GOLD, 0));
-		player.setExperience(mPreferences.getInt(Constants.PREF_PLAYER_XP, 0));
-		player.setMapPieces(mPreferences.getInt(Constants.PREF_PLAYER_MAP_PIECES, 0));
+		player.setLevel(mPreferences.getInt(Constants.PREF_PLAYER_LEVEL, Constants.ZERO_INT));
+		player.setGold(mPreferences.getInt(Constants.PREF_PLAYER_GOLD, Constants.ZERO_INT));
+		player.setExperience(mPreferences.getInt(Constants.PREF_PLAYER_XP, Constants.ZERO_INT));
+		player.setMapPieces(mPreferences.getInt(Constants.PREF_PLAYER_MAP_PIECES, Constants.ZERO_INT));
 		
 		helperPlayer = player;
 		
-		Point p = new Point(mPreferences.getInt(Constants.PREF_SHIP_COORDINATES_X, 0), mPreferences.getInt(Constants.PREF_SHIP_COORDINATES_Y, 0));
-		int ammo = mPreferences.getInt(Constants.PREF_SHIP_AMMUNITIONS, 20);
-		ShipType st = ShipType.values()[mPreferences.getInt(Constants.PREF_SHIP_TYPE, 0)];
+		Point p = new Point(mPreferences.getInt(Constants.PREF_SHIP_COORDINATES_X, Constants.ZERO_INT), mPreferences.getInt(Constants.PREF_SHIP_COORDINATES_Y, Constants.ZERO_INT));
+
+		int ammo = mPreferences.getInt(Constants.PREF_SHIP_AMMUNITIONS, Constants.DEFAULT_PLAYER_SHIP_AMMO);
+		ShipType st = ShipType.values()[mPreferences.getInt(Constants.PREF_SHIP_TYPE, Constants.ZERO_INT)];
 		int hp = mPreferences.getInt(Constants.PREF_SHIP_HEALTH, st.defaultHealthPoints());
 		ship = new Ship(context, ship, st, p, DEFAULT_DIRECTION, DEFAULT_SHIP_LENGTH, hp, ammo);
 		ship.setPlayable(true);
+		for(Ammunitions a : Ammunitions.values()){
+			ship.gainAmmo(mPreferences.getInt(a.getName(), Constants.ZERO_INT), a);
+		}
 			
 		helperShip = ship;
 
-		map.setMapSeed(mPreferences.getLong(Constants.PREF_MAP_SEED, 0));
-		map.setActiveCell(mPreferences.getInt(Constants.PREF_MAP_ACTIVECELL, 0));
+		map.setMapSeed(mPreferences.getLong(Constants.PREF_MAP_SEED, Constants.ZERO_INT));
+		map.setActiveCell(mPreferences.getInt(Constants.PREF_MAP_ACTIVECELL, Constants.ZERO_INT));
+		map.setLastActiveCell(mPreferences.getInt(Constants.PREF_MAP_LASTACTIVECELL, Constants.ZERO_INT));
 		int mapHeight = mPreferences.getInt(Constants.PREF_MAP_HEIGHT,Constants.MAP_MIN_HEIGHT);
 		int mapWidth = mPreferences.getInt(Constants.PREF_MAP_WIDTH,Constants.MAP_MIN_WIDTH);
 		map.setMapHeight(mapHeight);

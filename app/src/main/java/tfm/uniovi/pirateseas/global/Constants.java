@@ -7,7 +7,7 @@ import android.content.Context;
  */
 public class Constants{
 
-	// Modes
+    // Modes
 	private static final int MODE_DEBUG = 0x0;
 	@SuppressWarnings("unused")
 	private static final int MODE_RELEASE = 0x1;
@@ -51,7 +51,7 @@ public class Constants{
 	public static final int DEFAULT_ENEMY_Y_LIMIT = 60;
 
 	public static final int DEFAULT_PLAYER_SHIP_DIRECTION = DIRECTION_UP;
-	public static final int DEFAULT_PLAYER_SHIP_AMMO = 200;
+	public static final int DEFAULT_PLAYER_SHIP_AMMO = 20;
 	public static final int DEFAULT_SHIP_LENGTH = 5;
 	
 	public static final int DEFAULT_SHIP_RELOAD = 4;
@@ -115,6 +115,7 @@ public class Constants{
 	public static final String PREF_SHIP_TYPE = "shipTypePref";
 	public static final String PREF_MAP_SEED = "mapSeed";
 	public static final String PREF_MAP_ACTIVECELL = "mapActiveCell";
+    public static final String PREF_MAP_LASTACTIVECELL = "mapLastActiveCell";
 	public static final String PREF_MAP_CONTENT = "mapContent";
 	public static final String PREF_MAP_HEIGHT = "mapHeight";
 	public static final String PREF_MAP_WIDTH = "mapWidth";
@@ -156,6 +157,8 @@ public class Constants{
     public static final String PAUSE_SHIP = "PLAYERSHIP";
 	public static final String PAUSE_PLAYER = "PAUSEPLAYER";
 	public static final String PAUSE_MAP = "PAUSEMAP";
+
+	public static final int ZERO_INT = 0;
 
 	/**
 	 * Method that evaluates if the game is in debugging mode or not

@@ -352,7 +352,7 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
                                 } catch (CannonReloadingException e) {
                                     Log.e(EXCEPTION_TAG, e.getMessage());
                                     MusicManager.getInstance().playSound(MusicManager.SOUND_SHOT_RELOADING);
-                                    ((GameActivity)nContext).showText(e.getMessage());
+                                    ((GameActivity) nContext).showText(e.getMessage());
                                 }
                             }
                             break;
@@ -377,7 +377,9 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
                             if (nCheatCounter % Constants.CHT_VALUE == 0)
                                 grantCheat2Player();
                             break;
-                    }
+						default:
+							throw new IllegalStateException("Unexpected value: " + direction);
+					}
                     break;
 			}
 
@@ -392,7 +394,9 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 		nPlayer.addExperience(200);
 		nPlayer.addGold(50);
 		nPlayer.setMapPieces(1);
-		nPlayerShip.gainAmmo(10, Ammunitions.SWEEP);
+		nPlayerShip.gainAmmo(2, Ammunitions.AIMED);
+		nPlayerShip.gainAmmo(2, Ammunitions.DOUBLE);
+		nPlayerShip.gainAmmo(2, Ammunitions.SWEEP);
 		nPlayerShip.gainHealth(30);
 	}
 

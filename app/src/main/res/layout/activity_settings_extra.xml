@@ -79,15 +79,25 @@
 					android:text="@string/settings_change_ammo_mode"
 					android:textSize="@dimen/text_size" />
 			</LinearLayout>
-            
-            <Button
-	            android:id="@+id/btnSettingsRestore"
-	            style="?android:attr/buttonBarButtonStyle"
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:layout_marginLeft="8dp"
-	            android:layout_marginRight="8dp"
-	            android:background="@drawable/xml_btn_style"
-	            android:text="@string/icd_rest_preferences" />
-        </LinearLayout>        
+
+			<Button
+					android:id="@+id/btnSettingsRestore"
+					style="?android:attr/buttonBarButtonStyle"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_marginLeft="8dp"
+					android:layout_marginRight="8dp"
+					android:background="@drawable/xml_btn_style"
+					android:text="@string/icd_rest_preferences" />
+
+			<Button
+				android:id="@+id/btnSettingsBack"
+				style="?android:attr/buttonBarButtonStyle"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginLeft="8dp"
+				android:layout_marginRight="8dp"
+				android:background="@drawable/xml_btn_style"
+				android:text="@string/ic_back" />
+		</LinearLayout>
 </LinearLayout>

@@ -77,6 +77,16 @@ public class SettingsExtraActivity extends Activity {
 						"RestorePreferencesDialog");
 			}
 		});
+
+		Button btnBack = findViewById(R.id.btnSettingsBack);
+		btnBack.setTypeface(customFont);
+		btnBack.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				savePreferences();
+				finish();
+			}
+		});
 	}
 
 	@Override

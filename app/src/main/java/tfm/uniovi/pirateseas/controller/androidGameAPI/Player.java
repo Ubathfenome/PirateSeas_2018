@@ -90,6 +90,14 @@ public class Player implements Parcelable {
 	}
 
 	/**
+	 * @param level
+	 * 				the level to set
+	 */
+	public void setLevel(int level) {
+		this.level = level;
+	}
+
+	/**
 	 * @return the gold
 	 */
 	public int getGold() {
