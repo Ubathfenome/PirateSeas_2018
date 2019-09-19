@@ -97,17 +97,15 @@ public class ScreenSelectionActivity extends Activity {
 		if(map.getMapLength() == Constants.MAP_MIN_LENGTH)
 			map = null;
 
-		layoutMapBackground = findViewById(R.id.layoutMapBackground);
-		Drawable currentMapDrawable = getCurrentMap(date);
-		layoutMapBackground.setBackground(currentMapDrawable);
-
 		mapWidth = map.getMapWidth();
 		mapHeight = map.getMapHeight();
 		mapLength = map.getMapLength();
 		active = map.getActiveCell();
 		lastActive = map.getLastActiveCell();
 
-		final boolean encounter = randomEncounter();
+		layoutMapBackground = findViewById(R.id.layoutMapBackground);
+		Drawable currentMapDrawable = getCurrentMap(date);
+		layoutMapBackground.setBackground(currentMapDrawable);
 
 		ImageButton btnLeft = findViewById(R.id.btnLeft);
 		btnLeft.setOnClickListener(new OnClickListener() {
@@ -118,32 +116,7 @@ public class ScreenSelectionActivity extends Activity {
 				if(active%mapWidth != 0){
 					map.setLastActiveCell(active);
 					map.setActiveCell(active-1);
-					if(map.isActiveCellCleared() && map.isActiveCellIsland()) {
-						enterVisitedIsland();
-					} else if (map.isActiveCellCleared() && !map.isActiveCellIsland()) {
-						// ScreenSelection activity
-						reloadSelection();
-					} else {
-						if (!map.isActiveCellIsland()) {
-							// Game activity
-							try {
-								MusicManager.getInstance().stopBackgroundMusic();
-							} catch(IllegalStateException e){
-								MusicManager.getInstance().resetPlayer();
-							}
-							MusicManager.getInstance(context, MusicManager.MUSIC_BATTLE).playBackgroundMusic();
-							startBattleGame();
-						} else {
-							// Shop activity
-							try {
-								MusicManager.getInstance().stopBackgroundMusic();
-							} catch(IllegalStateException e){
-								MusicManager.getInstance().resetPlayer();
-							}
-							MusicManager.getInstance(context, MusicManager.MUSIC_ISLAND).playBackgroundMusic();
-							enterRandomIsland();
-						}
-					}
+					processOption();
 				} else {
 					wrongWayMessage();
 				}
@@ -159,32 +132,7 @@ public class ScreenSelectionActivity extends Activity {
 				if(active-mapWidth>=0){
 					map.setLastActiveCell(active);
 					map.setActiveCell(active-mapWidth);
-					if(map.isActiveCellCleared() && map.isActiveCellIsland()) {
-						enterVisitedIsland();
-					} else if (map.isActiveCellCleared() && !map.isActiveCellIsland()) {
-						// ScreenSelection activity
-						reloadSelection();
-					} else {
-						if (!map.isActiveCellIsland()) {
-							// Game activity
-							try {
-								MusicManager.getInstance().stopBackgroundMusic();
-							} catch(IllegalStateException e){
-								MusicManager.getInstance().resetPlayer();
-							}
-							MusicManager.getInstance(context, MusicManager.MUSIC_BATTLE).playBackgroundMusic();
-							startBattleGame();
-						} else {
-							// Shop activity
-							try {
-								MusicManager.getInstance().stopBackgroundMusic();
-							} catch(IllegalStateException e){
-								MusicManager.getInstance().resetPlayer();
-							}
-							MusicManager.getInstance(context, MusicManager.MUSIC_ISLAND).playBackgroundMusic();
-							enterRandomIsland();
-						}
-					}
+					processOption();
 				} else {
 					wrongWayMessage();
 				}
@@ -200,32 +148,7 @@ public class ScreenSelectionActivity extends Activity {
 				if((active+1)%mapWidth != 0){
 					map.setLastActiveCell(active);
 					map.setActiveCell(active+1);
-					if(map.isActiveCellCleared() && map.isActiveCellIsland()) {
-						enterVisitedIsland();
-					} else if (map.isActiveCellCleared() && !map.isActiveCellIsland()) {
-						// ScreenSelection activity
-						reloadSelection();
-					} else {
-						if (!map.isActiveCellIsland()) {
-							// Game activity
-							try {
-								MusicManager.getInstance().stopBackgroundMusic();
-							} catch(IllegalStateException e){
-								MusicManager.getInstance().resetPlayer();
-							}
-							MusicManager.getInstance(context, MusicManager.MUSIC_BATTLE).playBackgroundMusic();
-							startBattleGame();
-						} else {
-							// Shop activity
-							try {
-								MusicManager.getInstance().stopBackgroundMusic();
-							} catch(IllegalStateException e){
-								MusicManager.getInstance().resetPlayer();
-							}
-							MusicManager.getInstance(context, MusicManager.MUSIC_ISLAND).playBackgroundMusic();
-							enterRandomIsland();
-						}
-					}
+					processOption();
 				} else {
 					wrongWayMessage();
 				}
@@ -241,32 +164,7 @@ public class ScreenSelectionActivity extends Activity {
 				if((active+mapWidth)<mapLength){
 					map.setLastActiveCell(active);
 					map.setActiveCell(active+mapWidth);
-					if(map.isActiveCellCleared() && map.isActiveCellIsland()) {
-						enterVisitedIsland();
-					} else if (map.isActiveCellCleared() && !map.isActiveCellIsland()) {
-						// ScreenSelection activity
-						reloadSelection();
-					} else {
-						if (!map.isActiveCellIsland()) {
-							// Game activity
-							try {
-								MusicManager.getInstance().stopBackgroundMusic();
-							} catch(IllegalStateException e){
-								MusicManager.getInstance().resetPlayer();
-							}
-							MusicManager.getInstance(context, MusicManager.MUSIC_BATTLE).playBackgroundMusic();
-							startBattleGame();
-						} else {
-							// Shop activity
-							try {
-								MusicManager.getInstance().stopBackgroundMusic();
-							} catch(IllegalStateException e){
-								MusicManager.getInstance().resetPlayer();
-							}
-							MusicManager.getInstance(context, MusicManager.MUSIC_ISLAND).playBackgroundMusic();
-							enterRandomIsland();
-						}
-					}
+					processOption();
 				} else {
 					wrongWayMessage();
 				}
@@ -289,6 +187,35 @@ public class ScreenSelectionActivity extends Activity {
 			ShipType newShipType = getBetterShipType(st);
 			ship.updateShipType(newShipType);
 			GameHelper.saveGameAtPreferences(context, p, ship, newMap);
+		}
+	}
+
+	private void processOption() {
+		if (map.isActiveCellCleared() && map.isActiveCellIsland()) {
+			enterVisitedIsland();
+		} else if (map.isActiveCellCleared() && !map.isActiveCellIsland()) {
+			// ScreenSelection activity
+			reloadSelection();
+		} else {
+			if (!map.isActiveCellIsland()) {
+				// Game activity
+				try {
+					MusicManager.getInstance().stopBackgroundMusic();
+				} catch (IllegalStateException e) {
+					MusicManager.getInstance().resetPlayer();
+				}
+				MusicManager.getInstance(context, MusicManager.MUSIC_BATTLE).playBackgroundMusic();
+				startBattleGame();
+			} else {
+				// Shop activity
+				try {
+					MusicManager.getInstance().stopBackgroundMusic();
+				} catch (IllegalStateException e) {
+					MusicManager.getInstance().resetPlayer();
+				}
+				MusicManager.getInstance(context, MusicManager.MUSIC_ISLAND).playBackgroundMusic();
+				enterRandomIsland();
+			}
 		}
 	}
 
@@ -429,8 +356,6 @@ public class ScreenSelectionActivity extends Activity {
 			}
 			if(active==i && s.contains("0")){		// Overlap edge image to easier identify of active cell
 				bmpContent[i] = DrawableHelper.overlapBitmaps(bmpContent[i], bmpActive);
-			} else if(lastActive == i){
-				bmpContent[i] = DrawableHelper.overlapBitmaps(bmpContent[i], bmpActive);
 			}
 		}
 
@@ -438,22 +363,6 @@ public class ScreenSelectionActivity extends Activity {
 		Resources res = this.getResources();
 
 		return new BitmapDrawable(res, bitmap);
-	}
-
-	/**
-	 * Method that generates a random value with rate depending on player's level
-	 * @return Should a player have to fight an enemy? true : false
-	 */
-	protected boolean randomEncounter() {
-		int playerLevel = 1;
-		if (p != null)
-			playerLevel = p.getLevel();
-
-		if(playerLevel == 0)
-			playerLevel = 1;
-
-		double logarythm = Math.log(playerLevel);
-		return logarythm % 2 == 0;
 	}
 
 	@Override

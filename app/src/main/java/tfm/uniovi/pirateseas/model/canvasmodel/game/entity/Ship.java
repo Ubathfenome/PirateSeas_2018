@@ -188,7 +188,7 @@ public class Ship extends Entity implements Parcelable{
      * @param ammoType Ammunition type
      */
 	public void gainAmmo(int ammo, Ammunitions ammoType){
-		if(ammo > 0){
+		if(ammo >= 0){
 			nAmmunitions[Ammunitions.valueOf(ammoType.getName()).ordinal()] += ammo;
 		} else
 			throw new IllegalArgumentException("Encontrado valor de puntos negativo al modificar mAmmunition");

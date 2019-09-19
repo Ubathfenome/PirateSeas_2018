@@ -400,6 +400,7 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 				}
 			});
 			builder.setView(view);
+			builder.setCancelable(false);
 
 			// Create the AlertDialog object and return it
 			return builder.create();

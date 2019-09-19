@@ -95,10 +95,9 @@ public class GameHelper {
 		
 		Point p = new Point(mPreferences.getInt(Constants.PREF_SHIP_COORDINATES_X, Constants.ZERO_INT), mPreferences.getInt(Constants.PREF_SHIP_COORDINATES_Y, Constants.ZERO_INT));
 
-		int ammo = mPreferences.getInt(Constants.PREF_SHIP_AMMUNITIONS, Constants.DEFAULT_PLAYER_SHIP_AMMO);
 		ShipType st = ShipType.values()[mPreferences.getInt(Constants.PREF_SHIP_TYPE, Constants.ZERO_INT)];
 		int hp = mPreferences.getInt(Constants.PREF_SHIP_HEALTH, st.defaultHealthPoints());
-		ship = new Ship(context, ship, st, p, DEFAULT_DIRECTION, DEFAULT_SHIP_LENGTH, hp, ammo);
+		ship = new Ship(context, ship, st, p, DEFAULT_DIRECTION, DEFAULT_SHIP_LENGTH, hp, Constants.ZERO_INT);
 		ship.setPlayable(true);
 		for(Ammunitions a : Ammunitions.values()){
 			ship.gainAmmo(mPreferences.getInt(a.getName(), Constants.ZERO_INT), a);
