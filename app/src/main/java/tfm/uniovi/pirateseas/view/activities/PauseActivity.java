@@ -65,12 +65,7 @@ public class PauseActivity extends Activity {
 		btnResume.setTypeface(customFont);
 		btnResume.setOnClickListener(new OnClickListener(){
 			public void onClick(View v){
-				try {
-					MusicManager.getInstance().stopBackgroundMusic();
-				} catch(IllegalStateException e){
-					MusicManager.getInstance().resetPlayer();
-				}
-				MusicManager.getInstance(context, MusicManager.MUSIC_BATTLE).playBackgroundMusic();
+				MusicManager.getInstance().changeSong(context, MusicManager.MUSIC_BATTLE);
 				finish();
 			}
 		});
@@ -144,13 +139,7 @@ public class PauseActivity extends Activity {
 			}
 		});
 
-		try {
-			MusicManager.getInstance().stopBackgroundMusic();
-		} catch(IllegalStateException e){
-			MusicManager.getInstance().resetPlayer();
-		}
-		MusicManager.getInstance(context, MusicManager.MUSIC_GAME_PAUSED).playBackgroundMusic();
-
+        MusicManager.getInstance().changeSong(context, MusicManager.MUSIC_GAME_PAUSED);
 		Log.d(TAG,"PauseActivity Ship H=" + pgrHealth.getProgress() + "/" + pgrHealth.getMax() + " P=" + pgrPower.getProgress() + "/" + pgrPower.getMax() + " R=" + pgrRange.getProgress() + "/" + pgrRange.getMax());
 
 	}
@@ -184,16 +173,12 @@ public class PauseActivity extends Activity {
 					// Exit
 					// Exit game. Return to main menu
 					Intent mainMenuIntent = new Intent(dummyActivity, MainMenuActivity.class);
-					try {
-						MusicManager.getInstance().stopBackgroundMusic();
-					} catch(IllegalStateException e){
-						MusicManager.getInstance().resetPlayer();
-					}
+
+					MusicManager.getInstance().changeSong(dummyActivity, MusicManager.MUSIC_GAME_MENU);
 
 					((PauseActivity)dummyActivity).nMap.setActiveCell(((PauseActivity)dummyActivity).nMap.getLastActiveCell());
 					GameHelper.saveGameAtPreferences(dummyActivity, ((PauseActivity)dummyActivity).nPlayer, ((PauseActivity)dummyActivity).nShip, ((PauseActivity)dummyActivity).nMap);
 
-					MusicManager.getInstance(dummyActivity, MusicManager.MUSIC_GAME_MENU).playBackgroundMusic();
 					mainMenuIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
 					startActivity(mainMenuIntent);
 					dummyActivity.finish();

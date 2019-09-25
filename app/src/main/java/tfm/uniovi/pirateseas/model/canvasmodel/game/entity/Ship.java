@@ -53,8 +53,7 @@ public class Ship extends Entity implements Parcelable{
         this.selectedAmmo = Ammunitions.DEFAULT;
 		this.selectedAmmoIndex = Ammunitions.valueOf(selectedAmmo.getName()).ordinal();
 	}
-	
-	@SuppressWarnings("deprecation")
+
 	@SuppressLint("NewApi")
     /*
      * Constructor for new ship receiving previous ship data
@@ -117,7 +116,6 @@ public class Ship extends Entity implements Parcelable{
 	}
 
 	@SuppressLint("NewApi")
-	@SuppressWarnings("deprecation")
     /*
      * Constructor for new ship based on a previous ship's data
      */
@@ -256,12 +254,14 @@ public class Ship extends Entity implements Parcelable{
 					nAmmunitions[selectedAmmoIndex]--;
 			} else {
 				// Crear constructor de disparos para disparos del barco enemigo
+				int originalXCoord = this.entityCoordinates.x;
 				int originalYCoord = this.entityCoordinates.y
-						+ entityLength / 2;
+						+ entityLength;
 				int finalYCoord = originalYCoord - (Constants.DEFAULT_SHIP_BASIC_RANGE * sType.rangeMultiplier());
-				finalYCoord = finalYCoord < 0 ? 0 : finalYCoord;
-				Point origin = new Point(this.entityCoordinates.x, originalYCoord);
-				Point destination = new Point(this.entityCoordinates.x, finalYCoord);
+				finalYCoord = finalYCoord < 0 ? Math.abs(finalYCoord) : finalYCoord;
+				Point origin = new Point(originalXCoord, originalYCoord);
+				Point destination = new Point(originalXCoord, finalYCoord);
+
 				// Set shot image coordinates within horizon bounds
 				cannonballVector = new Shot[1];
 				cannonballVector[0] = new Shot(context, x + halfShipWidth - halfShotWidth, y + mHeight + 10,

@@ -6,6 +6,7 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnPreparedListener;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import java.io.IOException;
@@ -204,6 +205,18 @@ public class MusicManager{
 		}
 	}
 
+	public void changeSong(@NonNull Context context, int newSongResource) {
+		activeSongResource = mSoundKeys.get(newSongResource);
+		if(activeSongResource == null)
+			return;
+		mBackgroundMusic.reset();
+		setState(MediaPlayerState.IDLE);
+		mBackgroundMusic = MediaPlayer.create(context, activeSongResource);
+		setState(MediaPlayerState.PREPARED);
+		mBackgroundMusic.start();
+		setState(MediaPlayerState.STARTED);
+	}
+
 	/**
 	 * Stops the selected song
 	 */
@@ -242,18 +255,9 @@ public class MusicManager{
 	 * Plays the selected sounds resource once
 	 * @param index Sound resource id
 	 */
-	public void playSound (int index) {		
-		int resourceId = mSoundKeys.get(index);		
-		mSoundPools.playSound(mContext, String.valueOf(index), resourceId, false);
-	}
-
-	/**
-	 * Plays the selected sounds resource in an infinite loop
-	 * @param index Sound resource id
-	 */
-	public void playSoundLoop (int index) {
-		int resourceId = mSoundKeys.get(index);
-		mSoundPools.playSound(mContext, String.valueOf(index), resourceId, true);
+	public void playSound (int index) {
+		Integer resourceId = mSoundKeys.get(index);
+		mSoundPools.playSound(mContext, String.valueOf(index), resourceId);
 	}
 
 	/**
@@ -283,6 +287,7 @@ public class MusicManager{
 		if(mBackgroundMusic!=null && Arrays.asList(ANY_VALID_STATE).contains(mInstance.mState) && !mBackgroundMusic.isPlaying()){
 			mBackgroundMusic.release();
 			setState(MediaPlayerState.END);
+			mSoundKeys.clear();
 		}
 	}
 
@@ -295,6 +300,10 @@ public class MusicManager{
 
     public boolean isLoaded() {
 		return mBackgroundMusic != null;
+	}
+
+	public boolean hasRegisteredSounds() {
+		return mSoundKeys!=null && !mSoundKeys.isEmpty();
 	}
 
 	private enum MediaPlayerState {

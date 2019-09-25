@@ -13,6 +13,7 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -181,6 +182,10 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 
 		loadGame();
 
+		// Reset the player's base ammunition for normal shots
+		nPlayerShip.setSelectedAmmunition(Constants.ZERO_INT);
+		nPlayerShip.gainAmmo(Constants.DEFAULT_PLAYER_SHIP_AMMO, Ammunitions.DEFAULT);
+
 		nGameTimestamp = 0;
 		nCheatCounter = 0;
 		nGameMode = Constants.GAMEMODE_IDLE;
@@ -240,7 +245,7 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 
 		for (int i = 0, size = nShotList.size(); i < size; i++) {
 			Shot s = nShotList.get(i);
-			if (s.isAlive() && s.isInBounds(0))
+			if (s.isAlive() && s.isInBounds(Constants.ZERO_INT))
 				s.drawOnScreen(canvas);
 		}
 
@@ -327,7 +332,6 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
                     String direction = pressedMotion(new Point(downX, downY), new Point(x, y));
                     Log.d(TAG, "Pressed motion had direction: " + direction);
                     int xDistance = Math.abs(x - downX);
-                    int yDistance = Math.abs(y - downY);
                     switch (direction) {
                         case Constants.FRONT:
                             nCheatCounter = 0;
@@ -371,11 +375,12 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
                             }
                             break;
                         case Constants.BACK:
-                            nCheatCounter++;
+							nCheatCounter++;
                             if (nCheatCounter % Constants.CHT_VALUE > 0)
                                 Log.v("Cheat", Constants.CHT_VALUE - (nCheatCounter % Constants.CHT_VALUE) + " more touches to go!");
                             if (nCheatCounter % Constants.CHT_VALUE == 0)
                                 grantCheat2Player();
+
                             break;
 						default:
 							throw new IllegalStateException("Unexpected value: " + direction);
@@ -520,9 +525,17 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 						nPlayer.addGold(90);
 					}
 
-					selectScreen();
+					try {
+						selectScreen();
+					} catch (IOException e) {
+						Log.e(TAG, e.getMessage());
+					}
 				} else {
-					selectScreen();
+					try {
+						selectScreen();
+					} catch (IOException e) {
+						Log.e(TAG, e.getMessage());
+					}
 				}
 
 				nGameMode = Constants.GAMEMODE_IDLE;
@@ -567,7 +580,6 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 
 		switch (nGameMode) {
 		case Constants.GAMEMODE_BATTLE:
-			break;
 		case Constants.GAMEMODE_ADVANCE:
 			break;
 		case Constants.GAMEMODE_IDLE:
@@ -603,7 +615,7 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 		if (nGameMode == Constants.GAMEMODE_BATTLE && size > 0) {
 			for (int i = 0; i < size; i++) {
 				Shot s = nShotList.get(i);
-				if (s.isAlive() && s.isInBounds(0)) {
+				if (s.isAlive() && s.isInBounds(Constants.ZERO_INT)) {
 					switch (s.getShotStatus()) {
 					case Constants.SHOT_FIRED:
 						if (nGameTimestamp - s.getTimestamp() >= SHOT_CHK_DELAY) {
@@ -656,7 +668,7 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 							s.looseHealth(s.getDamage());
 						break;
 					}
-				} else if(s.isAlive() && !s.isInBounds(0)){
+				} else if(s.isAlive() && !s.isInBounds(Constants.ZERO_INT)){
 					s.setShotStatus(Constants.SHOT_MISSED);
 				} else { // If Shot is dead
 				    nShotList.remove(s);
@@ -729,13 +741,8 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 	private void managePlayer() {
 		if (!nPlayerShip.isAlive()) {
 			// Display "Game Over" Screen with calculated score
-			try {
-				MusicManager.getInstance().stopBackgroundMusic();
-			} catch(IllegalStateException e){
-				MusicManager.getInstance().resetPlayer();
-			}
+			MusicManager.getInstance().changeSong(nContext, MusicManager.MUSIC_GAME_OVER);
 			nMap.setActiveCell(nMap.getLastActiveCell());
-			MusicManager.getInstance(nContext,MusicManager.MUSIC_GAME_OVER).playBackgroundMusic();
 			((GameActivity) nContext).gameOver(nPlayer, nMap);
 			nStatus = Constants.GAME_STATE_END;
 		}
@@ -773,12 +780,7 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 		if (!Constants.isInDebugMode(Constants.MODE))
 			Log.d(TAG, "Enemy spawned");
 		MusicManager.getInstance().playSound(MusicManager.SOUND_ENEMY_APPEAR);
-		try {
-			MusicManager.getInstance().stopBackgroundMusic();
-		} catch(IllegalStateException e){
-			MusicManager.getInstance().resetPlayer();
-		}
-		MusicManager.getInstance(nContext, MusicManager.MUSIC_BATTLE).playBackgroundMusic();
+		MusicManager.getInstance().changeSong(nContext, MusicManager.MUSIC_BATTLE);
 
 		ShipType sType = Ship.randomShipType();
 		nEnemyShipInitialXcoord = randomXSpawnValue((int) DrawableHelper.getWidth(getResources(), sType.drawableValue()));
@@ -803,7 +805,7 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 	 * Calls the ScreenSelection Activity
 	 * @throws SaveGameException Exception if an error happens while saving the game
 	 */
-	public void selectScreen() throws SaveGameException {
+	public void selectScreen() throws SaveGameException, IOException {
 		// ISSUE #8 (Fixed)
 		nMap.clearActiveMapCell();
 
@@ -818,12 +820,8 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 		Log.d(TAG, "Start ScreenSelection Intent");
 		nContext.startActivity(screenSelectionIntent);
 		nStatus = Constants.GAME_STATE_END;
-		try {
-			MusicManager.getInstance().stopBackgroundMusic();
-		} catch(IllegalStateException e){
-			MusicManager.getInstance().resetPlayer();
-		}
-		MusicManager.getInstance(nContext, MusicManager.MUSIC_GAME_MENU).playBackgroundMusic();
+
+		MusicManager.getInstance().changeSong(nContext, MusicManager.MUSIC_GAME_MENU);
 	}
 
 	/**

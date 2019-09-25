@@ -15,7 +15,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Point;
 import android.graphics.Typeface;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -148,8 +147,12 @@ public class MainMenuActivity extends Activity {
 			}
 		});
 
-		AsyncTask<Void, Integer, Boolean> loadSoundsTask = new LoadSounds(this);
-		loadSoundsTask.execute();
+		if(!MusicManager.getInstance().hasRegisteredSounds()) {
+            AsyncTask<Void, Integer, Boolean> loadSoundsTask = new LoadSounds(this);
+            loadSoundsTask.execute();
+        } else {
+		    MusicManager.getInstance().changeSong(this, MusicManager.MUSIC_GAME_MENU);
+        }
 	}
 
 	/**
@@ -206,7 +209,9 @@ public class MainMenuActivity extends Activity {
 		// @see: https://stackoverflow.com/questions/32083913/android-gps-requires-access-fine-location-error-even-though-my-manifest-file
 		// @see: https://stackoverflow.com/questions/32266425/android-6-0-permission-denial-requires-permission-android-permission-write-sett
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+			/*
 			if (!Settings.System.canWrite(context)) {
+
 				if(!hasPermission(INITIAL_PERMS[0])) {
 					Intent intent = new Intent(android.provider.Settings.ACTION_MANAGE_WRITE_SETTINGS);
 					intent.setData(Uri.parse("package:" + this.getPackageName()));
@@ -214,6 +219,7 @@ public class MainMenuActivity extends Activity {
 					startActivityForResult(intent, Constants.REQUEST_PERMISSIONS);
 				}
 			}
+		    */
 			loadSettings();
 		}
 	}
@@ -317,27 +323,13 @@ public class MainMenuActivity extends Activity {
 		}
 	}
 
-	@Override
-	protected void onPause() {
-		try {
-			MusicManager.getInstance().pauseBackgroundMusic();
-		} catch(IllegalStateException e){
-			MusicManager.getInstance().resetPlayer();
-		}
-		super.onPause();
-	}
+    @Override
+    protected void onUserLeaveHint() {
+        MusicManager.getInstance().releaseResources();
+        super.onUserLeaveHint();
+    }
 
-	@Override
-	protected void onStop() {
-		try {
-			MusicManager.getInstance().stopBackgroundMusic();
-		} catch(IllegalStateException e){
-			MusicManager.getInstance().resetPlayer();
-		}
-		super.onStop();
-	}
-
-	@Override
+    @Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		switch (requestCode) {
 			case Constants.REQUEST_SENSOR_LIST:
@@ -443,19 +435,6 @@ public class MainMenuActivity extends Activity {
 		LoadSounds(Context c) {
 			context = c;
 		}
-
-        @Override
-        protected void onPreExecute() {
-            try {
-                MusicManager.getInstance().stopBackgroundMusic();
-            } catch (IllegalStateException e) {
-            	try {
-					MusicManager.getInstance().resetPlayer();
-				} catch (IllegalStateException ex){
-            		Log.e(TAG, "MusicManager has not the resources yet/anymore");
-				}
-            }
-        }
 
         @Override
 		protected Boolean doInBackground(Void... arg0) {

@@ -62,31 +62,29 @@ public class SoundPools {
 
 	/**
 	 * Play the selected sound
-	 * @param context
+	 * @param context The Context
 	 * @param soundId   Sound resource
 	 * @param id	Sound tag id
-	 * @param loopSound	Whether the sound should play on a loop or not
 	 */
-	public void playSound(Context context, String soundId, int id, boolean loopSound) {
-		int loop = loopSound?1:0;
+	void playSound(Context context, String soundId, Integer id) {
 		Log.d(TAG, "SouldPools play sound " + soundId);
 		try {
 			for (SoundPoolContainer container : containers) {
 				if (container.contains(soundId)) {
-					container.play(context, soundId, id, loop);
+					container.play(context, soundId, id);
 					return;
 				}
 			}
 			for (SoundPoolContainer container : containers) {
 				if (!container.isFull()) {
-					container.play(context, soundId, id, loop);
+					container.play(context, soundId, id);
 					return;
 				}
 			}
 			SoundPoolContainer container = new SoundPoolContainer();
 			containers.add(container);
 
-			container.play(context, soundId, id, loop);
+			container.play(context, soundId, id);
 		} catch (Exception e) {
 			Log.w(TAG, "Play sound error for id:" + soundId, e);
 		}
@@ -158,17 +156,16 @@ public class SoundPools {
 
 		/**
 		 * Play the selected sound
-		 * @param context
+		 * @param context The context
 		 * @param sound	Sound tag id
 		 * @param id	Sound resource id
-		 * @param loop	Whether the sound should be played on loop or not
 		 */
-		public void play(Context context, String sound, int id, int loop) {
+		void play(Context context, String sound, Integer id) {
 			android.media.AudioManager audioManager = (android.media.AudioManager) context
 					.getSystemService(Context.AUDIO_SERVICE);
 			final int streamVolume = audioManager
 					.getStreamVolume(android.media.AudioManager.STREAM_MUSIC);
-			Integer soundId = soundMap.get(id);
+			Integer soundId = soundMap.get(sound);
 			if (soundId == null) {
 				soundPool
 						.setOnLoadCompleteListener(new SoundPool.OnLoadCompleteListener() {
@@ -193,18 +190,19 @@ public class SoundPools {
 
 		/**
 		 * Check if the pool contains the selected sound
-		 * @param id
-		 * @return
+		 * @param id the sound id
+		 * @return whether the sound is registered on the soundMap or not
 		 */
-		public boolean contains(String id) {
+		boolean contains(String id) {
 			return soundMap.containsKey(id);
 		}
 
 		/**
 		 * Checks if the pool is full
-		 * @return
+		 * @return Whether the sound poll is full or not
 		 */
-		public boolean isFull() {
+		@SuppressWarnings("BooleanMethodIsAlwaysInverted")
+		boolean isFull() {
 			return this.size.get() >= MAX_STREAMS_PER_POOL;
 		}
 

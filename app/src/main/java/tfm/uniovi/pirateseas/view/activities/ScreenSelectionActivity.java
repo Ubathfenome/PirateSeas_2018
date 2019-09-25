@@ -97,15 +97,15 @@ public class ScreenSelectionActivity extends Activity {
 		if(map.getMapLength() == Constants.MAP_MIN_LENGTH)
 			map = null;
 
+		layoutMapBackground = findViewById(R.id.layoutMapBackground);
+		Drawable currentMapDrawable = getCurrentMap(date);
+		layoutMapBackground.setBackground(currentMapDrawable);
+
 		mapWidth = map.getMapWidth();
 		mapHeight = map.getMapHeight();
 		mapLength = map.getMapLength();
 		active = map.getActiveCell();
 		lastActive = map.getLastActiveCell();
-
-		layoutMapBackground = findViewById(R.id.layoutMapBackground);
-		Drawable currentMapDrawable = getCurrentMap(date);
-		layoutMapBackground.setBackground(currentMapDrawable);
 
 		ImageButton btnLeft = findViewById(R.id.btnLeft);
 		btnLeft.setOnClickListener(new OnClickListener() {
@@ -199,22 +199,12 @@ public class ScreenSelectionActivity extends Activity {
 		} else {
 			if (!map.isActiveCellIsland()) {
 				// Game activity
-				try {
-					MusicManager.getInstance().stopBackgroundMusic();
-				} catch (IllegalStateException e) {
-					MusicManager.getInstance().resetPlayer();
-				}
-				MusicManager.getInstance(context, MusicManager.MUSIC_BATTLE).playBackgroundMusic();
-				startBattleGame();
+				MusicManager.getInstance().changeSong(context, MusicManager.MUSIC_BATTLE);
+                startBattleGame();
 			} else {
 				// Shop activity
-				try {
-					MusicManager.getInstance().stopBackgroundMusic();
-				} catch (IllegalStateException e) {
-					MusicManager.getInstance().resetPlayer();
-				}
-				MusicManager.getInstance(context, MusicManager.MUSIC_ISLAND).playBackgroundMusic();
-				enterRandomIsland();
+				MusicManager.getInstance().changeSong(context, MusicManager.MUSIC_ISLAND);
+                enterRandomIsland();
 			}
 		}
 	}
@@ -428,13 +418,10 @@ public class ScreenSelectionActivity extends Activity {
 					// Exit
 					Log.d(TAG,"Finish ScreenSelection Activity");
 					Intent mainMenuIntent = new Intent(dummyActivity, MainMenuActivity.class);
-					try {
-						MusicManager.getInstance().stopBackgroundMusic();
-					} catch(IllegalStateException e){
-						MusicManager.getInstance().resetPlayer();
-					}
-					MusicManager.getInstance(dummyActivity, MusicManager.MUSIC_GAME_MENU).playBackgroundMusic();
-					mainMenuIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+					MusicManager.getInstance().changeSong(dummyActivity, MusicManager.MUSIC_GAME_MENU);
+
+                    mainMenuIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
 					startActivity(mainMenuIntent);
 					dummyActivity.finish();
 				}
