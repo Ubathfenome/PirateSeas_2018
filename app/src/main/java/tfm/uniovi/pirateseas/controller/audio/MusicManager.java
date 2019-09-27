@@ -184,6 +184,14 @@ public class MusicManager{
 					try {
 						if(Arrays.asList(START_VALID_STATES).contains(mInstance.mState)) {
 							mBackgroundMusic.start();
+							mBackgroundMusic.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+								@Override
+								public void onCompletion(MediaPlayer mediaPlayer) {
+									setState(MediaPlayerState.COMPLETED);
+									mediaPlayer.start();
+									setState(MediaPlayerState.STARTED);
+								}
+							});
 							setState(MediaPlayerState.STARTED);
 						}
 					} catch (IllegalStateException e){
@@ -214,6 +222,14 @@ public class MusicManager{
 		mBackgroundMusic = MediaPlayer.create(context, activeSongResource);
 		setState(MediaPlayerState.PREPARED);
 		mBackgroundMusic.start();
+		mBackgroundMusic.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+			@Override
+			public void onCompletion(MediaPlayer mediaPlayer) {
+				setState(MediaPlayerState.COMPLETED);
+				mediaPlayer.start();
+				setState(MediaPlayerState.STARTED);
+			}
+		});
 		setState(MediaPlayerState.STARTED);
 	}
 

@@ -142,7 +142,6 @@ public class MainMenuActivity extends Activity {
 		btnExit.setTypeface(customFont);
 		btnExit.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-				MusicManager.getInstance().releaseResources();
 				finish();
 			}
 		});
@@ -322,12 +321,6 @@ public class MainMenuActivity extends Activity {
 			mOverwriteWarning = true;
 		}
 	}
-
-    @Override
-    protected void onUserLeaveHint() {
-        MusicManager.getInstance().releaseResources();
-        super.onUserLeaveHint();
-    }
 
     @Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {

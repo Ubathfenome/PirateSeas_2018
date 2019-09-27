@@ -28,7 +28,7 @@ public class Map implements Parcelable{
     private String[] mapContent;
 
     /**
-     * Map class contructor
+     * Map class constructor
      * @param date Actual system date. Received to generate the Random seed
      * @param height Number of vertical cells that fit correctly on the device
      * @param width Number of horizontal cell that fit correctly on the screen

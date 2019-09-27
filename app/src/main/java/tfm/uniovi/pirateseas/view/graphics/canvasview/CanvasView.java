@@ -268,7 +268,7 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 		nScreenHeight = height;
 		mScreenHeight = height;
 		nPixelsWidth = width / Constants.MAX_ENTITY_WIDTH;
-		nPixelsHeight = (height / Constants.MAX_ENTITY_HEIGHT) / Constants.FLYING_TIME_MULTIPLIER;
+		nPixelsHeight = Constants.SHOT_SPEED; //(height / Constants.MAX_ENTITY_HEIGHT) / Constants.FLYING_TIME_MULTIPLIER;
 		Log.d(TAG, "Surface changed");
 	}
 
@@ -903,5 +903,9 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 	 */
 	public void setMessageReaded(boolean readed){
 		messageReaded = readed;
+	}
+
+	public boolean getShipControlMode() {
+		return nShipControlMode;
 	}
 }

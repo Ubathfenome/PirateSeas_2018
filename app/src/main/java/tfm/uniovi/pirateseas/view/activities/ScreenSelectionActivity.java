@@ -94,8 +94,12 @@ public class ScreenSelectionActivity extends Activity {
 		ship = GameHelper.helperShip;
 		map = GameHelper.helperMap;
 
-		if(map.getMapLength() == Constants.MAP_MIN_LENGTH)
-			map = null;
+		if(map.getMapLength() == Constants.MAP_MIN_LENGTH) {
+            map = null;
+        } else {
+            active = map.getActiveCell();
+            lastActive = map.getLastActiveCell();
+        }
 
 		layoutMapBackground = findViewById(R.id.layoutMapBackground);
 		Drawable currentMapDrawable = getCurrentMap(date);
@@ -104,8 +108,6 @@ public class ScreenSelectionActivity extends Activity {
 		mapWidth = map.getMapWidth();
 		mapHeight = map.getMapHeight();
 		mapLength = map.getMapLength();
-		active = map.getActiveCell();
-		lastActive = map.getLastActiveCell();
 
 		ImageButton btnLeft = findViewById(R.id.btnLeft);
 		btnLeft.setOnClickListener(new OnClickListener() {

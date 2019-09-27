@@ -6,7 +6,6 @@ import android.content.Context;
  * Class to set all project's global variables
  */
 public class Constants{
-
     // Modes
 	private static final int MODE_DEBUG = 0x0;
 	@SuppressWarnings("unused")
@@ -91,6 +90,7 @@ public class Constants{
 	public static final double NANOS_TO_SECONDS = Math.pow(10, -9);
 
 	public static final int FLYING_TIME_MULTIPLIER = 8;
+	public static final int SHOT_SPEED = 15;
 
     public static final int SHAKE_LIMIT = 2;
     public static final int TUTORIAL_NUM_PAGES = 8;

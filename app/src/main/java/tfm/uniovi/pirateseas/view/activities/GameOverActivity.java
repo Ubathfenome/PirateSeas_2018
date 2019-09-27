@@ -72,26 +72,6 @@ public class GameOverActivity extends Activity {
 		super.onResume();
 	}
 
-	@Override
-	protected void onPause() {
-		try {
-			MusicManager.getInstance().pauseBackgroundMusic();
-		} catch(IllegalStateException e){
-			MusicManager.getInstance().resetPlayer();
-		}
-		super.onPause();
-	}
-
-	@Override
-	protected void onStop() {
-		try {
-			MusicManager.getInstance().stopBackgroundMusic();
-		} catch(IllegalStateException e){
-			MusicManager.getInstance().resetPlayer();
-		}
-		super.onStop();
-	}
-
 	// OnTouch
 	@SuppressLint("NewApi")
 	//: DESTROY EVERYTHING!! Muahahaha!! >:D
@@ -102,11 +82,7 @@ public class GameOverActivity extends Activity {
 			Transition mFadeTransition = new Fade();
 			TransitionManager.beginDelayedTransition((ViewGroup) findViewById(R.id.rootLayoutGameOver), mFadeTransition);
 
-			try {
-				MusicManager.getInstance().stopBackgroundMusic();
-			} catch(IllegalStateException e){
-				MusicManager.getInstance().resetPlayer();
-			}
+			MusicManager.getInstance().changeSong(this, MusicManager.MUSIC_GAME_MENU);
 			
 			Intent newGameTaskIntent = new Intent(this, MainMenuActivity.class);
 			newGameTaskIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);

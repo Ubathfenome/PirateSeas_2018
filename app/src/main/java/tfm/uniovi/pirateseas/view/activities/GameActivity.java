@@ -307,6 +307,7 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 
 		// Reload saved settings in preferences
 		mCanvasView.nUpdateThread.getCanvasViewInstance().loadSettings();
+		shipControlMode = mCanvasView.nUpdateThread.getCanvasViewInstance().getShipControlMode();
 
 		if(!MusicManager.getInstance().isPlaying())
 			MusicManager.getInstance().playBackgroundMusic();
