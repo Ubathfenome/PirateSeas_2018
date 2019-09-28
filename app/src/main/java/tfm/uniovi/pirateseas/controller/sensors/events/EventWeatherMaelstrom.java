@@ -1,10 +1,12 @@
 package tfm.uniovi.pirateseas.controller.sensors.events;
 
+import android.util.Log;
+
 import tfm.uniovi.pirateseas.controller.sensors.SensorType;
 
 @SuppressWarnings("unused")
-/**
- * Event to generate the maelstorm that damages every ship on the screen
+/*
+  Event to generate the maelstorm that damages every ship on the screen
  */
 public class EventWeatherMaelstrom extends AppSensorEvent{
 	private static final String TAG = "EventWeatherMaelstrom";
@@ -18,7 +20,7 @@ public class EventWeatherMaelstrom extends AppSensorEvent{
 	/**
 	 * Establish event effects on sensor trigger
  	 */
-	public static boolean generateMaelstrom(float ySpeed, float zSpeed){
+	public static boolean generateMaelstrom(float ySpeed){
 		/*
 		double gHypot = Math.sqrt(ySpeed*ySpeed + zSpeed*zSpeed);
 		
@@ -26,6 +28,8 @@ public class EventWeatherMaelstrom extends AppSensorEvent{
 
         return Math.abs(gHypot - AVERAGE) >= THRESHOLD;
 		*/
+
+		Log.d(TAG, "ySpeed: " + ySpeed + " (" + THRESHOLD + ")");
 
 		return Math.abs(ySpeed) >= THRESHOLD;
     }

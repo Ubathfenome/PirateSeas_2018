@@ -401,7 +401,6 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 				}
 			});
 			builder.setView(view);
-			builder.setCancelable(false);
 
 			// Create the AlertDialog object and return it
 			return builder.create();
@@ -432,9 +431,9 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 					double angleY = Math.toDegrees(Math.asin (axisSpeedY / SensorManager.GRAVITY_EARTH));
 					double angleZ = Math.toDegrees(Math.asin (axisSpeedZ / SensorManager.GRAVITY_EARTH));
 
-					// Log.d(TAG, "TYPE_ACCELEROMETER: Acc:angle = "+axisSpeedX+":"+angleX+"º / "+axisSpeedY+":"+angleY+"º / "+axisSpeedZ+":"+angleZ+"º	");
+					Log.d(TAG, "TYPE_ACCELEROMETER: Acc:angle = "+axisSpeedX+":"+angleX+"º / "+axisSpeedY+":"+angleY+"º / "+axisSpeedZ+":"+angleZ+"º	");
 					// Event
-					if (EventWeatherMaelstrom.generateMaelstrom(axisSpeedY, axisSpeedZ)) {
+					if (EventWeatherMaelstrom.generateMaelstrom(axisSpeedY)) {
 						// Notify CanvasView to damage the ships
 						if (cView.getGamemode() == Constants.GAMEMODE_BATTLE) {
 							showText("Maelstorm inbound!");
@@ -687,7 +686,7 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 		Intent gameOverIntent = new Intent(this, GameOverActivity.class);
 		// Parcelable Extra with Player object content
 		gameOverIntent.putExtra(Constants.TAG_GAME_OVER_PLAYER, Player.clonePlayer(nPlayer));
-		gameOverIntent.putExtra(Constants.TAG_GAME_OVER_MAP, map.getClearedCells());
+		gameOverIntent.putExtra(Constants.TAG_GAME_OVER_MAP, map.getClearedMaps() * map.getMapLength() + map.getClearedCells());
 		Log.d(TAG, "Start GameOver Intent");
 		this.startActivity(gameOverIntent);
 		shutdownGame();
@@ -723,6 +722,7 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 		args.putInt(Constants.ARG_GOLD, gold);
 		args.putInt(Constants.ARG_XP, xp);
 		enemyDefeatedDialog.setArguments(args);
+		enemyDefeatedDialog.setCancelable(false);
 		enemyDefeatedDialog.show(getFragmentManager(), "EnemyDefeatedDialog");
 	}
 

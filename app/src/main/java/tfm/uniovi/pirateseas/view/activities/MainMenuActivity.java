@@ -32,11 +32,16 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.Date;
 import java.util.Locale;
 
 import tfm.uniovi.pirateseas.R;
+import tfm.uniovi.pirateseas.controller.androidGameAPI.Map;
+import tfm.uniovi.pirateseas.controller.androidGameAPI.Player;
 import tfm.uniovi.pirateseas.controller.audio.MusicManager;
 import tfm.uniovi.pirateseas.global.Constants;
+import tfm.uniovi.pirateseas.model.canvasmodel.game.entity.Ship;
+import tfm.uniovi.pirateseas.utils.persistence.GameHelper;
 
 /**
  * Main menu activity
@@ -45,6 +50,7 @@ public class MainMenuActivity extends Activity {
 
 	private static final String TAG = "MainMenuActivity";
 	private boolean newGame = false;
+	private boolean firstGame = false;
 	private boolean mOverwriteWarning = false;
 	private int mMode;
 
@@ -108,7 +114,9 @@ public class MainMenuActivity extends Activity {
 		btnTutorial.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				launchGame(true, null);
+				Intent tutorialIntent = new Intent(context, TutorialActivity.class);
+				tutorialIntent.putExtra(Constants.TAG_LOAD_GAME, true);
+				startActivity(tutorialIntent);
 			}
 		});
 
@@ -170,10 +178,19 @@ public class MainMenuActivity extends Activity {
 			startActivity(screenIntent);
 		} else {
 			//	New game
-			Intent tutorialIntent = new Intent(context, TutorialActivity.class);
-			tutorialIntent.putExtra(Constants.TAG_SENSOR_LIST, sensorTypes);
-			tutorialIntent.putExtra(Constants.TAG_LOAD_GAME, true);
-			startActivity(tutorialIntent);
+			if(firstGame) {
+				Intent tutorialIntent = new Intent(context, TutorialActivity.class);
+				tutorialIntent.putExtra(Constants.TAG_SENSOR_LIST, sensorTypes);
+				tutorialIntent.putExtra(Constants.TAG_LOAD_GAME, true);
+				startActivity(tutorialIntent);
+			} else {
+				Intent gameIntent = new Intent(context, ScreenSelectionActivity.class);
+				gameIntent.putExtra(Constants.TAG_SENSOR_LIST, sensorTypes);
+				gameIntent.putExtra(Constants.TAG_LOAD_GAME, displayTutorial);
+				gameIntent.putExtra(Constants.TAG_SCREEN_SELECTION_MAP_HEIGHT, calculateMapHeight());
+				gameIntent.putExtra(Constants.TAG_SCREEN_SELECTION_MAP_WIDTH, calculateMapWidth());
+				startActivity(gameIntent);
+			}
 		}
 	}
 
@@ -233,16 +250,21 @@ public class MainMenuActivity extends Activity {
 		int oldAppVersion = mPreferences.getInt(Constants.APP_VERSION, 0);
 		if (oldAppVersion < currentAppVersionCode) {
 			try {
-				if (oldAppVersion > 0)
+				if (oldAppVersion > 0) {
 					Toast.makeText(this, String.format(Locale.ENGLISH, "App updated from version %d", oldAppVersion), Toast.LENGTH_SHORT).show();
-				else
+				} else {
+					firstGame = true;
 					requestPermissionsFirstTime();
-				//Toast.makeText(this, String.format("App started for the first time", oldAppVersion), Toast.LENGTH_SHORT).show();
+					//Toast.makeText(this, String.format("App started for the first time", oldAppVersion), Toast.LENGTH_SHORT).show();
+				}
+
 			} finally {
 				SharedPreferences.Editor preferencesEditor = mPreferences.edit();
 				preferencesEditor.putInt(Constants.APP_VERSION, currentAppVersionCode);
 				preferencesEditor.apply();
 			}
+		} else {
+			loadSettings();
 		}
 	}
 
@@ -313,7 +335,10 @@ public class MainMenuActivity extends Activity {
 					Settings.System.SCREEN_BRIGHTNESS_MODE_AUTOMATIC);
 		}
 
-		if (mPreferences.getLong(Constants.PREF_PLAYER_TIMESTAMP, 0) == 0) {
+		GameHelper.loadGameAtPreferences(this, new Player(), new Ship(), new Map(new Date(), 1, 1));
+		Map helperMap = GameHelper.helperMap;
+
+		if(helperMap.getMapLength() == Constants.MAP_MIN_LENGTH) {
 			btnLoadGame.setEnabled(false);
 			mOverwriteWarning = false;
 		} else {

@@ -13,7 +13,6 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -525,17 +524,9 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 						nPlayer.addGold(90);
 					}
 
-					try {
-						selectScreen();
-					} catch (IOException e) {
-						Log.e(TAG, e.getMessage());
-					}
+					selectScreen();
 				} else {
-					try {
-						selectScreen();
-					} catch (IOException e) {
-						Log.e(TAG, e.getMessage());
-					}
+				    selectScreen();
 				}
 
 				nGameMode = Constants.GAMEMODE_IDLE;
@@ -600,7 +591,7 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 	/**
 	 * Manages entities
 	 */
-	private void manageEntities() {
+	private void manageEntities() throws SaveGameException {
 		managePlayer();
 		manageEnemies();
 		manageShots();
@@ -738,12 +729,13 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 	/**
 	 * manage player
 	 */
-	private void managePlayer() {
+	private void managePlayer() throws SaveGameException {
 		if (!nPlayerShip.isAlive()) {
 			// Display "Game Over" Screen with calculated score
 			MusicManager.getInstance().changeSong(nContext, MusicManager.MUSIC_GAME_OVER);
 			nMap.setActiveCell(nMap.getLastActiveCell());
-			((GameActivity) nContext).gameOver(nPlayer, nMap);
+			saveGame();
+            ((GameActivity) nContext).gameOver(nPlayer, nMap);
 			nStatus = Constants.GAME_STATE_END;
 		}
 	}
@@ -805,7 +797,7 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 	 * Calls the ScreenSelection Activity
 	 * @throws SaveGameException Exception if an error happens while saving the game
 	 */
-	public void selectScreen() throws SaveGameException, IOException {
+	public void selectScreen() throws SaveGameException {
 		// ISSUE #8 (Fixed)
 		nMap.clearActiveMapCell();
 

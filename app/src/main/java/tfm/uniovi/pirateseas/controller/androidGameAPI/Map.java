@@ -27,6 +27,8 @@ public class Map implements Parcelable{
     private int mapLength;
     private String[] mapContent;
 
+    private int clearedMaps;
+
     /**
      * Map class constructor
      * @param date Actual system date. Received to generate the Random seed
@@ -41,6 +43,7 @@ public class Map implements Parcelable{
         mapContent = generateContent(mapSeed);
         activeMapCell = 0;
         lastActiveMapCell = 0;
+        clearedMaps = 0;
     }
 
     /**
@@ -55,6 +58,7 @@ public class Map implements Parcelable{
         this.mapWidth = source.readInt();
         this.mapLength = mapHeight * mapWidth;
         this.mapContent = source.createStringArray();
+        this.clearedMaps = source.readInt();
         // source.readStringArray(mapContent);
     }
 
@@ -266,7 +270,7 @@ public class Map implements Parcelable{
         int clearedCells = 0;
         for(int i = 0; i < mapLength; i++){
             String cell = mapContent[i];
-            if(cell.endsWith("1")){
+            if(cell.endsWith("0")){
                 clearedCells++;
             }
         }
@@ -286,6 +290,14 @@ public class Map implements Parcelable{
             }
         }
         return true;
+    }
+
+    public void setClearedMaps(int clearedMaps){
+        this.clearedMaps = clearedMaps;
+    }
+
+    public int getClearedMaps(){
+        return clearedMaps;
     }
 
     /**
@@ -308,6 +320,7 @@ public class Map implements Parcelable{
         out.writeInt(this.mapHeight);
         out.writeInt(this.mapWidth);
         out.writeStringArray(this.mapContent);
+        out.writeInt(this.clearedMaps);
     }
 
     /**

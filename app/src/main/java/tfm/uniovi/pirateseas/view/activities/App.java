@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Application;
 import android.app.Application.ActivityLifecycleCallbacks;
 import android.os.Bundle;
+import android.widget.Toast;
 
 public class App extends Application implements ActivityLifecycleCallbacks {
 
@@ -25,7 +26,8 @@ public class App extends Application implements ActivityLifecycleCallbacks {
     public void onActivityStarted(Activity activity) {
         if (++activityReferences == 1 && !isActivityChangingConfigurations) {
             // App enters foreground
-            //MusicManager.getInstance(activity).playBackgroundMusic();
+            // MusicManager.getInstance(activity).playBackgroundMusic();
+            Toast.makeText(activity, "Activity on Foreground!", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -44,7 +46,8 @@ public class App extends Application implements ActivityLifecycleCallbacks {
         isActivityChangingConfigurations = activity.isChangingConfigurations();
         if (--activityReferences == 0 && !isActivityChangingConfigurations) {
             // App enters background
-            //MusicManager.getInstance(activity).releaseResources();
+            // MusicManager.getInstance(activity).releaseResources();
+            Toast.makeText(activity, "Activity on Background!", Toast.LENGTH_SHORT).show();
         }
     }
 

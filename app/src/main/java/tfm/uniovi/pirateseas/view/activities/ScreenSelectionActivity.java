@@ -62,6 +62,7 @@ public class ScreenSelectionActivity extends Activity {
 	int mapLength;
 	int active;
 	int lastActive;
+	int clearedMaps;
 
 	int[] sensorTypes = null;
 	boolean loadGame;
@@ -108,6 +109,7 @@ public class ScreenSelectionActivity extends Activity {
 		mapWidth = map.getMapWidth();
 		mapHeight = map.getMapHeight();
 		mapLength = map.getMapLength();
+		clearedMaps = 0;
 
 		ImageButton btnLeft = findViewById(R.id.btnLeft);
 		btnLeft.setOnClickListener(new OnClickListener() {
@@ -183,7 +185,9 @@ public class ScreenSelectionActivity extends Activity {
 		if(map.isAllClear()){
 			// Map completed! Clear map from preferences and start new map
 			Toast.makeText(context, getString(R.string.message_mapcompleted), Toast.LENGTH_LONG).show();
+			clearedMaps++;
 			Map newMap = new Map(new Date(), Constants.MAP_MIN_HEIGHT, Constants.MAP_MIN_WIDTH);
+			newMap.setClearedMaps(clearedMaps);
 			// Create new and better PlayerShip?
 			ShipType st = ship.getShipType();
 			ShipType newShipType = getBetterShipType(st);

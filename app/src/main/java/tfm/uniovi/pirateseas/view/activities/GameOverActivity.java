@@ -57,7 +57,7 @@ public class GameOverActivity extends Activity {
 		if(score == 0)
 			score = p.getExperience() + p.getGold();
 		
-		txtDays.setText(getString(R.string.generic_number,clearedMapCells));
+		txtDays.setText(getString(R.string.generic_number, clearedMapCells));
 		txtScore.setText(getString(R.string.generic_number,score));
 	}
 
