@@ -97,12 +97,21 @@
 
 		    <Button 
 		        style="?android:attr/buttonBarButtonStyle"
-		        android:id="@+id/btnBarNext"
+		        android:id="@+id/btnBarFinish"
 		        android:layout_width="wrap_content"
 	    		android:layout_height="wrap_content"
 	    		android:text="@string/action_finish"
 	    		android:background="@drawable/xml_btn_style"
 	    		android:gravity="center_horizontal" />
+
+			<Button
+				style="?android:attr/buttonBarButtonStyle"
+				android:id="@+id/btnBarNext"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="@string/action_finish"
+				android:background="@drawable/xml_btn_style"
+				android:gravity="center_horizontal" />
 		    
 		</LinearLayout>
 		
