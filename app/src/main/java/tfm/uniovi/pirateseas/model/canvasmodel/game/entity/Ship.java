@@ -258,7 +258,7 @@ public class Ship extends Entity implements Parcelable{
 				int originalYCoord = this.entityCoordinates.y
 						+ entityLength;
 				int finalYCoord = originalYCoord - (Constants.DEFAULT_SHIP_BASIC_RANGE * sType.rangeMultiplier());
-				finalYCoord = finalYCoord < 0 ? 1 : finalYCoord;
+				finalYCoord = finalYCoord < 0 ? (originalYCoord - finalYCoord) : finalYCoord;
 				Point origin = new Point(originalXCoord, originalYCoord);
 				Point destination = new Point(originalXCoord, finalYCoord);
 
