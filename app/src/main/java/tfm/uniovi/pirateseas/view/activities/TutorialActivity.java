@@ -61,17 +61,27 @@ public class TutorialActivity extends FragmentActivity {
 		PagerAdapter mPagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
         mPager.setAdapter(mPagerAdapter);
         mPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
-			int tmpPosition = 0;
+			int currentPosition = Constants.ZERO_INT;
+			int currentState = ViewPager.SCROLL_STATE_IDLE;
 			
             @Override
             public void onPageSelected(int position) {
-				tmpPosition = position;
+				currentPosition = position;
             }
-			
+
+			@Override
+			public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+				super.onPageScrolled(position, positionOffset, positionOffsetPixels);
+				if (position == Constants.TUTORIAL_NUM_PAGES - 1 && positionOffsetPixels == Constants.ZERO_INT && currentState == ViewPager.SCROLL_STATE_DRAGGING)
+					currentPosition = Constants.TUTORIAL_NUM_PAGES;
+
+			}
+
 			@Override
 			public void onPageScrollStateChanged(int state){
-				if (state == ViewPager.SCROLL_STATE_DRAGGING && tmpPosition == (Constants.TUTORIAL_NUM_PAGES - 1))
+				if (currentPosition == Constants.TUTORIAL_NUM_PAGES && currentState == ViewPager.SCROLL_STATE_DRAGGING && state == ViewPager.SCROLL_STATE_IDLE)
 					checkEndTutorial();
+				currentState = state;
 			}
         });
     }
