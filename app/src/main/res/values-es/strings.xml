@@ -213,7 +213,7 @@
     <string name="cd_map_cover">Celda del mapa oscurecida</string>
     <string name="reset_preferences_error">Error al borrar la memoria</string>
     <string name="reset_preferences_ok">Memoria borrada con éxito</string>
-    <string name="revealed_tile_is">El contenido del siguiente nivel es...</string>
+    <string name="revealed_tile_is">El contenido del siguiente nivel es…</string>
     <string name="game_message_enemy_defeated_title">Enemigo derrotado</string>
     <string name="btn_continue">Continuar</string>
     <string name="cd_event_image">Imagen del evento</string>
@@ -224,8 +224,8 @@
     <string name="toast_event_enabled">Su dispositivo tiene el sensor %1$s. El evento %2$s está habilitado.</string>
     <string name="cd_swipe_arrow_left">Flecha deslizar izquierda</string>
     <string name="cd_swipe_arrow_right">Flecha deslizar derecha</string>
-    <string name="event_clouds_message">Para desvelar al enemigo , eljugador debe agitar su dispositivo un par de veces. Con fuerza!</string>
-    <string name="event_day_night_message">Durante las batallas el ciclo dia/noche hara que los enemigos sean más dificiles de ver. Afina la punteria!</string>
+    <string name="event_clouds_message">Para desvelar al enemigo, el jugador debe agitar su dispositivo un par de veces. Con fuerza!</string>
+    <string name="event_day_night_message">Durante las batallas el ciclo día/noche hara que los enemigos sean más dificiles de ver. Afina la punteria!</string>
     <string name="event_light_message">Cuando juegues en lugares oscuros, la pantalla se volverá oscura también. Busca algo de luz!</string>
     <string name="event_whirlpool_message">Si estas controlando el juego con los sensores, si agitas el dispositivo demasiado fuerte, se puede generar un remolino que dañara a ambos barcos</string>
     <string name="ic_back">Volver</string>
