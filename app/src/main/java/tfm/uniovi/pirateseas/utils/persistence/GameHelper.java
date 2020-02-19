@@ -52,7 +52,7 @@ public class GameHelper {
 		for(Ammunitions a : Ammunitions.values()){
 			editor.putInt(a.getName(), ship.getAmmunition(a));
 		}
-		editor.putInt(Constants.PREF_SHIP_HEALTH, ship.getHealth());
+		editor.putInt(Constants.PREF_SHIP_HEALTH, ship.getHealth() < Constants.ZERO_INT ? ship.getShipType().defaultHealthPoints() : ship.getHealth());
 		editor.putInt(Constants.PREF_SHIP_TYPE, ship.getShipType().ordinal());
 
 		editor.putLong(Constants.PREF_MAP_SEED, map.getMapSeed());
