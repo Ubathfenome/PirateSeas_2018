@@ -3,30 +3,22 @@
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="@dimen/extra_small_padding_size">
+    android:padding="@dimen/small_padding_size">
+
+    <ImageView
+        android:id="@+id/imgSensorThumbnail"
+        android:layout_height="@dimen/large_padding_size"
+        android:layout_width="@dimen/large_padding_size"
+        android:layout_margin="@dimen/extra_small_padding_size"
+        android:contentDescription="@string/cd_event_thumb"
+        android:src="@mipmap/ic_launcher"/>
 
     <TextView
         android:id="@+id/txtSensorName"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
+        android:layout_margin="@dimen/extra_small_padding_size"
+        android:layout_gravity="center_vertical"
         android:text="@string/dummy_text" />
-
-    <Space
-        android:layout_height="wrap_content"
-        android:layout_width="0dp"
-        android:layout_weight="1"/>
-
-    <TextView
-        android:id="@+id/txtEventName"
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:text="@string/dummy_text" />
-
-    <ImageView
-        android:id="@+id/imgEventThumbnail"
-        android:layout_height="@dimen/large_padding_size"
-        android:layout_width="@dimen/large_padding_size"
-        android:contentDescription="@string/cd_event_thumb"
-        android:src="@mipmap/ic_launcher"/>
 
 </LinearLayout>

@@ -2,7 +2,11 @@ package tfm.uniovi.pirateseas.controller.sensors.events;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.LayerDrawable;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,9 +27,8 @@ public class SensorEventAdapter extends ArrayAdapter<AppSensorEvent> {
     private int resourceLayout;
 
     private class AppSensorEventViewHolder {
+        private ImageView imgSensorThumbnail;
         private TextView txtSensorName;
-        private TextView txtEventName;
-        private ImageView imgEventThumbnail;
     }
 
     public SensorEventAdapter(Context context, int resource, List<AppSensorEvent> objects) {
@@ -42,42 +45,37 @@ public class SensorEventAdapter extends ArrayAdapter<AppSensorEvent> {
         }
 
         final AppSensorEventViewHolder viewHolder =new AppSensorEventViewHolder();
+        viewHolder.imgSensorThumbnail = convertView.findViewById(R.id.imgSensorThumbnail);
         viewHolder.txtSensorName = convertView.findViewById(R.id.txtSensorName);
-        viewHolder.txtEventName = convertView.findViewById(R.id.txtEventName);
-        viewHolder.imgEventThumbnail = convertView.findViewById(R.id.imgEventThumbnail);
 
         final View.OnClickListener sensorClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                createEventDialog(viewHolder.txtSensorName.getText().toString(), 0, mContext.getString(R.string.toast_event_enabled,
-                        viewHolder.txtSensorName.getText().toString(),
-                        viewHolder.txtEventName.getText().toString()));
+                createEventDialog(viewHolder.txtSensorName.getText().toString(), mSensorEvents.get(position).getImageResource(), mSensorEvents.get(position).getMessageResource());
             }
         };
 
-        View.OnClickListener eventClickListener = new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                createEventDialog(viewHolder.txtEventName.getText().toString(),
-                        mSensorEvents.get(position).getImageResource(),
-                        mContext.getString(mSensorEvents.get(position).getMessageResource()));
-            }
-        };
+
+        viewHolder.imgSensorThumbnail.setImageResource(mSensorEvents.get(position).getSensorThumbnailResource());
+        if(!mSensorEvents.get(position).isSensorActive()) {
+            Drawable base = mContext.getDrawable(mSensorEvents.get(position).getSensorThumbnailResource());
+            Drawable overlay = mContext.getDrawable(R.drawable.ic_sensor_layered);
+            Drawable[] layers = {base, overlay};
+            LayerDrawable layerDrawable = new LayerDrawable(layers);
+            layerDrawable.setLayerGravity(1, Gravity.END);
+            viewHolder.imgSensorThumbnail.setImageDrawable(layerDrawable);
+        }
+        viewHolder.imgSensorThumbnail.setOnClickListener(sensorClickListener);
 
         viewHolder.txtSensorName.setText(mSensorEvents.get(position).getSensorName());
-        viewHolder.txtSensorName.setPaintFlags(mSensorEvents.get(position).isActive()? (viewHolder.txtSensorName.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG) : (viewHolder.txtSensorName.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG)));
+        viewHolder.txtSensorName.setTextColor(mSensorEvents.get(position).hasEvent()? Color.DKGRAY : Color.WHITE);
+        viewHolder.txtSensorName.setPaintFlags(mSensorEvents.get(position).hasEvent()? (viewHolder.txtSensorName.getPaintFlags() & (~Paint.FAKE_BOLD_TEXT_FLAG)) : (viewHolder.txtSensorName.getPaintFlags() | Paint.FAKE_BOLD_TEXT_FLAG));
         viewHolder.txtSensorName.setOnClickListener(sensorClickListener);
-
-        viewHolder.txtEventName.setText(mSensorEvents.get(position).getEventName());
-        viewHolder.txtEventName.setOnClickListener(eventClickListener);
-
-        viewHolder.imgEventThumbnail.setImageResource(mSensorEvents.get(position).getThumbnailResource());
-        viewHolder.imgEventThumbnail.setOnClickListener(eventClickListener);
 
         return convertView;
     }
 
-    private void createEventDialog(String eventTitle, int imageResource, String message) {
+    private void createEventDialog(String eventTitle, int imageResource, int message) {
         AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
         LayoutInflater inflater = ((SensorActivity)mContext).getLayoutInflater();
         View inflatedView = inflater.inflate(R.layout.event_dialog, null);

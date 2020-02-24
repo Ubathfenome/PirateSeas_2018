@@ -13,8 +13,8 @@ public class EventWeatherMaelstrom extends AppSensorEvent{
 	private static final int AVERAGE = 10;
 	private static final int THRESHOLD = 3;
 
-	public EventWeatherMaelstrom(String name, SensorType sensorType, int imageResource, int thumbnailResource, int messageResource) {
-		super(name, sensorType, imageResource, thumbnailResource, messageResource);
+	public EventWeatherMaelstrom(String name, SensorType sensorType, int imageResource, int eventThumbnailResource, int sensorThumbnailResource, int messageResource, boolean isSensorActive) {
+		super(name, sensorType, imageResource, eventThumbnailResource, sensorThumbnailResource, messageResource, isSensorActive);
 	}
 
 	/**

@@ -246,6 +246,7 @@
     <string name="event_light_message">When playing on dark places, the game screen will get darker too. So go find some light!</string>
     <string name="event_clouds_message">To be able to spawn the enemy ship, the player will have to shake its device a couple of times. Shake it hard!</string>
     <string name="event_whirlpool_message">When the sensor control mode is set, the player should not shake its device too hard, or else a whirlpool will appear due to the device shaking and damage both ships.</string>
+    <string name="event_no_event_message">There is no event related to this sensor.</string>
     <string name="ic_back">Back</string>
 
 

@@ -1,5 +1,7 @@
 package tfm.uniovi.pirateseas.controller.sensors.events;
 
+import android.util.Log;
+
 import tfm.uniovi.pirateseas.controller.sensors.SensorType;
 
 public class AppSensorEvent {
@@ -8,30 +10,23 @@ public class AppSensorEvent {
     private SensorType sensorType;
     private boolean active;
     private int imageResource;
-    private int thumbnailResource;
+    private int eventThumbnailResource;
+    private int sensorThumbnailResource;
     private int messageResource;
 
-    public AppSensorEvent(String name, SensorType sensorType, int imageResource, int thumbnailResource, int messageResource){
+    AppSensorEvent(String name, SensorType sensorType, int imageResource, int eventThumbnailResource, int sensorThumbnailResource, int messageResource, boolean isActive){
         this.eventName = name;
         this.sensorType = sensorType;
         this.imageResource = imageResource;
-        this.thumbnailResource = thumbnailResource;
+        this.eventThumbnailResource = eventThumbnailResource;
+        this.sensorThumbnailResource = sensorThumbnailResource;
         this.messageResource = messageResource;
-        setActive(false);
+        setActive(isActive);
     }
 
-    public AppSensorEvent(AppSensorEvent event) {
-        this.eventName = event.getEventName();
-        this.sensorType = event.getSensorType();
-        this.imageResource = event.getImageResource();
-        this.thumbnailResource = event.getThumbnailResource();
-        this.messageResource = event.getMessageResource();
-        setActive(event.isActive());
-    }
+    int getMessageResource() { return messageResource; }
 
-    public int getMessageResource() { return messageResource; }
-
-    public String getEventName() {
+    private String getEventName() {
         return eventName;
     }
 
@@ -43,19 +38,32 @@ public class AppSensorEvent {
         return sensorType.name();
     }
 
-    public boolean isActive() {
+    boolean isSensorActive() {
         return active;
     }
 
-    public void setActive(boolean active) {
+    private void setActive(boolean active) {
+        Log.d("AppSensorEvent", "Your device has a " + getSensorName() + " sensor. " + (NoEvent.class.getSimpleName().equals(getEventName()) ? "There is no event related to it." : "Its event will be triggered"));
         this.active = active;
     }
 
-    public int getImageResource() {
+    int getImageResource() {
         return imageResource;
     }
 
-    public int getThumbnailResource() {
-        return thumbnailResource;
+    int getEventThumbnailResource() {
+        return eventThumbnailResource;
+    }
+
+    int getSensorThumbnailResource() {
+        return sensorThumbnailResource;
+    }
+
+    public void setSensorThumbnailResource(int sensorThumbnailResource) {
+        this.sensorThumbnailResource = sensorThumbnailResource;
+    }
+
+    boolean hasEvent(){
+        return NoEvent.class.getSimpleName().equals(getEventName());
     }
 }

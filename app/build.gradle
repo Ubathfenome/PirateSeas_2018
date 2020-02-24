@@ -7,7 +7,7 @@ ext.versionPatch = 16
 ext.versionClassifier = "Beta"
 ext.isSnapshot = false
 
-ext.minimumSdkVersion = 21
+ext.minimumSdkVersion = 23
 ext.compileTargetVersion = 28
 
 android {

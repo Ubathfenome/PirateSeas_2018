@@ -8,7 +8,6 @@ import android.graphics.Typeface;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -25,6 +24,7 @@ import tfm.uniovi.pirateseas.controller.sensors.events.EventDayNightCycle;
 import tfm.uniovi.pirateseas.controller.sensors.events.EventShakeClouds;
 import tfm.uniovi.pirateseas.controller.sensors.events.EventWeatherLight;
 import tfm.uniovi.pirateseas.controller.sensors.events.EventWeatherMaelstrom;
+import tfm.uniovi.pirateseas.controller.sensors.events.NoEvent;
 import tfm.uniovi.pirateseas.controller.sensors.events.SensorEventAdapter;
 import tfm.uniovi.pirateseas.global.Constants;
 
@@ -62,30 +62,94 @@ public class SensorActivity extends Activity{
 		txtSensorListTitle.setTypeface(customFont);
 
 		// Set event generator' sensor list
-		sensorEvents.add(new EventDayNightCycle(
-				EventDayNightCycle.class.getSimpleName(),
-				SensorType.TYPE_PRESSURE,
-				R.mipmap.img_event_day_night_cycle,
-				R.mipmap.img_event_day_night_thumb,
-				R.string.event_day_night_message));
-		sensorEvents.add(new EventWeatherLight(
-				EventWeatherLight.class.getSimpleName(),
-				SensorType.TYPE_LIGHT,
-				R.mipmap.img_event_light,
-				R.mipmap.img_event_light_thumb,
-				R.string.event_light_message));
 		sensorEvents.add(new EventWeatherMaelstrom(
 				EventWeatherMaelstrom.class.getSimpleName(),
 				SensorType.TYPE_ACCELEROMETER,
 				R.mipmap.img_event_whirlpool,
 				R.mipmap.img_event_whirlpool_thumb,
-				R.string.event_whirlpool_message));
+				R.mipmap.img_sensor_accelerometer_thumb,
+				R.string.event_whirlpool_message,
+				mSensorManager.getDefaultSensor(SensorType.TYPE_ACCELEROMETER.getCode())!= null));
+		sensorEvents.add(new NoEvent(
+				NoEvent.class.getSimpleName(),
+				SensorType.TYPE_AMBIENT_TEMPERATURE,
+				R.drawable.img_none,
+				R.mipmap.img_none_thumb,
+				R.mipmap.img_sensor_ambient_temperature_thumb,
+				R.string.event_no_event_message,
+				mSensorManager.getDefaultSensor(SensorType.TYPE_AMBIENT_TEMPERATURE.getCode())!= null));
+		sensorEvents.add(new NoEvent(
+				NoEvent.class.getSimpleName(),
+				SensorType.TYPE_GRAVITY,
+				R.drawable.img_none,
+				R.mipmap.img_none_thumb,
+				R.mipmap.img_sensor_gravity_thumb,
+				R.string.event_no_event_message,
+				mSensorManager.getDefaultSensor(SensorType.TYPE_GRAVITY.getCode())!= null));
+		sensorEvents.add(new NoEvent(
+				NoEvent.class.getSimpleName(),
+				SensorType.TYPE_GYROSCOPE,
+				R.drawable.img_none,
+				R.mipmap.img_none_thumb,
+				R.mipmap.img_sensor_gyroscope_thumb,
+				R.string.event_no_event_message,
+				mSensorManager.getDefaultSensor(SensorType.TYPE_GYROSCOPE.getCode())!= null));
+		sensorEvents.add(new EventWeatherLight(
+				EventWeatherLight.class.getSimpleName(),
+				SensorType.TYPE_LIGHT,
+				R.mipmap.img_event_light,
+				R.mipmap.img_event_light_thumb,
+				R.mipmap.img_sensor_light_thumb,
+				R.string.event_light_message,
+				mSensorManager.getDefaultSensor(SensorType.TYPE_LIGHT.getCode())!= null));
 		sensorEvents.add(new EventShakeClouds(
-				"EventShakeClouds",
+				EventShakeClouds.class.getSimpleName(),
 				SensorType.TYPE_LINEAR_ACCELERATION,
 				R.mipmap.img_movement_spawn,
 				R.mipmap.img_event_clouds_thumb,
-				R.string.event_clouds_message));
+				R.mipmap.img_sensor_linear_acceleration_thumb,
+				R.string.event_clouds_message,
+				mSensorManager.getDefaultSensor(SensorType.TYPE_LINEAR_ACCELERATION.getCode())!= null));
+		sensorEvents.add(new NoEvent(
+				NoEvent.class.getSimpleName(),
+				SensorType.TYPE_MAGNETIC_FIELD,
+				R.drawable.img_none,
+				R.mipmap.img_none_thumb,
+				R.mipmap.img_sensor_magnetic_field_thumb,
+				R.string.event_no_event_message,
+				mSensorManager.getDefaultSensor(SensorType.TYPE_MAGNETIC_FIELD.getCode())!= null));
+		sensorEvents.add(new EventDayNightCycle(
+				EventDayNightCycle.class.getSimpleName(),
+				SensorType.TYPE_PRESSURE,
+				R.mipmap.img_event_day_night_cycle,
+				R.mipmap.img_event_day_night_thumb,
+				R.mipmap.img_sensor_pressure_thumb,
+				R.string.event_day_night_message,
+				mSensorManager.getDefaultSensor(SensorType.TYPE_PRESSURE.getCode())!= null));
+		sensorEvents.add(new NoEvent(
+				NoEvent.class.getSimpleName(),
+				SensorType.TYPE_PROXIMITY,
+				R.drawable.img_none,
+				R.mipmap.img_none_thumb,
+				R.mipmap.img_sensor_proximity_thumb,
+				R.string.event_no_event_message,
+				mSensorManager.getDefaultSensor(SensorType.TYPE_PROXIMITY.getCode())!= null));
+		sensorEvents.add(new NoEvent(
+				NoEvent.class.getSimpleName(),
+				SensorType.TYPE_RELATIVE_HUMIDITY,
+				R.drawable.img_none,
+				R.mipmap.img_none_thumb,
+				R.mipmap.img_sensor_relative_humidity_thumb,
+				R.string.event_no_event_message,
+				mSensorManager.getDefaultSensor(SensorType.TYPE_RELATIVE_HUMIDITY.getCode())!= null));
+		sensorEvents.add(new NoEvent(
+				NoEvent.class.getSimpleName(),
+				SensorType.TYPE_ROTATION_VECTOR,
+				R.drawable.img_none,
+				R.mipmap.img_none_thumb,
+				R.mipmap.img_sensor_rotation_vector_thumb,
+				R.string.event_no_event_message,
+				mSensorManager.getDefaultSensor(SensorType.TYPE_ROTATION_VECTOR.getCode())!= null));
 
 		ListView lstSensorEventList = findViewById(R.id.lstSensorEventsList);
 		SensorEventAdapter mAdapter = new SensorEventAdapter(this, R.layout.list_item_sensor_event, sensorEvents);
@@ -116,8 +180,9 @@ public class SensorActivity extends Activity{
 				mDeviceSensorTypes.add(aPreferenceSensorList);
 			}
 			exitActivity(true);
-		} else {
-
+		}
+		/*
+		else {
 			for(AppSensorEvent appSensorEvent : sensorEvents){
 				if(mSensorManager.getDefaultSensor(appSensorEvent.getSensorType().getCode()) != null){
 					mDeviceSensorTypes.add(appSensorEvent.getSensorType().getCode());
@@ -151,6 +216,7 @@ public class SensorActivity extends Activity{
 				}
 			}
 		}
+		*/
 	}
 
 	/**

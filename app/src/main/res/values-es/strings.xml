@@ -228,6 +228,7 @@
     <string name="event_day_night_message">Durante las batallas el ciclo día/noche hara que los enemigos sean más dificiles de ver. Afina la punteria!</string>
     <string name="event_light_message">Cuando juegues en lugares oscuros, la pantalla se volverá oscura también. Busca algo de luz!</string>
     <string name="event_whirlpool_message">Si estas controlando el juego con los sensores, si agitas el dispositivo demasiado fuerte, se puede generar un remolino que dañara a ambos barcos</string>
+    <string name="event_no_event_message">No hay ningún evento relacionado con este sensor.</string>
     <string name="ic_back">Volver</string>
 
 </resources>

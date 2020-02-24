@@ -13,8 +13,8 @@ import tfm.uniovi.pirateseas.controller.sensors.SensorType;
  */
 public class EventWeatherLight extends AppSensorEvent{
 
-	public EventWeatherLight(String name, SensorType sensorType, int imageResource, int thumbnailResource, int messageResource) {
-		super(name, sensorType, imageResource, thumbnailResource, messageResource);
+	public EventWeatherLight(String name, SensorType sensorType, int imageResource, int eventThumbnailResource, int sensorThumbnailResource, int messageResource, boolean isSensorActive) {
+		super(name, sensorType, imageResource, eventThumbnailResource, sensorThumbnailResource, messageResource, isSensorActive);
 	}
 
 	/**
