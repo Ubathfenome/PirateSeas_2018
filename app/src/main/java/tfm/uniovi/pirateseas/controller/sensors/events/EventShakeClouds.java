@@ -9,7 +9,7 @@ public class EventShakeClouds extends AppSensorEvent{
 	
 	public static final float threshold = 4;
 
-	public EventShakeClouds(String name, SensorType sensorType, int imageResource, int eventThumbnailResource, int sensorThumbnailResource, int messageResource, boolean isSensorActive) {
-		super(name, sensorType, imageResource, eventThumbnailResource, sensorThumbnailResource, messageResource, isSensorActive);
+	public EventShakeClouds(String name, SensorType sensorType, int imageResource, int eventThumbnailResource, int sensorThumbnailResource, int messageResource, boolean isSensorAvailable) {
+		super(name, sensorType, imageResource, eventThumbnailResource, sensorThumbnailResource, messageResource, isSensorAvailable, true);
 	}
 }

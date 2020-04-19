@@ -3,7 +3,6 @@ package tfm.uniovi.pirateseas.model.canvasmodel.game.entity;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Point;
-import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.os.SystemClock;
@@ -14,6 +13,7 @@ import java.util.Random;
 import tfm.uniovi.pirateseas.R;
 import tfm.uniovi.pirateseas.exceptions.NoAmmoException;
 import tfm.uniovi.pirateseas.global.Constants;
+import tfm.uniovi.pirateseas.utils.persistence.EnumHelper;
 import tfm.uniovi.pirateseas.view.graphics.canvasview.CanvasView;
 
 /**
@@ -75,41 +75,23 @@ public class Ship extends Entity implements Parcelable{
 		gainHealth(this.mMaxHealth = sType.defaultHealthPoints());		
 		
 		this.isPlayable = ammo != Constants.SHOT_AMMO_UNLIMITED;
-		
-		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
-			if(isPlayable)
-				setImage(context.getResources().getDrawable(sType.drawableValue(), null));
-			else{
-				switch(sType.ordinal()){
-					case 0:
-						setImage(context.getResources().getDrawable(R.mipmap.enemy_light_front, null));
-						break;
-					case 1:
-						setImage(context.getResources().getDrawable(R.mipmap.enemy_medium_front, null));
-						break;
-					case 2:
-						setImage(context.getResources().getDrawable(R.mipmap.enemy_heavy_front, null));
-						break;
-				}
-			}
-		} else {
-			if(isPlayable)
-				setImage(context.getResources().getDrawable(sType.drawableValue()));
-			else{
-				switch(sType.ordinal()){
-					case 0:
-						setImage(context.getResources().getDrawable(R.mipmap.enemy_light_front));
-						break;
-					case 1:
-						setImage(context.getResources().getDrawable(R.mipmap.enemy_medium_front));
-						break;
-					case 2:
-						setImage(context.getResources().getDrawable(R.mipmap.enemy_heavy_front));
-						break;
-				}
+
+		if(isPlayable)
+			setImage(context.getResources().getDrawable(sType.drawableValue(), null));
+		else{
+			switch(sType.ordinal()){
+				case 0:
+					setImage(context.getResources().getDrawable(R.mipmap.enemy_light_front, null));
+					break;
+				case 1:
+					setImage(context.getResources().getDrawable(R.mipmap.enemy_medium_front, null));
+					break;
+				case 2:
+					setImage(context.getResources().getDrawable(R.mipmap.enemy_heavy_front, null));
+					break;
 			}
 		}
-		
+
 		if(mHealthPoints > 0)
 			setStatus(Constants.STATE_ALIVE);
 		
@@ -135,11 +117,7 @@ public class Ship extends Entity implements Parcelable{
 		this.mMaxHealth = sType.defaultHealthPoints() > health ? sType.defaultHealthPoints() : health;
 		gainHealth(health);
 
-		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
-			setImage(context.getResources().getDrawable(sType.drawableValue(), null));
-		} else {
-			setImage(context.getResources().getDrawable(sType.drawableValue()));
-		}
+		setImage(context.getResources().getDrawable(sType.drawableValue(), null));
 
 		if(mHealthPoints > 0)
 			setStatus(Constants.STATE_ALIVE);
@@ -281,94 +259,49 @@ public class Ship extends Entity implements Parcelable{
      * Update ship's drawable
      */
 	public void updateImage(){
-		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
-			if(isPlayable){
-				setImage(context.getResources().getDrawable(sType.drawableValue(), null));
-			} else {
-				switch(sType.ordinal()){
-				case 0:
-					if(entityDirection == Constants.DIRECTION_LEFT){
-						setImage(context.getResources().getDrawable(R.mipmap.enemy_light_left, null));
-					} else if(entityDirection == Constants.DIRECTION_RIGHT) {
-						setImage(context.getResources().getDrawable(R.mipmap.enemy_light_right, null));
-					} else if(entityDirection == Constants.DIRECTION_UP) {
-						setImage(context.getResources().getDrawable(R.mipmap.enemy_light_back, null));
-					} else {
-						setImage(context.getResources().getDrawable(R.mipmap.enemy_light_front, null));
-					}
-
-					break;
-				case 1:
-					if(entityDirection == Constants.DIRECTION_LEFT){
-						setImage(context.getResources().getDrawable(R.mipmap.enemy_medium_left, null));
-					} else if(entityDirection == Constants.DIRECTION_RIGHT) {
-						setImage(context.getResources().getDrawable(R.mipmap.enemy_medium_right, null));
-					} else if(entityDirection == Constants.DIRECTION_UP){
-						setImage(context.getResources().getDrawable(R.mipmap.enemy_medium_back, null));
-					} else {
-						setImage(context.getResources().getDrawable(R.mipmap.enemy_medium_front, null));
-					}
-
-					break;
-				case 2:
-					if(entityDirection == Constants.DIRECTION_LEFT){
-						setImage(context.getResources().getDrawable(R.mipmap.enemy_heavy_left, null));
-					} else if(entityDirection == Constants.DIRECTION_RIGHT) {
-						setImage(context.getResources().getDrawable(R.mipmap.enemy_heavy_right, null));
-					} else if(entityDirection == Constants.DIRECTION_UP){
-						setImage(context.getResources().getDrawable(R.mipmap.enemy_heavy_back, null));
-					} else {
-						setImage(context.getResources().getDrawable(R.mipmap.enemy_heavy_front, null));
-					}
-
-					break;
-				}
-			}
-			
+		if(isPlayable){
+			setImage(context.getResources().getDrawable(sType.drawableValue(), null));
 		} else {
-			if(isPlayable){
-				setImage(context.getResources().getDrawable(sType.drawableValue()));
-			} else {
-				switch(sType.ordinal()){
-				case 0:
-					if(entityDirection == Constants.DIRECTION_LEFT){
-						setImage(context.getResources().getDrawable(R.mipmap.enemy_light_left));
-					} else if(entityDirection == Constants.DIRECTION_RIGHT) {
-						setImage(context.getResources().getDrawable(R.mipmap.enemy_light_right));
-					} else if(entityDirection == Constants.DIRECTION_UP){
-						setImage(context.getResources().getDrawable(R.mipmap.enemy_light_back));
-					} else {
-						setImage(context.getResources().getDrawable(R.mipmap.enemy_light_front));
-					}
-
-					break;
-				case 1:
-					if(entityDirection == Constants.DIRECTION_LEFT){
-						setImage(context.getResources().getDrawable(R.mipmap.enemy_medium_left));
-					} else if(entityDirection == Constants.DIRECTION_RIGHT) {
-						setImage(context.getResources().getDrawable(R.mipmap.enemy_medium_right));
-					} else if(entityDirection == Constants.DIRECTION_UP){
-						setImage(context.getResources().getDrawable(R.mipmap.enemy_medium_back));
-					} else {
-						setImage(context.getResources().getDrawable(R.mipmap.enemy_medium_front));
-					}
-
-					break;
-				case 2:
-					if(entityDirection == Constants.DIRECTION_LEFT){
-						setImage(context.getResources().getDrawable(R.mipmap.enemy_heavy_left));
-					} else if(entityDirection == Constants.DIRECTION_RIGHT) {
-						setImage(context.getResources().getDrawable(R.mipmap.enemy_heavy_right));
-					} else if(entityDirection == Constants.DIRECTION_UP){
-						setImage(context.getResources().getDrawable(R.mipmap.enemy_heavy_back));
-					} else {
-						setImage(context.getResources().getDrawable(R.mipmap.enemy_heavy_front));
-					}
-
-					break;
+			switch(sType.ordinal()){
+			case 0:
+				if(entityDirection == Constants.DIRECTION_LEFT){
+					setImage(context.getResources().getDrawable(R.mipmap.enemy_light_left, null));
+				} else if(entityDirection == Constants.DIRECTION_RIGHT) {
+					setImage(context.getResources().getDrawable(R.mipmap.enemy_light_right, null));
+				} else if(entityDirection == Constants.DIRECTION_UP) {
+					setImage(context.getResources().getDrawable(R.mipmap.enemy_light_back, null));
+				} else {
+					setImage(context.getResources().getDrawable(R.mipmap.enemy_light_front, null));
 				}
+
+				break;
+			case 1:
+				if(entityDirection == Constants.DIRECTION_LEFT){
+					setImage(context.getResources().getDrawable(R.mipmap.enemy_medium_left, null));
+				} else if(entityDirection == Constants.DIRECTION_RIGHT) {
+					setImage(context.getResources().getDrawable(R.mipmap.enemy_medium_right, null));
+				} else if(entityDirection == Constants.DIRECTION_UP){
+					setImage(context.getResources().getDrawable(R.mipmap.enemy_medium_back, null));
+				} else {
+					setImage(context.getResources().getDrawable(R.mipmap.enemy_medium_front, null));
+				}
+
+				break;
+			case 2:
+				if(entityDirection == Constants.DIRECTION_LEFT){
+					setImage(context.getResources().getDrawable(R.mipmap.enemy_heavy_left, null));
+				} else if(entityDirection == Constants.DIRECTION_RIGHT) {
+					setImage(context.getResources().getDrawable(R.mipmap.enemy_heavy_right, null));
+				} else if(entityDirection == Constants.DIRECTION_UP){
+					setImage(context.getResources().getDrawable(R.mipmap.enemy_heavy_back, null));
+				} else {
+					setImage(context.getResources().getDrawable(R.mipmap.enemy_heavy_front, null));
+				}
+
+				break;
 			}
-		}		
+		}
+
 	}
 
     /**
@@ -526,22 +459,6 @@ public class Ship extends Entity implements Parcelable{
 	}
 
     /**
-     * Get the ship's type index of the specified ship type
-     * @param s Ship type
-     * @return Index
-     */
-	private int getShipTypeIndex(ShipType s){
-		int index = 0;
-		ShipType[] sTypes = ShipType.values();
-		for(int i = 0; i < sTypes.length; i++){
-			ShipType st = sTypes[i];
-			if(s.name().equals(st.name()))
-				index = i;
-		}
-		return index;
-	}
-
-    /**
      * Set the ship as Idle (no movement)
      * @param wasIdle true if stopped, false otherwise
      */
@@ -640,7 +557,8 @@ public class Ship extends Entity implements Parcelable{
 		parcel.writeByte((byte) (wasIdle ? 1 : 0));
 		parcel.writeInt(mHealthPoints);
 		parcel.writeInt(mMaxHealth);
-		int shipEnum = getShipTypeIndex(sType);
+		EnumHelper<ShipType> ph = new EnumHelper<>();
+		int shipEnum = ph.getEnumIndex(sType);
 		parcel.writeInt(shipEnum);
 	}
 

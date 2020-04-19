@@ -6,7 +6,9 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -19,7 +21,11 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import tfm.uniovi.pirateseas.R;
+import tfm.uniovi.pirateseas.controller.sensors.events.AppSensorEvent;
 import tfm.uniovi.pirateseas.global.Constants;
 
 /**
@@ -32,6 +38,10 @@ public class TutorialActivity extends FragmentActivity {
 	int[] sensorTypes = null;
 	boolean returnToMain = false;
 	boolean loadGame = false;
+
+	private int mGamesNumber;
+	private SharedPreferences mPreferences;
+	private List<AppSensorEvent> sensorEvents;
 	
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,13 +51,20 @@ public class TutorialActivity extends FragmentActivity {
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
 		context = this;
-        
-        Intent data = getIntent();
-		sensorTypes = data.getIntArrayExtra(Constants.TAG_SENSOR_LIST);
-		loadGame = data.getBooleanExtra(Constants.TAG_LOAD_GAME, true);
 
-		if(sensorTypes==null || emptySensors(sensorTypes))
-			returnToMain=true;
+		sensorEvents = new ArrayList<>();
+
+		Intent data = getIntent();
+		sensorEvents = data.getParcelableArrayListExtra(Constants.TAG_SENSOR_EVENTS);
+		sensorTypes = data.getIntArrayExtra(Constants.TAG_SENSOR_LIST);
+		loadGame = data.getBooleanExtra(Constants.TAG_LOAD_GAME, false);
+
+		returnToMain=loadGame;
+
+		mPreferences = context.getSharedPreferences(Constants.TAG_PREF_NAME,
+				Context.MODE_PRIVATE);
+
+		mGamesNumber = mPreferences.getInt(Constants.TAG_GAMES_NUMBER, Constants.ZERO_INT);
 
 		// Instantiate a ViewPager and a PagerAdapter.
 		/*
@@ -94,8 +111,10 @@ public class TutorialActivity extends FragmentActivity {
 	private boolean emptySensors(int[] sensorTypes) {
 		boolean empty = true;
 		for(int sensor : sensorTypes){
-			if(sensor != 0)
+			if (sensor != 0) {
 				empty = false;
+				break;
+			}
 		}
 		return empty;
 	}
@@ -192,7 +211,13 @@ public class TutorialActivity extends FragmentActivity {
 	 * Launch the game activity
 	 */
 	private void startGame(){
+
+		SharedPreferences.Editor editor = mPreferences.edit();
+		editor.putInt(Constants.TAG_GAMES_NUMBER, ++mGamesNumber);
+		editor.apply();
+
 		Intent startGameIntent = new Intent(context, ScreenSelectionActivity.class);
+		startGameIntent.putParcelableArrayListExtra(Constants.TAG_SENSOR_EVENTS, (ArrayList<? extends Parcelable>) sensorEvents);
 		startGameIntent.putExtra(Constants.TAG_SENSOR_LIST, sensorTypes);
 		startGameIntent.putExtra(Constants.TAG_LOAD_GAME, loadGame);
 		startActivity(startGameIntent);

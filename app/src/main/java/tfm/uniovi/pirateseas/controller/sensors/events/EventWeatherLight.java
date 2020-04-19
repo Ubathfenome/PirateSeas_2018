@@ -13,13 +13,13 @@ import tfm.uniovi.pirateseas.controller.sensors.SensorType;
  */
 public class EventWeatherLight extends AppSensorEvent{
 
-	public EventWeatherLight(String name, SensorType sensorType, int imageResource, int eventThumbnailResource, int sensorThumbnailResource, int messageResource, boolean isSensorActive) {
-		super(name, sensorType, imageResource, eventThumbnailResource, sensorThumbnailResource, messageResource, isSensorActive);
+	public EventWeatherLight(String name, SensorType sensorType, int imageResource, int eventThumbnailResource, int sensorThumbnailResource, int messageResource, boolean isSensorAvailable) {
+		super(name, sensorType, imageResource, eventThumbnailResource, sensorThumbnailResource, messageResource, isSensorAvailable, true);
 	}
 
 	/**
 	 * Modify the screen brightness on certain device sensor behaviour
-	 * @param context
+	 * @param context Context context
 	 * @param brightnessLevel Brightness sensor new value
 	 */
 	public static void adjustScreenBrightness(Context context, float brightnessLevel){

@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,10 +20,14 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import tfm.uniovi.pirateseas.R;
 import tfm.uniovi.pirateseas.controller.androidGameAPI.Map;
 import tfm.uniovi.pirateseas.controller.androidGameAPI.Player;
 import tfm.uniovi.pirateseas.controller.audio.MusicManager;
+import tfm.uniovi.pirateseas.controller.sensors.events.AppSensorEvent;
 import tfm.uniovi.pirateseas.global.Constants;
 import tfm.uniovi.pirateseas.model.canvasmodel.game.entity.Ship;
 import tfm.uniovi.pirateseas.utils.persistence.GameHelper;
@@ -45,6 +50,8 @@ public class PauseActivity extends Activity {
 	private Player nPlayer;
 	private Map nMap;
 
+	private List<AppSensorEvent> sensorEvents;
+
     @Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -59,7 +66,10 @@ public class PauseActivity extends Activity {
 
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
+		sensorEvents = new ArrayList<>();
+
 		Intent data = getIntent();
+		sensorEvents = data.getParcelableArrayListExtra(Constants.TAG_SENSOR_EVENTS);
 
         Button btnResume = findViewById(R.id.btnPauseResume);
 		btnResume.setTypeface(customFont);
@@ -74,6 +84,7 @@ public class PauseActivity extends Activity {
 		btnSettings.setOnClickListener(new OnClickListener(){
 			public void onClick(View v){
 				Intent settingsIntent = new Intent(context, SettingsActivity.class);
+				settingsIntent.putParcelableArrayListExtra(Constants.TAG_SENSOR_EVENTS, (ArrayList<? extends Parcelable>) sensorEvents);
 				startActivity(settingsIntent);
 			}
 		});
@@ -142,6 +153,7 @@ public class PauseActivity extends Activity {
         MusicManager.getInstance().changeSong(context, MusicManager.MUSIC_GAME_PAUSED);
 		Log.d(TAG,"PauseActivity Ship H=" + pgrHealth.getProgress() + "/" + pgrHealth.getMax() + " P=" + pgrPower.getProgress() + "/" + pgrPower.getMax() + " R=" + pgrRange.getProgress() + "/" + pgrRange.getMax());
 
+
 	}
 
 	@Override
@@ -195,5 +207,23 @@ public class PauseActivity extends Activity {
 			// Create the AlertDialog object and return it
 			return builder.create();
 		}
+	}
+
+	@Override
+	protected void onPause() {
+		super.onPause();
+		Log.d(TAG, "Activity paused");
+	}
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		Log.d(TAG, "Activity destroyed");
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		Log.d(TAG, "Activity resumed");
 	}
 }

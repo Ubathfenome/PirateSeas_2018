@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.content.res.Resources.NotFoundException;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -26,6 +27,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -33,6 +35,7 @@ import tfm.uniovi.pirateseas.R;
 import tfm.uniovi.pirateseas.controller.androidGameAPI.Map;
 import tfm.uniovi.pirateseas.controller.androidGameAPI.Player;
 import tfm.uniovi.pirateseas.controller.audio.MusicManager;
+import tfm.uniovi.pirateseas.controller.sensors.events.AppSensorEvent;
 import tfm.uniovi.pirateseas.exceptions.NotEnoughGoldException;
 import tfm.uniovi.pirateseas.exceptions.SaveGameException;
 import tfm.uniovi.pirateseas.global.Constants;
@@ -56,6 +59,7 @@ public class ShopActivity extends ListActivity{
 	
 	String mNature = "";
 	private int[] sensorTypes;
+	private List<AppSensorEvent> sensorEvents;
 	private boolean loadGame;
 	private int mapHeight;
 	private int mapWidth;
@@ -82,8 +86,11 @@ public class ShopActivity extends ListActivity{
 		Typeface customFont = Typeface.createFromAsset(getAssets(), "fonts/" + Constants.FONT_NAME + ".ttf");
 
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-		
+
+		sensorEvents = new ArrayList<>();
+
 		Intent data = getIntent();
+		sensorEvents = data.getParcelableArrayListExtra(Constants.TAG_SENSOR_EVENTS);
 		mNature = data.getExtras().getString(Constants.ITEMLIST_NATURE, Constants.EMPTY_STRING);
 		sensorTypes = data.getIntArrayExtra(Constants.TAG_SENSOR_LIST);
 		loadGame = data.getBooleanExtra(Constants.TAG_LOAD_GAME, true);
@@ -269,6 +276,7 @@ public class ShopActivity extends ListActivity{
 					}
 					// Create ScreenSelection Intent, populate extras + flags & start Activity
 					Intent screenSelectionIntent = new Intent(dummyActivity, ScreenSelectionActivity.class);
+					screenSelectionIntent.putParcelableArrayListExtra(Constants.TAG_SENSOR_EVENTS, (ArrayList<? extends Parcelable>) ((ShopActivity)getActivity()).sensorEvents);
 					screenSelectionIntent.putExtra(Constants.TAG_SENSOR_LIST, ((ShopActivity)getActivity()).sensorTypes);
 					screenSelectionIntent.putExtra(Constants.TAG_LOAD_GAME, ((ShopActivity)getActivity()).loadGame);
 					screenSelectionIntent.putExtra(Constants.TAG_SCREEN_SELECTION_MAP_HEIGHT, ((ShopActivity)getActivity()).mapHeight);

@@ -109,7 +109,7 @@
 				android:id="@+id/btnBarNext"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:text="@string/action_finish"
+				android:text="@string/action_next"
 				android:background="@drawable/xml_btn_style"
 				android:gravity="center_horizontal" />
 		    

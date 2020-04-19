@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.support.annotation.NonNull;
 
 import tfm.uniovi.pirateseas.global.Constants;
 import tfm.uniovi.pirateseas.model.canvasmodel.game.BasicModel;
@@ -22,14 +23,14 @@ public class StatBar extends BasicModel {
 
 	/**
 	 * Constructor
-	 * @param context
-	 * @param x
-	 * @param y
-	 * @param mCanvasWidth
-	 * @param mCanvasHeight
-	 * @param maxValue
-	 * @param currentValue
-	 * @param type
+	 * @param context Context context
+	 * @param x  Coordinate x
+	 * @param y  Coordinate y
+	 * @param mCanvasWidth Canvas width
+	 * @param mCanvasHeight Canvas Height
+	 * @param maxValue max value
+	 * @param currentValue current value
+	 * @param type StatBar type
 	 */
 	public StatBar(Context context, double x, double y, double mCanvasWidth, double mCanvasHeight, int maxValue, int currentValue, int type){
 		super(context, x, y, mCanvasWidth, mCanvasHeight, null);
@@ -41,7 +42,7 @@ public class StatBar extends BasicModel {
 	}
 
 	@Override
-	/**
+	/*
 	 * Draws on the screen the image of the model
 	 */
 	public void drawOnScreen(Canvas canvas){
@@ -84,7 +85,7 @@ public class StatBar extends BasicModel {
 
 	/**
 	 * Set the current value of the bar
-	 * @param currentValue
+	 * @param currentValue Update current value
 	 */
 	public void setCurrentValue(int currentValue) {
 		this.currentValue = currentValue;
@@ -106,8 +107,9 @@ public class StatBar extends BasicModel {
 		return maxValue;
 	}
 
+	@NonNull
 	@Override
-	/**
+	/*
 	 * toString
 	 */
 	public String toString() {

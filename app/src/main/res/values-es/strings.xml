@@ -161,7 +161,6 @@
         tristique auctor. Duis sit amet varius odio. Vestibulum eu dui justo. Phasellus tellus tortor,
         molestie sollicitudin porta ac, maximus vitae orci. Nulla nibh massa, convallis egestas orci
         quis, efficitur ultricies erat.</string>
-    <string name="empty_string"/>
 
     <!-- Game strings -->
     <string name="tutorial_1">Arrr Grumete!! Bienvenido a PIRATE SEAS!!\nArr, quieres dominar los siete mares? Pues conquista todas las islas y hazte rico.</string>
@@ -230,5 +229,37 @@
     <string name="event_whirlpool_message">Si estas controlando el juego con los sensores, si agitas el dispositivo demasiado fuerte, se puede generar un remolino que dañara a ambos barcos</string>
     <string name="event_no_event_message">No hay ningún evento relacionado con este sensor.</string>
     <string name="ic_back">Volver</string>
+    <string name="lbl_controls">Controles</string>
+    <string name="lbl_ship_controls">Controles del barco</string>
+    <string name="lbl_ammo_controls">Controles de la municion</string>
+    <string name="lbl_shoot_controls">Controles de disparo</string>
+    <string name="lbl_advanced_settings">Ajustes avanzados</string>
+    <string name="txt_volume_desc">Ajustar volumen</string>
+    <string name="lbl_sensor_event">Mostrar relacion sensor - evento</string>
+    <string name="txt_sensor_event_desc">Muestra los sensores del dispositivo y el evento relacionado</string>
+    <string name="lbl_wipe_memory">Borrar memoria</string>
+    <string name="txt_wipe_memory_desc">Borra la memoria de la aplicación</string>
+    <string name="txt_ship_on_desc">Mueve tu barco arrastrando el dedo por la pantalla</string>
+    <string name="txt_ship_off_desc">Mueve tu barco inclinando tu dispositivo hacia los lados</string>
+    <string name="txt_ammo_on_desc">Cambia la municion seleccionada tocando el botón de la municion actual</string>
+    <string name="txt_ammo_off_desc">Cambia la municion seleccionada usando los botones de volumen del dispositivo</string>
+    <string name="txt_shoot_on_desc">Dispara los cañones usando tu voz o tocando la pantalla</string>
+    <string name="txt_shoot_off_desc">Dispara tus cañones deslizando el dedo hacia arriba por la pantalla</string>
+    <string name="sensor_accelerometer">Acelerometro</string>
+    <string name="sensor_magnetic_field">Campo magnetico</string>
+    <string name="sensor_orientation">Orientacion</string>
+    <string name="sensor_gyroscope">Giroscopio</string>
+    <string name="sensor_light">Luz</string>
+    <string name="sensor_pressure">Presion</string>
+    <string name="sensor_temperature">Temperatura</string>
+    <string name="sensor_proximity">Proximidad</string>
+    <string name="sensor_gravity">Gravedad</string>
+    <string name="sensor_linear_acceleration">Aceleracion lineal</string>
+    <string name="sensor_rotation_vector">Vector de rotacion</string>
+    <string name="sensor_relative_humidity">Humedad relativa</string>
+    <string name="sensor_ambient_temperature">Temperatura ambiente</string>
+    <string name="btn_back">Volver</string>
+
+    <string name="progress_bar_title">Agita tu dispositivo</string>
 
 </resources>

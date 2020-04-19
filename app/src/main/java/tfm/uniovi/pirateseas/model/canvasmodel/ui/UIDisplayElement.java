@@ -7,12 +7,14 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
+import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.view.View;
 
 import tfm.uniovi.pirateseas.R;
+import tfm.uniovi.pirateseas.global.Constants;
 
 /**
  * Class to represent values over images
@@ -27,29 +29,25 @@ public class UIDisplayElement extends View {
 	private TypedArray mArray;
 	
 	@SuppressLint("NewApi")
-	@SuppressWarnings("deprecation")
-	/**
+	/*
 	 * Constructor
 	 */
 	public UIDisplayElement(Context context, int drawableResource, int value){
 		super(context);
-		
+
+		Typeface customFont = Typeface.createFromAsset(context.getAssets(), "fonts/" + Constants.FONT_NAME + ".ttf");
 		paint = new Paint();
 		paint.setColor(Color.WHITE);
+		paint.setTypeface(customFont);
 		this.mValue = value;
 		this.mReloading = false;
-		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
-			mImage = context.getResources().getDrawable(drawableResource, null);
-			mImageCancel = context.getResources().getDrawable(R.mipmap.ico_cancel, null);
-		} else {
-			mImage = context.getResources().getDrawable(drawableResource);
-			mImageCancel = context.getResources().getDrawable(R.mipmap.ico_cancel);
-		}
+		mImage = context.getResources().getDrawable(drawableResource, null);
+		mImageCancel = context.getResources().getDrawable(R.mipmap.ico_cancel, null);
 	}
 
 	/**
 	 * Constructor
-	 * @param context
+	 * @param context Context context
 	 */
 	public UIDisplayElement(Context context) {
 		this(context, null);
@@ -57,8 +55,8 @@ public class UIDisplayElement extends View {
 
 	/**
 	 * Constructor
-	 * @param context
-	 * @param attrs
+	 * @param context Context context
+	 * @param attrs AttributeSet attrs
 	 */
 	public UIDisplayElement(Context context, AttributeSet attrs) {
 		this(context, attrs, 0);
@@ -66,9 +64,9 @@ public class UIDisplayElement extends View {
 
 	/**
 	 * Constructor
-	 * @param context
-	 * @param attrs
-	 * @param defStyle
+	 * @param context Context context
+	 * @param attrs AttributeSet attrs
+	 * @param defStyle int default style
 	 */
 	public UIDisplayElement(Context context, AttributeSet attrs, int defStyle){
 		super(context, attrs, defStyle);
@@ -81,28 +79,23 @@ public class UIDisplayElement extends View {
 	}
 	
 	@SuppressLint("NewApi")
-	@SuppressWarnings("deprecation")
-	/**
+	/*
 	 * Initialize the UIElement
 	 */
 	private void init(){
 		paint = new Paint();
 		paint.setColor(Color.RED);
 		paint.setTextSize(40f);
-		paint.setStyle(Style.STROKE);
+		paint.setStyle(Style.FILL_AND_STROKE);
 		
-		this.mValue = mArray.getInteger(R.styleable.UIDisplayElement_defaultValue, 0);
+		this.mValue = mArray.getInteger(R.styleable.UIDisplayElement_value, 0);
 		this.mImage = getBackground();
-		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
-			this.mImageCancel = getResources().getDrawable(R.mipmap.ico_cancel, null);
-		} else {
-			this.mImageCancel = getResources().getDrawable(R.mipmap.ico_cancel);
-		}
+		this.mImageCancel = getResources().getDrawable(R.mipmap.ico_cancel, null);
 	}
 
 	/**
 	 * Get the UIElement value
-	 * @return
+	 * @return Element value
 	 */
 	public int getElementValue(){
 		return mValue;
@@ -110,7 +103,7 @@ public class UIDisplayElement extends View {
 
 	/**
 	 * Set the UIElement value
-	 * @param value
+	 * @param value value
 	 */
 	public void setElementValue(int value){
 		this.mValue = value;
@@ -131,18 +124,20 @@ public class UIDisplayElement extends View {
 	}
 
 	@Override
-	/**
+	/*
 	 * Draws on the screen the image of the model
 	 */
 	public void onDraw(Canvas canvas){
 		mImage.draw(canvas);
 		if(mReloading)
 			mImageCancel.draw(canvas);
+		//noinspection IntegerDivisionInFloatingPointContext
 		canvas.drawText(String.valueOf(mValue), mImage.getIntrinsicWidth() / 16, mImage.getIntrinsicHeight() / 2 + 10, paint);
 	}
 
+	@NonNull
 	@Override
-	/**
+	/*
 	 * toString
 	 */
 	public String toString() {

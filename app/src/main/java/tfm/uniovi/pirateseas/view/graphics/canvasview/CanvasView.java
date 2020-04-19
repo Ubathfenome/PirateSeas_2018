@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Canvas;
 import android.graphics.Point;
+import android.os.Parcelable;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -99,6 +100,8 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 	double nEnemyShipInitialXcoord;
 	double nEnemyShipInitialYcoord;
 
+	private boolean nTouched;
+
 	public static int mScreenWidth, mScreenHeight;
 
 	/**
@@ -189,7 +192,7 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 		nCheatCounter = 0;
 		nGameMode = Constants.GAMEMODE_IDLE;
 		Log.d(TAG, "Initialization: GameMode set to IDLE");
-		nShipControlMode = nPreferences.getBoolean(Constants.PREF_SHIP_CONTROL_MODE, Constants.PREF_GAME_TOUCH);
+		nShipControlMode = nPreferences.getBoolean(Constants.PREF_SHIP_CONTROL_MODE, Constants.PREF_IS_ACTIVE);
 
 		nInitialized = true;
 	}
@@ -313,6 +316,7 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 	 * Event called when a user touches the screen
 	 */
 	public boolean onTouchEvent(MotionEvent event) {
+		nTouched = true;
 		int x = (int) event.getX();
 		int y = (int) event.getY();
 
@@ -382,12 +386,18 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 
                             break;
 						default:
+							nTouched = false;
 							throw new IllegalStateException("Unexpected value: " + direction);
 					}
+
+					// Iniciar reconocimiento de voz
+					((GameActivity) nContext).startVoiceRecognitionRequest();
+
                     break;
 			}
 
 		}
+		nTouched = false;
 		return true;
 	}
 
@@ -450,6 +460,7 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 	 */
 	public void pauseLogicThread() {
 		nUpdateThread.setRunning(false);
+		Log.d(TAG, "GameLogicThread has been stopped");
 	}
 
 	/**
@@ -513,6 +524,8 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 	private void manageMode() throws SaveGameException {
 		if (nGameMode == Constants.GAMEMODE_ADVANCE) {
 			if(messageReaded) {
+				pauseLogicThread();
+
 				// Manage Island reveal on map
 				if (nPlayer.hasCompleteMap()) {
 					nPlayer.spendMap();
@@ -787,7 +800,7 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 
 		View v = ((GameActivity)nContext).findViewById(R.id.enemyHBarSpace);
 		double nEnemyBarXcoord = v.getX();
-        double nEnemyBarYcoord = (double) 25;
+        double nEnemyBarYcoord = 25;
 
 		nEnemyHBar = new StatBar(nContext, nEnemyBarXcoord, nEnemyBarYcoord, nScreenWidth, nScreenHeight, nEnemyShip.getHealth(),
 		nEnemyShip.getShipType().defaultHealthPoints(), Constants.BAR_HEALTH);
@@ -804,6 +817,7 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 		saveGame();
 
 		Intent screenSelectionIntent = new Intent(nContext, ScreenSelectionActivity.class);
+		screenSelectionIntent.putParcelableArrayListExtra(Constants.TAG_SENSOR_EVENTS, (ArrayList<? extends Parcelable>) ((GameActivity) nContext).getSensorEvents());
 		screenSelectionIntent.putExtra(Constants.TAG_SENSOR_LIST, ((GameActivity) nContext).getSensorTypes());
 		screenSelectionIntent.putExtra(Constants.TAG_LOAD_GAME, ((GameActivity) nContext).hasToLoadGame());
 		screenSelectionIntent.putExtra(Constants.TAG_SCREEN_SELECTION_MAP_HEIGHT, ((GameActivity) nContext).getMapHeight());
@@ -886,7 +900,7 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 	public void loadSettings() {
 		if(nPreferences==null)
 			nPreferences = nContext.getSharedPreferences(Constants.TAG_PREF_NAME, Context.MODE_PRIVATE);
-		nShipControlMode = nPreferences.getBoolean(Constants.PREF_SHIP_CONTROL_MODE, Constants.PREF_GAME_TOUCH);
+		nShipControlMode = nPreferences.getBoolean(Constants.PREF_SHIP_CONTROL_MODE, Constants.PREF_IS_ACTIVE);
 	}
 
 	/**
@@ -895,6 +909,10 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 	 */
 	public void setMessageReaded(boolean readed){
 		messageReaded = readed;
+	}
+
+	public boolean isScreenTouched(){
+		return nTouched;
 	}
 
 	public boolean getShipControlMode() {

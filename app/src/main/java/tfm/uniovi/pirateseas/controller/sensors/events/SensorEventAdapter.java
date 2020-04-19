@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
+import android.support.annotation.NonNull;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,8 +39,9 @@ public class SensorEventAdapter extends ArrayAdapter<AppSensorEvent> {
         mSensorEvents = objects;
     }
 
+    @NonNull
     @Override
-    public View getView(final int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, @NonNull ViewGroup parent) {
         if(convertView == null){
             convertView = LayoutInflater.from(mContext).inflate(resourceLayout, parent, false);
         }
@@ -55,9 +57,8 @@ public class SensorEventAdapter extends ArrayAdapter<AppSensorEvent> {
             }
         };
 
-
         viewHolder.imgSensorThumbnail.setImageResource(mSensorEvents.get(position).getSensorThumbnailResource());
-        if(!mSensorEvents.get(position).isSensorActive()) {
+        if(!mSensorEvents.get(position).isSensorAvailable()) {
             Drawable base = mContext.getDrawable(mSensorEvents.get(position).getSensorThumbnailResource());
             Drawable overlay = mContext.getDrawable(R.drawable.ic_sensor_layered);
             Drawable[] layers = {base, overlay};
@@ -67,7 +68,7 @@ public class SensorEventAdapter extends ArrayAdapter<AppSensorEvent> {
         }
         viewHolder.imgSensorThumbnail.setOnClickListener(sensorClickListener);
 
-        viewHolder.txtSensorName.setText(mSensorEvents.get(position).getSensorName());
+        viewHolder.txtSensorName.setText(mContext.getResources().getString(mSensorEvents.get(position).getSensorName()));
         viewHolder.txtSensorName.setTextColor(mSensorEvents.get(position).hasEvent()? Color.DKGRAY : Color.WHITE);
         viewHolder.txtSensorName.setPaintFlags(mSensorEvents.get(position).hasEvent()? (viewHolder.txtSensorName.getPaintFlags() & (~Paint.FAKE_BOLD_TEXT_FLAG)) : (viewHolder.txtSensorName.getPaintFlags() | Paint.FAKE_BOLD_TEXT_FLAG));
         viewHolder.txtSensorName.setOnClickListener(sensorClickListener);

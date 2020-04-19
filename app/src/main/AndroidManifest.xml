@@ -13,16 +13,18 @@
     <application
         android:name=".view.activities.App"
         android:allowBackup="true"
+        android:fullBackupContent="@xml/backup_descriptor"
         android:icon="@mipmap/ic_launcher"
+        android:roundIcon="@mipmap/ic_launcher_round"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/FullscreenTheme"
-        android:debuggable="true"
         android:isGame="true"
         tools:ignore="HardcodedDebugMode">
         <activity
             android:name=".view.activities.MainMenuActivity"
-            android:screenOrientation="landscape">
+            android:screenOrientation="landscape"
+            tools:ignore="LockedOrientationActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VIEW" />
@@ -33,7 +35,8 @@
             android:name=".view.activities.GameActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
             android:label="@string/app_name"
-            android:screenOrientation="landscape">
+            android:screenOrientation="landscape"
+            tools:ignore="LockedOrientationActivity">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -42,39 +45,48 @@
         </activity>
         <activity
             android:name=".view.activities.TutorialActivity"
-            android:screenOrientation="landscape">
+            android:screenOrientation="landscape"
+            tools:ignore="LockedOrientationActivity">
         </activity>
         <activity
             android:name=".view.activities.ScreenSelectionActivity"
-            android:screenOrientation="landscape">
+            android:screenOrientation="landscape"
+            tools:ignore="LockedOrientationActivity">
         </activity>
         <activity
             android:name=".view.activities.SettingsActivity"
-            android:screenOrientation="landscape">
-        </activity>
-        <activity
-            android:name=".view.activities.SettingsExtraActivity"
-            android:screenOrientation="landscape">
+            android:screenOrientation="landscape"
+            android:theme="@style/SettingsTheme"
+            tools:ignore="LockedOrientationActivity">
         </activity>
         <activity
             android:name=".view.activities.HelpActivity"
-            android:screenOrientation="landscape">
+            android:screenOrientation="landscape"
+            tools:ignore="LockedOrientationActivity">
         </activity>
         <activity
             android:name=".view.activities.SensorActivity"
-            android:screenOrientation="landscape">
+            android:screenOrientation="landscape"
+            tools:ignore="LockedOrientationActivity">
+            <intent-filter>
+                <action android:name="tfm.uniovi.pirateseas.view.activities.SETTING_START_ACTIVITY" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".view.activities.ShopActivity"
-            android:screenOrientation="landscape">
+            android:screenOrientation="landscape"
+            tools:ignore="LockedOrientationActivity">
         </activity>
         <activity
             android:name=".view.activities.PauseActivity"
-            android:screenOrientation="landscape">
+            android:screenOrientation="landscape"
+            tools:ignore="LockedOrientationActivity">
         </activity>
         <activity
             android:name=".view.activities.GameOverActivity"
-            android:screenOrientation="landscape">
+            android:screenOrientation="landscape"
+            tools:ignore="LockedOrientationActivity">
         </activity>
     </application>
 </manifest>

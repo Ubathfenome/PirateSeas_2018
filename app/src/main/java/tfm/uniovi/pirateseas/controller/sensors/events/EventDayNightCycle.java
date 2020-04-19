@@ -16,8 +16,8 @@ public class EventDayNightCycle extends AppSensorEvent {
 	private static final float HOUR_VALUE_RATIO = (MAX_SHADOW_VALUE * 2) / (Constants.HOURS_PER_DAY * PSA); // Ratio = 510 values / 60 hours per day; -> X values per hour
 	public static float pressure = PSA;
 
-	public EventDayNightCycle(String name, SensorType sensorType, int imageResource, int eventThumbnailResource, int sensorThumbnailResource, int messageResource, boolean isSensorActive) {
-		super(name, sensorType, imageResource, eventThumbnailResource, sensorThumbnailResource, messageResource, isSensorActive);
+	public EventDayNightCycle(String name, SensorType sensorType, int imageResource, int eventThumbnailResource, int sensorThumbnailResource, int messageResource, boolean isSensorAvailable) {
+		super(name, sensorType, imageResource, eventThumbnailResource, sensorThumbnailResource, messageResource, isSensorAvailable, true);
 	}
 
 	/**
@@ -28,10 +28,11 @@ public class EventDayNightCycle extends AppSensorEvent {
 	public static int getSkyFilter(float hour){
 		// Changes between day to night and viceversa
 		int filterValue = 0;
-		if(hour <= (Constants.HOURS_PER_DAY / 2))
+		if(hour <= (Constants.HOURS_PER_DAY / 2)) {
 			filterValue = (int) (hour * pressure * HOUR_VALUE_RATIO);
-		else
+		} else {
 			filterValue = (int) ((Constants.HOURS_PER_DAY - hour) * pressure * HOUR_VALUE_RATIO);
+		}
 		// Log.d(TAG, "Sky mask is " + filterValue + " while hour is " + hour);
 		return filterValue;
 	}

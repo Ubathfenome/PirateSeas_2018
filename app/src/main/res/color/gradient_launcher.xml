@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<gradient xmlns:android="http://schemas.android.com/apk/res/android"
+	android:startX="0"
+	android:startY="0"
+	android:endX="@integer/viewport_big_size"
+	android:endY="@integer/viewport_big_size"
+	android:startColor="#03b1fc"
+	android:centerColor="#6203fc"
+	android:endColor="#034afc"
+	android:type="sweep">
+</gradient>

@@ -20,6 +20,7 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.speech.RecognitionListener;
@@ -50,6 +51,8 @@ import tfm.uniovi.pirateseas.R;
 import tfm.uniovi.pirateseas.controller.androidGameAPI.Map;
 import tfm.uniovi.pirateseas.controller.androidGameAPI.Player;
 import tfm.uniovi.pirateseas.controller.audio.MusicManager;
+import tfm.uniovi.pirateseas.controller.sensors.SensorType;
+import tfm.uniovi.pirateseas.controller.sensors.events.AppSensorEvent;
 import tfm.uniovi.pirateseas.controller.sensors.events.EventDayNightCycle;
 import tfm.uniovi.pirateseas.controller.sensors.events.EventShakeClouds;
 import tfm.uniovi.pirateseas.controller.sensors.events.EventWeatherMaelstrom;
@@ -66,6 +69,7 @@ import tfm.uniovi.pirateseas.view.graphics.canvasview.CanvasView;
  *
  * @see: http://android-developers.blogspot.com.es/2011/11/making-android-games-that-play-nice.html
  */
+@SuppressWarnings("AccessStaticViaInstance")
 public class GameActivity extends AppCompatActivity implements SensorEventListener {
 
 	private static final String TAG = "GameActivity";
@@ -91,17 +95,21 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 
     private boolean shipControlMode;
     private boolean ammoControlMode;
+    private boolean shootControlMode;
 
     private float lastX, lastY, lastZ;
 
     protected SensorManager mSensorManager;
     protected List<Sensor> triggeringSensors;
+	private List<AppSensorEvent> sensorEvents;
 
     public ImageButton btnPause, btnChangeAmmo;
     public UIDisplayElement mGold, mAmmo;
 
     public ProgressBar nPlayerHealthBar;
     public ProgressBar nPlayerExperienceBar;
+
+    private ProgressBar nShakesForceBar;
 
     private SpeechRecognizer mSpeechRecognizer;
     private Intent mSpeechRecognizerIntent;
@@ -130,7 +138,10 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
                 getString(R.string.lang));
         mSpeechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 3);
 
+		sensorEvents = new ArrayList<>();
+
 		Intent data = getIntent();
+		sensorEvents = data.getParcelableArrayListExtra(Constants.TAG_SENSOR_EVENTS);
 
 		// Receive the device event triggering sensor list
 		triggeringSensors = new ArrayList<>();
@@ -142,7 +153,8 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 			totalSensors = sensorTypes.length;
 		for (int i = 0; i < totalSensors; i++) {
 			if (sensorTypes[i] != 0) {
-				triggeringSensors.add(mSensorManager.getDefaultSensor(sensorTypes[i]));
+				int sensorCode = SensorType.values()[i].getCode();
+				triggeringSensors.add(mSensorManager.getDefaultSensor(sensorCode));
 			}
 		}
 
@@ -152,8 +164,9 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 
 		mPreferences = getSharedPreferences(Constants.TAG_PREF_NAME,
 				Context.MODE_PRIVATE);
-		shipControlMode = mPreferences.getBoolean(Constants.PREF_SHIP_CONTROL_MODE, Constants.PREF_GAME_TOUCH);
-		ammoControlMode = mPreferences.getBoolean(Constants.PREF_AMMO_CONTROL_MODE, Constants.PREF_GAME_TOUCH);
+		shipControlMode = mPreferences.getBoolean(Constants.PREF_SHIP_CONTROL_MODE, Constants.PREF_IS_ACTIVE);
+		ammoControlMode = mPreferences.getBoolean(Constants.PREF_AMMO_CONTROL_MODE, Constants.PREF_IS_ACTIVE);
+		shootControlMode = mPreferences.getBoolean(Constants.PREF_SHOOT_CONTROL_MODE, Constants.PREF_IS_ACTIVE);
 
 		// Launch the game!!
 		setContentView(R.layout.activity_game);
@@ -166,9 +179,11 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 				Ship nPlayerShip = currentCView.nPlayerShip;
 				Player nPlayer = currentCView.nPlayer;
 				Map nMap = currentCView.nMap;
+				currentCView.pauseLogicThread();
 				pauseIntent.putExtra(Constants.PAUSE_SHIP, nPlayerShip);
 				pauseIntent.putExtra(Constants.PAUSE_PLAYER, nPlayer);
 				pauseIntent.putExtra(Constants.PAUSE_MAP, nMap);
+				pauseIntent.putParcelableArrayListExtra(Constants.TAG_SENSOR_EVENTS, (ArrayList<? extends Parcelable>) sensorEvents);
 				context.startActivity(pauseIntent);
 				Log.d(TAG, "Start Pause Intent");
 			}
@@ -206,21 +221,9 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
         nPlayerExperienceBar = findViewById(R.id.prgXpBar);
         nPlayerExperienceBar.getProgressDrawable().setColorFilter(Color.GREEN, PorterDuff.Mode.SRC_IN);
 
-		if(MusicManager.getInstance().getDeviceVolume() == 0){
-            if(!mIsListening) {
-                ActivityCompat.requestPermissions
-                        (GameActivity.this,
-                                new String[]{Manifest.permission.RECORD_AUDIO},
-                                REQUEST_RECORD_PERMISSION);
-				imgMicStatus.setImageResource(R.drawable.ic_mic_enabled);
-                mIsListening = true;
-            } else {
-                mSpeechRecognizer.stopListening();
-				imgMicStatus.setImageResource(R.drawable.ic_mic_disabled);
-                mIsListening = false;
-            }
-        }
-
+		nShakesForceBar = findViewById(R.id.shakesProgressBar);
+		nShakesForceBar.setMax((int) EventShakeClouds.threshold);
+		nShakesForceBar.getProgressDrawable().setColorFilter(Color.BLUE, PorterDuff.Mode.SRC_IN);
 	}
 
     /**
@@ -330,7 +333,26 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 	    nPlayerExperienceBar.setMax(max);
     }
 
-    /**
+	public void startVoiceRecognitionRequest() {
+		if(shootControlMode && mCanvasView.isScreenTouched()){
+			if(!mIsListening) {
+				ActivityCompat.requestPermissions
+						(GameActivity.this,
+								new String[]{Manifest.permission.RECORD_AUDIO},
+								REQUEST_RECORD_PERMISSION);
+				imgMicStatus.setImageResource(R.drawable.ic_mic_usage);
+				mIsListening = true;
+			} else {
+				mSpeechRecognizer.stopListening();
+				imgMicStatus.setImageResource(R.drawable.ic_mic_enabled);
+				mIsListening = false;
+			}
+		} else {
+			imgMicStatus.setImageResource(R.drawable.ic_mic_disabled);
+		}
+	}
+
+	/**
 	 * Class to create a Dialog that asks the player if he/she is sure of leaving the game activity
 	 */
 	public static class LeaveGameDialogFragment extends DialogFragment {
@@ -417,7 +439,7 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 		long deltaTime = event.timestamp - sensorLastTimestamp;
 		double deltaSeconds = deltaTime * Constants.NANOS_TO_SECONDS;
         CanvasView cView = mCanvasView.nUpdateThread.getCanvasViewInstance();
-		if (arrayContainsValue(sensorTypes, sensor.getType())) {
+		if (sensorIsActive(sensorTypes, sensor.getType())) {
 			switch (sensor.getType()) {
 			case Sensor.TYPE_ACCELEROMETER:
 
@@ -431,7 +453,7 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 					double angleY = Math.toDegrees(Math.asin (axisSpeedY / SensorManager.GRAVITY_EARTH));
 					double angleZ = Math.toDegrees(Math.asin (axisSpeedZ / SensorManager.GRAVITY_EARTH));
 
-					Log.d(TAG, "TYPE_ACCELEROMETER: Acc:angle = "+axisSpeedX+":"+angleX+"º / "+axisSpeedY+":"+angleY+"º / "+axisSpeedZ+":"+angleZ+"º	");
+					// Log.d(TAG, "TYPE_ACCELEROMETER: Acc:angle = "+axisSpeedX+":"+angleX+"º / "+axisSpeedY+":"+angleY+"º / "+axisSpeedZ+":"+angleZ+"º	");
 					// Event
 					if (EventWeatherMaelstrom.generateMaelstrom(axisSpeedY)) {
 						// Notify CanvasView to damage the ships
@@ -583,7 +605,9 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 
 					// Event
 					// Log.d(TAG, "TYPE_LINEAR_ACCELERATION: Acceleration force (m/s^2): " + linearAccelerationX  + " < " + EventShakeClouds.threshold);
-					if (Math.abs(linearAccelerationX) > EventShakeClouds.threshold){
+					float currentValue = Math.abs(linearAccelerationX);
+					nShakesForceBar.setProgress((int) currentValue);
+					if (currentValue > EventShakeClouds.threshold){
 						shakeClouds();
 					}
 
@@ -669,15 +693,25 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 	 * @param value value to look for inside the array
 	 * @return true if it hold it, false otherwise
 	 */
-	private boolean arrayContainsValue(int[] array, int value) {
-        for (int anArray : array) {
-            if (anArray == value)
-                return true;
-        }
-		return false;
+	private boolean sensorIsActive(int[] array, int value) {
+        // Coger la lista de sensorEvents,
+        // extraer la posicion del AppSensorEvent con codigo 'value' y
+        // verificar si esa posicion esta a 1 en 'array'
+        int position = findAppSensorEventIndexByCode(value);
+        return position != -1 && array[position] == 1;
 	}
 
-	/**
+    private int findAppSensorEventIndexByCode(int value) {
+	    for(int i = 0; i < sensorEvents.size(); i++){
+	        AppSensorEvent event = sensorEvents.get(i);
+	        if(event.getSensorType().getCode() == value) {
+                return i;
+            }
+        }
+	    return -1;
+    }
+
+    /**
 	 * Calls the activity to end the game
 	 * @param nPlayer player object
 	 * @param map map object
@@ -733,7 +767,14 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 		if(mCanvasView != null) {
 			int shakeCount = mCanvasView.getShakeMoveCount();
 			mCanvasView.setShakeMoveCount(shakeCount + 1);
-			showText(String.format(getResources().getString(R.string.message_shakesleft), (Constants.SHAKE_LIMIT - (shakeCount + 1))));
+			int shakesLeft = Constants.SHAKE_LIMIT - (shakeCount + 1);
+			showText(String.format(getResources().getString(R.string.message_shakesleft), shakesLeft));
+			if(shakesLeft <= Constants.ZERO_INT){
+				View v = findViewById(R.id.shakeCloudsUILayer);
+				if(v != null){
+					v.setVisibility(View.GONE);
+				}
+			}
 		}
 	}
 
@@ -752,6 +793,15 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 	public int[] getSensorTypes(){
 		return sensorTypes;
 	}
+
+    /**
+     *
+     * Get the sensor events list
+     * @return The devices's sensor events list
+     */
+	public List<AppSensorEvent> getSensorEvents(){
+	    return sensorEvents;
+    }
 
 	/**
 	 * Get the number of vertical cells fro the map to fit in the device's screen
@@ -791,6 +841,7 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 		public void onEndOfSpeech()
 		{
 			Log.d(TAG, "onEndOfSpeech");
+			imgMicStatus.setImageResource(R.drawable.ic_mic_enabled);
 		}
 
 		@Override
@@ -830,8 +881,8 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
             if(matches!=null && checkMatches(matches))
                 doAction();
 
-			mSpeechRecognizer.startListening(mSpeechRecognizerIntent);
-			imgMicStatus.setImageResource(R.drawable.ic_mic_usage);
+			// mSpeechRecognizer.startListening(mSpeechRecognizerIntent);
+			// imgMicStatus.setImageResource(R.drawable.ic_mic_usage);
 		}
 
         /**
@@ -865,6 +916,7 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
          */
         private void doAction() {
             try {
+				imgMicStatus.setImageResource(R.drawable.ic_mic_enabled);
                 mCanvasView.nShotList.addAll(Arrays.asList(mCanvasView.nPlayerShip.shootCannon()));
             } catch (NoAmmoException e) {
                 showText(e.getMessage());

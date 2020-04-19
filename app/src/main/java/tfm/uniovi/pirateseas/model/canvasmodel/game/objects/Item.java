@@ -1,23 +1,25 @@
 package tfm.uniovi.pirateseas.model.canvasmodel.game.objects;
 
+import android.support.annotation.NonNull;
+
 /**
  * Class for the in-game things to buy
  */
 public class Item implements Comparable<Item> {
 	
-	private int id;
+	private final int id;
 	private String name;
 	private String description;
-	private int recommendedLevel;
+	private final int recommendedLevel;
 	private int level;
 	private int price;
 
 	/**
 	 * Constructor
-	 * @param name
-	 * @param description
-	 * @param level
-	 * @param price
+	 * @param name Item name
+	 * @param description Item description
+	 * @param level Item level
+	 * @param price Item price
 	 */
 	Item(String name, String description, int level, int price){
 		this.id = name.hashCode();
@@ -34,12 +36,7 @@ public class Item implements Comparable<Item> {
 	 * @return 1 if this Item has higher level than the other, 0 if their level is equal, -1 if the other Item has higher level
 	 */
 	public int compareTo(Item other){
-		if (level > other.level)
-			return 1;
-		else if (level == other.level)
-			return 0;
-		else
-			return -1;
+		return Integer.compare(level, other.level);
 	}
 
 	/**
@@ -73,7 +70,7 @@ public class Item implements Comparable<Item> {
 	/**
 	 * @return the level
 	 */
-	public int getLevel() {
+	int getLevel() {
 		return level;
 	}
 
@@ -94,7 +91,7 @@ public class Item implements Comparable<Item> {
 	/**
 	 * @param price the price to set
 	 */
-	public void setPrice(int price) {
+	void setPrice(int price) {
 		this.price = price;
 	}
 
@@ -108,12 +105,13 @@ public class Item implements Comparable<Item> {
 	/**
 	 * @return the recommendedLevel
 	 */
-	public int getRecommendedLevel() {
+	int getRecommendedLevel() {
 		return recommendedLevel;
 	}
 
+	@NonNull
 	@Override
-	/**
+	/*
 	 * toString
 	 */
 	public String toString() {

@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.media.AudioAttributes;
 import android.media.SoundPool;
-import android.os.Build;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -27,18 +26,18 @@ public class SoundPools {
 	/**
 	 * Constructor
 	 */
-	public SoundPools() {
+	SoundPools() {
 		containers = Collections
 				.synchronizedList(new ArrayList<SoundPoolContainer>());
 	}
 
 	/**
 	 * Method to register a new sound resource on the available pool
-	 * @param context
+	 * @param context Context context
 	 * @param soundId New sound resource
 	 * @param id Sound tag id
 	 */
-	public void loadSound(Context context, String soundId, int id) {
+	void loadSound(Context context, String soundId, int id) {
 		Log.d(TAG, "SouldPools load sound " + soundId);
 		try {
 			for (SoundPoolContainer container : containers) {
@@ -117,32 +116,27 @@ public class SoundPools {
 		AtomicInteger size;
 
 		@SuppressLint("NewApi")
-		/**
+		/*
 		 * Constructor
-		 */
-		public SoundPoolContainer() {
-			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-				AudioAttributes.Builder attrBuilder = new AudioAttributes.Builder()
-						.setLegacyStreamType(android.media.AudioManager.STREAM_MUSIC)
-						.setContentType(AudioAttributes.CONTENT_TYPE_MUSIC).setUsage(AudioAttributes.USAGE_MEDIA);
-				SoundPool.Builder spBuilder = new SoundPool.Builder().setMaxStreams(MAX_STREAMS_PER_POOL)
-						.setAudioAttributes(attrBuilder.build());
-				this.soundPool = spBuilder.build();
-			} else {
-				this.soundPool = new SoundPool(MAX_STREAMS_PER_POOL, android.media.AudioManager.STREAM_MUSIC, 0);
-			}
-			this.soundMap = new ConcurrentHashMap<String, Integer>(
+		 */ SoundPoolContainer() {
+			AudioAttributes.Builder attrBuilder = new AudioAttributes.Builder()
+					.setLegacyStreamType(android.media.AudioManager.STREAM_MUSIC)
+					.setContentType(AudioAttributes.CONTENT_TYPE_MUSIC).setUsage(AudioAttributes.USAGE_MEDIA);
+			SoundPool.Builder spBuilder = new SoundPool.Builder().setMaxStreams(MAX_STREAMS_PER_POOL)
+					.setAudioAttributes(attrBuilder.build());
+			this.soundPool = spBuilder.build();
+			this.soundMap = new ConcurrentHashMap<>(
 					MAX_STREAMS_PER_POOL);
 			this.size = new AtomicInteger(0);
 		}
 
 		/**
 		 * Load the selected sound resource into the sound pool
-		 * @param context
+		 * @param context Context context
 		 * @param soundId Sound resource
 		 * @param id	Sound tag id
 		 */
-		public void load(Context context, String soundId, int id) {
+		void load(Context context, String soundId, int id) {
 			try {
 				if(soundPool != null){
 					this.size.incrementAndGet();
@@ -209,7 +203,7 @@ public class SoundPools {
 		/**
 		 * Pause the current sound
 		 */
-		public void onPause() {
+		void onPause() {
 			try {
 				soundPool.autoPause();
 			} catch (Exception e) {
@@ -220,7 +214,7 @@ public class SoundPools {
 		/**
 		 * Resume the current sound
 		 */
-		public void onResume() {
+		void onResume() {
 			try {
 				soundPool.autoResume();
 			} catch (Exception e) {

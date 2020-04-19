@@ -13,4 +13,8 @@
 	    android:id="@+id/guiLayer"
 	    layout="@layout/custom_ui_layout" />
 
+	<include
+		android:id="@+id/shakeCloudsUILayer"
+		layout="@layout/custom_ui_progress_bar" />
+
 </FrameLayout>

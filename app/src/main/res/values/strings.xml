@@ -35,16 +35,53 @@
     <string name="exception_reloading">Reloading cannons!</string>
     <string name="exception_save">Error while saving</string>
 
+    <!-- Sensors -->
+
+    <string name="sensor_accelerometer">Accelerometer</string>
+    <string name="sensor_magnetic_field">Magnetic field</string>
+    <string name="sensor_orientation">Orientation</string> // Deprecated since API 8
+    <string name="sensor_gyroscope">Gyroscope</string>
+    <string name="sensor_light">Light</string>
+    <string name="sensor_pressure">Pressure</string>
+    <string name="sensor_temperature">Temperature</string>  // Deprecated since API 8
+    <string name="sensor_proximity">Proximity</string>
+    <string name="sensor_gravity">Gravity</string>
+    <string name="sensor_linear_acceleration">Linear acceleration</string>
+    <string name="sensor_rotation_vector">Rotation vector</string>
+    <string name="sensor_relative_humidity">Relative humidity</string>
+    <string name="sensor_ambient_temperature">Ambient temperature</string>
+
     <!-- Game Menu strings -->
     <string name="game_resume">Resume</string>
     <string name="label_pause">PAUSE</string>
     <string name="label_settings">SETTINGS</string>
     <string name="btn_receive">Receive All</string>
     <string name="btn_pause">Pause Button</string>
+    <string name="lbl_controls">Controls</string>
+    <string name="lbl_ship_controls">Ship Controls</string>
+    <string name="txt_ship_on_desc">Move your ship touching the devices\' screen</string>
+    <string name="txt_ship_off_desc">Move your ship moving the device</string>
+    <string name="lbl_ammo_controls">Ammunition Controls</string>
+    <string name="txt_ammo_on_desc">Change your current ammo touching the selected ammo button</string>
+    <string name="txt_ammo_off_desc">Change your current ammo using the device\'s volume keys</string>
+    <string name="lbl_shoot_controls">Shoot Controls</string>
+    <string name="txt_shoot_on_desc">Shoot your cannons using your voice or touching the screen</string>
+    <string name="txt_shoot_off_desc">Shoot your cannons touching the devices\' screen upwards</string>
+    <string name="lbl_advanced_settings">Advanced settings</string>
     <string name="lbl_volume">Volume</string>
+    <string name="txt_volume_desc">Adjust volume value</string>
+    <string name="lbl_sensor_event">Show Sensors - Events</string>
+    <string name="txt_sensor_event_desc">Show device sensors and the related events</string>
+    <string name="lbl_wipe_memory">Wipe memory</string>
+    <string name="txt_wipe_memory_desc">Delete app memory</string>
     <string name="tb_control_sensor">Sensor Control</string>
     <string name="tb_control_touch">Touch Control</string>
     <string name="lbl_control_mode">Ship Control Mode</string>
+
+    <string name="toggle_on" translatable="false">ON</string>
+    <string name="toggle_off" translatable="false">OFF</string>
+
+    <!-- Settings -->
     <string name="settings_change_ammo_volume">With volume keys</string>
     <string name="settings_change_ammo_touch">By touch</string>
     <string name="settings_change_ammo_mode">Change ammo type mode</string>
@@ -248,6 +285,9 @@
     <string name="event_whirlpool_message">When the sensor control mode is set, the player should not shake its device too hard, or else a whirlpool will appear due to the device shaking and damage both ships.</string>
     <string name="event_no_event_message">There is no event related to this sensor.</string>
     <string name="ic_back">Back</string>
+    <string name="btn_back">Back</string>
+
+    <string name="progress_bar_title">Shake your device</string>
 
 
 </resources>

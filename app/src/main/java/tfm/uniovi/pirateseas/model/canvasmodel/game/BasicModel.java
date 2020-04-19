@@ -50,8 +50,8 @@ public class BasicModel{
 
     /**
      * Move the object the specified pixels on the specified coordinate
-     * @param xLength
-     * @param yLength
+     * @param xLength units to be moved in the x coordinate
+     * @param yLength units to be moved in the y coordinate
      * @param bounce  true if the object should bounce on the screen's edge, false otherwise
      */
 	public void move(double xLength, double yLength, boolean bounce){
@@ -92,7 +92,7 @@ public class BasicModel{
 	/**
      * Draws on the screen the image of the model
      * 
-     * @param canvas
+     * @param canvas Canvas canvas
      */
     public void drawOnScreen(Canvas canvas) {
         yUp = (int) y;
@@ -114,7 +114,7 @@ public class BasicModel{
 
     /**
      * Get the object's drawable
-     * @return
+     * @return Image drawable
      */
 	public Drawable getImage() {
         return mImage;
@@ -122,7 +122,7 @@ public class BasicModel{
 
     /**
      * Set the object's drawable
-     * @param image
+     * @param image Image drawable
      */
     public void setImage(Drawable image) {
         this.mImage = image;
@@ -134,7 +134,7 @@ public class BasicModel{
      * Get the object's parallax (if any)
      * @return Object's Parallax
      */
-    public Parallax getParallax(){
+    protected Parallax getParallax(){
     	return this.mParallax;
     }
 
@@ -142,7 +142,7 @@ public class BasicModel{
      * Set the object's parallax
      * @param parallax Parallax
      */
-    public void setParallax(Parallax parallax){
+    private void setParallax(Parallax parallax){
     	this.mParallax = parallax;
     	if(parallax != null){
 	    	this.mWidth = parallax.getMaxWidth();
@@ -192,7 +192,7 @@ public class BasicModel{
 
     /**
      * Set the object's height
-     * @param height
+     * @param height Height
      */
     public void setHeight(int height) {
         this.mHeight = height;
@@ -200,7 +200,7 @@ public class BasicModel{
 
     /**
      *  Get the image width of the object
-     * @return
+     * @return Width
      */
     public int getWidth() {
         return mWidth;
@@ -208,7 +208,7 @@ public class BasicModel{
 
     /**
      * Set the object's width
-     * @param width
+     * @param width Width
      */
     public void setWidth(int width) {
         this.mWidth = width;

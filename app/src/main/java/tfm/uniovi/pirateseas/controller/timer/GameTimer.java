@@ -1,6 +1,7 @@
 package tfm.uniovi.pirateseas.controller.timer;
 
 import android.os.SystemClock;
+import android.support.annotation.NonNull;
 
 import tfm.uniovi.pirateseas.global.Constants;
 
@@ -18,7 +19,7 @@ public class GameTimer {
 	/**
 	 * Constructor
 	 */
-	public GameTimer(){
+	private GameTimer(){
 		gameDay = 0;
 		gameHour = 0;
 		lastTimestamp = 0;
@@ -107,9 +108,10 @@ public class GameTimer {
 		return gameDay;
 	}
 
+	@NonNull
 	@Override
-	/**
-	 * toString
+	/*
+	  toString
 	 */
 	public String toString() {
 		return "GameTimer [gameDay=" + gameDay + ", gameHour=" + gameHour + "]";

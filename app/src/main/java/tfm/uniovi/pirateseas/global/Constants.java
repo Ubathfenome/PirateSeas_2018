@@ -6,6 +6,7 @@ import android.content.Context;
  * Class to set all project's global variables
  */
 public class Constants{
+
     // Modes
 	private static final int MODE_DEBUG = 0x0;
 	@SuppressWarnings("unused")
@@ -21,7 +22,9 @@ public class Constants{
 	
 	// Tags
 	public static final String TAG_EXE_MODE = "tfm.uniovi.pirateseas.EXE_MODE";
+	public static final String TAG_GAMES_NUMBER = "tfm.uniovi.pirateseas.GAMES_NUMBER";
 	public static final String TAG_SENSOR_LIST = "tfm.uniovi.pirateseas.SENSOR_LIST";
+	public static final String TAG_SENSOR_EVENTS = "tfm.uniovi.pirateseas.SENSOR_EVENTS";
 	public static final String TAG_LOAD_GAME = "tfm.uniovi.pirateseas.LOAD_GAME";
 	public static final String TAG_GAME_OVER = "tfm.uniovi.pirateseas.GAME_OVER";
 	public static final String TAG_GAME_OVER_PLAYER = "GameOverPlayer";
@@ -29,9 +32,7 @@ public class Constants{
 	public static final String TAG_PREF_NAME = "tfm.uniovi.pirateseas.PREFERENCES";
 	public static final String TAG_SCREEN_SELECTION_MAP_HEIGHT = "tfm.uniovi.pirateseas.SCREEN_SELECTION_MAP_HEIGHT";
 	public static final String TAG_SCREEN_SELECTION_MAP_WIDTH = "tfm.uniovi.pirateseas.SCREEN_SELECTION_MAP_WIDTH";
-	
-	// Requests
-	public static final int REQUEST_SENSOR_LIST = 0x00;
+
 	public static final int REQUEST_PERMISSIONS = 0x01;
 	
 	// Entities
@@ -89,7 +90,6 @@ public class Constants{
 	public static final double MILLIS_TO_SECONDS_INV = Math.pow(MILLIS_TO_SECONDS, -1); 
 	public static final double NANOS_TO_SECONDS = Math.pow(10, -9);
 
-	public static final int FLYING_TIME_MULTIPLIER = 8;
 	public static final int SHOT_SPEED = 15;
 
     public static final int SHAKE_LIMIT = 2;
@@ -102,7 +102,8 @@ public class Constants{
 	public static final String ARG_XP = "argumentXp";
 
 	public static final String EMPTY_STRING = "";
-	public static final String PREF_SENSOR_LIST = "sensorListPref";
+	public static final String LIST_SEPARATOR = ";";
+
 	public static final String PREF_PLAYER_TIMESTAMP = "playerTimestampPref";
 	public static final String PREF_PLAYER_LEVEL = "playerLevelPref";
 	public static final String PREF_PLAYER_GOLD = "playerGoldPref";
@@ -110,7 +111,6 @@ public class Constants{
 	public static final String PREF_PLAYER_MAP_PIECES = "playerMapPiecesPref";
 	public static final String PREF_SHIP_COORDINATES_X = "shipCoordinatesXPref";
 	public static final String PREF_SHIP_COORDINATES_Y = "shipCoordinatesYPref";
-	public static final String PREF_SHIP_AMMUNITIONS = "shipAmmunitionPref";
 	public static final String PREF_SHIP_HEALTH = "shipHealthPref";
 	public static final String PREF_SHIP_TYPE = "shipTypePref";
 	public static final String PREF_MAP_SEED = "mapSeed";
@@ -122,16 +122,18 @@ public class Constants{
 
 	public static final String PREF_DEVICE_HEIGHT_RES = "deviceHeightPref";
 	public static final String PREF_DEVICE_WIDTH_RES = "deviceWidthPref";
-	public static final String PREF_DEVICE_NOSENSORS = "deviceNoSensorsPref";
 
+	// Definir constantes para las nuevas preferencias
+	public static final String PREF_SENSOR_LIST = "settings_sensor_list_preference";
+	public static final String PREF_SHIP_CONTROL_MODE = "settings_ship_preference";
+	public static final String PREF_AMMO_CONTROL_MODE = "settings_ammunition_preference";
+	public static final String PREF_SHOOT_CONTROL_MODE = "settings_shoot_preference";
+	public static final boolean PREF_IS_ACTIVE = true;
+	public static final String PREF_VOLUME_VALUE = "settings_volume_preference";
+	public static final String PREF_SENSORS_EVENTS = "settings_sensors_events_preference";
+	public static final String PREF_WIPE_MEMORY = "settings_wipe_memory_preference";
 
-	public static final String PREF_SHIP_CONTROL_MODE = "shipControlMode";
-	public static final String PREF_AMMO_CONTROL_MODE = "ammoControlMode";
-	public static final String PREF_LEVEL_CONTROL_MODE = "levelControlMode";
-	public static final String PREF_PAUSE_CONTROL_MODE = "pauseControlMode";
-	public static final boolean PREF_GAME_TOUCH = true;
-
-	public static final String FONT_NAME = "TooneyNoodleNF";
+	public static final String FONT_NAME = "Skullsandcrossbones-RppKM";
 	
 	public static final String FRONT = "Front";
 	public static final String BACK = "Back";
@@ -154,7 +156,7 @@ public class Constants{
 	public static final String ITEM_KEY_AMMO_AIMED = "Ammo aimed";
 	public static final String ITEM_KEY_AMMO_DOUBLE = "Ammo double";
 	public static final String ITEM_KEY_AMMO_SWEEP = "Ammo sweep";
-    public static final String PAUSE_SHIP = "PLAYERSHIP";
+    public static final String PAUSE_SHIP = "PAUSESHIP";
 	public static final String PAUSE_PLAYER = "PAUSEPLAYER";
 	public static final String PAUSE_MAP = "PAUSEMAP";
 

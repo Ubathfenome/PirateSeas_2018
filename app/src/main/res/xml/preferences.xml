@@ -1,11 +1,68 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE PreferenceScreen>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <PreferenceCategory android:title="@string/code_sensor_list" >
+    <PreferenceCategory
+        android:key="settings_controls_category"
+        android:title="@string/lbl_controls">
+
+        <SwitchPreference
+            android:key="settings_ship_preference"
+            android:defaultValue="true"
+            android:switchTextOn="@string/toggle_on"
+            android:switchTextOff="@string/toggle_off"
+            android:summaryOn="@string/txt_ship_on_desc"
+            android:summaryOff="@string/txt_ship_off_desc"
+            android:title="@string/lbl_ship_controls" />
+
+        <SwitchPreference
+            android:key="settings_ammunition_preference"
+            android:defaultValue="true"
+            android:switchTextOn="@string/toggle_on"
+            android:switchTextOff="@string/toggle_off"
+            android:summaryOn="@string/txt_ammo_on_desc"
+            android:summaryOff="@string/txt_ammo_off_desc"
+            android:title="@string/lbl_ammo_controls" />
+
+        <SwitchPreference
+            android:key="settings_shoot_preference"
+            android:defaultValue="true"
+            android:switchTextOn="@string/toggle_on"
+            android:switchTextOff="@string/toggle_off"
+            android:summaryOn="@string/txt_shoot_on_desc"
+            android:summaryOff="@string/txt_shoot_off_desc"
+            android:title="@string/lbl_shoot_controls" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:key="settings_advanced_category"
+        android:title="@string/lbl_advanced_settings">
+
+        <!--
+        <android.support.v7.preference.SeekBarPreference
+            android:key="settings_volume_preference"
+            android:summary="@string/txt_volume_desc"
+            android:title="@string/lbl_volume"
+            android:defaultValue="0"
+            android:max="100" />
+        -->
+
+        <Preference
+            android:key="settings_sensors_events_preference"
+            android:summary="@string/txt_sensor_event_desc"
+            android:title="@string/lbl_sensor_event" />
+
+        <Preference
+            android:key="settings_wipe_memory_preference"
+            android:summary="@string/txt_wipe_memory_desc"
+            android:title="@string/lbl_wipe_memory" />
+
         <EditTextPreference
             android:defaultValue="@string/sensor_list_default"
-            android:key="sensorListPref" />
+            android:key="settings_sensor_list_preference"
+            android:selectable="false"
+            android:enabled="false"
+            android:shouldDisableView="true"/>
+
     </PreferenceCategory>
 
 </PreferenceScreen>

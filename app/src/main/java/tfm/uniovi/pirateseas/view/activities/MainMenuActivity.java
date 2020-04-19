@@ -1,6 +1,5 @@
 package tfm.uniovi.pirateseas.view.activities;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -15,9 +14,12 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Point;
 import android.graphics.Typeface;
+import android.hardware.SensorManager;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Parcelable;
+import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
@@ -30,15 +32,23 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import tfm.uniovi.pirateseas.R;
 import tfm.uniovi.pirateseas.controller.androidGameAPI.Map;
 import tfm.uniovi.pirateseas.controller.androidGameAPI.Player;
 import tfm.uniovi.pirateseas.controller.audio.MusicManager;
+import tfm.uniovi.pirateseas.controller.sensors.SensorType;
+import tfm.uniovi.pirateseas.controller.sensors.events.AppSensorEvent;
+import tfm.uniovi.pirateseas.controller.sensors.events.EventDayNightCycle;
+import tfm.uniovi.pirateseas.controller.sensors.events.EventShakeClouds;
+import tfm.uniovi.pirateseas.controller.sensors.events.EventWeatherLight;
+import tfm.uniovi.pirateseas.controller.sensors.events.EventWeatherMaelstrom;
+import tfm.uniovi.pirateseas.controller.sensors.events.NoEvent;
 import tfm.uniovi.pirateseas.global.Constants;
 import tfm.uniovi.pirateseas.model.canvasmodel.game.entity.Ship;
 import tfm.uniovi.pirateseas.utils.persistence.GameHelper;
@@ -49,12 +59,12 @@ import tfm.uniovi.pirateseas.utils.persistence.GameHelper;
 public class MainMenuActivity extends Activity {
 
 	private static final String TAG = "MainMenuActivity";
-	private boolean newGame = false;
-	private boolean firstGame = false;
+	private int[] activeSensors;
+	private List<AppSensorEvent> sensorEvents;
 	private boolean mOverwriteWarning = false;
 	private int mMode;
+	private int mGamesNumber;
 
-	private static final String[] INITIAL_PERMS = {Manifest.permission.WRITE_SETTINGS};
 	protected Context context;
 	protected SharedPreferences mPreferences;
 
@@ -73,6 +83,8 @@ public class MainMenuActivity extends Activity {
 
 		mMode = Constants.MODE;
 
+		sensorEvents = new ArrayList<>();
+
 		// Get Screen
 		Point size = new Point();
 		getWindowManager().getDefaultDisplay().getSize(size);
@@ -80,16 +92,20 @@ public class MainMenuActivity extends Activity {
 		screenResolutionWidth = size.x;
 		screenResolutionHeight = size.y;
 
+		PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 		mPreferences = context.getSharedPreferences(Constants.TAG_PREF_NAME,
 				Context.MODE_PRIVATE);
+
+		mGamesNumber = mPreferences.getInt(Constants.TAG_GAMES_NUMBER, Constants.ZERO_INT);
+
 		SharedPreferences.Editor editor = mPreferences.edit();
 		editor.putInt(Constants.PREF_DEVICE_WIDTH_RES, screenResolutionWidth);
 		editor.putInt(Constants.PREF_DEVICE_HEIGHT_RES, screenResolutionHeight);
-		editor.putBoolean(Constants.PREF_SHIP_CONTROL_MODE, Constants.PREF_GAME_TOUCH);
-		editor.putBoolean(Constants.PREF_AMMO_CONTROL_MODE, Constants.PREF_GAME_TOUCH);
-		editor.putBoolean(Constants.PREF_LEVEL_CONTROL_MODE, Constants.PREF_GAME_TOUCH);
-		editor.putBoolean(Constants.PREF_PAUSE_CONTROL_MODE, Constants.PREF_GAME_TOUCH);
+		editor.putBoolean(Constants.PREF_SHIP_CONTROL_MODE, Constants.PREF_IS_ACTIVE);
+		editor.putBoolean(Constants.PREF_AMMO_CONTROL_MODE, Constants.PREF_IS_ACTIVE);
+		editor.putBoolean(Constants.PREF_SHOOT_CONTROL_MODE, Constants.PREF_IS_ACTIVE);
 		editor.putBoolean(Constants.TAG_EXE_MODE, Constants.isInDebugMode(mMode));
+		// editor.putInt(Constants.TAG_GAMES_NUMBER, mGamesNumber);
 		editor.apply();
 
 		TextView txtTitle = findViewById(R.id.txtTitleLabel);
@@ -103,8 +119,7 @@ public class MainMenuActivity extends Activity {
 					OverwriteGameDialogFragment overwriteDialog = new OverwriteGameDialogFragment();
 					overwriteDialog.show(getFragmentManager(), "OverwriteGameDialog");
 				} else {
-					newGame = true;
-					launchSensorActivity();
+					launchGame(true, activeSensors);
 				}
 			}
 		});
@@ -115,6 +130,7 @@ public class MainMenuActivity extends Activity {
 			@Override
 			public void onClick(View view) {
 				Intent tutorialIntent = new Intent(context, TutorialActivity.class);
+				tutorialIntent.putParcelableArrayListExtra(Constants.TAG_SENSOR_EVENTS, (ArrayList<? extends Parcelable>) sensorEvents);
 				tutorialIntent.putExtra(Constants.TAG_LOAD_GAME, true);
 				startActivity(tutorialIntent);
 			}
@@ -124,8 +140,7 @@ public class MainMenuActivity extends Activity {
 		btnLoadGame.setTypeface(customFont);
 		btnLoadGame.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-				newGame = false;
-				launchSensorActivity();
+				launchGame(false, activeSensors);
 			}
 		});
 
@@ -134,6 +149,7 @@ public class MainMenuActivity extends Activity {
 			public void onClick(View v) {
 				Intent settingsIntent = new Intent(context,
 						SettingsActivity.class);
+				settingsIntent.putParcelableArrayListExtra(Constants.TAG_SENSOR_EVENTS, (ArrayList<? extends Parcelable>) sensorEvents);
 				startActivity(settingsIntent);
 			}
 		});
@@ -160,6 +176,161 @@ public class MainMenuActivity extends Activity {
         } else {
 		    MusicManager.getInstance().changeSong(this, MusicManager.MUSIC_GAME_MENU);
         }
+
+		// Initialize sensorEvents setting whether to linked sensor is active on the device or not
+		SensorManager mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+		initializeSensorEvents(mSensorManager);
+
+		activeSensors = checkSensorPreferences();
+	}
+
+	private int[] checkSensorPreferences() {
+		mPreferences = getSharedPreferences(Constants.TAG_PREF_NAME, Context.MODE_PRIVATE);
+		String prefStringSensorList = mPreferences.getString(Constants.PREF_SENSOR_LIST, Constants.EMPTY_STRING);
+
+		String[] preferenceStringArray;
+		int[] preferenceIntArray = new int[SensorType.values().length];
+
+		if(prefStringSensorList != null && prefStringSensorList.length() > 0){
+			preferenceStringArray = prefStringSensorList.split(Constants.LIST_SEPARATOR);
+			for(int i = 0; i < preferenceStringArray.length; i++){
+				int value = Integer.parseInt(preferenceStringArray[i]);
+				preferenceIntArray[i] = value;
+			}
+		}
+
+		if(sensorArrayIsNotInitialized(preferenceIntArray)){
+			preferenceIntArray = extractActiveSensors(sensorEvents);
+
+			prefStringSensorList = toStringList(preferenceIntArray);
+
+			SharedPreferences.Editor editor = mPreferences.edit();
+			editor.putString(Constants.TAG_SENSOR_LIST, prefStringSensorList);
+			editor.apply();
+		}
+
+		return preferenceIntArray;
+	}
+
+	private boolean sensorArrayIsNotInitialized(int[] intArray) {
+		for(int value : intArray){
+			if(Constants.ZERO_INT != value) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	private void initializeSensorEvents(SensorManager mSensorManager) {
+		// Set event generator' sensor list
+		sensorEvents.add(new EventWeatherMaelstrom(
+				EventWeatherMaelstrom.class.getSimpleName(),
+				SensorType.TYPE_ACCELEROMETER,
+				R.mipmap.img_event_whirlpool,
+				R.mipmap.img_event_whirlpool_thumb,
+				R.mipmap.img_sensor_accelerometer_thumb,
+				R.string.event_whirlpool_message,
+				mSensorManager.getDefaultSensor(SensorType.TYPE_ACCELEROMETER.getCode())!= null));
+		sensorEvents.add(new NoEvent(
+				NoEvent.class.getSimpleName(),
+				SensorType.TYPE_MAGNETIC_FIELD,
+				R.drawable.img_none,
+				R.mipmap.img_none_thumb,
+				R.mipmap.img_sensor_magnetic_field_thumb,
+				R.string.event_no_event_message,
+				mSensorManager.getDefaultSensor(SensorType.TYPE_MAGNETIC_FIELD.getCode())!= null));
+		sensorEvents.add(new NoEvent(
+				NoEvent.class.getSimpleName(),
+				SensorType.TYPE_GYROSCOPE,
+				R.drawable.img_none,
+				R.mipmap.img_none_thumb,
+				R.mipmap.img_sensor_gyroscope_thumb,
+				R.string.event_no_event_message,
+				mSensorManager.getDefaultSensor(SensorType.TYPE_GYROSCOPE.getCode())!= null));
+		sensorEvents.add(new EventWeatherLight(
+				EventWeatherLight.class.getSimpleName(),
+				SensorType.TYPE_LIGHT,
+				R.mipmap.img_event_light,
+				R.mipmap.img_event_light_thumb,
+				R.mipmap.img_sensor_light_thumb,
+				R.string.event_light_message,
+				mSensorManager.getDefaultSensor(SensorType.TYPE_LIGHT.getCode())!= null));
+		sensorEvents.add(new EventDayNightCycle(
+				EventDayNightCycle.class.getSimpleName(),
+				SensorType.TYPE_PRESSURE,
+				R.mipmap.img_event_day_night_cycle,
+				R.mipmap.img_event_day_night_thumb,
+				R.mipmap.img_sensor_pressure_thumb,
+				R.string.event_day_night_message,
+				mSensorManager.getDefaultSensor(SensorType.TYPE_PRESSURE.getCode())!= null));
+		sensorEvents.add(new NoEvent(
+				NoEvent.class.getSimpleName(),
+				SensorType.TYPE_PROXIMITY,
+				R.drawable.img_none,
+				R.mipmap.img_none_thumb,
+				R.mipmap.img_sensor_proximity_thumb,
+				R.string.event_no_event_message,
+				mSensorManager.getDefaultSensor(SensorType.TYPE_PROXIMITY.getCode())!= null));
+		sensorEvents.add(new NoEvent(
+				NoEvent.class.getSimpleName(),
+				SensorType.TYPE_GRAVITY,
+				R.drawable.img_none,
+				R.mipmap.img_none_thumb,
+				R.mipmap.img_sensor_gravity_thumb,
+				R.string.event_no_event_message,
+				mSensorManager.getDefaultSensor(SensorType.TYPE_GRAVITY.getCode())!= null));
+		sensorEvents.add(new EventShakeClouds(
+				EventShakeClouds.class.getSimpleName(),
+				SensorType.TYPE_LINEAR_ACCELERATION,
+				R.mipmap.img_movement_spawn,
+				R.mipmap.img_event_clouds_thumb,
+				R.mipmap.img_sensor_linear_acceleration_thumb,
+				R.string.event_clouds_message,
+				mSensorManager.getDefaultSensor(SensorType.TYPE_LINEAR_ACCELERATION.getCode())!= null));
+		sensorEvents.add(new NoEvent(
+				NoEvent.class.getSimpleName(),
+				SensorType.TYPE_ROTATION_VECTOR,
+				R.drawable.img_none,
+				R.mipmap.img_none_thumb,
+				R.mipmap.img_sensor_rotation_vector_thumb,
+				R.string.event_no_event_message,
+				mSensorManager.getDefaultSensor(SensorType.TYPE_ROTATION_VECTOR.getCode())!= null));
+		sensorEvents.add(new NoEvent(
+				NoEvent.class.getSimpleName(),
+				SensorType.TYPE_RELATIVE_HUMIDITY,
+				R.drawable.img_none,
+				R.mipmap.img_none_thumb,
+				R.mipmap.img_sensor_relative_humidity_thumb,
+				R.string.event_no_event_message,
+				mSensorManager.getDefaultSensor(SensorType.TYPE_RELATIVE_HUMIDITY.getCode())!= null));
+		sensorEvents.add(new NoEvent(
+				NoEvent.class.getSimpleName(),
+				SensorType.TYPE_AMBIENT_TEMPERATURE,
+				R.drawable.img_none,
+				R.mipmap.img_none_thumb,
+				R.mipmap.img_sensor_ambient_temperature_thumb,
+				R.string.event_no_event_message,
+				mSensorManager.getDefaultSensor(SensorType.TYPE_AMBIENT_TEMPERATURE.getCode())!= null));
+	}
+
+	private String toStringList(int[] preferenceIntArray) {
+		StringBuilder builder = new StringBuilder();
+		for(int value : preferenceIntArray){
+			builder.append(value);
+			builder.append(Constants.LIST_SEPARATOR);
+		}
+		return builder.toString();
+	}
+
+	private int[] extractActiveSensors(List<AppSensorEvent> sensorEvents) {
+		int[] activeSensors = new int[sensorEvents.size()];
+		for(int i = 0; i < sensorEvents.size(); i++){
+			AppSensorEvent sensorEvent = sensorEvents.get(i);
+			boolean sensorAvailable = sensorEvent.isSensorAvailable();
+			boolean sensorActive = sensorEvent.isSensorActive();
+			activeSensors[i] = (sensorAvailable && sensorActive)?1:0;
+		}
+		return activeSensors;
 	}
 
 	/**
@@ -168,29 +339,28 @@ public class MainMenuActivity extends Activity {
 	 * @param sensorTypes Set the sensor values as an array to be handled
 	 */
 	private void launchGame(boolean displayTutorial, int[] sensorTypes) {
-		if (!displayTutorial) {
+		if(displayTutorial && mGamesNumber == 0){
+			Intent tutorialIntent = new Intent(context, TutorialActivity.class);
+			tutorialIntent.putParcelableArrayListExtra(Constants.TAG_SENSOR_EVENTS, (ArrayList<? extends Parcelable>) sensorEvents);
+			tutorialIntent.putExtra(Constants.TAG_SENSOR_LIST, sensorTypes);
+			tutorialIntent.putExtra(Constants.TAG_LOAD_GAME, false);
+			startActivity(tutorialIntent);
+		} else {
+
+			if(displayTutorial) {
+				SharedPreferences.Editor editor = mPreferences.edit();
+				editor.putInt(Constants.TAG_GAMES_NUMBER, ++mGamesNumber);
+				editor.apply();
+			}
+
 			// Load game
 			Intent screenIntent = new Intent(context, ScreenSelectionActivity.class);
+			screenIntent.putParcelableArrayListExtra(Constants.TAG_SENSOR_EVENTS, (ArrayList<? extends Parcelable>) sensorEvents);
 			screenIntent.putExtra(Constants.TAG_SENSOR_LIST, sensorTypes);
-			screenIntent.putExtra(Constants.TAG_LOAD_GAME, false);
+			screenIntent.putExtra(Constants.TAG_LOAD_GAME, displayTutorial);
 			screenIntent.putExtra(Constants.TAG_SCREEN_SELECTION_MAP_HEIGHT, calculateMapHeight());
 			screenIntent.putExtra(Constants.TAG_SCREEN_SELECTION_MAP_WIDTH, calculateMapWidth());
 			startActivity(screenIntent);
-		} else {
-			//	New game
-			if(firstGame) {
-				Intent tutorialIntent = new Intent(context, TutorialActivity.class);
-				tutorialIntent.putExtra(Constants.TAG_SENSOR_LIST, sensorTypes);
-				tutorialIntent.putExtra(Constants.TAG_LOAD_GAME, true);
-				startActivity(tutorialIntent);
-			} else {
-				Intent gameIntent = new Intent(context, ScreenSelectionActivity.class);
-				gameIntent.putExtra(Constants.TAG_SENSOR_LIST, sensorTypes);
-				gameIntent.putExtra(Constants.TAG_LOAD_GAME, displayTutorial);
-				gameIntent.putExtra(Constants.TAG_SCREEN_SELECTION_MAP_HEIGHT, calculateMapHeight());
-				gameIntent.putExtra(Constants.TAG_SCREEN_SELECTION_MAP_WIDTH, calculateMapWidth());
-				startActivity(gameIntent);
-			}
 		}
 	}
 
@@ -199,7 +369,8 @@ public class MainMenuActivity extends Activity {
 	 */
 	private void launchSensorActivity(){
 		Intent checkSensorListIntent = new Intent(context, SensorActivity.class);
-		startActivityForResult(checkSensorListIntent, Constants.REQUEST_SENSOR_LIST);
+		checkSensorListIntent.putParcelableArrayListExtra(Constants.TAG_SENSOR_EVENTS, (ArrayList<? extends Parcelable>) sensorEvents);
+		startActivity(checkSensorListIntent);
 	}
 
 	@Override
@@ -208,8 +379,6 @@ public class MainMenuActivity extends Activity {
 
 		// Run permissions request only the first time
 		checkAppVersion();
-
-		// ISSUE #9 (Test pending)
 
 		if(MusicManager.getInstance() != null && MusicManager.getInstance().isLoaded() && !MusicManager.getInstance().isPlaying())
             MusicManager.getInstance().playBackgroundMusic();
@@ -225,17 +394,6 @@ public class MainMenuActivity extends Activity {
 		// @see: https://stackoverflow.com/questions/32083913/android-gps-requires-access-fine-location-error-even-though-my-manifest-file
 		// @see: https://stackoverflow.com/questions/32266425/android-6-0-permission-denial-requires-permission-android-permission-write-sett
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-			/*
-			if (!Settings.System.canWrite(context)) {
-
-				if(!hasPermission(INITIAL_PERMS[0])) {
-					Intent intent = new Intent(android.provider.Settings.ACTION_MANAGE_WRITE_SETTINGS);
-					intent.setData(Uri.parse("package:" + this.getPackageName()));
-					intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-					startActivityForResult(intent, Constants.REQUEST_PERMISSIONS);
-				}
-			}
-		    */
 			loadSettings();
 		}
 	}
@@ -251,13 +409,14 @@ public class MainMenuActivity extends Activity {
 		if (oldAppVersion < currentAppVersionCode) {
 			try {
 				if (oldAppVersion > 0) {
-					Toast.makeText(this, String.format(Locale.ENGLISH, "App updated from version %d", oldAppVersion), Toast.LENGTH_SHORT).show();
+					Log.i(TAG,String.format(Locale.ENGLISH, "App updated from version %d", oldAppVersion));
 				} else {
-					firstGame = true;
 					requestPermissionsFirstTime();
-					//Toast.makeText(this, String.format("App started for the first time", oldAppVersion), Toast.LENGTH_SHORT).show();
+					Log.i(TAG, "App started for the first time");
 				}
 
+				// Show devices\' sensors list only after a fresh install or after an update.
+				launchSensorActivity();
 			} finally {
 				SharedPreferences.Editor preferencesEditor = mPreferences.edit();
 				preferencesEditor.putInt(Constants.APP_VERSION, currentAppVersionCode);
@@ -335,7 +494,7 @@ public class MainMenuActivity extends Activity {
 					Settings.System.SCREEN_BRIGHTNESS_MODE_AUTOMATIC);
 		}
 
-		GameHelper.loadGameAtPreferences(this, new Player(), new Ship(), new Map(new Date(), 1, 1));
+		GameHelper.loadGameAtPreferences(this, new Player(), new Ship(), new Map(new Date(), Constants.MAP_MIN_HEIGHT, Constants.MAP_MIN_WIDTH));
 		Map helperMap = GameHelper.helperMap;
 
 		if(helperMap.getMapLength() == Constants.MAP_MIN_LENGTH) {
@@ -344,35 +503,6 @@ public class MainMenuActivity extends Activity {
 		} else {
 			btnLoadGame.setEnabled(true);
 			mOverwriteWarning = true;
-		}
-	}
-
-    @Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		switch (requestCode) {
-			case Constants.REQUEST_SENSOR_LIST:
-				if (resultCode == RESULT_OK) {
-					int[] sensorTypes = data
-							.getIntArrayExtra(Constants.TAG_SENSOR_LIST);
-
-					boolean emptyList = true;
-					for (int sensorType : sensorTypes) {
-						if (sensorType != 0)
-							emptyList = false;
-					}
-					if(emptyList){
-						Toast.makeText(context, "No sensors have been detected. No events will be triggered.", Toast.LENGTH_LONG).show();
-						SharedPreferences.Editor editor = mPreferences.edit();
-						editor.putBoolean(Constants.PREF_DEVICE_NOSENSORS, true);
-						editor.apply();
-					}
-
-					launchGame(newGame, sensorTypes);
-				}
-				break;
-			case Constants.REQUEST_PERMISSIONS:
-
-				break;
 		}
 	}
 
@@ -405,27 +535,20 @@ public class MainMenuActivity extends Activity {
 			btnPositive.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View view) {
-					boolean noSensors = ((MainMenuActivity)getActivity()).mPreferences.getBoolean(Constants.PREF_DEVICE_NOSENSORS, false);
-					boolean shipControlMode = ((MainMenuActivity)getActivity()).mPreferences.getBoolean(Constants.PREF_SHIP_CONTROL_MODE, Constants.PREF_GAME_TOUCH);
-					boolean ammoControlMode = ((MainMenuActivity)getActivity()).mPreferences.getBoolean(Constants.PREF_AMMO_CONTROL_MODE, Constants.PREF_GAME_TOUCH);
-					boolean levelControlMode = ((MainMenuActivity)getActivity()).mPreferences.getBoolean(Constants.PREF_LEVEL_CONTROL_MODE, Constants.PREF_GAME_TOUCH);
-					boolean pauseControlMode = ((MainMenuActivity)getActivity()).mPreferences.getBoolean(Constants.PREF_PAUSE_CONTROL_MODE, Constants.PREF_GAME_TOUCH);
+					boolean shipControlMode = ((MainMenuActivity)getActivity()).mPreferences.getBoolean(Constants.PREF_SHIP_CONTROL_MODE, Constants.PREF_IS_ACTIVE);
+					boolean ammoControlMode = ((MainMenuActivity)getActivity()).mPreferences.getBoolean(Constants.PREF_AMMO_CONTROL_MODE, Constants.PREF_IS_ACTIVE);
+					boolean shootControlMode = ((MainMenuActivity)getActivity()).mPreferences.getBoolean(Constants.PREF_SHOOT_CONTROL_MODE, Constants.PREF_IS_ACTIVE);
 
 					SharedPreferences.Editor editor = ((MainMenuActivity)getActivity()).mPreferences.edit();
 					editor.clear();
+					// Sets default preferences
 					editor.putBoolean(Constants.PREF_SHIP_CONTROL_MODE, shipControlMode);
 					editor.putBoolean(Constants.PREF_AMMO_CONTROL_MODE, ammoControlMode);
-					editor.putBoolean(Constants.PREF_LEVEL_CONTROL_MODE, levelControlMode);
-					editor.putBoolean(Constants.PREF_PAUSE_CONTROL_MODE, pauseControlMode);
+					editor.putBoolean(Constants.PREF_SHOOT_CONTROL_MODE, shootControlMode);
 					editor.putBoolean(Constants.TAG_EXE_MODE, Constants.isInDebugMode(((MainMenuActivity)getActivity()).mMode));
 					editor.apply();
 
-					if(!noSensors)
-						((MainMenuActivity)getActivity()).launchSensorActivity();
-					else{
-						int[] emptySensorList = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
-						((MainMenuActivity)getActivity()).launchGame(!((MainMenuActivity)getActivity()).mOverwriteWarning, emptySensorList);
-					}
+					((MainMenuActivity)getActivity()).launchGame(true, ((MainMenuActivity)getActivity()).activeSensors);
 				}
 			});
 			btnNegative.setOnClickListener(new OnClickListener() {

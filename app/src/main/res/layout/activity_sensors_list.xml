@@ -22,29 +22,16 @@
         android:layout_weight="1"
         tools:listitem="@layout/list_item_sensor_event"/>
 
-    <LinearLayout
+
+    <Button
+        style="?android:attr/buttonBarButtonStyle"
+        android:id="@+id/btnBack"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/extra_small_padding_size">
+        android:padding="@dimen/extra_small_padding_size"
+        android:text="@string/btn_back"
+        android:background="@drawable/xml_btn_style"/>
 
-        <Button
-            style="?android:attr/buttonBarButtonStyle"
-            android:id="@+id/btnCancel"
-            android:layout_height="wrap_content"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:text="@string/btn_cancel"
-            android:background="@drawable/xml_btn_style"/>
 
-        <Button
-            style="?android:attr/buttonBarButtonStyle"
-            android:id="@+id/btnContinue"
-            android:layout_height="wrap_content"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:text="@string/btn_continue"
-            android:background="@drawable/xml_btn_style"/>
-
-    </LinearLayout>
 
 </LinearLayout>

@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 
 import tfm.uniovi.pirateseas.R;
 import tfm.uniovi.pirateseas.model.canvasmodel.game.BasicModel;
@@ -16,8 +15,7 @@ public class Sea extends BasicModel{
 	
 	private Drawable mImageAux;
 	private static int startingHeight;
-	
-	@SuppressWarnings("deprecation")
+
 	@SuppressLint("NewApi")
     /*
      * Constructor
@@ -26,14 +24,9 @@ public class Sea extends BasicModel{
 		super(context, x, y, mCanvasWidth, mCanvasHeight, null);
 		
 		startingHeight = (int) y;
-		
-		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
-			setImage(context.getResources().getDrawable(R.mipmap.txtr_water, null));
-			mImageAux = context.getResources().getDrawable(R.mipmap.txtr_water, null);
-		} else {
-			setImage(context.getResources().getDrawable(R.mipmap.txtr_water));
-			mImageAux = context.getResources().getDrawable(R.mipmap.txtr_water);
-		}
+
+		setImage(context.getResources().getDrawable(R.mipmap.txtr_water, null));
+		mImageAux = context.getResources().getDrawable(R.mipmap.txtr_water, null);
 	}
 	
 	@Override

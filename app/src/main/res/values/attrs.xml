@@ -14,6 +14,6 @@
 	<declare-styleable name="UIDisplayElement">
 	    <attr name="android_layout_gravity" format="integer" />
 	    <attr name="android_layout_position" format="integer" />
-        <attr name="defaultValue" format="integer" />
+        <attr name="value" format="integer" />
     </declare-styleable>
 </resources>

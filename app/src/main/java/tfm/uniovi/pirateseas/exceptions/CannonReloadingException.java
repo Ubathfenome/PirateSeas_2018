@@ -9,7 +9,7 @@ public class CannonReloadingException extends Exception {
 
 	/**
 	 * Constructor
-	 * @param message
+	 * @param message String message
 	 */
 	public CannonReloadingException(String message){
 		super(message);

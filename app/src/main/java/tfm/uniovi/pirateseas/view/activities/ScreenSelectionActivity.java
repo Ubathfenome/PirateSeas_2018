@@ -17,6 +17,7 @@ import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -30,13 +31,16 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Random;
 
 import tfm.uniovi.pirateseas.R;
 import tfm.uniovi.pirateseas.controller.androidGameAPI.Map;
 import tfm.uniovi.pirateseas.controller.androidGameAPI.Player;
 import tfm.uniovi.pirateseas.controller.audio.MusicManager;
+import tfm.uniovi.pirateseas.controller.sensors.events.AppSensorEvent;
 import tfm.uniovi.pirateseas.global.Constants;
 import tfm.uniovi.pirateseas.model.canvasmodel.game.entity.Ship;
 import tfm.uniovi.pirateseas.model.canvasmodel.game.entity.ShipType;
@@ -65,6 +69,7 @@ public class ScreenSelectionActivity extends Activity {
 	int clearedMaps;
 
 	int[] sensorTypes = null;
+	private List<AppSensorEvent> sensorEvents;
 	boolean loadGame;
 
 	private Context context;
@@ -82,12 +87,15 @@ public class ScreenSelectionActivity extends Activity {
 
 		this.context = this;
 
-		Intent intent = getIntent();
+		sensorEvents = new ArrayList<>();
 
-		sensorTypes = intent.getIntArrayExtra(Constants.TAG_SENSOR_LIST);
-		loadGame = intent.getBooleanExtra(Constants.TAG_LOAD_GAME, false);
-		mapHeight = intent.getIntExtra(Constants.TAG_SCREEN_SELECTION_MAP_HEIGHT, Constants.MAP_MIN_HEIGHT);
-		mapWidth = intent.getIntExtra(Constants.TAG_SCREEN_SELECTION_MAP_WIDTH, Constants.MAP_MIN_WIDTH);
+		Intent data = getIntent();
+		sensorEvents = data.getParcelableArrayListExtra(Constants.TAG_SENSOR_EVENTS);
+
+		sensorTypes = data.getIntArrayExtra(Constants.TAG_SENSOR_LIST);
+		loadGame = data.getBooleanExtra(Constants.TAG_LOAD_GAME, false);
+		mapHeight = data.getIntExtra(Constants.TAG_SCREEN_SELECTION_MAP_HEIGHT, Constants.MAP_MIN_HEIGHT);
+		mapWidth = data.getIntExtra(Constants.TAG_SCREEN_SELECTION_MAP_WIDTH, Constants.MAP_MIN_WIDTH);
 
 		Date date = new Date();
 		GameHelper.loadGameAtPreferences(this,p = new Player(), ship = new Ship(), map = new Map(date, mapHeight, mapWidth));
@@ -245,6 +253,7 @@ public class ScreenSelectionActivity extends Activity {
 		GameHelper.saveGameAtPreferences(this, p, ship, map);
 
 		Intent newGameIntent = new Intent(context, GameActivity.class);
+		newGameIntent.putParcelableArrayListExtra(Constants.TAG_SENSOR_EVENTS, (ArrayList<? extends Parcelable>) sensorEvents);
 		newGameIntent.putExtra(Constants.TAG_SENSOR_LIST, sensorTypes);
 		newGameIntent.putExtra(Constants.TAG_LOAD_GAME, loadGame);
 		newGameIntent.putExtra(Constants.TAG_SCREEN_SELECTION_MAP_HEIGHT, mapHeight);
@@ -266,6 +275,7 @@ public class ScreenSelectionActivity extends Activity {
 
 	private void launchResetIntent(){
 		Intent resetIntent = new Intent(this, ScreenSelectionActivity.class);
+		resetIntent.putParcelableArrayListExtra(Constants.TAG_SENSOR_EVENTS, (ArrayList<? extends Parcelable>) sensorEvents);
 		resetIntent.putExtra(Constants.TAG_SENSOR_LIST, sensorTypes);
 		resetIntent.putExtra(Constants.TAG_LOAD_GAME, loadGame);
 		resetIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -295,6 +305,7 @@ public class ScreenSelectionActivity extends Activity {
 		Random rand = new Random();
 		boolean yesNo = rand.nextBoolean();
 		Intent shopIntent = new Intent(this, ShopActivity.class);
+		shopIntent.putParcelableArrayListExtra(Constants.TAG_SENSOR_EVENTS, (ArrayList<? extends Parcelable>) sensorEvents);
 		shopIntent.putExtra(Constants.TAG_SENSOR_LIST, sensorTypes);
 		shopIntent.putExtra(Constants.TAG_LOAD_GAME, loadGame);
 		shopIntent.putExtra(Constants.ITEMLIST_NATURE, yesNo ? Constants.NATURE_SHOP : Constants.NATURE_TREASURE);
@@ -319,6 +330,7 @@ public class ScreenSelectionActivity extends Activity {
 		getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
 		int screenHeight = displayMetrics.heightPixels - (2 * (int) getResources().getDimension(R.dimen.small_padding_size));
 		int screenWidth = displayMetrics.widthPixels - (2 * (int) getResources().getDimension(R.dimen.small_padding_size));
+		//noinspection UnusedAssignment
 		Bitmap bitmap = Bitmap.createBitmap(screenWidth, screenHeight, Bitmap.Config.ARGB_8888);
 
 		int fragmentHeight = bmpCover.getHeight();
@@ -350,9 +362,12 @@ public class ScreenSelectionActivity extends Activity {
 			} else {	// Water image
 				bmpContent[i] = bmpWater;
 			}
-			if(active==i && s.contains("0")){		// Overlap edge image to easier identify of active cell
-				bmpContent[i] = DrawableHelper.overlapBitmaps(bmpContent[i], bmpActive);
-			}
+		}
+
+		if(mapContent[active].contains("0")){		// Overlap edge image to easier identify of active cell
+			bmpContent[active] = DrawableHelper.overlapBitmaps(bmpContent[active], bmpActive);
+		} else if(mapContent[lastActive].contains("0")){
+			bmpContent[lastActive] = DrawableHelper.overlapBitmaps(bmpContent[lastActive], bmpActive);
 		}
 
 		bitmap = DrawableHelper.mergeBitmaps(bmpContent, screenHeight, screenWidth);
@@ -411,6 +426,7 @@ public class ScreenSelectionActivity extends Activity {
 			final Activity dummyActivity = getActivity();
 			AlertDialog.Builder builder = new AlertDialog.Builder(dummyActivity);
 			LayoutInflater inflater = dummyActivity.getLayoutInflater();
+			@SuppressLint("InflateParams")
 			View view = inflater.inflate(R.layout.custom_dialog_layout, null);
 			TextView txtTitle = view.findViewById(R.id.txtTitle);
 			TextView txtMessage = view.findViewById(R.id.txtMessage);
