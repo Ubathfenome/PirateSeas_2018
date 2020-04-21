@@ -91,6 +91,7 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 	private int nGameMode;
 
 	private boolean nShipControlMode;
+	private boolean nShootControlMode;
 
 	private boolean messageSent = false;
 	private boolean messageReaded = false;
@@ -193,6 +194,7 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 		nGameMode = Constants.GAMEMODE_IDLE;
 		Log.d(TAG, "Initialization: GameMode set to IDLE");
 		nShipControlMode = nPreferences.getBoolean(Constants.PREF_SHIP_CONTROL_MODE, Constants.PREF_IS_ACTIVE);
+		nShootControlMode = nPreferences.getBoolean(Constants.PREF_SHOOT_CONTROL_MODE, Constants.PREF_IS_ACTIVE);
 
 		nInitialized = true;
 	}
@@ -279,7 +281,7 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 	 * @param holder Holder
 	 */
 	public void surfaceCreated(SurfaceHolder holder) {
-		if (!Constants.isInDebugMode(Constants.MODE))
+		if (Constants.isInDebugMode(Constants.MODE))
 			Log.d(TAG, "Surface Created");
 
 		if (!nUpdateThread.isAlive()) {
@@ -338,30 +340,10 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
                     switch (direction) {
                         case Constants.FRONT:
                             nCheatCounter = 0;
-                            if (reloaded && nEnemyShip.isAlive()) {
-                                try {
-                                    // If using AIMED ammo, dealt damage to enemy instantly
-                                    if (nPlayerShip.getSelectedAmmo() == Ammunitions.AIMED && nPlayerShip.getSelectedAmmunition() > 0) {
-                                        nEnemyShip.looseHealth((int) (Constants.DEFAULT_SHOOT_DAMAGE * nPlayerShip.getPower()));
-                                        nPlayerShip.setSelectedAmmunition(nPlayerShip.getSelectedAmmunition() - 1);
-                                    } else {
-                                        nShotList.addAll(Arrays.asList(nPlayerShip.shootCannon()));
-                                    }
-                                    MusicManager.getInstance().playSound(MusicManager.SOUND_SHOT_FIRED);
-                                } catch (NoAmmoException e) {
-                                    Log.e(EXCEPTION_TAG, e.getMessage());
-                                    ((GameActivity) nContext).showText(e.getMessage());
-                                }
-                            } else {
-                                try {
-                                    throw new CannonReloadingException(
-                                            nContext.getResources().getString(R.string.exception_reloading));
-                                } catch (CannonReloadingException e) {
-                                    Log.e(EXCEPTION_TAG, e.getMessage());
-                                    MusicManager.getInstance().playSound(MusicManager.SOUND_SHOT_RELOADING);
-                                    ((GameActivity) nContext).showText(e.getMessage());
-                                }
-                            }
+                            // Add if-clause for the active ShootMode
+							if(!nShootControlMode) {
+								playerDoShot(reloaded);
+							}
                             break;
                         case Constants.RIGHT:
                             if (nShipControlMode) {
@@ -399,6 +381,34 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 		}
 		nTouched = false;
 		return true;
+	}
+
+	private void playerDoShot(boolean reloaded) {
+		if (reloaded && nEnemyShip.isAlive()) {
+			try {
+				// If using AIMED ammo, dealt damage to enemy instantly
+				if (nPlayerShip.getSelectedAmmo() == Ammunitions.AIMED && nPlayerShip.getSelectedAmmunition() > 0) {
+					nEnemyShip.looseHealth((int) (Constants.DEFAULT_SHOOT_DAMAGE * nPlayerShip.getPower()));
+					MusicManager.getInstance().playSound(MusicManager.SOUND_SHOT_HIT);
+					nPlayerShip.setSelectedAmmunition(nPlayerShip.getSelectedAmmunition() - 1);
+				} else {
+					nShotList.addAll(Arrays.asList(nPlayerShip.shootCannon()));
+					MusicManager.getInstance().playSound(MusicManager.SOUND_SHOT_FIRED);
+				}
+			} catch (NoAmmoException e) {
+				Log.e(EXCEPTION_TAG, e.getMessage());
+				((GameActivity) nContext).showText(e.getMessage());
+			}
+		} else {
+			try {
+				throw new CannonReloadingException(
+						nContext.getResources().getString(R.string.exception_reloading));
+			} catch (CannonReloadingException e) {
+				Log.e(EXCEPTION_TAG, e.getMessage());
+				MusicManager.getInstance().playSound(MusicManager.SOUND_SHOT_RELOADING);
+				((GameActivity) nContext).showText(e.getMessage());
+			}
+		}
 	}
 
 	/**
@@ -662,7 +672,7 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 						}
 						break;
 					case Constants.SHOT_HIT:
-						// Play hit sound
+							// Play hit sound
 							MusicManager.getInstance().playSound(MusicManager.SOUND_SHOT_HIT);
 							s.looseHealth(s.getDamage());
 						break;
@@ -692,16 +702,18 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 				nGameMode = Constants.GAMEMODE_ADVANCE;
 				Log.d(TAG, "GameMode set to ADVANCE");
 			} else {
-				// EnemyShip shoot
-				if(nEnemyShip.isReloaded(nGameTimestamp)) {
-                    try {
-						nShotList.addAll(Arrays.asList(nEnemyShip.shootCannon()));
-                        MusicManager.getInstance().playSound(MusicManager.SOUND_SHOT_FIRED);
-                    } catch (NoAmmoException e) {
-                        Log.e(EXCEPTION_TAG, e.getMessage());
-						((GameActivity)nContext).showText(e.getMessage());
-                    }
-                }
+				// EnemyShip shoot - Enemy wont shoot on debug
+				if (!Constants.isInDebugMode(Constants.MODE)) {
+					if(nEnemyShip.isReloaded(nGameTimestamp)) {
+						try {
+							nShotList.addAll(Arrays.asList(nEnemyShip.shootCannon()));
+							MusicManager.getInstance().playSound(MusicManager.SOUND_SHOT_FIRED);
+						} catch (NoAmmoException e) {
+							Log.e(EXCEPTION_TAG, e.getMessage());
+							((GameActivity) nContext).showText(e.getMessage());
+						}
+					}
+				}
 				// Establecer comportamiento enemigo con movimiento en circulo
 				if(nEnemyShip.getX()+nEnemyShip.getWidth()+nEnemyShip.getShipType().getSpeed() > nScreenWidth) {
 					if(nEnemyShip.getY() > nEnemyShipInitialYcoord) {
@@ -767,7 +779,7 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 	 * Activates the maelstorm event
 	 */
 	public void maelstorm() {
-		if (!Constants.isInDebugMode(Constants.MODE))
+		if (Constants.isInDebugMode(Constants.MODE))
 			Log.d(TAG, "Maelstorm inbound!");
 		nWhirlpool = new Whirlpool(nContext, 0, HORIZON_Y_VALUE, nScreenWidth, nScreenHeight, null);
 		// All ships loose some health
@@ -782,7 +794,7 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 	 * Spawn a random enemy
 	 */
 	public void spawnEnemyShip() {
-		if (!Constants.isInDebugMode(Constants.MODE))
+		if (Constants.isInDebugMode(Constants.MODE))
 			Log.d(TAG, "Enemy spawned");
 		MusicManager.getInstance().playSound(MusicManager.SOUND_ENEMY_APPEAR);
 		MusicManager.getInstance().changeSong(nContext, MusicManager.MUSIC_BATTLE);

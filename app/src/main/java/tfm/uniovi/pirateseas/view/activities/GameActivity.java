@@ -297,7 +297,7 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 		mCanvasView.setStatus(Constants.GAME_STATE_NORMAL);
 
 		if (!CanvasView.nUpdateThread.isAlive() && CanvasView.nUpdateThread.getState() != Thread.State.NEW) {
-			if (!Constants.isInDebugMode(Constants.MODE))
+			if (Constants.isInDebugMode(Constants.MODE))
 				Log.e(TAG, "MainLogic is DEAD. Re-starting...");
 			mCanvasView.launchMainLogic();
 			CanvasView.nUpdateThread.start();
@@ -334,7 +334,7 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
     }
 
 	public void startVoiceRecognitionRequest() {
-		if(shootControlMode && mCanvasView.isScreenTouched()){
+		if(shootControlMode){
 			if(!mIsListening) {
 				ActivityCompat.requestPermissions
 						(GameActivity.this,
@@ -917,7 +917,8 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
         private void doAction() {
             try {
 				imgMicStatus.setImageResource(R.drawable.ic_mic_enabled);
-                mCanvasView.nShotList.addAll(Arrays.asList(mCanvasView.nPlayerShip.shootCannon()));
+				CanvasView canvasView = mCanvasView.nUpdateThread.getCanvasViewInstance();
+				canvasView.nShotList.addAll(Arrays.asList(canvasView.nPlayerShip.shootCannon()));
             } catch (NoAmmoException e) {
                 showText(e.getMessage());
             }

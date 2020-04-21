@@ -1,5 +1,7 @@
 package tfm.uniovi.pirateseas.controller.sensors.events;
 
+import android.util.Log;
+
 import tfm.uniovi.pirateseas.controller.sensors.SensorType;
 
 @SuppressWarnings("unused")
@@ -27,7 +29,7 @@ public class EventWeatherMaelstrom extends AppSensorEvent{
         return Math.abs(gHypot - AVERAGE) >= THRESHOLD;
 		*/
 
-		// Log.d(TAG, "ySpeed: " + ySpeed + " (" + THRESHOLD + ")");
+		Log.d(TAG, "ySpeed: " + Math.abs(ySpeed) + " (" + THRESHOLD + ")");
 
 		return Math.abs(ySpeed) >= THRESHOLD;
     }

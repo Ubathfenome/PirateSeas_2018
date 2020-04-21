@@ -367,7 +367,9 @@ public class ScreenSelectionActivity extends Activity {
 		if(mapContent[active].contains("0")){		// Overlap edge image to easier identify of active cell
 			bmpContent[active] = DrawableHelper.overlapBitmaps(bmpContent[active], bmpActive);
 		} else if(mapContent[lastActive].contains("0")){
-			bmpContent[lastActive] = DrawableHelper.overlapBitmaps(bmpContent[lastActive], bmpActive);
+			active = lastActive;
+			map.setActiveCell(active);
+			bmpContent[active] = DrawableHelper.overlapBitmaps(bmpContent[active], bmpActive);
 		}
 
 		bitmap = DrawableHelper.mergeBitmaps(bmpContent, screenHeight, screenWidth);

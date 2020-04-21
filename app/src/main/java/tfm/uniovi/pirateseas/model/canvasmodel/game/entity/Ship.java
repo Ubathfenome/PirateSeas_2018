@@ -197,6 +197,7 @@ public class Ship extends Entity implements Parcelable{
 										.powerMultiplier()), timestampLastShot);
 						break;
 					case 1:
+						cannonballVector = new Shot[0];
 						break;
 					case 2:
 						cannonballVector = new Shot[2];
