@@ -62,6 +62,8 @@ public class Constants{
 	public static final int SHIP_MAX_POWER = 500;
 	public static final int SHIP_MAX_RANGE = 30;
 
+	public static final int MAP_PIECES_LIMIT = 6;
+
 	public static final int SHOT_AMMO_UNLIMITED = -1;
 	public static final int SHOT_FIRED = 0;
 	public static final int SHOT_FLYING = 1;
@@ -120,6 +122,7 @@ public class Constants{
 	public static final String PREF_MAP_CONTENT = "mapContent";
 	public static final String PREF_MAP_HEIGHT = "mapHeight";
 	public static final String PREF_MAP_WIDTH = "mapWidth";
+	public static final String PREF_TUTORIAL_ALREADY_SHOWN = "tutorialAlreadyShown";
 
 	public static final String PREF_DEVICE_HEIGHT_RES = "deviceHeightPref";
 	public static final String PREF_DEVICE_WIDTH_RES = "deviceWidthPref";

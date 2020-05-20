@@ -158,4 +158,9 @@ public class Entity extends BasicModel{
 	public void setEntityDirection(int entityDirection) {
 		this.entityDirection = entityDirection;
 	}
+
+	/**
+	 * @param health the health to set
+	 */
+	public void setHealth(int health){ this.mHealthPoints = health; }
 }

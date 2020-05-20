@@ -63,16 +63,18 @@
             android:text="@string/max_value" />
 	</LinearLayout>
 
-    <TextView
-        android:id="@+id/lblRestartHint"
-        android:layout_width="wrap_content"
+    <Button
+        android:id="@+id/btn_load_game"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginBottom="8dp"
-        android:layout_gravity="center_horizontal"
-        android:gravity="bottom"
-        android:text="@string/gameover_hint"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
+        android:text="@string/activity_load_game"
+        android:background="@drawable/xml_btn_style"/>
+
+    <Button
+        android:id="@+id/btn_main_menu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/btn_back_main_menu"
+        android:background="@drawable/xml_btn_style"/>
 
 </LinearLayout>

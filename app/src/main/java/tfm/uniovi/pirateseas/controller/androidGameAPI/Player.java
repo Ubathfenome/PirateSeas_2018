@@ -6,6 +6,7 @@ import android.os.Parcelable;
 
 import tfm.uniovi.pirateseas.R;
 import tfm.uniovi.pirateseas.exceptions.NotEnoughGoldException;
+import tfm.uniovi.pirateseas.global.Constants;
 
 /**
  * Class that represents the player stats. Holds the value of the gold the player won, its experience points among its experience level and the map pieces found
@@ -20,7 +21,6 @@ import tfm.uniovi.pirateseas.exceptions.NotEnoughGoldException;
  */
 public class Player implements Parcelable {
 	private static final int INVALID_VALUE = -1;
-	private static final int MAP_PIECES_LIMIT = 6;
 	private static final int[] LOG_BASES = {0, 400, 1900, 4500, 8200, 13000, 18900, 24900};
 
 	private int level;
@@ -190,12 +190,12 @@ public class Player implements Parcelable {
 		if (mapPieces < 0) {
 			this.mapPieces = 0;
 		} else {
-			if (mapPieces > (2 * MAP_PIECES_LIMIT-1)) {
-				mapPieces = (2 * MAP_PIECES_LIMIT-1);
+			if (mapPieces > (2 * Constants.MAP_PIECES_LIMIT-1)) {
+				mapPieces = (2 * Constants.MAP_PIECES_LIMIT-1);
 			}
-			if (mapPieces % MAP_PIECES_LIMIT == 0 && mapPieces != 0) {
+			if (mapPieces % Constants.MAP_PIECES_LIMIT == 0 && mapPieces != 0) {
 				hasCompleteMap = true;
-				mapPieces -= MAP_PIECES_LIMIT;
+				mapPieces -= Constants.MAP_PIECES_LIMIT;
 			}
 			this.mapPieces = mapPieces;
 		}
@@ -206,9 +206,9 @@ public class Player implements Parcelable {
 	 */
 	public void addMapPiece() {
 		this.mapPieces++;
-		if (mapPieces % MAP_PIECES_LIMIT == 0) {
+		if (mapPieces % Constants.MAP_PIECES_LIMIT == 0) {
 			hasCompleteMap = true;
-			mapPieces -= MAP_PIECES_LIMIT;
+			mapPieces -= Constants.MAP_PIECES_LIMIT;
 		}
 	}
 

@@ -107,12 +107,6 @@
         Miguel Angel Jiménez Rega - UO179050\n
         Para el Trabajo de Fin de Master</string>
 
-    <!-- Pause Activity tooltips -->
-    <string name="pause_hint_health">Salud del barco: %1$d / %2$d</string>
-    <string name="pause_hint_power">Daño de los cañones: %1$d / %2$d</string>
-    <string name="pause_hint_range">Alcance de los cañones: %1$d / %2$d</string>
-    <string name="pause_hint_default">Pasa el dedo sobre los iconos para ver su valor</string>
-
     <!-- Screen Slide Content -->
     <string name="title_screen_slide">Diapositivas</string>
     <string name="action_finish">Terminar</string>
@@ -176,7 +170,7 @@
     <string name="tutorial_8">Conviertete en el mayor Rey Pirata! o caminarás por la plancha!</string>
 
     <string name="gameover_title">Fin de la partida\nA dormir con los tiburones</string>
-    <string name="gameover_hint">(Pulsa en cualquier lugar para reiniciar el juego&#8230;)</string>
+    <string name="gameover_hint">(Toca en cualquier lugar para volver al menu principal)</string>
     <string name="gameover_score">Puntuación</string>
     <string name="gameover_days">Días transcurridos</string>
 
@@ -195,15 +189,17 @@
     <string name="game_message_islands_discovered">Ya hemos encontrado todas las islas de este mar. Venderemos este mapa por 90 monedas de oro!</string>
 
     <!-- Help strings -->
-    <string name="help_message_1">1. Tipo de munición seleccionada</string>
-    <string name="help_message_2">2. Barra de vida del enemigo</string>
-    <string name="help_message_3">3. Botón de pausa</string>
-    <string name="help_message_4">4. Barco enemigo</string>
-    <string name="help_message_5">5. Barra de vida del jugador</string>
-    <string name="help_message_6">6. Barra de experiencia del jugador</string>
-    <string name="help_message_7">7. Barco del jugador</string>
-    <string name="help_message_8">8. Oro del jugador</string>
-    <string name="help_message_9">9. Municion restante</string>
+    <string-array name="help_messages">
+        <item>1. Tipo de munición seleccionada</item>
+        <item>2. Barra de vida del enemigo</item>
+        <item>3. Botón de pausa</item>
+        <item>4. Barco enemigo</item>
+        <item>5. Barra de vida del jugador</item>
+        <item>6. Barra de experiencia del jugador</item>
+        <item>7. Barco del jugador</item>
+        <item>8. Oro del jugador</item>
+        <item>9. Municion restante</item>
+    </string-array>
 
     <string name="lang">es</string>
     <string name="command_fire">fuego</string>
@@ -239,12 +235,26 @@
     <string name="txt_sensor_event_desc">Muestra los sensores del dispositivo y el evento relacionado</string>
     <string name="lbl_wipe_memory">Borrar memoria</string>
     <string name="txt_wipe_memory_desc">Borra la memoria de la aplicación</string>
-    <string name="txt_ship_on_desc">Mueve tu barco arrastrando el dedo por la pantalla</string>
-    <string name="txt_ship_off_desc">Mueve tu barco inclinando tu dispositivo hacia los lados</string>
-    <string name="txt_ammo_on_desc">Cambia la municion seleccionada tocando el botón de la municion actual</string>
-    <string name="txt_ammo_off_desc">Cambia la municion seleccionada usando los botones de volumen del dispositivo</string>
-    <string name="txt_shoot_on_desc">Dispara los cañones usando tu voz o tocando la pantalla</string>
-    <string name="txt_shoot_off_desc">Dispara tus cañones deslizando el dedo hacia arriba por la pantalla</string>
+
+    <string-array name="ship_controls">
+        <item>Mueve tu barco arrastrando el dedo por la pantalla</item>
+        <item>Mueve tu barco inclinando tu dispositivo hacia los lados</item>
+    </string-array>
+    <string-array name="ammo_controls">
+        <item>Cambia la municion seleccionada tocando el botón de la municion actual</item>
+        <item>Cambia la municion seleccionada usando los botones de volumen del dispositivo</item>
+    </string-array>
+    <string-array name="shoot_controls">
+        <item>Dispara los cañones usando tu voz o tocando la pantalla</item>
+        <item>Dispara tus cañones deslizando el dedo hacia arriba por la pantalla</item>
+    </string-array>
+
+    <string-array name="control_values">
+        <item>true</item>
+        <item>false</item>
+    </string-array>
+
+    <!-- Sensors -->
     <string name="sensor_accelerometer">Acelerometro</string>
     <string name="sensor_magnetic_field">Campo magnetico</string>
     <string name="sensor_orientation">Orientacion</string>
@@ -261,5 +271,12 @@
     <string name="btn_back">Volver</string>
 
     <string name="progress_bar_title">Agita tu dispositivo</string>
+    <string name="btn_back_main_menu">Volver al menu principal</string>
+    <string name="icd_health">Icono salud</string>
+    <string name="icd_range">Icono alcance</string>
+    <string name="icd_xp">Icono experiencia</string>
+    <string name="icd_power">Icono poder</string>
+    <string name="icd_map">Icono mapa</string>
+    <string name="current_level_xp">Nvl %1$d (%2$d)</string>
 
 </resources>

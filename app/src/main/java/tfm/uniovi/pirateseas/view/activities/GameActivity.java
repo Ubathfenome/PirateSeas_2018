@@ -104,10 +104,9 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 	private List<AppSensorEvent> sensorEvents;
 
     public ImageButton btnPause, btnChangeAmmo;
-    public UIDisplayElement mGold, mAmmo;
+    public UIDisplayElement mAmmo;
 
     public ProgressBar nPlayerHealthBar;
-    public ProgressBar nPlayerExperienceBar;
 
     private ProgressBar nShakesForceBar;
 
@@ -210,16 +209,11 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 
 		imgMicStatus = findViewById(R.id.imgMicStatus);
 
-
-		mGold = findViewById(R.id.playerGold);
-		mGold.setElementValue(0);
 		mAmmo = findViewById(R.id.playerAmmunition);
 		mAmmo.setElementValue(0);
 
         nPlayerHealthBar = findViewById(R.id.prgHealthBar);
         nPlayerHealthBar.getProgressDrawable().setColorFilter(Color.RED, PorterDuff.Mode.SRC_IN);
-        nPlayerExperienceBar = findViewById(R.id.prgXpBar);
-        nPlayerExperienceBar.getProgressDrawable().setColorFilter(Color.GREEN, PorterDuff.Mode.SRC_IN);
 
 		nShakesForceBar = findViewById(R.id.shakesProgressBar);
 		nShakesForceBar.setMax((int) EventShakeClouds.threshold);
@@ -328,11 +322,6 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 	    nPlayerHealthBar.setMax(max);
     }
 
-    public void updateExperienceBar(int experience, int max) {
-	    nPlayerExperienceBar.setProgress(experience);
-	    nPlayerExperienceBar.setMax(max);
-    }
-
 	public void startVoiceRecognitionRequest() {
 		if(shootControlMode){
 			if(!mIsListening) {
@@ -404,7 +393,7 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 			final Activity dummyActivity = getActivity();
 			int gold = getArguments().getInt(Constants.ARG_GOLD, 0);
 			int xp = getArguments().getInt(Constants.ARG_XP, 0);
-			AlertDialog.Builder builder = new AlertDialog.Builder(dummyActivity);
+			AlertDialog.Builder builder = new AlertDialog.Builder(dummyActivity, R.style.Dialog_No_Border);
 			LayoutInflater inflater = dummyActivity.getLayoutInflater();
 			View view = inflater.inflate(R.layout.custom_positive_dialog_layout, null);
 			TextView txtTitle = view.findViewById(R.id.txtTitle);
@@ -721,6 +710,8 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 		// Parcelable Extra with Player object content
 		gameOverIntent.putExtra(Constants.TAG_GAME_OVER_PLAYER, Player.clonePlayer(nPlayer));
 		gameOverIntent.putExtra(Constants.TAG_GAME_OVER_MAP, map.getClearedMaps() * map.getMapLength() + map.getClearedCells());
+		gameOverIntent.putParcelableArrayListExtra(Constants.TAG_SENSOR_EVENTS, (ArrayList<? extends Parcelable>) sensorEvents);
+		gameOverIntent.putExtra(Constants.TAG_SENSOR_LIST, sensorTypes);
 		Log.d(TAG, "Start GameOver Intent");
 		this.startActivity(gameOverIntent);
 		shutdownGame();

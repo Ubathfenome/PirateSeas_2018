@@ -64,7 +64,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical|center_horizontal"
-                    android:background="@mipmap/ico_arrow_left"
+                    android:background="@drawable/xml_arrow_left"
                     android:contentDescription="@string/icd_btn_arrow"/>
             </LinearLayout>
 
@@ -81,14 +81,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical|center_horizontal"
-                    android:background="@mipmap/ico_arrow_front"
+                    android:background="@drawable/xml_arrow_front"
                     android:contentDescription="@string/icd_btn_arrow"/>
 
                 <ImageButton
                     android:id="@+id/btnDown"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@mipmap/ico_arrow_down"
+                    android:background="@drawable/xml_arrow_down"
                     android:contentDescription="@string/icd_btn_arrow"/>
             </LinearLayout>
 
@@ -106,7 +106,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical|center_horizontal"
-                    android:background="@mipmap/ico_arrow_right"
+                    android:background="@drawable/xml_arrow_right"
                     android:contentDescription="@string/icd_btn_arrow"/>
             </LinearLayout>
         </LinearLayout>

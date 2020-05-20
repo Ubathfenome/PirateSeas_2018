@@ -246,7 +246,7 @@ public class ShopActivity extends ListActivity{
 		public Dialog onCreateDialog(Bundle savedInstanceState) {
 			final Activity dummyActivity = getActivity();
 
-			AlertDialog.Builder builder = new AlertDialog.Builder(dummyActivity);
+			AlertDialog.Builder builder = new AlertDialog.Builder(dummyActivity, R.style.Dialog_No_Border);
 			LayoutInflater inflater = dummyActivity.getLayoutInflater();
 			View view = inflater.inflate(R.layout.custom_dialog_layout, null);
 			TextView txtTitle = view.findViewById(R.id.txtTitle);
@@ -315,7 +315,7 @@ public class ShopActivity extends ListActivity{
 		@Override
 		public Dialog onCreateDialog(Bundle savedInstanceState) {
 			final Activity dummyActivity = getActivity();
-			AlertDialog.Builder builder = new AlertDialog.Builder(dummyActivity);
+			AlertDialog.Builder builder = new AlertDialog.Builder(dummyActivity, R.style.Dialog_No_Border);
 			LayoutInflater inflater = dummyActivity.getLayoutInflater();
 			View view = inflater.inflate(R.layout.custom_dialog_layout, null);
 			TextView txtTitle = view.findViewById(R.id.txtTitle);

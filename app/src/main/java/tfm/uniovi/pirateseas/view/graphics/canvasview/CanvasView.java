@@ -101,6 +101,8 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 	double nEnemyShipInitialXcoord;
 	double nEnemyShipInitialYcoord;
 
+	int nPlayerShipInitialHealth = 0;
+
 	private boolean nTouched;
 
 	public static int mScreenWidth, mScreenHeight;
@@ -188,6 +190,8 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 		// Reset the player's base ammunition for normal shots
 		nPlayerShip.setSelectedAmmunition(Constants.ZERO_INT);
 		nPlayerShip.gainAmmo(Constants.DEFAULT_PLAYER_SHIP_AMMO, Ammunitions.DEFAULT);
+
+		nPlayerShipInitialHealth = nPlayerShip.getHealth();
 
 		nGameTimestamp = 0;
 		nCheatCounter = 0;
@@ -507,12 +511,8 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 			if (nEnemyShip != null)
 				nEnemyHBar.setCurrentValue(nEnemyShip.getHealth());
             ((GameActivity) nContext).updateHealthBar(nPlayerShip.getHealth(), nPlayerShip.getMaxHealth());
-            ((GameActivity) nContext).updateExperienceBar(nPlayer.getExperience(), nPlayer.getNextLevelThreshold());
 
 			// Manage UIDisplayElements
-			((GameActivity) nContext).mGold.setElementValue(nPlayer.getGold());
-			((GameActivity) nContext).mGold.postInvalidate();
-
 			((GameActivity) nContext).mAmmo.setElementValue(nPlayerShip.getSelectedAmmunition());
 
 			if (nPlayerShip.isReloaded(nGameTimestamp))
@@ -523,7 +523,6 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 			((GameActivity) nContext).mAmmo.postInvalidate();
 		} else if(nGameMode == Constants.GAMEMODE_IDLE){
             ((GameActivity) nContext).updateHealthBar(nPlayerShip.getHealth(), nPlayerShip.getMaxHealth());
-            ((GameActivity) nContext).updateExperienceBar(nPlayer.getExperience(), nPlayer.getNextLevelThreshold());
         }
 	}
 
@@ -759,6 +758,7 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 			// Display "Game Over" Screen with calculated score
 			MusicManager.getInstance().changeSong(nContext, MusicManager.MUSIC_GAME_OVER);
 			nMap.setActiveCell(nMap.getLastActiveCell());
+			nPlayerShip.setHealth(nPlayerShipInitialHealth);
 			saveGame();
             ((GameActivity) nContext).gameOver(nPlayer, nMap);
 			nStatus = Constants.GAME_STATE_END;

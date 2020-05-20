@@ -8,12 +8,26 @@
         <item name="metaButtonBarStyle">@style/ButtonBar</item>
         <item name="metaButtonBarButtonStyle">@style/ButtonBarButton</item>
         <item name="defaultValue">@style/DefaultValue</item>
+
+        <item name="android:dialogTheme">@style/DialogStyle</item>
+        <item name="android:alertDialogTheme">@style/DialogStyle</item>
     </style>
 	
 	<!-- Dialog Theme -->
 	<style name="NoTitleDialog" parent="android:style/Theme.Dialog">
 		<item name="android:windowNoTitle">true</item>
 	</style>
+
+    <style name="Dialog_No_Border">
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
+
+    <style name="DialogStyle" parent="android:Theme.Material.Dialog">
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:background">@color/popup_background</item>
+        <item name="android:windowBackground">@drawable/xml_border</item>
+    </style>
 
     <style name="ButtonBar">
         <item name="android:paddingLeft">2dp</item>

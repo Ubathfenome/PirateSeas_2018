@@ -4,32 +4,26 @@
         android:key="settings_controls_category"
         android:title="@string/lbl_controls">
 
-        <SwitchPreference
+        <ListPreference
             android:key="settings_ship_preference"
-            android:defaultValue="true"
-            android:switchTextOn="@string/toggle_on"
-            android:switchTextOff="@string/toggle_off"
-            android:summaryOn="@string/txt_ship_on_desc"
-            android:summaryOff="@string/txt_ship_off_desc"
-            android:title="@string/lbl_ship_controls" />
+            android:title="@string/lbl_ship_controls"
+            android:dialogTitle="@string/lbl_ship_controls"
+            android:entries="@array/ship_controls"
+            android:entryValues="@array/control_values"/>
 
-        <SwitchPreference
+        <ListPreference
             android:key="settings_ammunition_preference"
-            android:defaultValue="true"
-            android:switchTextOn="@string/toggle_on"
-            android:switchTextOff="@string/toggle_off"
-            android:summaryOn="@string/txt_ammo_on_desc"
-            android:summaryOff="@string/txt_ammo_off_desc"
-            android:title="@string/lbl_ammo_controls" />
+            android:title="@string/lbl_ammo_controls"
+            android:dialogTitle="@string/lbl_ammo_controls"
+            android:entries="@array/ammo_controls"
+            android:entryValues="@array/control_values"/>
 
-        <SwitchPreference
+        <ListPreference
             android:key="settings_shoot_preference"
-            android:defaultValue="true"
-            android:switchTextOn="@string/toggle_on"
-            android:switchTextOff="@string/toggle_off"
-            android:summaryOn="@string/txt_shoot_on_desc"
-            android:summaryOff="@string/txt_shoot_off_desc"
-            android:title="@string/lbl_shoot_controls" />
+            android:title="@string/lbl_shoot_controls"
+            android:dialogTitle="@string/lbl_shoot_controls"
+            android:entries="@array/shoot_controls"
+            android:entryValues="@array/control_values"/>
 
     </PreferenceCategory>
 

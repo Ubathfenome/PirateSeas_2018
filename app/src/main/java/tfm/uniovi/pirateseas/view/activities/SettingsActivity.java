@@ -10,11 +10,11 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
-import android.preference.SwitchPreference;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
@@ -26,7 +26,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import tfm.uniovi.pirateseas.R;
-import tfm.uniovi.pirateseas.controller.audio.MusicManager;
 import tfm.uniovi.pirateseas.controller.sensors.events.AppSensorEvent;
 import tfm.uniovi.pirateseas.global.Constants;
 
@@ -65,8 +64,6 @@ public class SettingsActivity extends PreferenceActivity {
 
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-		float volumeValue = MusicManager
-				.getInstance(this).getDeviceVolume();
 	}
 
 	public PreferenceCompanion getCompanion() {
@@ -79,31 +76,19 @@ public class SettingsActivity extends PreferenceActivity {
 		private Preference.OnPreferenceClickListener mPreferenceClickListener;
 
 		PreferenceCompanion(){
+
 			mPreferenceChangeListener = new Preference.OnPreferenceChangeListener() {
 				@Override
 				public boolean onPreferenceChange(Preference preference, Object o) {
 
 					String stringValue = o.toString();
 
-					if(preference instanceof SwitchPreference){
-
-						boolean switched = ((SwitchPreference) preference)
-								.isChecked();
-
-						mEditor = mPreferences.edit();
-						mEditor.putBoolean(preference.getKey(), !switched);
-						mEditor.apply();
-
+					if(preference instanceof ListPreference){
+						preference.setSummary(((ListPreference) preference).getEntry());
 					} else {
-						//if (Constants.PREF_VOLUME_VALUE.equals(preference.getKey())) {
-						//	preference.setSummary(getString(R.string.txt_volume_desc));
-						//	MusicManager.getInstance().setDeviceVolume(Float.parseFloat(stringValue));
-						//} else {
-							// For all other preferences, set the summary to the value's
-							// simple string representation.
-							preference.setSummary(stringValue);
-						//}
+						preference.setSummary(stringValue);
 					}
+
 					return true;
 				}
 			};
@@ -137,25 +122,14 @@ public class SettingsActivity extends PreferenceActivity {
 		}
 
 		void bindPreferenceSummaryToValue(Preference preference){
-			// Set the listener to watch for value changes.
+			// Set the listener to watch for value changes
 			preference.setOnPreferenceChangeListener(mPreferenceChangeListener);
 			preference.setOnPreferenceClickListener(mPreferenceClickListener);
 
-			if (preference instanceof SwitchPreference){
-				// Trigger the listener immediately with the preference's
-				// current value.
-				mPreferenceChangeListener.onPreferenceChange(
-						preference,
-						PreferenceManager.getDefaultSharedPreferences(
-								preference.getContext()).getBoolean(preference.getKey(),true));
-			} else {
-				// Trigger the listener immediately with the preference's
-				// current value.
-				mPreferenceChangeListener.onPreferenceChange(preference,
-						PreferenceManager
-								.getDefaultSharedPreferences(preference.getContext())
-								.getString(preference.getKey(), Constants.EMPTY_STRING));
-			}
+			mPreferenceChangeListener.onPreferenceChange(preference,
+					PreferenceManager
+							.getDefaultSharedPreferences(preference.getContext())
+							.getString(preference.getKey(), Constants.EMPTY_STRING));
 		}
 	}
 
@@ -188,7 +162,7 @@ public class SettingsActivity extends PreferenceActivity {
 		@Override
 		public Dialog onCreateDialog(Bundle savedInstanceState) {
 			final Activity dummyActivity = getActivity();
-			AlertDialog.Builder builder = new AlertDialog.Builder(dummyActivity);
+			AlertDialog.Builder builder = new AlertDialog.Builder(dummyActivity, R.style.Dialog_No_Border);
 			LayoutInflater inflater = dummyActivity.getLayoutInflater();
 			View view = inflater.inflate(R.layout.custom_dialog_layout, null);
 			TextView txtTitle = view.findViewById(R.id.txtTitle);

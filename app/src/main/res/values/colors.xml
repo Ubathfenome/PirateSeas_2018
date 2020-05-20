@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="light_gray">#0fc6c6c6</color>
+    <color name="popup_background">#99663300</color>
+    <color name="popup_stroke">#8a6244</color>
 </resources>

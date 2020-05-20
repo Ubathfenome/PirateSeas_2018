@@ -59,14 +59,8 @@
     <string name="btn_pause">Pause Button</string>
     <string name="lbl_controls">Controls</string>
     <string name="lbl_ship_controls">Ship Controls</string>
-    <string name="txt_ship_on_desc">Move your ship touching the devices\' screen</string>
-    <string name="txt_ship_off_desc">Move your ship moving the device</string>
     <string name="lbl_ammo_controls">Ammunition Controls</string>
-    <string name="txt_ammo_on_desc">Change your current ammo touching the selected ammo button</string>
-    <string name="txt_ammo_off_desc">Change your current ammo using the device\'s volume keys</string>
     <string name="lbl_shoot_controls">Shoot Controls</string>
-    <string name="txt_shoot_on_desc">Shoot your cannons using your voice or touching the screen</string>
-    <string name="txt_shoot_off_desc">Shoot your cannons touching the devices\' screen upwards</string>
     <string name="lbl_advanced_settings">Advanced settings</string>
     <string name="lbl_volume">Volume</string>
     <string name="txt_volume_desc">Adjust volume value</string>
@@ -78,8 +72,23 @@
     <string name="tb_control_touch">Touch Control</string>
     <string name="lbl_control_mode">Ship Control Mode</string>
 
-    <string name="toggle_on" translatable="false">ON</string>
-    <string name="toggle_off" translatable="false">OFF</string>
+    <string-array name="ship_controls">
+        <item>Move your ship touching the devices\' screen</item>
+        <item>Move your ship moving the device</item>
+    </string-array>
+    <string-array name="ammo_controls">
+        <item>Change your current ammo touching the selected ammo button</item>
+        <item>Change your current ammo using the device\'s volume keys</item>
+    </string-array>
+    <string-array name="shoot_controls">
+        <item>Shoot your cannons using your voice or touching the screen</item>
+        <item>Shoot your cannons touching the devices\' screen upwards</item>
+    </string-array>
+
+    <string-array name="control_values">
+        <item>true</item>
+        <item>false</item>
+    </string-array>
 
     <!-- Settings -->
     <string name="settings_change_ammo_volume">With volume keys</string>
@@ -159,12 +168,6 @@
         For his Master\'s Final Work</string>
     <string name="about_dialog_positive" translatable="false">OK</string>
 
-    <!-- Pause Activity tooltips -->
-    <string name="pause_hint_health">Ship\'s health: %1$d / %2$d</string>
-    <string name="pause_hint_power">Ship\'s power: %1$d / %2$d</string>
-    <string name="pause_hint_range">Ship\'s Range: %1$d / %2$d</string>
-    <string name="pause_hint_default">Hover the icons to see their value</string>
-
     <!-- Screen Slide Content -->
     <string name="title_screen_slide">Screen Slide</string>
     <string name="action_finish">Finish</string>
@@ -207,6 +210,11 @@
     <string name="cd_map_cover">Obscured map cell</string>
     <string name="cd_swipe_arrow_left">Left swipe arrow</string>
     <string name="cd_swipe_arrow_right">Right swipe arrow</string>
+    <string name="icd_health">Health icon</string>
+    <string name="icd_range">Range icon</string>
+    <string name="icd_xp">XP icon</string>
+    <string name="icd_power">Power icon</string>
+    <string name="icd_map">Map icon</string>
     
 	<!-- Numeric values -->
     <string name="max_value" translatable="false">999</string>
@@ -236,7 +244,7 @@
     <string name="tutorial_7">Gain exp when sink your enemies ang unlock better upgrades</string>
     <string name="tutorial_8">Become the greatest pirate king! or walk the plank!</string>
     <string name="gameover_title">Game Over\nYou when to sleep with Davi Jones</string>
-    <string name="gameover_hint">(Press anywhere to restart game&#8230;)</string>
+    <string name="gameover_hint">(Touch anywhere to go back to the main menu)</string>
     <string name="gameover_score">Score</string>
     <string name="gameover_days">Days passed</string>
     <string name="app_about">About us&#8230;</string>
@@ -254,15 +262,18 @@
     <string name="game_message_islands_discovered">All islands have been discovered. We\'ll sell this map for 90 gold coins!</string>
 
     <!-- Help strings -->
-    <string name="help_message_1">1. Selected ammution type</string>
-    <string name="help_message_2">2. Enemy health bar</string>
-    <string name="help_message_3">3. Pause button</string>
-    <string name="help_message_4">4. Enemy ship</string>
-    <string name="help_message_5">5. Player health bar</string>
-    <string name="help_message_6">6. Player experience bar</string>
-    <string name="help_message_7">7. Player ship</string>
-    <string name="help_message_8">8. Player\'s gold</string>
-    <string name="help_message_9">9. Selected remaining ammo</string>
+    <string-array name="help_messages">
+        <item>1. Selected ammunition type</item>
+        <item>2. Enemy health bar</item>
+        <item>3. Pause button</item>
+        <item>4. Enemy ship</item>
+        <item>5. Player health bar</item>
+        <item>6. Player experience bar</item>
+        <item>7. Player ship</item>
+        <item>8. Player\'s gold</item>
+        <item>9. Selected remaining ammo</item>
+    </string-array>
+
     <string name="lang">en</string>
     <string name="command_fire">fire</string>
     <string name="command_ok" translatable="false">OK</string>
@@ -288,6 +299,9 @@
     <string name="btn_back">Back</string>
 
     <string name="progress_bar_title">Shake your device</string>
+    <string name="btn_back_main_menu">Back to main menu</string>
 
+    <string name="current_max_value" translatable="false">%1$d / %2$d</string>
+    <string name="current_level_xp">Lvl %1$d (%2$d)</string>
 
 </resources>

@@ -16,8 +16,6 @@ import android.view.View.OnClickListener;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -40,12 +38,6 @@ public class PauseActivity extends Activity {
 
 	private Context context;
 
-    private TextView txtTooltip;
-
-    private ProgressBar pgrHealth;
-	private ProgressBar pgrPower;
-	private ProgressBar pgrRange;
-
 	private Ship nShip;
 	private Player nPlayer;
 	private Map nMap;
@@ -60,8 +52,9 @@ public class PauseActivity extends Activity {
 		
 		context = this;
 
-        TextView txtTitleLabel = findViewById(R.id.txtPauseLabel);
 		Typeface customFont = Typeface.createFromAsset(getAssets(), "fonts/" + Constants.FONT_NAME + ".ttf");
+
+		TextView txtTitleLabel = findViewById(R.id.txtPauseLabel);
 		txtTitleLabel.setTypeface(customFont);
 
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
@@ -71,8 +64,7 @@ public class PauseActivity extends Activity {
 		Intent data = getIntent();
 		sensorEvents = data.getParcelableArrayListExtra(Constants.TAG_SENSOR_EVENTS);
 
-        Button btnResume = findViewById(R.id.btnPauseResume);
-		btnResume.setTypeface(customFont);
+        ImageButton btnResume = findViewById(R.id.btnPauseResume);
 		btnResume.setOnClickListener(new OnClickListener(){
 			public void onClick(View v){
 				MusicManager.getInstance().changeSong(context, MusicManager.MUSIC_BATTLE);
@@ -97,8 +89,7 @@ public class PauseActivity extends Activity {
 			}
 		});
 
-        Button btnExit = findViewById(R.id.btnPauseExit);
-		btnExit.setTypeface(customFont);
+		ImageButton btnExit = findViewById(R.id.btnPauseExit);
 		btnExit.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
@@ -107,53 +98,35 @@ public class PauseActivity extends Activity {
 			}
 		});
 
-		txtTooltip = findViewById(R.id.txtTooltip);
-		txtTooltip.setTypeface(customFont);
-
 		nShip = data.getParcelableExtra(Constants.PAUSE_SHIP);
 		nPlayer = data.getParcelableExtra(Constants.PAUSE_PLAYER);
 		nMap = data.getParcelableExtra(Constants.PAUSE_MAP);
 
-		pgrHealth = findViewById(R.id.pgrsHealth);
-		pgrHealth.setMax(nShip.getMaxHealth());
-		pgrHealth.setProgress(nShip.getHealth());
+		TextView txtHealth = findViewById(R.id.txtHealth);
+		txtHealth.setText(getString(R.string.current_max_value, nShip.getHealth(), nShip.getMaxHealth()));
+		txtHealth.setTypeface(customFont);
 
-		pgrPower = findViewById(R.id.pgrsPower);
-		pgrPower.setMax(Constants.SHIP_MAX_POWER);
-		int pProgress = Math.round(nShip.getPower() * Constants.DEFAULT_SHOOT_DAMAGE);
-		pgrPower.setProgress(pProgress);
+		TextView txtGold = findViewById(R.id.txtGold);
+		txtGold.setText(nPlayer.getGold());
+		txtGold.setTypeface(customFont);
 
-		pgrRange = findViewById(R.id.pgrsRange);
-		pgrRange.setMax(Constants.SHIP_MAX_RANGE);
-		int rProgress = Math.round(nShip.getRange() * Constants.DEFAULT_SHIP_BASIC_RANGE);
-		pgrRange.setProgress(rProgress);
+		TextView txtRange = findViewById(R.id.txtRange);
+		txtRange.setText(Math.round(nShip.getRange() * Constants.DEFAULT_SHIP_BASIC_RANGE));
+		txtRange.setTypeface(customFont);
 
-        ImageView imgHealth = findViewById(R.id.imgHealth);
-        imgHealth.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				txtTooltip.setText(getString(R.string.pause_hint_health, pgrHealth.getProgress(), pgrHealth.getMax()));
-			}
-		});
-        ImageView imgPower = findViewById(R.id.imgPower);
-        imgPower.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				txtTooltip.setText(getString(R.string.pause_hint_power, pgrPower.getProgress(), pgrPower.getMax()));
-			}
-		});
-        ImageView imgRange = findViewById(R.id.imgRange);
-        imgRange.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				txtTooltip.setText(getString(R.string.pause_hint_range, pgrRange.getProgress(), pgrRange.getMax()));
-			}
-		});
+		TextView txtXp = findViewById(R.id.txtXp);
+		txtXp.setText(getString(R.string.current_level_xp, nPlayer.getLevel(), nPlayer.getExperience()));
+		txtXp.setTypeface(customFont);
+
+		TextView txtPower = findViewById(R.id.txtPower);
+		txtPower.setText(Math.round(nShip.getPower() * Constants.DEFAULT_SHOOT_DAMAGE));
+		txtPower.setTypeface(customFont);
+
+		TextView txtMap = findViewById(R.id.txtMap);
+		txtMap.setText(getString(R.string.current_max_value, nPlayer.getMapPieces(), Constants.MAP_PIECES_LIMIT));
+		txtMap.setTypeface(customFont);
 
         MusicManager.getInstance().changeSong(context, MusicManager.MUSIC_GAME_PAUSED);
-		Log.d(TAG,"PauseActivity Ship H=" + pgrHealth.getProgress() + "/" + pgrHealth.getMax() + " P=" + pgrPower.getProgress() + "/" + pgrPower.getMax() + " R=" + pgrRange.getProgress() + "/" + pgrRange.getMax());
-
-
 	}
 
 	@Override
@@ -170,7 +143,7 @@ public class PauseActivity extends Activity {
 		@Override
 		public Dialog onCreateDialog(Bundle savedInstanceState) {
 			final Activity dummyActivity = getActivity();
-			AlertDialog.Builder builder = new AlertDialog.Builder(dummyActivity);
+			AlertDialog.Builder builder = new AlertDialog.Builder(dummyActivity, R.style.Dialog_No_Border);
 			LayoutInflater inflater = dummyActivity.getLayoutInflater();
 			View view = inflater.inflate(R.layout.custom_dialog_layout, null);
 			TextView txtTitle = view.findViewById(R.id.txtTitle);

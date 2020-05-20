@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE selector>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@mipmap/arrow_front_disabled" android:state_enabled="false" />
+    <item android:drawable="@mipmap/ico_arrow_front" />
+</selector>

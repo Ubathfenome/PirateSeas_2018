@@ -77,12 +77,6 @@
                 android:layout_height="wrap_content"
                 style="@android:style/Widget.Holo.Light.ProgressBar.Horizontal" />
 
-            <ProgressBar
-                android:id="@+id/prgXpBar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                style="@android:style/Widget.Holo.Light.ProgressBar.Horizontal" />
-
         </LinearLayout>
 
         <Space
@@ -91,15 +85,6 @@
             android:layout_height="wrap_content"
             android:layout_gravity="fill"
             android:layout_weight="1" />
-
-        <tfm.uniovi.pirateseas.model.canvasmodel.ui.UIDisplayElement
-            android:id="@+id/playerGold"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_gravity="bottom"
-            android:layout_margin="@dimen/small_padding_size"
-            android:background="@mipmap/ico_gold"
-            custom:defaultValue="0" />
 
         <tfm.uniovi.pirateseas.model.canvasmodel.ui.UIDisplayElement
             android:id="@+id/playerAmmunition"

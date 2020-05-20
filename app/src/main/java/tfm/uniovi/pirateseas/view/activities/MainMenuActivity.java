@@ -105,7 +105,6 @@ public class MainMenuActivity extends Activity {
 		editor.putBoolean(Constants.PREF_AMMO_CONTROL_MODE, Constants.PREF_IS_ACTIVE);
 		editor.putBoolean(Constants.PREF_SHOOT_CONTROL_MODE, Constants.PREF_IS_ACTIVE);
 		editor.putBoolean(Constants.TAG_EXE_MODE, Constants.isInDebugMode(mMode));
-		// editor.putInt(Constants.TAG_GAMES_NUMBER, mGamesNumber);
 		editor.apply();
 
 		TextView txtTitle = findViewById(R.id.txtTitleLabel);
@@ -339,20 +338,18 @@ public class MainMenuActivity extends Activity {
 	 * @param sensorTypes Set the sensor values as an array to be handled
 	 */
 	private void launchGame(boolean displayTutorial, int[] sensorTypes) {
-		if(displayTutorial && mGamesNumber == 0){
+
+		SharedPreferences.Editor editor = mPreferences.edit();
+		editor.putInt(Constants.TAG_GAMES_NUMBER, ++mGamesNumber);
+		editor.apply();
+
+		if(displayTutorial && !mPreferences.getBoolean(Constants.PREF_TUTORIAL_ALREADY_SHOWN, false)){
 			Intent tutorialIntent = new Intent(context, TutorialActivity.class);
 			tutorialIntent.putParcelableArrayListExtra(Constants.TAG_SENSOR_EVENTS, (ArrayList<? extends Parcelable>) sensorEvents);
 			tutorialIntent.putExtra(Constants.TAG_SENSOR_LIST, sensorTypes);
 			tutorialIntent.putExtra(Constants.TAG_LOAD_GAME, false);
 			startActivity(tutorialIntent);
 		} else {
-
-			if(displayTutorial) {
-				SharedPreferences.Editor editor = mPreferences.edit();
-				editor.putInt(Constants.TAG_GAMES_NUMBER, ++mGamesNumber);
-				editor.apply();
-			}
-
 			// Load game
 			Intent screenIntent = new Intent(context, ScreenSelectionActivity.class);
 			screenIntent.putParcelableArrayListExtra(Constants.TAG_SENSOR_EVENTS, (ArrayList<? extends Parcelable>) sensorEvents);
@@ -523,7 +520,7 @@ public class MainMenuActivity extends Activity {
 		public Dialog onCreateDialog(Bundle savedInstanceState) {
 			final Activity dummyActivity = getActivity();
 
-			AlertDialog.Builder builder = new AlertDialog.Builder(dummyActivity);
+			AlertDialog.Builder builder = new AlertDialog.Builder(dummyActivity, R.style.Dialog_No_Border);
 			LayoutInflater inflater = dummyActivity.getLayoutInflater();
 			View view = inflater.inflate(R.layout.custom_dialog_layout, null);
 			TextView txtTitle = view.findViewById(R.id.txtTitle);
@@ -548,7 +545,7 @@ public class MainMenuActivity extends Activity {
 					editor.putBoolean(Constants.TAG_EXE_MODE, Constants.isInDebugMode(((MainMenuActivity)getActivity()).mMode));
 					editor.apply();
 
-					((MainMenuActivity)getActivity()).launchGame(true, ((MainMenuActivity)getActivity()).activeSensors);
+					((MainMenuActivity)getActivity()).launchGame(true,	((MainMenuActivity)getActivity()).activeSensors);
 				}
 			});
 			btnNegative.setOnClickListener(new OnClickListener() {

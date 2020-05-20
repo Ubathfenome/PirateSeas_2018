@@ -69,7 +69,7 @@ public class SensorEventAdapter extends ArrayAdapter<AppSensorEvent> {
         viewHolder.imgSensorThumbnail.setOnClickListener(sensorClickListener);
 
         viewHolder.txtSensorName.setText(mContext.getResources().getString(mSensorEvents.get(position).getSensorName()));
-        viewHolder.txtSensorName.setTextColor(mSensorEvents.get(position).hasEvent()? Color.DKGRAY : Color.WHITE);
+        viewHolder.txtSensorName.setTextColor(mSensorEvents.get(position).hasEvent()? Color.LTGRAY : Color.WHITE);
         viewHolder.txtSensorName.setPaintFlags(mSensorEvents.get(position).hasEvent()? (viewHolder.txtSensorName.getPaintFlags() & (~Paint.FAKE_BOLD_TEXT_FLAG)) : (viewHolder.txtSensorName.getPaintFlags() | Paint.FAKE_BOLD_TEXT_FLAG));
         viewHolder.txtSensorName.setOnClickListener(sensorClickListener);
 

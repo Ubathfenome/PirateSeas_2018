@@ -30,51 +30,10 @@
             android:layout_weight="1"
 			app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-			<TextView
-				android:id="@+id/txtHelp1"
-				android:layout_width="match_parent"
+			<ListView
+				android:id="@+id/lstHelpItems"
 				android:layout_height="wrap_content"
-                android:text="@string/help_message_1"/>
-			<TextView
-				android:id="@+id/txtHelp2"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-                android:text="@string/help_message_2"/>
-			<TextView
-				android:id="@+id/txtHelp3"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-                android:text="@string/help_message_3"/>
-			<TextView
-				android:id="@+id/txtHelp4"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-                android:text="@string/help_message_4"/>
-			<TextView
-				android:id="@+id/txtHelp5"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-                android:text="@string/help_message_5"/>
-			<TextView
-				android:id="@+id/txtHelp6"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-                android:text="@string/help_message_6"/>
-			<TextView
-				android:id="@+id/txtHelp7"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-                android:text="@string/help_message_7"/>
-			<TextView
-				android:id="@+id/txtHelp8"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-                android:text="@string/help_message_8"/>
-			<TextView
-				android:id="@+id/txtHelp9"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-                android:text="@string/help_message_9"/>
+				android:layout_width="wrap_content" />
 
 	    </LinearLayout>
 
@@ -87,36 +46,18 @@
     	android:layout_margin="8dp"
     	android:baselineAligned="false"
 		android:orientation="horizontal">
-	    
-	    <LinearLayout 
-		    android:layout_width="match_parent"
-	    	android:layout_height="wrap_content"
-	    	android:layout_weight="2"
-	    	android:gravity="center_horizontal"
-			android:orientation="horizontal">
 
-		    <Button 
-		        style="?android:attr/buttonBarButtonStyle"
-		        android:id="@+id/btnBarFinish"
-		        android:layout_width="wrap_content"
-	    		android:layout_height="wrap_content"
-	    		android:text="@string/action_finish"
-	    		android:background="@drawable/xml_btn_style"
-	    		android:gravity="center_horizontal" />
-
-			<Button
-				style="?android:attr/buttonBarButtonStyle"
-				android:id="@+id/btnBarNext"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:text="@string/action_next"
-				android:background="@drawable/xml_btn_style"
-				android:gravity="center_horizontal" />
-		    
-		</LinearLayout>
+		<Button
+			style="?android:attr/buttonBarButtonStyle"
+			android:id="@+id/btnBarFinish"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="@string/btn_back"
+			android:background="@drawable/xml_btn_style"
+			android:gravity="center_horizontal" />
 		
 	    <LinearLayout 
-		    android:layout_width="match_parent"
+		    android:layout_width="0dp"
 	    	android:layout_height="wrap_content"
 	    	android:layout_weight="2"
 	    	android:gravity="center_horizontal|end"

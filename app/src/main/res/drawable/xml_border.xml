@@ -5,10 +5,10 @@
 	
 	<corners android:radius="5dp" />
 
-    <solid android:color="#99663300" />
+    <solid android:color="@color/popup_background" />
 
     <stroke
         android:width="3dp"
-        android:color="#8a6244" />
+        android:color="@color/popup_stroke" />
 
 </shape>

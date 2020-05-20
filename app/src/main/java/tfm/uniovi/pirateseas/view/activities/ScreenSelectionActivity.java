@@ -57,6 +57,8 @@ public class ScreenSelectionActivity extends Activity {
 	private TextView txtScreenSelectionLabel;
 	private LinearLayout layoutMapBackground;
 
+	private ImageButton btnLeft, btnRight, btnUp, btnDown;
+
 	private Player p = null;
 	private Ship ship = null;
 	private Map map = null;
@@ -119,69 +121,64 @@ public class ScreenSelectionActivity extends Activity {
 		mapLength = map.getMapLength();
 		clearedMaps = 0;
 
-		ImageButton btnLeft = findViewById(R.id.btnLeft);
+		btnLeft = findViewById(R.id.btnLeft);
 		btnLeft.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
 				// Get map's left cell content
-				if(active%mapWidth != 0){
+				if(v.isEnabled()) {
 					map.setLastActiveCell(active);
-					map.setActiveCell(active-1);
+					map.setActiveCell(active - 1);
 					processOption();
-				} else {
-					wrongWayMessage();
 				}
 			}
 		});
 
-		ImageButton btnUp = findViewById(R.id.btnFront);
+		btnUp = findViewById(R.id.btnFront);
 		btnUp.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
 				// Get map's up cell content
-				if(active-mapWidth>=0){
+				if(v.isEnabled()) {
 					map.setLastActiveCell(active);
 					map.setActiveCell(active-mapWidth);
 					processOption();
-				} else {
-					wrongWayMessage();
 				}
 			}
 		});
 
-		ImageButton btnRight = findViewById(R.id.btnRight);
+		btnRight = findViewById(R.id.btnRight);
 		btnRight.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
 				// Get map's right cell content
-				if((active+1)%mapWidth != 0){
+				if(v.isEnabled()) {
 					map.setLastActiveCell(active);
 					map.setActiveCell(active+1);
 					processOption();
-				} else {
-					wrongWayMessage();
 				}
 			}
 		});
 
-		ImageButton btnDown = findViewById(R.id.btnDown);
+		btnDown = findViewById(R.id.btnDown);
 		btnDown.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
 				// Get map's down cell content
-				if((active+mapWidth)<mapLength){
+				if(v.isEnabled()) {
 					map.setLastActiveCell(active);
 					map.setActiveCell(active+mapWidth);
 					processOption();
-				} else {
-					wrongWayMessage();
 				}
 			}
 		});
+
+		// Update arrow images if active cell is on any border of the map
+		updateArrowButtonsState();
 
 		txtScreenSelectionLabel = findViewById(R.id.txtScreenSelectionLabel);
 		txtScreenSelectionLabel.setTypeface(customFont);
@@ -202,6 +199,13 @@ public class ScreenSelectionActivity extends Activity {
 			ship.updateShipType(newShipType);
 			GameHelper.saveGameAtPreferences(context, p, ship, newMap);
 		}
+	}
+
+	private void updateArrowButtonsState() {
+		btnLeft.setEnabled(active%mapWidth != 0);
+		btnUp.setEnabled(active-mapWidth>=0);
+		btnRight.setEnabled((active+1)%mapWidth != 0);
+		btnDown.setEnabled((active+mapWidth)<mapLength);
 	}
 
 	private void processOption() {
@@ -240,13 +244,6 @@ public class ScreenSelectionActivity extends Activity {
 	}
 
 	/**
-	 * Display a wrong way message
-	 */
-	private void wrongWayMessage(){
-		Toast.makeText(context, getString(R.string.message_wrongway),Toast.LENGTH_SHORT).show();
-	}
-
-	/**
 	 * Launch the battle activity
 	 */
 	private void startBattleGame(){
@@ -266,8 +263,8 @@ public class ScreenSelectionActivity extends Activity {
 	 * Relaunch the select screen activity
 	 */
 	private void reloadSelection(){
-        String message = getResources().getString(R.string.message_nothinghere);
-        txtScreenSelectionLabel.setText(message);
+//        String message = getResources().getString(R.string.message_nothinghere);
+//        txtScreenSelectionLabel.setText(message);
 		GameHelper.saveGameAtPreferences(this, p, ship, map);
 
 		launchResetIntent();
@@ -280,8 +277,10 @@ public class ScreenSelectionActivity extends Activity {
 		resetIntent.putExtra(Constants.TAG_LOAD_GAME, loadGame);
 		resetIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		Log.d(TAG,"Reset ScreenSelection Intent");
-		startActivity(resetIntent);
+		overridePendingTransition(0, 0);
 		finish();
+		overridePendingTransition(0, 0);
+		startActivity(resetIntent);
 	}
 
 	/**
@@ -426,7 +425,7 @@ public class ScreenSelectionActivity extends Activity {
 		@Override
 		public Dialog onCreateDialog(Bundle savedInstanceState) {
 			final Activity dummyActivity = getActivity();
-			AlertDialog.Builder builder = new AlertDialog.Builder(dummyActivity);
+			AlertDialog.Builder builder = new AlertDialog.Builder(dummyActivity, R.style.Dialog_No_Border);
 			LayoutInflater inflater = dummyActivity.getLayoutInflater();
 			@SuppressLint("InflateParams")
 			View view = inflater.inflate(R.layout.custom_dialog_layout, null);

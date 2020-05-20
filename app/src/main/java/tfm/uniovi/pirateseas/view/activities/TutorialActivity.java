@@ -64,6 +64,10 @@ public class TutorialActivity extends FragmentActivity {
 		mPreferences = context.getSharedPreferences(Constants.TAG_PREF_NAME,
 				Context.MODE_PRIVATE);
 
+		SharedPreferences.Editor editor = mPreferences.edit();
+		editor.putBoolean(Constants.PREF_TUTORIAL_ALREADY_SHOWN, true);
+		editor.apply();
+
 		mGamesNumber = mPreferences.getInt(Constants.TAG_GAMES_NUMBER, Constants.ZERO_INT);
 
 		// Instantiate a ViewPager and a PagerAdapter.
@@ -139,12 +143,10 @@ public class TutorialActivity extends FragmentActivity {
 	 */
 	public static class LeaveTutorialDialogFragment extends DialogFragment {
 
-
-
 	    @Override
 	    public Dialog onCreateDialog(Bundle savedInstanceState) {
 	        // Use the Builder class for convenient dialog construction
-	        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+	        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.Dialog_No_Border);
 			LayoutInflater inflater = getActivity().getLayoutInflater();
 			View view = inflater.inflate(R.layout.custom_dialog_layout, null);
 			TextView txtTitle = view.findViewById(R.id.txtTitle);
