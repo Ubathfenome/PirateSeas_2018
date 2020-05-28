@@ -33,6 +33,7 @@
 	        android:id="@+id/txtItemName"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
+			android:fontFamily="@font/skullsandcrossbones"
 	        android:text="@string/shop_item_name"
 	        android:textAllCaps="true"
 	        android:layout_marginStart="8dp"
@@ -50,6 +51,7 @@
 	        android:id="@+id/txtItemPrice"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
+			android:fontFamily="@font/skullsandcrossbones"
 	        android:text="@string/max_value"
 	        android:layout_marginStart="48dp"
 	        android:layout_marginEnd="8dp" />

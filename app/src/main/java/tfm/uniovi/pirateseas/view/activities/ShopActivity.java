@@ -9,7 +9,6 @@ import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources.NotFoundException;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
@@ -83,15 +82,13 @@ public class ShopActivity extends ListActivity{
 		
 		setContentView(R.layout.activity_shop);
 
-		Typeface customFont = Typeface.createFromAsset(getAssets(), "fonts/" + Constants.FONT_NAME + ".ttf");
-
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
 		sensorEvents = new ArrayList<>();
 
 		Intent data = getIntent();
 		sensorEvents = data.getParcelableArrayListExtra(Constants.TAG_SENSOR_EVENTS);
-		mNature = data.getExtras().getString(Constants.ITEMLIST_NATURE, Constants.EMPTY_STRING);
+		mNature = data.getStringExtra(Constants.ITEMLIST_NATURE);
 		sensorTypes = data.getIntArrayExtra(Constants.TAG_SENSOR_LIST);
 		loadGame = data.getBooleanExtra(Constants.TAG_LOAD_GAME, true);
 		mapHeight = data.getIntExtra(Constants.TAG_SCREEN_SELECTION_MAP_HEIGHT, Constants.MAP_MIN_HEIGHT);
@@ -116,7 +113,6 @@ public class ShopActivity extends ListActivity{
 		}
 
 		lblShopTitle = findViewById(R.id.lblShopTitle);
-		lblShopTitle.setTypeface(customFont);
 		
 		listView = findViewById(android.R.id.list);
 		
@@ -125,7 +121,6 @@ public class ShopActivity extends ListActivity{
 		listView.setAdapter(mAdapter);
 		
 		txtDescription = findViewById(R.id.txtItemDescription);
-		txtDescription.setTypeface(customFont);
 		descriptionTip = this.getResources().getString(R.string.shop_purchase_hint);
 		txtAvailableGold = findViewById(R.id.playerGold);
 		txtAvailableGold.setElementValue(dummyPlayer.getGold());

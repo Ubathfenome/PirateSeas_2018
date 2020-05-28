@@ -141,6 +141,16 @@ public class Map implements Parcelable{
     }
 
     /**
+     * Sets the map cell containing an island as revealed
+     * @param index The map cell index
+     */
+    public void revealIsland(int index) {
+        String cell = mapContent[index];
+        char cellType = cell.charAt(0);
+        mapContent[index] = cellType + "2";
+    }
+
+    /**
      * Set the map seed
      * @param seed New map seed
      */

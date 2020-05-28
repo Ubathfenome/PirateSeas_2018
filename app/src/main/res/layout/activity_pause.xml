@@ -10,6 +10,7 @@
         android:id="@+id/txtPauseLabel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/skullsandcrossbones"
         android:text="@string/label_pause"
         android:textAlignment="center"
         android:textSize="@dimen/title_size" />
@@ -27,8 +28,7 @@
             android:layout_height="match_parent"
             android:background="@drawable/xml_btn_style"
             android:contentDescription="@string/game_resume"
-            android:src="@drawable/ico_resume"
-            android:text="@string/game_resume" />
+            android:src="@drawable/ico_resume" />
 
         <ImageButton
             android:id="@+id/btnPauseHelp"
@@ -36,8 +36,7 @@
             android:layout_height="match_parent"
             android:background="@drawable/xml_btn_style"
             android:contentDescription="@string/activity_help"
-            android:src="@mipmap/ico_help"
-            android:text="@string/activity_help" />
+            android:src="@mipmap/ico_help" />
 
         <ImageButton
             android:id="@+id/btnPauseSettings"
@@ -45,8 +44,7 @@
             android:layout_height="match_parent"
             android:background="@drawable/xml_btn_style"
             android:contentDescription="@string/activity_settings"
-            android:src="@mipmap/ico_settings"
-            android:text="@string/activity_settings" />
+            android:src="@mipmap/ico_settings"/>
 
         <ImageButton
             android:id="@+id/btnPauseExit"
@@ -54,8 +52,7 @@
             android:layout_height="match_parent"
             android:background="@drawable/xml_btn_style"
             android:contentDescription="@string/game_exit"
-            android:src="@drawable/ico_exit"
-            android:text="@string/game_exit" />
+            android:src="@drawable/ico_exit"/>
 
     </LinearLayout>
     
@@ -72,6 +69,7 @@
             android:id="@+id/txtHealth"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/skullsandcrossbones"
             android:contentDescription="@string/icd_health"
             android:drawableStart="@mipmap/icon_health"
             android:drawablePadding="@dimen/extra_small_padding_size"
@@ -83,6 +81,7 @@
             android:id="@+id/txtGold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/skullsandcrossbones"
             android:contentDescription="@string/icd_gold"
             android:drawableStart="@mipmap/ico_gold"
             android:drawablePadding="@dimen/extra_small_padding_size"
@@ -94,6 +93,7 @@
             android:id="@+id/txtRange"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/skullsandcrossbones"
             android:contentDescription="@string/icd_range"
             android:drawableStart="@mipmap/icon_buff_occu"
             android:drawablePadding="@dimen/extra_small_padding_size"
@@ -105,6 +105,7 @@
             android:id="@+id/txtXp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/skullsandcrossbones"
             android:contentDescription="@string/icd_xp"
             android:drawableStart="@mipmap/icon_buff_xp"
             android:drawablePadding="@dimen/extra_small_padding_size"
@@ -116,6 +117,7 @@
             android:id="@+id/txtPower"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/skullsandcrossbones"
             android:contentDescription="@string/icd_power"
             android:drawableStart="@mipmap/icon_buff_bpow"
             android:drawablePadding="@dimen/extra_small_padding_size"
@@ -127,6 +129,7 @@
             android:id="@+id/txtMap"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/skullsandcrossbones"
             android:contentDescription="@string/icd_map"
             android:drawableStart="@mipmap/icon_buff_mapp"
             android:drawablePadding="@dimen/extra_small_padding_size"

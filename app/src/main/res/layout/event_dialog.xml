@@ -10,6 +10,7 @@
         android:gravity="top|center"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/skullsandcrossbones"
         android:text="@string/dummy_text"/>
 
     <ImageView
@@ -24,6 +25,7 @@
         android:id="@+id/txtEventMessage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/skullsandcrossbones"
         android:padding="@dimen/small_padding_size"
         android:text="@string/default_sample_text"/>
 
@@ -31,6 +33,7 @@
         android:id="@+id/btnEventDialogOk"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/skullsandcrossbones"
         android:text="@string/command_ok"
         android:background="@drawable/xml_btn_style"/>
 

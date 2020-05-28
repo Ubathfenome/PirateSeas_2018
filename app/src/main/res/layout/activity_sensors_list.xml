@@ -12,6 +12,7 @@
         android:id="@+id/txtSensorListTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/skullsandcrossbones"
         android:gravity="top|center_horizontal"
         android:text="@string/sensor_list_title"/>
 
@@ -28,6 +29,7 @@
         android:id="@+id/btnBack"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/skullsandcrossbones"
         android:padding="@dimen/extra_small_padding_size"
         android:text="@string/btn_back"
         android:background="@drawable/xml_btn_style"/>

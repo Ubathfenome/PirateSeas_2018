@@ -6,7 +6,6 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.Log;
@@ -51,11 +50,6 @@ public class PauseActivity extends Activity {
 		this.setFinishOnTouchOutside(false);
 		
 		context = this;
-
-		Typeface customFont = Typeface.createFromAsset(getAssets(), "fonts/" + Constants.FONT_NAME + ".ttf");
-
-		TextView txtTitleLabel = findViewById(R.id.txtPauseLabel);
-		txtTitleLabel.setTypeface(customFont);
 
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
@@ -104,27 +98,21 @@ public class PauseActivity extends Activity {
 
 		TextView txtHealth = findViewById(R.id.txtHealth);
 		txtHealth.setText(getString(R.string.current_max_value, nShip.getHealth(), nShip.getMaxHealth()));
-		txtHealth.setTypeface(customFont);
 
 		TextView txtGold = findViewById(R.id.txtGold);
-		txtGold.setText(nPlayer.getGold());
-		txtGold.setTypeface(customFont);
+		txtGold.setText(getString(R.string.generic_number, nPlayer.getGold()));
 
 		TextView txtRange = findViewById(R.id.txtRange);
-		txtRange.setText(Math.round(nShip.getRange() * Constants.DEFAULT_SHIP_BASIC_RANGE));
-		txtRange.setTypeface(customFont);
+		txtRange.setText(getString(R.string.generic_number, Math.round(nShip.getRange() * Constants.DEFAULT_SHIP_BASIC_RANGE)));
 
 		TextView txtXp = findViewById(R.id.txtXp);
 		txtXp.setText(getString(R.string.current_level_xp, nPlayer.getLevel(), nPlayer.getExperience()));
-		txtXp.setTypeface(customFont);
 
 		TextView txtPower = findViewById(R.id.txtPower);
-		txtPower.setText(Math.round(nShip.getPower() * Constants.DEFAULT_SHOOT_DAMAGE));
-		txtPower.setTypeface(customFont);
+		txtPower.setText(getString(R.string.generic_number, Math.round(nShip.getPower() * Constants.DEFAULT_SHOOT_DAMAGE)));
 
 		TextView txtMap = findViewById(R.id.txtMap);
 		txtMap.setText(getString(R.string.current_max_value, nPlayer.getMapPieces(), Constants.MAP_PIECES_LIMIT));
-		txtMap.setTypeface(customFont);
 
         MusicManager.getInstance().changeSong(context, MusicManager.MUSIC_GAME_PAUSED);
 	}

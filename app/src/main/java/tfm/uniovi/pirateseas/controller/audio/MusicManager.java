@@ -121,7 +121,6 @@ public class MusicManager{
 		mAudioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
 	}
 
-
 	/**
 	 * Starts the selected song as background music
  	 * @param context Context
@@ -129,13 +128,14 @@ public class MusicManager{
 	 */
 	private void initSounds(Context context, int backgroundMusicId) {
 		this.mContext = context;
+
+		if(mAudioManager == null)
+			init(mContext);
+
 		this.activeSongResource = mSoundKeys.get(backgroundMusicId);
 		if(activeSongResource == null)
 			initSounds(context, backgroundMusicId);
-		
-		if(mAudioManager == null)
-			init(mContext);
-		
+
 		mBackgroundMusic = MediaPlayer.create(context, activeSongResource);
 		setState(MediaPlayerState.PREPARED);
 		mBackgroundMusic.setOnPreparedListener(new OnPreparedListener() {

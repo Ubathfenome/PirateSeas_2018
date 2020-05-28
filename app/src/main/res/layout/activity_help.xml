@@ -52,6 +52,7 @@
 			android:id="@+id/btnBarFinish"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
+			android:fontFamily="@font/skullsandcrossbones"
 			android:text="@string/btn_back"
 			android:background="@drawable/xml_btn_style"
 			android:gravity="center_horizontal" />
@@ -68,6 +69,7 @@
 		        android:id="@+id/btnBarAbout"
 		        android:layout_width="wrap_content"
 	    		android:layout_height="wrap_content"
+				android:fontFamily="@font/skullsandcrossbones"
 	    		android:text="@string/app_about"
 	    		android:background="@drawable/xml_btn_style"
 	    		android:gravity="end" />

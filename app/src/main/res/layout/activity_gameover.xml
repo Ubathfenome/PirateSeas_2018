@@ -11,9 +11,10 @@
         android:id="@+id/lblGameOver"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="48dp"
+        android:layout_marginTop="12dp"
         android:layout_marginBottom="28dp"
         android:gravity="center"
+        android:fontFamily="@font/skullsandcrossbones"
         android:text="@string/gameover_title"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
@@ -27,6 +28,7 @@
             android:id="@+id/lblDays"
             android:layout_width="wrap_content"
         	android:layout_height="wrap_content"
+            android:fontFamily="@font/skullsandcrossbones"
             android:layout_gravity="center"
             android:layout_margin="18dp"
             android:text="@string/gameover_days" />
@@ -35,6 +37,7 @@
             android:id="@+id/txtDays"
             android:layout_width="wrap_content"
         	android:layout_height="wrap_content"
+            android:fontFamily="@font/skullsandcrossbones"
             android:layout_gravity="center"
             android:layout_margin="18dp"
             android:text="@string/max_value" />
@@ -50,6 +53,7 @@
             android:id="@+id/lblScore"
 			android:layout_width="wrap_content"
         	android:layout_height="wrap_content"
+            android:fontFamily="@font/skullsandcrossbones"
             android:layout_gravity="center"
             android:layout_margin="18dp"
             android:text="@string/gameover_score" />
@@ -58,6 +62,7 @@
             android:id="@+id/txtScore"
 			android:layout_width="wrap_content"
         	android:layout_height="wrap_content"
+            android:fontFamily="@font/skullsandcrossbones"
             android:layout_gravity="center"
             android:layout_margin="18dp"
             android:text="@string/max_value" />
@@ -67,6 +72,7 @@
         android:id="@+id/btn_load_game"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/skullsandcrossbones"
         android:text="@string/activity_load_game"
         android:background="@drawable/xml_btn_style"/>
 
@@ -74,6 +80,7 @@
         android:id="@+id/btn_main_menu"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/skullsandcrossbones"
         android:text="@string/btn_back_main_menu"
         android:background="@drawable/xml_btn_style"/>
 

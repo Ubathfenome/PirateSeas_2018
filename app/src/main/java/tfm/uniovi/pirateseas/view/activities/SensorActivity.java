@@ -2,13 +2,11 @@ package tfm.uniovi.pirateseas.view.activities;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import java.util.List;
 
@@ -30,7 +28,6 @@ public class SensorActivity extends Activity{
 		
 		// Set animation layout while loading
 		setContentView(R.layout.activity_sensors_list);
-		Typeface customFont = Typeface.createFromAsset(getAssets(), "fonts/" + Constants.FONT_NAME + ".ttf");
 
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
@@ -39,15 +36,11 @@ public class SensorActivity extends Activity{
 		Intent data = getIntent();
 		sensorEvents = data.getParcelableArrayListExtra(Constants.TAG_SENSOR_EVENTS);
 
-		TextView txtSensorListTitle = findViewById(R.id.txtSensorListTitle);
-		txtSensorListTitle.setTypeface(customFont);
-
 		ListView lstSensorEventList = findViewById(R.id.lstSensorEventsList);
 		SensorEventAdapter mAdapter = new SensorEventAdapter(this, R.layout.list_item_sensor_event, sensorEvents);
 		lstSensorEventList.setAdapter(mAdapter);
 
 		Button btnBack = findViewById(R.id.btnBack);
-		btnBack.setTypeface(customFont);
 		btnBack.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {

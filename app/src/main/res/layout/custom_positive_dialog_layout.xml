@@ -9,15 +9,19 @@
 
     <TextView
         android:id="@+id/txtTitle"
+        style="?android:textAppearanceLarge"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/skullsandcrossbones"
         android:textSize="@dimen/title_size"
         android:padding="@dimen/extra_small_padding_size"/>
 
     <TextView
         android:id="@+id/txtMessage"
+        style="?android:textAppearanceMedium"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/skullsandcrossbones"
         android:textSize="@dimen/text_size"
         android:padding="@dimen/padding_size"/>
 
@@ -27,6 +31,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_margin="@dimen/extra_small_padding_size"
+        android:fontFamily="@font/skullsandcrossbones"
         android:text="@string/command_ok"
         android:background="@drawable/xml_btn_style"
         tools:ignore="ButtonStyle"/>

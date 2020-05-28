@@ -23,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import tfm.uniovi.pirateseas.R;
@@ -84,7 +85,10 @@ public class SettingsActivity extends PreferenceActivity {
 					String stringValue = o.toString();
 
 					if(preference instanceof ListPreference){
-						preference.setSummary(((ListPreference) preference).getEntry());
+						List<CharSequence> entries = Arrays.asList(((ListPreference) preference).getEntries());
+						List<CharSequence> values = Arrays.asList(((ListPreference) preference).getEntryValues());
+						CharSequence entry = entries.get(Constants.EMPTY_STRING.equals(stringValue) ? 0 : values.indexOf(stringValue));
+						preference.setSummary(entry);
 					} else {
 						preference.setSummary(stringValue);
 					}
@@ -201,9 +205,9 @@ public class SettingsActivity extends PreferenceActivity {
 		SharedPreferences.Editor editor = mPreferences.edit();
 		editor.clear();
 		editor.putBoolean(Constants.TAG_EXE_MODE, mDebugMode);
-		editor.putBoolean(Constants.PREF_SHIP_CONTROL_MODE, Constants.PREF_IS_ACTIVE);
+		editor.putBoolean(Constants.PREF_SHIP_CONTROL_MODE, !Constants.PREF_IS_ACTIVE);
 		editor.putBoolean(Constants.PREF_AMMO_CONTROL_MODE, Constants.PREF_IS_ACTIVE);
-		editor.putBoolean(Constants.PREF_SHOOT_CONTROL_MODE, Constants.PREF_IS_ACTIVE);
+		editor.putBoolean(Constants.PREF_SHOOT_CONTROL_MODE, !Constants.PREF_IS_ACTIVE);
 		return editor.commit();
 	}
 

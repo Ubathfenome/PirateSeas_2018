@@ -104,24 +104,38 @@ public class ScreenSlidePageFragment extends Fragment {
 				((TextView) rootView.findViewById(R.id.text2)).setText(getResources().getString(R.string.tutorial_4));
 				break;
             case 4:
-                imageReference = R.mipmap.img_ammunition;
+                imageReference = R.mipmap.img_movement_shoot_voice;
                 rootView.findViewById(R.id.imgLeftArrow).setAlpha(1f);
-                ((TextView) rootView.findViewById(R.id.text2)).setText(getResources().getString(R.string.tutorial_5));
+                ((TextView) rootView.findViewById(R.id.text2)).setText(
+                        getResources().getString(R.string.tutorial_5,
+                                getResources().getString(R.string.command_fire),
+                                getResources().getString(R.string.command_shoot),
+                                getResources().getString(R.string.command_go)));
                 break;
             case 5:
-                imageReference = R.mipmap.enemy_types;
+                imageReference = R.mipmap.img_ammunition;
                 rootView.findViewById(R.id.imgLeftArrow).setAlpha(1f);
                 ((TextView) rootView.findViewById(R.id.text2)).setText(getResources().getString(R.string.tutorial_6));
                 break;
             case 6:
-                imageReference = R.mipmap.img_pause;
+                imageReference = R.mipmap.img_enemy_defeated;
                 rootView.findViewById(R.id.imgLeftArrow).setAlpha(1f);
                 ((TextView) rootView.findViewById(R.id.text2)).setText(getResources().getString(R.string.tutorial_7));
                 break;
             case 7:
-                imageReference = R.mipmap.img_gameover;
+                imageReference = R.mipmap.enemy_types;
                 rootView.findViewById(R.id.imgLeftArrow).setAlpha(1f);
                 ((TextView) rootView.findViewById(R.id.text2)).setText(getResources().getString(R.string.tutorial_8));
+                break;
+            case 8:
+                imageReference = R.mipmap.img_pause;
+                rootView.findViewById(R.id.imgLeftArrow).setAlpha(1f);
+                ((TextView) rootView.findViewById(R.id.text2)).setText(getResources().getString(R.string.tutorial_9));
+                break;
+            case 9:
+                imageReference = R.mipmap.img_gameover;
+                rootView.findViewById(R.id.imgLeftArrow).setAlpha(1f);
+                ((TextView) rootView.findViewById(R.id.text2)).setText(getResources().getString(R.string.tutorial_10));
                 break;
 		}
 

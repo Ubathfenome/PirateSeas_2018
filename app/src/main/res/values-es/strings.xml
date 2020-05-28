@@ -161,13 +161,14 @@
     <string name="tutorial_2">Escoge tu siguiente paso con cuidado grumetillo! Muchos buenos hombres se han hundido en estas aguas.</string>
     <string name="tutorial_3">Si te encuentras con neblina en el mar.. Cuidado! Seguro que hay un enemigo tras la niebla. Agita tu dispositivo para aclarar el cielo!</string>
     <string name="tutorial_4">Toca la pantalla hacia arriba para disparar la munición seleccionada.</string>
-    <string name="tutorial_5">Cambia el tipo de munición seleccionada pulsando en el icono de la munición (por defecto) o pulsando las teclas de volumen.</string>
-    <string name="tutorial_6">Consigue riquezas hundiendo a tus enemigos o descubriendo tesoros con los mapas que encontraras en tu camino.
-        \nLos barcos rojos son más resistentes y lentos.
+    <string name="tutorial_5">También puedes disparar usando comandos de voz, como \'%1$s\', \'%2$s\' y \'%3$s\' tocando la pantalla para hacer que tus hombres escuchen tus ordenes.</string>
+    <string name="tutorial_6">Cambia el tipo de munición seleccionada pulsando en el icono de la munición (por defecto) o pulsando las teclas de volumen.</string>
+    <string name="tutorial_7">Consigue riquezas hundiendo a tus enemigos o descubriendo tesoros con los mapas que encontraras en tu camino.</string>
+    <string name="tutorial_8">Los barcos rojos son más resistentes y lentos.
         \nLos barcos amarillos tienen una vida y velocidad normales.
         \Los barcos verdes son los mas débiles, pero también los mas rapidos.</string>
-    <string name="tutorial_7">Gana experiencia hundiendo a tus enemigos y desbloquea mejores actualizaciones.</string>
-    <string name="tutorial_8">Conviertete en el mayor Rey Pirata! o caminarás por la plancha!</string>
+    <string name="tutorial_9">Gana experiencia hundiendo a tus enemigos y desbloquea mejores actualizaciones.</string>
+    <string name="tutorial_10">Conviertete en el mayor Rey Pirata! o caminarás por la plancha!</string>
 
     <string name="gameover_title">Fin de la partida\nA dormir con los tiburones</string>
     <string name="gameover_hint">(Toca en cualquier lugar para volver al menu principal)</string>
@@ -193,12 +194,11 @@
         <item>1. Tipo de munición seleccionada</item>
         <item>2. Barra de vida del enemigo</item>
         <item>3. Botón de pausa</item>
-        <item>4. Barco enemigo</item>
-        <item>5. Barra de vida del jugador</item>
-        <item>6. Barra de experiencia del jugador</item>
+        <item>4. Indicador de tripulacion a la espera de ordenes</item>
+        <item>5. Barco enemigo</item>
+        <item>6. Barra de vida del jugador</item>
         <item>7. Barco del jugador</item>
-        <item>8. Oro del jugador</item>
-        <item>9. Municion restante</item>
+        <item>8. Municion restante</item>
     </string-array>
 
     <string name="lang">es</string>
@@ -245,7 +245,7 @@
         <item>Cambia la municion seleccionada usando los botones de volumen del dispositivo</item>
     </string-array>
     <string-array name="shoot_controls">
-        <item>Dispara los cañones usando tu voz o tocando la pantalla</item>
+        <item>Dispara los cañones usando tu voz</item>
         <item>Dispara tus cañones deslizando el dedo hacia arriba por la pantalla</item>
     </string-array>
 
@@ -278,5 +278,7 @@
     <string name="icd_power">Icono poder</string>
     <string name="icd_map">Icono mapa</string>
     <string name="current_level_xp">Nvl %1$d (%2$d)</string>
+    <string name="game_message_player_defeated_title">Jugador derrotado</string>
+    <string name="game_message_player_defeated">Has sido derrotado!</string>
 
 </resources>

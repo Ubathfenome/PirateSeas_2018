@@ -81,13 +81,18 @@
         <item>Change your current ammo using the device\'s volume keys</item>
     </string-array>
     <string-array name="shoot_controls">
-        <item>Shoot your cannons using your voice or touching the screen</item>
+        <item>Shoot your cannons using your voice</item>
         <item>Shoot your cannons touching the devices\' screen upwards</item>
     </string-array>
 
     <string-array name="control_values">
         <item>true</item>
         <item>false</item>
+    </string-array>
+
+    <string-array name="inverse_control_values">
+        <item>false</item>
+        <item>true</item>
     </string-array>
 
     <!-- Settings -->
@@ -236,13 +241,15 @@
     <string name="tutorial_2">Choose wisely your next step mate! Lot\'s of good ol\'men have sunk in these waters.</string>
     <string name="tutorial_3">If you find a cloudy day.. Beware! An enemy might be lurking behind it. Shake your mobile device to wipe out the clouds!</string>
     <string name="tutorial_4">Touch the screen to shoot your selected ammo.</string>
-    <string name="tutorial_5">Cycle through your ammo types touching the selected ammo icon. (Default setting)</string>
-    <string name="tutorial_6">Collect booty by sinking your enemies or discovering treasures using the maps you will find on the islands in your path.
-        \nRed ships are heavier and slower.
+    <string name="tutorial_5">You can also shoot using voice commands, such as \'%1$s\', \'%2$s\' and \'%3$s\' touching the screen to make your men listen.</string>
+    <string name="tutorial_6">Cycle through your ammo types touching the selected ammo icon. (Default setting)</string>
+    <string name="tutorial_7">Collect booty by sinking your enemies or discovering treasures using the maps you will find on the islands in your path.</string>
+    <string name="tutorial_8">Red ships are the slowest and the sturdiest.
         \nYellow ships have normal speed and health.
         \nGreen ships are the fastest and lightest.</string>
-    <string name="tutorial_7">Gain exp when sink your enemies ang unlock better upgrades</string>
-    <string name="tutorial_8">Become the greatest pirate king! or walk the plank!</string>
+    <string name="tutorial_9">Gain exp when sink your enemies and unlock better upgrades</string>
+    <string name="tutorial_10">Become the greatest pirate king! or walk the plank!</string>
+
     <string name="gameover_title">Game Over\nYou when to sleep with Davi Jones</string>
     <string name="gameover_hint">(Touch anywhere to go back to the main menu)</string>
     <string name="gameover_score">Score</string>
@@ -266,12 +273,11 @@
         <item>1. Selected ammunition type</item>
         <item>2. Enemy health bar</item>
         <item>3. Pause button</item>
-        <item>4. Enemy ship</item>
-        <item>5. Player health bar</item>
-        <item>6. Player experience bar</item>
+        <item>4. Crew is listening indicator</item>
+        <item>5. Enemy ship</item>
+        <item>6. Player health bar</item>
         <item>7. Player ship</item>
-        <item>8. Player\'s gold</item>
-        <item>9. Selected remaining ammo</item>
+        <item>8. Selected remaining ammo</item>
     </string-array>
 
     <string name="lang">en</string>
@@ -303,5 +309,7 @@
 
     <string name="current_max_value" translatable="false">%1$d / %2$d</string>
     <string name="current_level_xp">Lvl %1$d (%2$d)</string>
+    <string name="game_message_player_defeated_title">Player defeated</string>
+    <string name="game_message_player_defeated">You have been defeated!</string>
 
 </resources>

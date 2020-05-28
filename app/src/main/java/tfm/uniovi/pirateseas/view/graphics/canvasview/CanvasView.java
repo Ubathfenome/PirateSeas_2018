@@ -197,8 +197,8 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 		nCheatCounter = 0;
 		nGameMode = Constants.GAMEMODE_IDLE;
 		Log.d(TAG, "Initialization: GameMode set to IDLE");
-		nShipControlMode = nPreferences.getBoolean(Constants.PREF_SHIP_CONTROL_MODE, Constants.PREF_IS_ACTIVE);
-		nShootControlMode = nPreferences.getBoolean(Constants.PREF_SHOOT_CONTROL_MODE, Constants.PREF_IS_ACTIVE);
+		nShipControlMode = nPreferences.getBoolean(Constants.PREF_SHIP_CONTROL_MODE, !Constants.PREF_IS_ACTIVE);
+		nShootControlMode = nPreferences.getBoolean(Constants.PREF_SHOOT_CONTROL_MODE, !Constants.PREF_IS_ACTIVE);
 
 		nInitialized = true;
 	}
@@ -377,7 +377,9 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 					}
 
 					// Iniciar reconocimiento de voz
-					((GameActivity) nContext).startVoiceRecognitionRequest();
+					if(!nShootControlMode) {
+						((GameActivity) nContext).startVoiceRecognitionRequest();
+					}
 
                     break;
 			}
@@ -540,7 +542,8 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 					nPlayer.spendMap();
 					int index = nMap.getIsland();
 					if (index != -1) {
-						nMap.clearMapCell(index);
+						// Indicar que la isla se ha revelado (sin mostrar la imagen) estableciendo el map content del indice en 2 ('isla_revelada')
+						nMap.revealIsland(index);
 					} else {
 						((GameActivity) nContext).showText(getResources().getString(R.string.game_message_islands_discovered));
 						nPlayer.addGold(90);
@@ -561,7 +564,6 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 					nPlayer.addExperience(xp);
 					messageSent = true;
 					((GameActivity) nContext).enemyDefeated(gold, xp);
-					// ((GameActivity)nContext).showText(String.format(getResources().getString(R.string.game_message_enemy_defeated), gold, xp));
 				}
 			}
 		}
@@ -755,13 +757,19 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 	 */
 	private void managePlayer() throws SaveGameException {
 		if (!nPlayerShip.isAlive()) {
-			// Display "Game Over" Screen with calculated score
-			MusicManager.getInstance().changeSong(nContext, MusicManager.MUSIC_GAME_OVER);
-			nMap.setActiveCell(nMap.getLastActiveCell());
-			nPlayerShip.setHealth(nPlayerShipInitialHealth);
-			saveGame();
-            ((GameActivity) nContext).gameOver(nPlayer, nMap);
-			nStatus = Constants.GAME_STATE_END;
+
+			if(!messageReaded && !messageSent){
+				((GameActivity) nContext).playerDefeated();
+				messageSent = true;
+			} else {
+				// Display "Game Over" Screen with calculated score
+				MusicManager.getInstance().changeSong(nContext, MusicManager.MUSIC_GAME_OVER);
+				nMap.setActiveCell(nMap.getLastActiveCell());
+				nPlayerShip.setHealth(nPlayerShipInitialHealth);
+				saveGame();
+				((GameActivity) nContext).gameOver(nPlayer, nMap);
+				nStatus = Constants.GAME_STATE_END;
+			}
 		}
 	}
 
@@ -912,7 +920,8 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 	public void loadSettings() {
 		if(nPreferences==null)
 			nPreferences = nContext.getSharedPreferences(Constants.TAG_PREF_NAME, Context.MODE_PRIVATE);
-		nShipControlMode = nPreferences.getBoolean(Constants.PREF_SHIP_CONTROL_MODE, Constants.PREF_IS_ACTIVE);
+		nShipControlMode = nPreferences.getBoolean(Constants.PREF_SHIP_CONTROL_MODE, !Constants.PREF_IS_ACTIVE);
+		nShootControlMode = nPreferences.getBoolean(Constants.PREF_SHOOT_CONTROL_MODE, !Constants.PREF_IS_ACTIVE);
 	}
 
 	/**

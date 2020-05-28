@@ -7,7 +7,6 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,7 +18,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import tfm.uniovi.pirateseas.R;
-import tfm.uniovi.pirateseas.global.Constants;
 import tfm.uniovi.pirateseas.utils.persistence.FontAdapter;
 
 /**
@@ -35,17 +33,14 @@ public class HelpActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_help);
 
-		Typeface customFont = Typeface.createFromAsset(getAssets(), "fonts/" + Constants.FONT_NAME + ".ttf");
-
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
 		ListView listView = findViewById(R.id.lstHelpItems);
-		ArrayAdapter<String> adapter = new FontAdapter(this, android.R.layout.simple_list_item_1, android.R.id.text1, getResources().getStringArray(R.array.help_messages), customFont);
+		ArrayAdapter<String> adapter = new FontAdapter(this, android.R.layout.simple_list_item_1, android.R.id.text1, getResources().getStringArray(R.array.help_messages));
 
 		listView.setAdapter(adapter);
 
 		btnFinish = findViewById(R.id.btnBarFinish);
-		btnFinish.setTypeface(customFont);
 		btnFinish.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
@@ -54,7 +49,6 @@ public class HelpActivity extends Activity {
 		});
 		
 		btnAbout = findViewById(R.id.btnBarAbout);
-		btnAbout.setTypeface(customFont);
 		btnAbout.setOnClickListener(new OnClickListener() {
 			
 			@Override

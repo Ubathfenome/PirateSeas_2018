@@ -4,11 +4,14 @@ import android.content.Context;
 import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.content.res.ResourcesCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+
+import tfm.uniovi.pirateseas.R;
 
 public class FontAdapter extends ArrayAdapter<String> {
     private Typeface font;
@@ -17,9 +20,9 @@ public class FontAdapter extends ArrayAdapter<String> {
     private int idTextView;
     private String[] values;
 
-    public FontAdapter(Context context, int idListView, int idTextView, String[] stringArray, Typeface customFont) {
+    public FontAdapter(Context context, int idListView, int idTextView, String[] stringArray) {
         super(context, idListView, idTextView, stringArray);
-        this.font = customFont;
+        this.font = ResourcesCompat.getFont(context, R.font.skullsandcrossbones);
         this.context = context;
         this.values = stringArray;
         this.idListView = idListView;

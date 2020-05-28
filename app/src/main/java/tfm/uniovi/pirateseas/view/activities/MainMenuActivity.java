@@ -13,7 +13,6 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Point;
-import android.graphics.Typeface;
 import android.hardware.SensorManager;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -77,7 +76,7 @@ public class MainMenuActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main_menu);
-		Typeface customFont = Typeface.createFromAsset(getAssets(), "fonts/" + Constants.FONT_NAME + ".ttf");
+
 
 		context = this;
 
@@ -101,17 +100,13 @@ public class MainMenuActivity extends Activity {
 		SharedPreferences.Editor editor = mPreferences.edit();
 		editor.putInt(Constants.PREF_DEVICE_WIDTH_RES, screenResolutionWidth);
 		editor.putInt(Constants.PREF_DEVICE_HEIGHT_RES, screenResolutionHeight);
-		editor.putBoolean(Constants.PREF_SHIP_CONTROL_MODE, Constants.PREF_IS_ACTIVE);
+		editor.putBoolean(Constants.PREF_SHIP_CONTROL_MODE, !Constants.PREF_IS_ACTIVE);
 		editor.putBoolean(Constants.PREF_AMMO_CONTROL_MODE, Constants.PREF_IS_ACTIVE);
-		editor.putBoolean(Constants.PREF_SHOOT_CONTROL_MODE, Constants.PREF_IS_ACTIVE);
+		editor.putBoolean(Constants.PREF_SHOOT_CONTROL_MODE, !Constants.PREF_IS_ACTIVE);
 		editor.putBoolean(Constants.TAG_EXE_MODE, Constants.isInDebugMode(mMode));
 		editor.apply();
 
-		TextView txtTitle = findViewById(R.id.txtTitleLabel);
-		txtTitle.setTypeface(customFont);
-
 		Button btnNewGame = findViewById(R.id.btn_newgame);
-		btnNewGame.setTypeface(customFont);
 		btnNewGame.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				if(mOverwriteWarning){
@@ -124,7 +119,6 @@ public class MainMenuActivity extends Activity {
 		});
 
 		Button btnTutorial = findViewById(R.id.btn_tutorial);
-		btnTutorial.setTypeface(customFont);
 		btnTutorial.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
@@ -136,7 +130,6 @@ public class MainMenuActivity extends Activity {
 		});
 
 		btnLoadGame = findViewById(R.id.btn_loadgame);
-		btnLoadGame.setTypeface(customFont);
 		btnLoadGame.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				launchGame(false, activeSensors);
@@ -162,7 +155,6 @@ public class MainMenuActivity extends Activity {
 		});
 
 		Button btnExit = findViewById(R.id.btn_exit);
-		btnExit.setTypeface(customFont);
 		btnExit.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				finish();
@@ -532,9 +524,9 @@ public class MainMenuActivity extends Activity {
 			btnPositive.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View view) {
-					boolean shipControlMode = ((MainMenuActivity)getActivity()).mPreferences.getBoolean(Constants.PREF_SHIP_CONTROL_MODE, Constants.PREF_IS_ACTIVE);
+					boolean shipControlMode = ((MainMenuActivity)getActivity()).mPreferences.getBoolean(Constants.PREF_SHIP_CONTROL_MODE, !Constants.PREF_IS_ACTIVE);
 					boolean ammoControlMode = ((MainMenuActivity)getActivity()).mPreferences.getBoolean(Constants.PREF_AMMO_CONTROL_MODE, Constants.PREF_IS_ACTIVE);
-					boolean shootControlMode = ((MainMenuActivity)getActivity()).mPreferences.getBoolean(Constants.PREF_SHOOT_CONTROL_MODE, Constants.PREF_IS_ACTIVE);
+					boolean shootControlMode = ((MainMenuActivity)getActivity()).mPreferences.getBoolean(Constants.PREF_SHOOT_CONTROL_MODE, !Constants.PREF_IS_ACTIVE);
 
 					SharedPreferences.Editor editor = ((MainMenuActivity)getActivity()).mPreferences.edit();
 					editor.clear();

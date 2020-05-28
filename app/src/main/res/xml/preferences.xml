@@ -9,36 +9,30 @@
             android:title="@string/lbl_ship_controls"
             android:dialogTitle="@string/lbl_ship_controls"
             android:entries="@array/ship_controls"
-            android:entryValues="@array/control_values"/>
+            android:entryValues="@array/control_values"
+            android:defaultValue="false"/>
 
         <ListPreference
             android:key="settings_ammunition_preference"
             android:title="@string/lbl_ammo_controls"
             android:dialogTitle="@string/lbl_ammo_controls"
             android:entries="@array/ammo_controls"
-            android:entryValues="@array/control_values"/>
+            android:entryValues="@array/control_values"
+            android:defaultValue="true"/>
 
         <ListPreference
             android:key="settings_shoot_preference"
             android:title="@string/lbl_shoot_controls"
             android:dialogTitle="@string/lbl_shoot_controls"
             android:entries="@array/shoot_controls"
-            android:entryValues="@array/control_values"/>
+            android:entryValues="@array/control_values"
+            android:defaultValue="false"/>
 
     </PreferenceCategory>
 
     <PreferenceCategory
         android:key="settings_advanced_category"
         android:title="@string/lbl_advanced_settings">
-
-        <!--
-        <android.support.v7.preference.SeekBarPreference
-            android:key="settings_volume_preference"
-            android:summary="@string/txt_volume_desc"
-            android:title="@string/lbl_volume"
-            android:defaultValue="0"
-            android:max="100" />
-        -->
 
         <Preference
             android:key="settings_sensors_events_preference"

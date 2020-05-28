@@ -52,13 +52,9 @@ public class Shot extends Entity{
 		endPoint = entityDestiny;
 		
 		mShotStatus = Constants.SHOT_FIRED;
-	
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-			setImage(mContext.getResources().getDrawable(R.mipmap.txtr_shot_smoke, null));
-		} else {
-			setImage(mContext.getResources().getDrawable(R.mipmap.txtr_shot_smoke));
-		}
-		
+
+		setImage(mContext.getResources().getDrawable(R.mipmap.txtr_shot_smoke, null));
+
 		shotWidth = mWidth;
 		shotHeight = mHeight;
 		

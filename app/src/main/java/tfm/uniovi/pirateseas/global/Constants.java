@@ -14,7 +14,7 @@ public class Constants{
 
 	// Set on release
 	public static final int MODE = MODE_RELEASE;
-	
+
 	public static final int GAMEMODE_ADVANCE = 0x1;
 	public static final int GAMEMODE_BATTLE = 0x2;
 	public static final int GAMEMODE_IDLE = 0x3;
@@ -96,7 +96,7 @@ public class Constants{
 	public static final int SHOT_SPEED = 15;
 
     public static final int SHAKE_LIMIT = 2;
-    public static final int TUTORIAL_NUM_PAGES = 8;
+    public static final int TUTORIAL_NUM_PAGES = 10;
 
     public static final int MAX_ENTITY_WIDTH = 15;
     public static final int MAX_ENTITY_HEIGHT = 15;

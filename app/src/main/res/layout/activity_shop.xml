@@ -13,6 +13,7 @@
         android:id="@+id/lblShopTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/skullsandcrossbones"
         android:gravity="top|center_horizontal"
         android:text="@string/message_islanddetected"/>
 
@@ -28,6 +29,7 @@
         android:id="@+id/txtItemDescription"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/skullsandcrossbones"
         android:layout_marginTop="8dp"
         android:layout_marginLeft="4dp"
         android:layout_marginRight="4dp"
@@ -46,6 +48,7 @@
             android:id="@+id/btnReceiveAll"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/skullsandcrossbones"
             android:text="@string/btn_receive"
             android:background="@drawable/xml_btn_style" />
 
@@ -54,6 +57,7 @@
             android:id="@+id/btnClose"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/skullsandcrossbones"
             android:text="@string/btn_close"
             android:background="@drawable/xml_btn_style" />
         
@@ -64,6 +68,7 @@
 		    android:layout_gravity="bottom"
 		    android:layout_marginStart="48dp"
 		    android:background="@mipmap/ico_gold"
+            android:fontFamily="@font/skullsandcrossbones"
 		    custom:defaultValue="0" />
 
     </LinearLayout>

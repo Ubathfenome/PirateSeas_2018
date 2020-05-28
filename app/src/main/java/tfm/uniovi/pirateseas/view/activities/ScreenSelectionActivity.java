@@ -13,7 +13,6 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -54,7 +53,6 @@ public class ScreenSelectionActivity extends Activity {
 
 	private static final String TAG = "ScreenSelectionActivity";
 
-	private TextView txtScreenSelectionLabel;
 	private LinearLayout layoutMapBackground;
 
 	private ImageButton btnLeft, btnRight, btnUp, btnDown;
@@ -82,8 +80,6 @@ public class ScreenSelectionActivity extends Activity {
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.activity_screen_selection_ui);
-
-		Typeface customFont = Typeface.createFromAsset(getAssets(), "fonts/" + Constants.FONT_NAME + ".ttf");
 
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
@@ -180,12 +176,8 @@ public class ScreenSelectionActivity extends Activity {
 		// Update arrow images if active cell is on any border of the map
 		updateArrowButtonsState();
 
-		txtScreenSelectionLabel = findViewById(R.id.txtScreenSelectionLabel);
-		txtScreenSelectionLabel.setTypeface(customFont);
-
 		TextView txtAnimationTitle = findViewById(R.id.txtAnimationTitle);
 		txtAnimationTitle.setTextColor(Color.BLACK);
-		txtAnimationTitle.setTypeface(customFont);
 
 		if(map.isAllClear()){
 			// Map completed! Clear map from preferences and start new map
@@ -263,8 +255,6 @@ public class ScreenSelectionActivity extends Activity {
 	 * Relaunch the select screen activity
 	 */
 	private void reloadSelection(){
-//        String message = getResources().getString(R.string.message_nothinghere);
-//        txtScreenSelectionLabel.setText(message);
 		GameHelper.saveGameAtPreferences(this, p, ship, map);
 
 		launchResetIntent();
@@ -287,9 +277,9 @@ public class ScreenSelectionActivity extends Activity {
 	 * Save the game when going into an already visited island
 	 */
 	private void enterVisitedIsland() {
-		String message = getText(R.string.message_islandvisited) + "\n" + txtScreenSelectionLabel.getText();
+		// String message = getText(R.string.message_islandvisited) + "\n" + txtScreenSelectionLabel.getText();
 		// Notify that the island has already been visited and cannot be visited twice
-		txtScreenSelectionLabel.setText(message);
+		// txtScreenSelectionLabel.setText(message);
 		GameHelper.saveGameAtPreferences(this, p, ship, map);
 
 		launchResetIntent();
@@ -322,6 +312,7 @@ public class ScreenSelectionActivity extends Activity {
 	private Drawable getCurrentMap(Date date) {
 		Bitmap bmpCover = BitmapFactory.decodeResource(getResources(),R.mipmap.txtr_map_cover);
 		Bitmap bmpIsland = BitmapFactory.decodeResource(getResources(),R.mipmap.txtr_map_island);
+		Bitmap bmpIslandRevealed = DrawableHelper.overlapBitmaps(bmpCover, BitmapFactory.decodeResource(getResources(),R.mipmap.txtr_map_island_revealed));
 		Bitmap bmpWater = BitmapFactory.decodeResource(getResources(),R.mipmap.txtr_map_water);
 		Bitmap bmpActive = BitmapFactory.decodeResource(getResources(),R.mipmap.txtr_map_active);
 
@@ -354,8 +345,10 @@ public class ScreenSelectionActivity extends Activity {
 
 		for(int i = 0; i < mapLength; i++){
 			String s = mapContent[i];
-			if(s.contains("1")){	// Fog image
+			if(s.contains("1")) {    // Fog image
 				bmpContent[i] = bmpCover;
+			} else if (s.contains("2")){	// 'X' marks the spot image
+				bmpContent[i] = bmpIslandRevealed;
 			} else if (s.contains("I")){	// Island image
 				bmpContent[i] = bmpIsland;
 			} else {	// Water image

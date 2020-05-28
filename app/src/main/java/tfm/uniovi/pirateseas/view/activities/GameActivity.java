@@ -13,7 +13,6 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.PorterDuff;
-import android.graphics.Typeface;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -163,9 +162,9 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 
 		mPreferences = getSharedPreferences(Constants.TAG_PREF_NAME,
 				Context.MODE_PRIVATE);
-		shipControlMode = mPreferences.getBoolean(Constants.PREF_SHIP_CONTROL_MODE, Constants.PREF_IS_ACTIVE);
+		shipControlMode = mPreferences.getBoolean(Constants.PREF_SHIP_CONTROL_MODE, !Constants.PREF_IS_ACTIVE);
 		ammoControlMode = mPreferences.getBoolean(Constants.PREF_AMMO_CONTROL_MODE, Constants.PREF_IS_ACTIVE);
-		shootControlMode = mPreferences.getBoolean(Constants.PREF_SHOOT_CONTROL_MODE, Constants.PREF_IS_ACTIVE);
+		shootControlMode = mPreferences.getBoolean(Constants.PREF_SHOOT_CONTROL_MODE, !Constants.PREF_IS_ACTIVE);
 
 		// Launch the game!!
 		setContentView(R.layout.activity_game);
@@ -231,8 +230,10 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 		if (requestCode == REQUEST_RECORD_PERMISSION) {
 			if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-				mSpeechRecognizer.startListening(mSpeechRecognizerIntent);
-				imgMicStatus.setImageResource(R.drawable.ic_mic_usage);
+				if(shootControlMode) {
+					mSpeechRecognizer.startListening(mSpeechRecognizerIntent);
+					imgMicStatus.setImageResource(R.drawable.ic_mic_usage);
+				}
 			} else {
 				showText("Permission Denied!");
 			}
@@ -397,12 +398,42 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 			LayoutInflater inflater = dummyActivity.getLayoutInflater();
 			View view = inflater.inflate(R.layout.custom_positive_dialog_layout, null);
 			TextView txtTitle = view.findViewById(R.id.txtTitle);
-			Typeface customFont = Typeface.createFromAsset(dummyActivity.getAssets(), "fonts/" + Constants.FONT_NAME + ".ttf");
-			txtTitle.setTypeface(customFont);
 			TextView txtMessage = view.findViewById(R.id.txtMessage);
 			Button btnPositive = view.findViewById(R.id.btnPositive);
 			txtTitle.setText(getResources().getString(R.string.game_message_enemy_defeated_title));
 			txtMessage.setText(String.format(getResources().getString(R.string.game_message_enemy_defeated), gold, xp));
+			btnPositive.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View view) {
+					// Exit
+					setMessageAsRead(true);
+					dismiss();
+				}
+			});
+			builder.setView(view);
+
+			// Create the AlertDialog object and return it
+			return builder.create();
+		}
+
+		private void setMessageAsRead(boolean b) {
+			((GameActivity)getActivity()).mCanvasView.nUpdateThread.getCanvasViewInstance().setMessageReaded(b);
+		}
+	}
+
+	public static class PlayerDefeatedFragment extends DialogFragment {
+
+		@Override
+		public Dialog onCreateDialog(Bundle savedInstanceState) {
+			final Activity dummyActivity = getActivity();
+			AlertDialog.Builder builder = new AlertDialog.Builder(dummyActivity, R.style.Dialog_No_Border);
+			LayoutInflater inflater = dummyActivity.getLayoutInflater();
+			View view = inflater.inflate(R.layout.custom_positive_dialog_layout, null);
+			TextView txtTitle = view.findViewById(R.id.txtTitle);
+			TextView txtMessage = view.findViewById(R.id.txtMessage);
+			Button btnPositive = view.findViewById(R.id.btnPositive);
+			txtTitle.setText(getResources().getString(R.string.game_message_player_defeated_title));
+			txtMessage.setText(getResources().getString(R.string.game_message_player_defeated));
 			btnPositive.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View view) {
@@ -443,7 +474,6 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 					double angleZ = Math.toDegrees(Math.asin (axisSpeedZ / SensorManager.GRAVITY_EARTH));
 
 					// Log.d(TAG, "TYPE_ACCELEROMETER: Acc:angle = "+axisSpeedX+":"+angleX+"º / "+axisSpeedY+":"+angleY+"º / "+axisSpeedZ+":"+angleZ+"º	");
-					// Event
 					if (EventWeatherMaelstrom.generateMaelstrom(axisSpeedY)) {
 						// Notify CanvasView to damage the ships
 						if (cView.getGamemode() == Constants.GAMEMODE_BATTLE) {
@@ -752,6 +782,15 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 	}
 
 	/**
+	 * Show a dialog stating that the player is dead
+	 */
+	public void playerDefeated(){
+		PlayerDefeatedFragment enemyDefeatedDialog = new PlayerDefeatedFragment();
+		enemyDefeatedDialog.setCancelable(false);
+		enemyDefeatedDialog.show(getFragmentManager(), "PlayerDefeatedDialog");
+	}
+
+	/**
 	 * Shake the clouds once
 	 */
 	public void shakeClouds() {
@@ -872,8 +911,6 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
             if(matches!=null && checkMatches(matches))
                 doAction();
 
-			// mSpeechRecognizer.startListening(mSpeechRecognizerIntent);
-			// imgMicStatus.setImageResource(R.drawable.ic_mic_usage);
 		}
 
         /**

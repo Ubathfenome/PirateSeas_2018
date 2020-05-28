@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.transition.Fade;
@@ -46,7 +45,6 @@ public class GameOverActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		
 		setContentView(R.layout.activity_gameover);
-		Typeface customFont = Typeface.createFromAsset(getAssets(), "fonts/" + Constants.FONT_NAME + ".ttf");
 
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
@@ -60,11 +58,8 @@ public class GameOverActivity extends Activity {
 		sensorTypes = intent.getIntArrayExtra(Constants.TAG_SENSOR_LIST);
 
 		lblGameOver = findViewById(R.id.lblGameOver);
-		lblGameOver.setTypeface(customFont);
 		txtDays = findViewById(R.id.txtDays);
-		txtDays.setTypeface(customFont);
 		txtScore = findViewById(R.id.txtScore);
-		txtScore.setTypeface(customFont);
 		
 		int score = p.getLevel() * p.getExperience() + p.getGold();
 		if(score == 0)

@@ -12,6 +12,7 @@
 			android:id="@+id/txtTitleLabel"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
+			android:fontFamily="@font/skullsandcrossbones"
 			android:textSize="@dimen/title_size"
 			android:text="@string/game_title"/>
 
@@ -23,6 +24,7 @@
 			<Button android:id="@+id/btn_newgame"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
+				android:fontFamily="@font/skullsandcrossbones"
 				android:text="@string/activity_new_game"
 				android:background="@drawable/xml_btn_style"
                 tools:ignore="ButtonStyle" />
@@ -30,6 +32,7 @@
 			<Button android:id="@+id/btn_tutorial"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
+				android:fontFamily="@font/skullsandcrossbones"
 				android:text="@string/activity_tutorial"
 				android:background="@drawable/xml_btn_style"
                 tools:ignore="ButtonStyle" />
@@ -39,6 +42,7 @@
 		<Button android:id="@+id/btn_loadgame"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
+			android:fontFamily="@font/skullsandcrossbones"
 			android:text="@string/activity_load_game"
 			android:background="@drawable/xml_btn_style" />
 		
@@ -51,7 +55,6 @@
 				android:src="@mipmap/ico_settings"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:text="@string/activity_settings"
 				android:contentDescription="@string/icd_btn_settings"
 				android:background="@drawable/xml_btn_style" />
 			
@@ -59,7 +62,6 @@
 				android:src="@mipmap/ico_help"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:text="@string/activity_help"
 				android:contentDescription="@string/icd_btn_help"
 				android:background="@drawable/xml_btn_style" />
 		    
@@ -68,6 +70,7 @@
 		<Button android:id="@+id/btn_exit"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
+			android:fontFamily="@font/skullsandcrossbones"
 			android:text="@string/exit_dialog_positive"
 			android:background="@drawable/xml_btn_style" />
 		
