@@ -36,6 +36,10 @@ public class DrawableHelper{
 		return Bitmap.createBitmap(bmp, 0, bmp.getHeight() / 2, bmp.getWidth(), bmp.getHeight() / 2);
 	}
 
+	public static Drawable getFrameFromBitmap(Resources r, Bitmap bitmap, int x, int y, int width, int height){
+		return new BitmapDrawable(r, Bitmap.createBitmap(bitmap, x, y, width, height));
+	}
+
 	/**
 	 * Returns the received Drawable rotated x degrees
 	 * @param d

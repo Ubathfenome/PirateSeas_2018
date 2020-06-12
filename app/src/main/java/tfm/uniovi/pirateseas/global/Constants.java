@@ -7,13 +7,13 @@ import android.content.Context;
  */
 public class Constants{
 
-    // Modes
+	// Modes
 	private static final int MODE_DEBUG = 0x0;
 	@SuppressWarnings("unused")
 	private static final int MODE_RELEASE = 0x1;
 
 	// Set on release
-	public static final int MODE = MODE_RELEASE;
+	public static final int MODE = MODE_DEBUG;
 
 	public static final int GAMEMODE_ADVANCE = 0x1;
 	public static final int GAMEMODE_BATTLE = 0x2;
@@ -94,9 +94,10 @@ public class Constants{
 	public static final double NANOS_TO_SECONDS = Math.pow(10, -9);
 
 	public static final int SHOT_SPEED = 15;
+	public static final long GRACE_PERIOD = 1500;
 
     public static final int SHAKE_LIMIT = 2;
-    public static final int TUTORIAL_NUM_PAGES = 10;
+    public static final int TUTORIAL_NUM_PAGES = 11;
 
     public static final int MAX_ENTITY_WIDTH = 15;
     public static final int MAX_ENTITY_HEIGHT = 15;
@@ -165,6 +166,16 @@ public class Constants{
 	public static final String PAUSE_MAP = "PAUSEMAP";
 
 	public static final int ZERO_INT = 0;
+
+	public static final String SHIP_ENTITY = "SHIP";
+	public static final String SHIP_HEALTH = "Health";
+	public static final String SHIP_AMMO = "Ammunition";
+	public static final String SHIP_RANGE = "Range";
+	public static final String SHIP_MAX_HEALTH = "MaxHealth";
+	public static final String PLAYER_ENTITY = "PLAYER";
+	public static final String PLAYER_MAP_PIECE = "MapPieces";
+	public static final String SHIP_POWER = "Power";
+	public static final String PLAYER_GOLD = "Gold";
 
 	/**
 	 * Method that evaluates if the game is in debugging mode or not

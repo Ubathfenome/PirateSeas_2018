@@ -3,8 +3,8 @@
 <!-- Normal screens -->
 <resources>
 
-    <dimen name="text_size">12sp</dimen>
-	<dimen name="title_size">18sp</dimen>
+    <dimen name="text_size">14sp</dimen>
+	<dimen name="title_size">20sp</dimen>
 	<dimen name="header_size">26sp</dimen>
 	<dimen name="small_padding_size">10dp</dimen>
 	<dimen name="extra_small_padding_size">5dp</dimen>

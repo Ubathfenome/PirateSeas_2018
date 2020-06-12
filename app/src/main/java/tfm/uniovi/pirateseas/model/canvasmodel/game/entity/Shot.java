@@ -2,19 +2,26 @@ package tfm.uniovi.pirateseas.model.canvasmodel.game.entity;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Point;
-import android.os.Build;
+import android.graphics.Rect;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 
 import tfm.uniovi.pirateseas.R;
 import tfm.uniovi.pirateseas.global.Constants;
+import tfm.uniovi.pirateseas.utils.approach2d.DrawableHelper;
 
 /**
  * Class to manage the Shot's behaviour
  */
 public class Shot extends Entity{
-	
+
+	private static final int ANIMATION_STEPS = 13;
+
 	private Context mContext;
 	
 	private Point startPoint;
@@ -27,6 +34,22 @@ public class Shot extends Entity{
 	private int mDamage;
 	
 	private int mShotStatus;
+
+	private boolean animationHasEnded;
+
+	private int frameWidth;
+	private int frameHeight;
+	private int currentFrame;
+	private Rect frameToDraw = new Rect(
+			0,
+			0,
+			frameWidth,
+			frameHeight);
+
+	private Bitmap bitmap;
+
+	// What time was it when we last changed frames
+	private long lastFrameChangeTime = 0;
 
 	static int shotWidth, shotHeight;
 
@@ -54,6 +77,12 @@ public class Shot extends Entity{
 		mShotStatus = Constants.SHOT_FIRED;
 
 		setImage(mContext.getResources().getDrawable(R.mipmap.txtr_shot_smoke, null));
+		bitmap = BitmapFactory.decodeResource(context.getResources(), R.mipmap.explosion_sprite);
+		Drawable bDrawable = new BitmapDrawable(context.getResources(), bitmap);
+		frameHeight = bDrawable.getIntrinsicHeight();
+		frameWidth = bDrawable.getIntrinsicWidth() / ANIMATION_STEPS;
+		currentFrame = 0;
+		animationHasEnded = false;
 
 		shotWidth = mWidth;
 		shotHeight = mHeight;
@@ -94,44 +123,27 @@ public class Shot extends Entity{
 	}
 	
 	@SuppressLint("NewApi")
-	@SuppressWarnings("deprecation")
-	@Override
 	/*
 	 * Draw the Shot on the screen Canvas
 	 */
 	public void drawOnScreen(Canvas canvas) {
-		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
-			switch(mShotStatus){
-				case Constants.SHOT_FIRED:
-					setImage(mContext.getResources().getDrawable(R.mipmap.txtr_shot_smoke, null));
-					break;
-				case Constants.SHOT_FLYING:
-					setImage(mContext.getResources().getDrawable(R.mipmap.txtr_shot_cannonball, null));
-					break;
-				case Constants.SHOT_HIT:
-					setImage(mContext.getResources().getDrawable(R.mipmap.txtr_shot_hit, null));
-					break;
-				case Constants.SHOT_MISSED:
-					setImage(mContext.getResources().getDrawable(R.mipmap.txtr_shot_miss, null));
-					break;
-			}
-		} else {
-			switch(mShotStatus){
-				case Constants.SHOT_FIRED:
-					setImage(mContext.getResources().getDrawable(R.mipmap.txtr_shot_smoke));
-					break;
-				case Constants.SHOT_FLYING:
-					setImage(mContext.getResources().getDrawable(R.mipmap.txtr_shot_cannonball));
-					break;
-				case Constants.SHOT_HIT:
-					setImage(mContext.getResources().getDrawable(R.mipmap.txtr_shot_hit));
-					break;
-				case Constants.SHOT_MISSED:
-					setImage(mContext.getResources().getDrawable(R.mipmap.txtr_shot_miss));
-					break;
-			}
+		switch(mShotStatus){
+			case Constants.SHOT_FIRED:
+				setImage(mContext.getResources().getDrawable(R.mipmap.txtr_shot_smoke, null));
+				break;
+			case Constants.SHOT_FLYING:
+				setImage(mContext.getResources().getDrawable(R.mipmap.txtr_shot_cannonball, null));
+				break;
+			case Constants.SHOT_HIT:
+				// setImage(mContext.getResources().getDrawable(R.mipmap.txtr_shot_hit, null));
+				getCurrentFrame();
+				// Set the correct frame
+				setImage(DrawableHelper.getFrameFromBitmap(mContext.getResources(), bitmap, frameToDraw.left, frameToDraw.top, frameWidth, frameHeight));
+				break;
+			case Constants.SHOT_MISSED:
+				setImage(mContext.getResources().getDrawable(R.mipmap.txtr_shot_miss, null));
+				break;
 		}
-
 		super.drawOnScreen(canvas);
 	}
 
@@ -173,6 +185,33 @@ public class Shot extends Entity{
 	 */
 	public Point getEndPoint() {
 		return endPoint;
+	}
+
+	/**
+	 * Set the next frame to draw
+	 */
+	public void getCurrentFrame(){
+		long timestamp = System.currentTimeMillis();
+		// How long should each frame last
+		int frameLengthInMilliseconds = 100;
+		if ( timestamp > lastFrameChangeTime + frameLengthInMilliseconds) {
+			lastFrameChangeTime = timestamp;
+			currentFrame++;
+			if (currentFrame >= ANIMATION_STEPS) {
+				animationHasEnded = true;
+				// currentFrame = 0; // Use this if the animation should be restarted
+			}
+		}
+
+		//update the left and right values of the source of
+		//the next frame on the sprite sheet
+		frameToDraw.left = currentFrame * frameWidth;
+		frameToDraw.right = frameToDraw.left + frameWidth;
+
+	}
+
+	public boolean getAnimationHasEnded(){
+		return animationHasEnded;
 	}
 
 	@NonNull

@@ -20,6 +20,7 @@ import android.hardware.SensorManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.os.SystemClock;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.speech.RecognitionListener;
@@ -84,6 +85,8 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 
     protected int[] sensorTypes = null;
     protected long sensorLastTimestamp;
+
+    private long lastClickTimestamp = 0;
 
     boolean loadGame = false;
 
@@ -172,6 +175,12 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 		btnPause = findViewById(R.id.btnPause);
 		btnPause.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
+				if(SystemClock.elapsedRealtime() - lastClickTimestamp < 1000){
+					return;
+				}
+
+				lastClickTimestamp = SystemClock.elapsedRealtime();
+
 				Intent pauseIntent = new Intent(context, PauseActivity.class);
 				CanvasView currentCView = mCanvasView.nUpdateThread.getCanvasViewInstance();
 				Ship nPlayerShip = currentCView.nPlayerShip;
@@ -305,7 +314,9 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 
 		// Reload saved settings in preferences
 		mCanvasView.nUpdateThread.getCanvasViewInstance().loadSettings();
+		// Check if the voice commands have been activated. Ready the speechRecognizer
 		shipControlMode = mCanvasView.nUpdateThread.getCanvasViewInstance().getShipControlMode();
+		shootControlMode = mCanvasView.nUpdateThread.getCanvasViewInstance().getShootControlMode();
 
 		if(!MusicManager.getInstance().isPlaying())
 			MusicManager.getInstance().playBackgroundMusic();
@@ -771,7 +782,7 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 	 * @param gold Gold gained after defeating the enemy
 	 * @param xp Experience points won after defeating the enemy
 	 */
-	public void enemyDefeated(int gold, int xp){
+	public void enemyDefeated(int gold, int xp, boolean mapPiece){
 		EnemyDefeatedFragment enemyDefeatedDialog = new EnemyDefeatedFragment();
 		Bundle args = new Bundle();
 		args.putInt(Constants.ARG_GOLD, gold);

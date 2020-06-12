@@ -63,7 +63,7 @@ public class Whirlpool extends BasicModel {
         if ( timestamp > lastFrameChangeTime + frameLengthInMilliseconds) {
             lastFrameChangeTime = timestamp;
             currentFrame++;
-            int frameCount = 7;
+            int frameCount = 8;
             if (currentFrame >= frameCount) {
                 currentFrame = 0;
             }
@@ -91,6 +91,7 @@ public class Whirlpool extends BasicModel {
      * @param canvas Screen canvas
      */
     public void drawOnScreen(Canvas canvas){
+        getCurrentFrame();
         if (x+frameWidth<mCanvasWidth) {
             canvas.drawBitmap(bitmap,
                     frameToDraw,

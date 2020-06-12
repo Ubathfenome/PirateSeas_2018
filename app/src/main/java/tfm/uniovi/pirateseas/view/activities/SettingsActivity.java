@@ -36,7 +36,6 @@ import tfm.uniovi.pirateseas.global.Constants;
 public class SettingsActivity extends PreferenceActivity {
 
 	SharedPreferences mPreferences;
-	private SharedPreferences.Editor mEditor;
 	private PreferenceCompanion pCompanion;
 	private Context mContext;
 
@@ -202,13 +201,35 @@ public class SettingsActivity extends PreferenceActivity {
 	 * @return true if the preferences got reset, false otherwise
 	 */
 	private boolean resetPreferences() {
+		int appVersion = mPreferences.getInt(Constants.APP_VERSION, Constants.ZERO_INT);
 		SharedPreferences.Editor editor = mPreferences.edit();
 		editor.clear();
 		editor.putBoolean(Constants.TAG_EXE_MODE, mDebugMode);
 		editor.putBoolean(Constants.PREF_SHIP_CONTROL_MODE, !Constants.PREF_IS_ACTIVE);
 		editor.putBoolean(Constants.PREF_AMMO_CONTROL_MODE, Constants.PREF_IS_ACTIVE);
 		editor.putBoolean(Constants.PREF_SHOOT_CONTROL_MODE, !Constants.PREF_IS_ACTIVE);
+		editor.putInt(Constants.APP_VERSION, appVersion);
 		return editor.commit();
 	}
 
+	@Override
+	protected void onStop() {
+		savePreferences();
+		super.onStop();
+	}
+
+	private void savePreferences() {
+		// Save changes in preferences
+		SharedPreferences activityPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+
+		boolean shipControlMode = Boolean.parseBoolean(activityPreferences.getString(Constants.PREF_SHIP_CONTROL_MODE, String.valueOf(!Constants.PREF_IS_ACTIVE)));
+		boolean ammoControlMode = Boolean.parseBoolean(activityPreferences.getString(Constants.PREF_AMMO_CONTROL_MODE, String.valueOf(Constants.PREF_IS_ACTIVE)));
+		boolean shootControlMode = Boolean.parseBoolean(activityPreferences.getString(Constants.PREF_SHOOT_CONTROL_MODE, String.valueOf(!Constants.PREF_IS_ACTIVE)));
+
+		SharedPreferences.Editor editor = mPreferences.edit();
+		editor.putBoolean(Constants.PREF_SHIP_CONTROL_MODE, shipControlMode);
+		editor.putBoolean(Constants.PREF_AMMO_CONTROL_MODE, ammoControlMode);
+		editor.putBoolean(Constants.PREF_SHOOT_CONTROL_MODE, shootControlMode);
+		editor.apply();
+	}
 }

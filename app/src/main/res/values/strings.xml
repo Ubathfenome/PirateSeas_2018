@@ -239,16 +239,17 @@
     <!-- Game strings -->
     <string name="tutorial_1">Arrr Mate!! Welcome to PIRATE SEAS!!\nYarr want to rule these seas and loot all the booty.</string>
     <string name="tutorial_2">Choose wisely your next step mate! Lot\'s of good ol\'men have sunk in these waters.</string>
-    <string name="tutorial_3">If you find a cloudy day.. Beware! An enemy might be lurking behind it. Shake your mobile device to wipe out the clouds!</string>
-    <string name="tutorial_4">Touch the screen to shoot your selected ammo.</string>
-    <string name="tutorial_5">You can also shoot using voice commands, such as \'%1$s\', \'%2$s\' and \'%3$s\' touching the screen to make your men listen.</string>
-    <string name="tutorial_6">Cycle through your ammo types touching the selected ammo icon. (Default setting)</string>
-    <string name="tutorial_7">Collect booty by sinking your enemies or discovering treasures using the maps you will find on the islands in your path.</string>
-    <string name="tutorial_8">Red ships are the slowest and the sturdiest.
+    <string name="tutorial_3">When moving to a new zone, you can find an island or more water.</string>
+    <string name="tutorial_4">If you find a cloudy day.. Beware! An enemy might be lurking behind it. Shake your mobile device to wipe out the clouds!</string>
+    <string name="tutorial_5">Touch the screen to shoot your selected ammo.</string>
+    <string name="tutorial_6">You can also shoot using voice commands, such as \'%1$s\', \'%2$s\' and \'%3$s\' touching the screen to make your men listen.</string>
+    <string name="tutorial_7">Cycle through your ammo types touching the selected ammo icon. (Default setting)</string>
+    <string name="tutorial_8">Collect booty by sinking your enemies or discovering treasures using the maps you will find on the islands in your path.</string>
+    <string name="tutorial_9">Red ships are the slowest and the sturdiest.
         \nYellow ships have normal speed and health.
         \nGreen ships are the fastest and lightest.</string>
-    <string name="tutorial_9">Gain exp when sink your enemies and unlock better upgrades</string>
-    <string name="tutorial_10">Become the greatest pirate king! or walk the plank!</string>
+    <string name="tutorial_10">Gain exp when sink your enemies and unlock better upgrades</string>
+    <string name="tutorial_11">Become the greatest pirate king! or walk the plank!</string>
 
     <string name="gameover_title">Game Over\nYou when to sleep with Davi Jones</string>
     <string name="gameover_hint">(Touch anywhere to go back to the main menu)</string>
@@ -257,7 +258,7 @@
     <string name="app_about">About us&#8230;</string>
     <string name="tutorial_content">This is some tutorial content</string>
     <string name="message_screenselection">Which direction go next, capt\'n?</string>
-    <string name="message_screenselection_detail">Please, select the next direction you want to go</string>
+    <string name="message_screenselection_detail">Select the next direction you want to go</string>
     <string name="message_islandvisited">Capt\'n! We\'ve been already there!</string>
     <string name="message_islanddetected">Capt\'n! Land in sight!</string>
     <string name="message_nothinghere">Capt\'n! There\s nothing here! Which direction we go next?</string>
@@ -311,5 +312,10 @@
     <string name="current_level_xp">Lvl %1$d (%2$d)</string>
     <string name="game_message_player_defeated_title">Player defeated</string>
     <string name="game_message_player_defeated">You have been defeated!</string>
+    <string name="nature_shop">Shop</string>
+    <string name="nature_treasure">Treasure</string>
+
+    <string name="generic_strings_join" translatable="false">%1$s\n%2$s</string>
+    <string name="generic_current_value">Current value is %1$d</string>
 
 </resources>

@@ -26,6 +26,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -42,6 +43,7 @@ import tfm.uniovi.pirateseas.model.canvasmodel.game.entity.Ammunitions;
 import tfm.uniovi.pirateseas.model.canvasmodel.game.entity.Ship;
 import tfm.uniovi.pirateseas.model.canvasmodel.game.objects.Item;
 import tfm.uniovi.pirateseas.model.canvasmodel.game.objects.ItemLoader;
+import tfm.uniovi.pirateseas.model.canvasmodel.game.objects.Nature;
 import tfm.uniovi.pirateseas.model.canvasmodel.ui.UIDisplayElement;
 import tfm.uniovi.pirateseas.utils.persistence.GameHelper;
 
@@ -53,9 +55,7 @@ import tfm.uniovi.pirateseas.utils.persistence.GameHelper;
  */
 public class ShopActivity extends ListActivity{
 	private static final String TAG = "ShopActivity";
-	
-	static String descriptionTip;
-	
+
 	String mNature = "";
 	private int[] sensorTypes;
 	private List<AppSensorEvent> sensorEvents;
@@ -68,8 +68,10 @@ public class ShopActivity extends ListActivity{
 	Map dummyMap;
 	
 	List<Item> itemList;
+	List<Nature> natureList;
 	ListView listView;
-	ListAdapter mAdapter;
+	ListAdapter mNatureAdapter;
+	ListAdapter mItemAdapter;
 	
 	TextView txtDescription, lblShopTitle;
 	UIDisplayElement txtAvailableGold;
@@ -93,7 +95,8 @@ public class ShopActivity extends ListActivity{
 		loadGame = data.getBooleanExtra(Constants.TAG_LOAD_GAME, true);
 		mapHeight = data.getIntExtra(Constants.TAG_SCREEN_SELECTION_MAP_HEIGHT, Constants.MAP_MIN_HEIGHT);
 		mapWidth = data.getIntExtra(Constants.TAG_SCREEN_SELECTION_MAP_WIDTH, Constants.MAP_MIN_WIDTH);
-		
+
+		natureList = new ArrayList<>();
 		ItemLoader loader = new ItemLoader(this);
 		
 		dummyPlayer = new Player();
@@ -105,9 +108,13 @@ public class ShopActivity extends ListActivity{
 		dummyShip = GameHelper.helperShip;
 		
 		if(mNature.equals(Constants.NATURE_SHOP)){
+			// Add SHOP item. When clicked, load default items for the players level
+			natureList.add(new Nature(getString(R.string.nature_shop), R.mipmap.ico_shop));
 			// An ordered list of items with their price
 			itemList = loader.loadDefault(dummyPlayer.getLevel());
 		} else if (mNature.equals(Constants.NATURE_TREASURE)){
+			// Add CHEST item. When clicked, load random items
+			natureList.add(new Nature(getString(R.string.nature_treasure), R.mipmap.ico_chest));
 			// A random list of free items
 			itemList = loader.loadRandom();
 		}
@@ -117,18 +124,21 @@ public class ShopActivity extends ListActivity{
 		listView = findViewById(android.R.id.list);
 		
 		// Assign loaded itemList to ListView Adapter
-		mAdapter = new ItemAdapter(this, R.layout.list_item_layout, itemList);
-		listView.setAdapter(mAdapter);
+		// Add NatureAdapter with 1 item based on shop type
+		mNatureAdapter = new NatureAdapter(this, R.layout.list_nature_layout, natureList);
+		mItemAdapter = new ItemAdapter(this, R.layout.list_item_layout, itemList);
+		listView.setAdapter(mNatureAdapter);
 		
 		txtDescription = findViewById(R.id.txtItemDescription);
-		descriptionTip = this.getResources().getString(R.string.shop_purchase_hint);
+
 		txtAvailableGold = findViewById(R.id.playerGold);
 		txtAvailableGold.setElementValue(dummyPlayer.getGold());
 		
 		// Accept all
 		btnAcceptAll = findViewById(R.id.btnReceiveAll);
-		if(mNature.equals(Constants.NATURE_SHOP))
+		if(listView.getAdapter() instanceof NatureAdapter || mNature.equals(Constants.NATURE_SHOP)) {
 			btnAcceptAll.setVisibility(View.GONE);
+		}
 		btnAcceptAll.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -141,7 +151,7 @@ public class ShopActivity extends ListActivity{
 					itemList.remove(--size);
 				}
 				
-				listView.setAdapter(mAdapter);
+				listView.setAdapter(mItemAdapter);
 				v.setVisibility(View.INVISIBLE);
 			}
 		});
@@ -178,40 +188,40 @@ public class ShopActivity extends ListActivity{
 			
 			// Add item effects
 			switch(itemPurchased.getName()){
-				case Constants.ITEM_KEY_CREW:
+				case R.string.shop_item_crew_name:
 					dummyShip.gainHealth(5);
 					break;
-				case Constants.ITEM_KEY_REPAIRMAN:
+				case R.string.shop_item_repairman_name:
 					dummyShip.gainHealth(15);
 					break;
-				case Constants.ITEM_KEY_AMMO_SIMPLE:
+				case R.string.shop_item_ammo_simple_name:
 					dummyShip.gainAmmo(10, Ammunitions.DEFAULT);
 					break;
-				case Constants.ITEM_KEY_AMMO_AIMED:
+				case R.string.shop_item_ammo_aimed_name:
 					dummyShip.gainAmmo(5, Ammunitions.AIMED);
 					break;
-				case Constants.ITEM_KEY_AMMO_DOUBLE:
+				case R.string.shop_item_ammo_double_name:
 					dummyShip.gainAmmo(5, Ammunitions.DOUBLE);
 					break;
-				case Constants.ITEM_KEY_AMMO_SWEEP:
+				case R.string.shop_item_ammo_sweep_name:
 					dummyShip.gainAmmo(2, Ammunitions.SWEEP);
 					break;
-				case Constants.ITEM_KEY_NEST:
+				case R.string.shop_item_nest_name:
 					dummyShip.addRange(1.15f);
 					break;
-				case Constants.ITEM_KEY_MATERIALS:
+				case R.string.shop_item_mats_name:
 					dummyShip.setMaxHealth(dummyShip.getMaxHealth() + 10);
 					break;
-				case Constants.ITEM_KEY_MAPPIECE:
+				case R.string.shop_item_mpiece_name:
 					dummyPlayer.addMapPiece();
 					break;
-				case Constants.ITEM_KEY_MAP:
+				case R.string.shop_item_map_name:
 					dummyPlayer.giveCompleteMap(true);
 					break;
-				case Constants.ITEM_KEY_BLACKPOWDER:
+				case R.string.shop_item_bpowder_name:
 					dummyShip.addPower(0.5f);
 					break;
-				case Constants.ITEM_KEY_VALUABLE:
+				case R.string.shop_item_valuable_name:
 					dummyPlayer.addGold(100);
 					break;
 			}
@@ -325,7 +335,7 @@ public class ShopActivity extends ListActivity{
 					if(item != null){
 						if(((ShopActivity)getActivity()).purchaseItem(item)){
 							((ShopActivity)getActivity()).itemList.remove(item);
-							((ShopActivity)getActivity()).listView.setAdapter(((ShopActivity)getActivity()).mAdapter);
+							((ShopActivity)getActivity()).listView.setAdapter(((ShopActivity)getActivity()).mItemAdapter);
 						}
 					}
 					dismiss();
@@ -341,6 +351,58 @@ public class ShopActivity extends ListActivity{
 
 			// Create the AlertDialog object and return it
 			return builder.create();
+		}
+	}
+
+	/**
+	 * Class that holds the shops nature item
+	 * @see: http://stackoverflow.com/questions/2265661/how-to-use-arrayadaptermyclass
+	 *
+	 */
+	private class NatureAdapter extends ArrayAdapter<Nature>{
+
+		private class ViewHolder{
+			private TextView natureNameView;
+		}
+
+		ViewHolder vHolder;
+		Context context;
+		Nature shopNature;
+
+		NatureAdapter(Context context, int resource, List<Nature> objects){
+			super(context, resource, objects);
+			shopNature = objects.get(Constants.ZERO_INT);
+		}
+
+		@NonNull
+		@Override
+		public View getView(final int position, View convertView, @NonNull ViewGroup parent) {
+			// Populate the related view
+			if(convertView == null){
+				convertView = LayoutInflater.from(this.getContext())
+						.inflate(R.layout.list_nature_layout, parent, false);
+
+				vHolder = new NatureAdapter.ViewHolder();
+				vHolder.natureNameView = convertView.findViewById(R.id.txtNatureName);
+				vHolder.natureNameView.setText(shopNature.getNatureName());
+				// Set the correct shop nature icon
+				vHolder.natureNameView.setCompoundDrawablesRelativeWithIntrinsicBounds(shopNature.getDrawableResource(), 0,0,0);
+				vHolder.natureNameView.setOnClickListener(new OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						// Add item listener. When item is clicked, assign ItemAdapter
+						// Check that item list is not regenerated
+						if(mNature.equals(Constants.NATURE_TREASURE)) {
+							btnAcceptAll.setVisibility(View.VISIBLE);
+						}
+						listView.setAdapter(mItemAdapter);
+					}
+				});
+			} else {
+				vHolder = (NatureAdapter.ViewHolder) convertView.getTag();
+			}
+
+			return convertView;
 		}
 	}
 	
@@ -377,7 +439,26 @@ public class ShopActivity extends ListActivity{
 				vHolder.itemHelpIcon.setOnClickListener(new OnClickListener() {
 					@Override
 					public void onClick(View view) {
-                        txtDescription.setText(itemList.get(position).getDescription() + descriptionTip);
+						// Obtener el valor actual del barco/jugador de la estadistica relacionada (salud, poder, rango,...)
+						int currentValue = 0;
+						String stat = itemList.get(position).getRelatedStat();
+						if(Constants.PLAYER_ENTITY.equals(itemList.get(position).getRelatedEntity())){
+							// Player
+							try {
+								currentValue = (int) dummyPlayer.getClass().getMethod("get" + stat).invoke(dummyPlayer);
+							} catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+								e.printStackTrace();
+							}
+						} else {
+							// Ship
+							try {
+								currentValue = (int) dummyShip.getClass().getMethod("get" + stat).invoke(dummyShip);
+							} catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+								e.printStackTrace();
+							}
+						}
+
+                        txtDescription.setText(getString(R.string.generic_strings_join, itemList.get(position).getDescription(), getString(R.string.generic_current_value, currentValue)));
 					}
 				});
 				vHolder.itemIconView = convertView.findViewById(R.id.imgItemIcon);
@@ -393,32 +474,32 @@ public class ShopActivity extends ListActivity{
 
 			Item item = getItem(position);
 			if(item != null) {
-				if(getString(R.string.shop_item_crew_name).equals(item.getName())){
+				if(R.string.shop_item_crew_name == item.getName()){
 				    vHolder.itemIconView.setImageResource(R.mipmap.icon_buff_crew); }
-				else if(getString(R.string.shop_item_repairman_name).equals(item.getName())){
+				else if(R.string.shop_item_repairman_name == item.getName()){
 				    vHolder.itemIconView.setImageResource(R.mipmap.icon_buff_repa); }
-				else if(getString(R.string.shop_item_ammo_simple_name).equals(item.getName())){
+				else if(R.string.shop_item_ammo_simple_name == item.getName()){
 				    vHolder.itemIconView.setImageResource(R.mipmap.txtr_ammo_default); }
-				else if(getString(R.string.shop_item_ammo_aimed_name).equals(item.getName())){
+				else if(R.string.shop_item_ammo_aimed_name == item.getName()){
 				    vHolder.itemIconView.setImageResource(R.mipmap.txtr_ammo_aimed); }
-				else if(getString(R.string.shop_item_ammo_double_name).equals(item.getName())){
+				else if(R.string.shop_item_ammo_double_name == item.getName()){
 				    vHolder.itemIconView.setImageResource(R.mipmap.txtr_ammo_double); }
-				else if(getString(R.string.shop_item_ammo_sweep_name).equals(item.getName())){
+				else if(R.string.shop_item_ammo_sweep_name == item.getName()){
 				    vHolder.itemIconView.setImageResource(R.mipmap.txtr_ammo_sweep); }
-				else if(getString(R.string.shop_item_nest_name).equals(item.getName())){
+				else if(R.string.shop_item_nest_name == item.getName()){
 				    vHolder.itemIconView.setImageResource(R.mipmap.icon_buff_occu); }
-				else if(getString(R.string.shop_item_mats_name).equals(item.getName())){
+				else if(R.string.shop_item_mats_name == item.getName()){
 				    vHolder.itemIconView.setImageResource(R.mipmap.icon_buff_wood); }
-				else if(getString(R.string.shop_item_mpiece_name).equals(item.getName())){
+				else if(R.string.shop_item_mpiece_name == item.getName()){
 				    vHolder.itemIconView.setImageResource(R.mipmap.icon_buff_mapp); }
-				else if(getString(R.string.shop_item_map_name).equals(item.getName())){
+				else if(R.string.shop_item_map_name == item.getName()){
 				    vHolder.itemIconView.setImageResource(R.mipmap.icon_buff_mapp); }
-				else if(getString(R.string.shop_item_bpowder_name).equals(item.getName())){
+				else if(R.string.shop_item_bpowder_name == item.getName()){
 				    vHolder.itemIconView.setImageResource(R.mipmap.icon_buff_bpow); }
-				else if(getString(R.string.shop_item_valuable_name).equals(item.getName())){
+				else if(R.string.shop_item_valuable_name == item.getName()){
 				    vHolder.itemIconView.setImageResource(R.mipmap.ico_gold); }
 
-				vHolder.itemNameView.setText(item.getName());
+				vHolder.itemNameView.setText(getString(item.getName()));
 				vHolder.itemPriceView.setText(String.valueOf(item.getPrice()));
 				vHolder.itemPriceIconView.setBackgroundResource(R.mipmap.ico_gold);
 			}

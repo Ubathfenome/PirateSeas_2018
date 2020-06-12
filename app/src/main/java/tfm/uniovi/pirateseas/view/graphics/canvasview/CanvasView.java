@@ -5,8 +5,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.graphics.Point;
+import android.os.Build;
 import android.os.Parcelable;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -52,7 +56,8 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 	private static final String EXCEPTION_TAG = "CustomException";
 
 	private static final int SHOT_CHK_DELAY = 50;
-	private static final int PLAYER_SHIP_Y_VALUE = 300;
+	private static final int
+			PLAYER_SHIP_Y_VALUE = 175;
 
 	private int HORIZON_Y_VALUE = 200;
 
@@ -70,6 +75,8 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 	public Player nPlayer;
 	public Map nMap;
 
+	private Paint paint;
+
 	private Sky nSky;
 	private Sea nSea;
 	private Whirlpool nWhirlpool;
@@ -84,6 +91,7 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 	private SharedPreferences nPreferences;
 	private long nBaseTimestamp;
 	private long nGameTimestamp;
+	private long nEnemyShipSpawnedTimestamp;
 
 	private boolean nInitialized = false;
 
@@ -170,6 +178,8 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 		nGameTimer = new GameTimer(nBaseTimestamp);
 		nPlayer = new Player();
 
+		paint = new Paint();
+
 		// Initialize components
 		// Scene
 		nSky = new Sky(nContext, 0, 0, nScreenWidth, nScreenHeight);
@@ -253,12 +263,11 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 
 		for (int i = 0, size = nShotList.size(); i < size; i++) {
 			Shot s = nShotList.get(i);
-			if (s.isAlive() && s.isInBounds(Constants.ZERO_INT))
+			if (!s.getAnimationHasEnded() && s.isInBounds(Constants.ZERO_INT))
 				s.drawOnScreen(canvas);
 		}
 
 		if(nWhirlpool!=null) {
-			nWhirlpool.getCurrentFrame();
 			nWhirlpool.drawOnScreen(canvas);
 		}
 	}
@@ -563,7 +572,7 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 					nPlayer.addGold(gold);
 					nPlayer.addExperience(xp);
 					messageSent = true;
-					((GameActivity) nContext).enemyDefeated(gold, xp);
+					((GameActivity) nContext).enemyDefeated(gold, xp, nEnemyShip.getShipType() == ShipType.HEAVY);
 				}
 			}
 		}
@@ -646,14 +655,13 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 								if (s.getEntityDirection() == Constants.DIRECTION_UP && s.intersection(nEnemyShip)) {
 									nEnemyShip.looseHealth(s.getDamage());
 									s.setShotStatus(Constants.SHOT_HIT);
-									s.looseHealth(s.getDamage());
+									s.setY(nEnemyShip.getY()-nEnemyShip.getHeight());
 								}
 							}
 							if(nPlayerShip != null && nPlayerShip.isAlive()){
 								if(s.getEntityDirection() == Constants.DIRECTION_DOWN && s.intersection(nPlayerShip)){
 									nPlayerShip.looseHealth(s.getDamage());
 									s.setShotStatus(Constants.SHOT_HIT);
-									s.looseHealth(s.getDamage());
 								}
 							}
 
@@ -668,22 +676,22 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 
 							if (s.getCoordinates().x == s.getEndPoint().x && s.getCoordinates().y == s.getEndPoint().y) {
 								s.setShotStatus(Constants.SHOT_MISSED);
-								s.looseHealth(s.getDamage());
 							}
 						}
 						break;
 					case Constants.SHOT_HIT:
 							// Play hit sound
 							MusicManager.getInstance().playSound(MusicManager.SOUND_SHOT_HIT);
-							s.looseHealth(s.getDamage());
 						break;
 					case Constants.SHOT_MISSED:
-						// Play missed sound
+							// Play missed sound
 							MusicManager.getInstance().playSound(MusicManager.SOUND_SHOT_MISSED);
 							s.looseHealth(s.getDamage());
 						break;
 					}
 				} else if(s.isAlive() && !s.isInBounds(Constants.ZERO_INT)){
+					if(s.getShotStatus()==Constants.SHOT_MISSED)
+						nShotList.remove(s);
 					s.setShotStatus(Constants.SHOT_MISSED);
 				} else { // If Shot is dead
 				    nShotList.remove(s);
@@ -705,7 +713,7 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 			} else {
 				// EnemyShip shoot - Enemy wont shoot on debug
 				if (!Constants.isInDebugMode(Constants.MODE)) {
-					if(nEnemyShip.isReloaded(nGameTimestamp)) {
+					if(nEnemyShipSpawnedTimestamp - nGameTimestamp >= Constants.GRACE_PERIOD && nEnemyShip.isReloaded(nGameTimestamp)) {
 						try {
 							nShotList.addAll(Arrays.asList(nEnemyShip.shootCannon()));
 							MusicManager.getInstance().playSound(MusicManager.SOUND_SHOT_FIRED);
@@ -824,6 +832,19 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 
 		nEnemyHBar = new StatBar(nContext, nEnemyBarXcoord, nEnemyBarYcoord, nScreenWidth, nScreenHeight, nEnemyShip.getHealth(),
 		nEnemyShip.getShipType().defaultHealthPoints(), Constants.BAR_HEALTH);
+
+		Vibrator vibrator = (Vibrator) nContext.getSystemService(Context.VIBRATOR_SERVICE);
+		if(vibrator.hasVibrator()) {
+			long vibrationDuration = Constants.GRACE_PERIOD;
+			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+				vibrator.vibrate(VibrationEffect.createOneShot(vibrationDuration, VibrationEffect.DEFAULT_AMPLITUDE));
+			} else {
+				//deprecated in API 26
+				vibrator.vibrate(vibrationDuration);
+			}
+		}
+
+		nEnemyShipSpawnedTimestamp = nGameTimestamp;
 	}
 
 	/**
@@ -938,5 +959,9 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 
 	public boolean getShipControlMode() {
 		return nShipControlMode;
+	}
+
+	public boolean getShootControlMode() {
+		return nShootControlMode;
 	}
 }

@@ -13,6 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fontFamily="@font/skullsandcrossbones"
+        android:textColor="@android:color/white"
         android:textSize="@dimen/title_size"
         android:padding="@dimen/extra_small_padding_size"/>
 
@@ -22,6 +23,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fontFamily="@font/skullsandcrossbones"
+        android:textColor="@android:color/white"
         android:textSize="@dimen/text_size"
         android:padding="@dimen/padding_size"/>
 
@@ -33,6 +35,7 @@
         android:layout_margin="@dimen/extra_small_padding_size"
         android:fontFamily="@font/skullsandcrossbones"
         android:text="@string/command_ok"
+        android:textSize="@dimen/text_size"
         android:background="@drawable/xml_btn_style"
         tools:ignore="ButtonStyle"/>
 

@@ -2,17 +2,22 @@ package tfm.uniovi.pirateseas.model.canvasmodel.game.objects;
 
 import android.support.annotation.NonNull;
 
+import tfm.uniovi.pirateseas.R;
+import tfm.uniovi.pirateseas.global.Constants;
+
 /**
  * Class for the in-game things to buy
  */
 public class Item implements Comparable<Item> {
-	
-	private final int id;
-	private String name;
+
+	private int name;
 	private String description;
 	private final int recommendedLevel;
 	private int level;
 	private int price;
+
+	private String relatedEntity;
+	private String relatedStat;
 
 	/**
 	 * Constructor
@@ -21,13 +26,49 @@ public class Item implements Comparable<Item> {
 	 * @param level Item level
 	 * @param price Item price
 	 */
-	Item(String name, String description, int level, int price){
-		this.id = name.hashCode();
+	Item(int name, String description, int level, int price){
 		this.name = name;
 		this.description = description;
 		this.level = level;
 		this.recommendedLevel = level - 1;
 		this.price = price;
+		// Set related entity & stat from the received name
+		switch(name){
+			//  Reemplazar Constants.NOMBRE_VARIABLE por R.string.id_recurso
+			case R.string.shop_item_crew_name:
+			case R.string.shop_item_repairman_name:
+				relatedEntity = Constants.SHIP_ENTITY;
+				relatedStat = Constants.SHIP_HEALTH;
+				break;
+			case R.string.shop_item_ammo_simple_name:
+			case R.string.shop_item_ammo_aimed_name:
+			case R.string.shop_item_ammo_double_name:
+			case R.string.shop_item_ammo_sweep_name:
+				relatedEntity = Constants.SHIP_ENTITY;
+				relatedStat = Constants.SHIP_AMMO;
+				break;
+			case R.string.shop_item_nest_name:
+				relatedEntity = Constants.SHIP_ENTITY;
+				relatedStat = Constants.SHIP_RANGE;
+				break;
+			case R.string.shop_item_mats_name:
+				relatedEntity = Constants.SHIP_ENTITY;
+				relatedStat = Constants.SHIP_MAX_HEALTH;
+				break;
+			case R.string.shop_item_mpiece_name:
+			case R.string.shop_item_map_name:
+				relatedEntity = Constants.PLAYER_ENTITY;
+				relatedStat = Constants.PLAYER_MAP_PIECE;
+				break;
+			case R.string.shop_item_bpowder_name:
+				relatedEntity = Constants.SHIP_ENTITY;
+				relatedStat = Constants.SHIP_POWER;
+				break;
+			case R.string.shop_item_valuable_name:
+				relatedEntity = Constants.PLAYER_ENTITY;
+				relatedStat = Constants.PLAYER_GOLD;
+				break;
+		}
 	}
 
 	/**
@@ -42,14 +83,14 @@ public class Item implements Comparable<Item> {
 	/**
 	 * @return the name
 	 */
-	public String getName() {
+	public int getName() {
 		return name;
 	}
 
 	/**
 	 * @param name the name to set
 	 */
-	public void setName(String name) {
+	public void setName(int name) {
 		this.name = name;
 	}
 
@@ -96,13 +137,6 @@ public class Item implements Comparable<Item> {
 	}
 
 	/**
-	 * @return the id
-	 */
-	public int getId() {
-		return id;
-	}
-
-	/**
 	 * @return the recommendedLevel
 	 */
 	int getRecommendedLevel() {
@@ -117,6 +151,12 @@ public class Item implements Comparable<Item> {
 	public String toString() {
 		return "Item [name=" + name + ", price=" + price + "]";
 	}
-	
-	
+
+	public String getRelatedEntity() {
+		return relatedEntity;
+	}
+
+	public String getRelatedStat() {
+		return relatedStat;
+	}
 }

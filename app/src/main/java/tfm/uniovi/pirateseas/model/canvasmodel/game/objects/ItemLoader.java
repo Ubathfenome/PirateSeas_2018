@@ -43,24 +43,24 @@ public class ItemLoader{
 		
 		this.context = c;
 		
-		crew = new Item(getString(R.string.shop_item_crew_name),
+		crew = new Item(R.string.shop_item_crew_name,
 				getString(R.string.shop_item_crew_desc), 1, 5);
 
-		repairman = new Item(getString(R.string.shop_item_repairman_name),
+		repairman = new Item(R.string.shop_item_repairman_name,
 				getString(R.string.shop_item_repairman_desc), 1, 15);
-		Item ammoSimple = new Item(getString(R.string.shop_item_ammo_simple_name), getString(R.string.shop_item_ammo_simple_desc), 1, 1);
-		Item ammoAimed = new Item(getString(R.string.shop_item_ammo_aimed_name), getString(R.string.shop_item_ammo_aimed_desc), 1, 10);
-		Item ammoDouble = new Item(getString(R.string.shop_item_ammo_double_name), getString(R.string.shop_item_ammo_double_desc), 2, 20);
-		Item ammoSweep = new Item(getString(R.string.shop_item_ammo_sweep_name), getString(R.string.shop_item_ammo_sweep_desc), 3, 30);
-		nest = new Item(getString(R.string.shop_item_nest_name),
+		Item ammoSimple = new Item(R.string.shop_item_ammo_simple_name, getString(R.string.shop_item_ammo_simple_desc), 1, 1);
+		Item ammoAimed = new Item(R.string.shop_item_ammo_aimed_name, getString(R.string.shop_item_ammo_aimed_desc), 1, 10);
+		Item ammoDouble = new Item(R.string.shop_item_ammo_double_name, getString(R.string.shop_item_ammo_double_desc), 2, 20);
+		Item ammoSweep = new Item(R.string.shop_item_ammo_sweep_name, getString(R.string.shop_item_ammo_sweep_desc), 3, 30);
+		nest = new Item(R.string.shop_item_nest_name,
 				getString(R.string.shop_item_nest_desc), 3, 35);
-		materials = new Item(getString(R.string.shop_item_mats_name),
+		materials = new Item(R.string.shop_item_mats_name,
 				getString(R.string.shop_item_mats_desc), 2, 40);
-		mapPiece = new Item(getString(R.string.shop_item_mpiece_name),
+		mapPiece = new Item(R.string.shop_item_mpiece_name,
 				getString(R.string.shop_item_mpiece_desc), 2, 65);
-		blackPowder = new Item(getString(R.string.shop_item_bpowder_name),
+		blackPowder = new Item(R.string.shop_item_bpowder_name,
 				getString(R.string.shop_item_bpowder_desc), 3, 85);
-		valuable = new Item(getString(R.string.shop_item_valuable_name),
+		valuable = new Item(R.string.shop_item_valuable_name,
 				getString(R.string.shop_item_valuable_desc), 3, 101);
 		
 		defaultList = (ArrayList<Item>) ((ArrayList<Item>) loadAll()).clone();

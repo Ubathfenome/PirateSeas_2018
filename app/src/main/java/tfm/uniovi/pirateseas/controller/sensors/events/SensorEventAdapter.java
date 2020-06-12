@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.List;
@@ -30,6 +31,7 @@ public class SensorEventAdapter extends ArrayAdapter<AppSensorEvent> {
     private class AppSensorEventViewHolder {
         private ImageView imgSensorThumbnail;
         private TextView txtSensorName;
+        private LinearLayout sensorLinearLayout;
     }
 
     public SensorEventAdapter(Context context, int resource, List<AppSensorEvent> objects) {
@@ -65,13 +67,14 @@ public class SensorEventAdapter extends ArrayAdapter<AppSensorEvent> {
             LayerDrawable layerDrawable = new LayerDrawable(layers);
             layerDrawable.setLayerGravity(1, Gravity.END);
             viewHolder.imgSensorThumbnail.setImageDrawable(layerDrawable);
-        }
-        viewHolder.imgSensorThumbnail.setOnClickListener(sensorClickListener);
+            viewHolder.sensorLinearLayout.setClickable(false);
+        } else {
+            viewHolder.txtSensorName.setText(mContext.getResources().getString(mSensorEvents.get(position).getSensorName()));
+            viewHolder.txtSensorName.setTextColor(mSensorEvents.get(position).hasEvent()? Color.LTGRAY : Color.WHITE);
+            viewHolder.txtSensorName.setPaintFlags(mSensorEvents.get(position).hasEvent()? (viewHolder.txtSensorName.getPaintFlags() & (~Paint.FAKE_BOLD_TEXT_FLAG)) : (viewHolder.txtSensorName.getPaintFlags() | Paint.FAKE_BOLD_TEXT_FLAG));
 
-        viewHolder.txtSensorName.setText(mContext.getResources().getString(mSensorEvents.get(position).getSensorName()));
-        viewHolder.txtSensorName.setTextColor(mSensorEvents.get(position).hasEvent()? Color.LTGRAY : Color.WHITE);
-        viewHolder.txtSensorName.setPaintFlags(mSensorEvents.get(position).hasEvent()? (viewHolder.txtSensorName.getPaintFlags() & (~Paint.FAKE_BOLD_TEXT_FLAG)) : (viewHolder.txtSensorName.getPaintFlags() | Paint.FAKE_BOLD_TEXT_FLAG));
-        viewHolder.txtSensorName.setOnClickListener(sensorClickListener);
+            viewHolder.sensorLinearLayout.setOnClickListener(sensorClickListener);
+        }
 
         return convertView;
     }
