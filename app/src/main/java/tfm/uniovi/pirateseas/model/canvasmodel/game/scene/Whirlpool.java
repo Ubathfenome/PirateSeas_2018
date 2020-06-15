@@ -7,10 +7,13 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 
 import tfm.uniovi.pirateseas.R;
 import tfm.uniovi.pirateseas.model.canvasmodel.game.BasicModel;
 import tfm.uniovi.pirateseas.model.canvasmodel.game.Parallax;
+import tfm.uniovi.pirateseas.utils.approach2d.DrawableHelper;
 
 /**
  * Class for the whirlpool element that appears on screen when a maelstorm is triggered
@@ -18,8 +21,12 @@ import tfm.uniovi.pirateseas.model.canvasmodel.game.Parallax;
  * @see: http://gamecodeschool.com/android/coding-android-sprite-sheet-animations/
  */
 public class Whirlpool extends BasicModel {
-    private int frameWidth = 67;
-    private int frameHeight = 67;
+    private static final int ANIMATION_STEPS = 8;
+
+    private Context mContext;
+
+    private int frameWidth;
+    private int frameHeight;
     private int currentFrame;
     private Rect frameToDraw = new Rect(
             0,
@@ -49,7 +56,11 @@ public class Whirlpool extends BasicModel {
      */
     public Whirlpool(Context context, double x, double y, double mCanvasWidth, double mCanvasHeight, Parallax parallax) {
         super(context, x, y, mCanvasWidth, mCanvasHeight, parallax);
+        this.mContext = context;
         bitmap = BitmapFactory.decodeResource(context.getResources(), R.mipmap.whirlpool_sprite);
+        Drawable bDrawable = new BitmapDrawable(context.getResources(), bitmap);
+        frameHeight = bDrawable.getIntrinsicHeight();
+        frameWidth = bDrawable.getIntrinsicWidth() / ANIMATION_STEPS;
         currentFrame = 0;
     }
 
@@ -63,8 +74,7 @@ public class Whirlpool extends BasicModel {
         if ( timestamp > lastFrameChangeTime + frameLengthInMilliseconds) {
             lastFrameChangeTime = timestamp;
             currentFrame++;
-            int frameCount = 8;
-            if (currentFrame >= frameCount) {
+            if (currentFrame >= ANIMATION_STEPS) {
                 currentFrame = 0;
             }
         }
@@ -80,8 +90,8 @@ public class Whirlpool extends BasicModel {
      * Move the whirlpool through the screen
      */
     public void move(){
-        if (x+frameWidth<mCanvasWidth){
-            int frameAcceleration = 23;
+        if (isInBounds()){
+            int frameAcceleration = frameWidth / 3;
             x+= frameAcceleration;
         }
     }
@@ -92,11 +102,19 @@ public class Whirlpool extends BasicModel {
      */
     public void drawOnScreen(Canvas canvas){
         getCurrentFrame();
-        if (x+frameWidth<mCanvasWidth) {
-            canvas.drawBitmap(bitmap,
-                    frameToDraw,
-                    whereToDraw, paint);
+        if (isInBounds()) {
+            // canvas.drawBitmap(bitmap, frameToDraw, whereToDraw, paint);
+            setImage(DrawableHelper.getFrameFromBitmap(mContext.getResources(), bitmap, frameToDraw.left, frameToDraw.top, frameWidth, frameHeight));
+            super.drawOnScreen(canvas);
+            move();
         }
     }
 
+    /**
+     * Checks if the whirlpool is in the screen
+     * @return true if the whirlpool is in the screen, false otherwise
+     */
+    public boolean isInBounds(){
+        return x+frameWidth<mCanvasWidth;
+    }
 }

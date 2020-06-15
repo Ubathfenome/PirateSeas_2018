@@ -51,6 +51,7 @@ public class SensorEventAdapter extends ArrayAdapter<AppSensorEvent> {
         final AppSensorEventViewHolder viewHolder =new AppSensorEventViewHolder();
         viewHolder.imgSensorThumbnail = convertView.findViewById(R.id.imgSensorThumbnail);
         viewHolder.txtSensorName = convertView.findViewById(R.id.txtSensorName);
+        viewHolder.sensorLinearLayout = convertView.findViewById(R.id.sensorLinearLayout);
 
         final View.OnClickListener sensorClickListener = new View.OnClickListener() {
             @Override

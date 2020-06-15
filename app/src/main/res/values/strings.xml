@@ -266,7 +266,8 @@
     <string name="message_mapcompleted">Map completed!</string>
     <string name="message_shakesleft">Shake your device %1$d more time(s)!</string>
     <string name="game_exit">Exit</string>
-    <string name="game_message_enemy_defeated">You found %1$d gold coins and gained %2$d xp!</string>
+    <string name="game_message_enemy_defeated">You found %1$d gold coins and gained %2$d xp</string>
+    <string name="game_message_heavy_enemy_defeated">and a map piece</string>
     <string name="game_message_islands_discovered">All islands have been discovered. We\'ll sell this map for 90 gold coins!</string>
 
     <!-- Help strings -->
@@ -315,7 +316,9 @@
     <string name="nature_shop">Shop</string>
     <string name="nature_treasure">Treasure</string>
 
-    <string name="generic_strings_join" translatable="false">%1$s\n%2$s</string>
+    <string name="generic_strings_new_line_join" translatable="false">%1$s\n%2$s</string>
+    <string name="generic_strings_join" translatable="false">%1$s %2$s</string>
     <string name="generic_current_value">Current value is %1$d</string>
+    <string name="maelstorm_inbound">Maelstorm inbound!</string>
 
 </resources>

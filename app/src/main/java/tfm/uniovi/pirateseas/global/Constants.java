@@ -7,7 +7,7 @@ import android.content.Context;
  */
 public class Constants{
 
-	// Modes
+    // Modes
 	private static final int MODE_DEBUG = 0x0;
 	@SuppressWarnings("unused")
 	private static final int MODE_RELEASE = 0x1;
@@ -104,6 +104,7 @@ public class Constants{
 
 	public static final String ARG_GOLD = "argumentGold";
 	public static final String ARG_XP = "argumentXp";
+	public static final String ARG_MAP_PIECE = "argumentMapPiece";
 
 	public static final String EMPTY_STRING = "";
 	public static final String LIST_SEPARATOR = ";";

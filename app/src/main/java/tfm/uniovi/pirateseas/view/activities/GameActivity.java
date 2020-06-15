@@ -74,6 +74,7 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 
 	private static final String TAG = "GameActivity";
 	private static final long DURATION_MILLIS = 1500;
+	private static final long MAELSTORM_COOLDOWN = (long) (60 * Math.pow(10, 9));
 
 	private Context context;
 
@@ -87,6 +88,8 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
     protected long sensorLastTimestamp;
 
     private long lastClickTimestamp = 0;
+    private long battleStartedTimestamp = 0;
+    private long lastMaelstormTimestamp = 0;
 
     boolean loadGame = false;
 
@@ -405,6 +408,7 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 			final Activity dummyActivity = getActivity();
 			int gold = getArguments().getInt(Constants.ARG_GOLD, 0);
 			int xp = getArguments().getInt(Constants.ARG_XP, 0);
+			boolean mapPiece = getArguments().getBoolean(Constants.ARG_MAP_PIECE);
 			AlertDialog.Builder builder = new AlertDialog.Builder(dummyActivity, R.style.Dialog_No_Border);
 			LayoutInflater inflater = dummyActivity.getLayoutInflater();
 			View view = inflater.inflate(R.layout.custom_positive_dialog_layout, null);
@@ -412,7 +416,11 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 			TextView txtMessage = view.findViewById(R.id.txtMessage);
 			Button btnPositive = view.findViewById(R.id.btnPositive);
 			txtTitle.setText(getResources().getString(R.string.game_message_enemy_defeated_title));
-			txtMessage.setText(String.format(getResources().getString(R.string.game_message_enemy_defeated), gold, xp));
+			if(mapPiece){
+				txtMessage.setText(getResources().getString(R.string.generic_strings_join, getResources().getString(R.string.game_message_enemy_defeated, gold, xp), getResources().getString(R.string.game_message_heavy_enemy_defeated)));
+			} else {
+				txtMessage.setText(String.format(getResources().getString(R.string.game_message_enemy_defeated), gold, xp));
+			}
 			btnPositive.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View view) {
@@ -473,37 +481,6 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 		if (sensorIsActive(sensorTypes, sensor.getType())) {
 			switch (sensor.getType()) {
 			case Sensor.TYPE_ACCELEROMETER:
-
-				if (deltaSeconds >= SENSOR_UPDATE_SECONDS) { // Hold sensor updates
-					// Parameters
-					float axisSpeedX = event.values[0];
-					float axisSpeedY = event.values[1];
-					float axisSpeedZ = event.values[2];
-
-					double angleX = Math.toDegrees(Math.asin (axisSpeedX / SensorManager.GRAVITY_EARTH));
-					double angleY = Math.toDegrees(Math.asin (axisSpeedY / SensorManager.GRAVITY_EARTH));
-					double angleZ = Math.toDegrees(Math.asin (axisSpeedZ / SensorManager.GRAVITY_EARTH));
-
-					// Log.d(TAG, "TYPE_ACCELEROMETER: Acc:angle = "+axisSpeedX+":"+angleX+"º / "+axisSpeedY+":"+angleY+"º / "+axisSpeedZ+":"+angleZ+"º	");
-					if (EventWeatherMaelstrom.generateMaelstrom(axisSpeedY)) {
-						// Notify CanvasView to damage the ships
-						if (cView.getGamemode() == Constants.GAMEMODE_BATTLE) {
-							showText("Maelstorm inbound!");
-
-							Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-							// Vibrate for 500 milliseconds
-							if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-								v.vibrate(VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE));
-							} else {
-								//deprecated in API 26
-								v.vibrate(500);
-							}
-
-							cView.maelstorm();
-						}
-					}
-				}
-
 				// Gestionar los movimientos del barco del jugador dependiendo de los valores de los sensores
 				// @see: https://code.tutsplus.com/tutorials/using-the-accelerometer-on-android--mobile-22125
 				if(cView.getGamemode() == Constants.GAMEMODE_BATTLE) {
@@ -512,7 +489,14 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 					float axisSpeedY = event.values[1];
 					float axisSpeedZ = event.values[2];
 
+					long timeSinceBattleStarted = 0;
+					long timeSinceLastMaelstorm = 0;
+
 					if (!shipControlMode && battleIsGoing(cView)) {
+						if (battleStartedTimestamp == 0)
+							battleStartedTimestamp = event.timestamp;
+						timeSinceBattleStarted = event.timestamp - battleStartedTimestamp;
+						timeSinceLastMaelstorm = event.timestamp - lastMaelstormTimestamp;
 						if (Math.abs(axisSpeedY) >= ACCELEROMETER_THRESHOLD) {
 							int shipSpeed = cView.nPlayerShip.getShipType().getSpeed();
 							float speed = Math.abs(axisSpeedX + axisSpeedY + axisSpeedZ - lastX - lastY - lastZ);
@@ -526,6 +510,28 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 								cView.nPlayerShip.moveShipEntity(new Point(cView.nPlayerShip.getCoordinates().x + 1, cView.nPlayerShip.getCoordinates().y));
 							}
 						}
+
+						if (EventWeatherMaelstrom.generateMaelstrom(axisSpeedY) &&
+								(timeSinceBattleStarted >= Constants.GRACE_PERIOD) &&
+								(timeSinceLastMaelstorm >= MAELSTORM_COOLDOWN)) {
+							lastMaelstormTimestamp = event.timestamp;
+							// Notify CanvasView to damage the ships
+							Log.d(TAG, "Maelstorm generated @ " + sensorLastTimestamp + " (" + axisSpeedY + ")");
+							showText(getString(R.string.maelstorm_inbound));
+
+							Vibrator v = (Vibrator) getApplicationContext().getSystemService(Context.VIBRATOR_SERVICE);
+							long vibrationDuration = 500;
+							// Vibrate for 500 milliseconds
+							if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+								v.vibrate(VibrationEffect.createOneShot(vibrationDuration, VibrationEffect.DEFAULT_AMPLITUDE));
+							} else {
+								//deprecated in API 26
+								v.vibrate(vibrationDuration);
+							}
+
+							cView.maelstorm();
+
+						}
 					}
 
 					lastX = axisSpeedX;
@@ -533,6 +539,7 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 					lastZ = axisSpeedZ;
 					sensorLastTimestamp = event.timestamp;
 				}
+
 				break;
 			case Sensor.TYPE_MAGNETIC_FIELD:
 				if (deltaSeconds >= SENSOR_UPDATE_SECONDS) {
@@ -787,6 +794,7 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 		Bundle args = new Bundle();
 		args.putInt(Constants.ARG_GOLD, gold);
 		args.putInt(Constants.ARG_XP, xp);
+		args.putBoolean(Constants.ARG_MAP_PIECE, mapPiece);
 		enemyDefeatedDialog.setArguments(args);
 		enemyDefeatedDialog.setCancelable(false);
 		enemyDefeatedDialog.show(getFragmentManager(), "EnemyDefeatedDialog");

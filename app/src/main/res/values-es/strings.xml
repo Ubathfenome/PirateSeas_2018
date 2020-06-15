@@ -187,7 +187,7 @@
     <string name="message_mapcompleted">Mapa completado!</string>
     <string name="message_shakesleft">Agita tu dispositivo %1$d veces mas!</string>
     <string name="game_exit">Salir</string>
-    <string name="game_message_enemy_defeated">Has encontrado %1$d monedas de oro y conseguido %2$d xp!</string>
+    <string name="game_message_enemy_defeated">Has encontrado %1$d monedas de oro y conseguido %2$d xp</string>
     <string name="game_message_islands_discovered">Ya hemos encontrado todas las islas de este mar. Venderemos este mapa por 90 monedas de oro!</string>
 
     <!-- Help strings -->
@@ -284,5 +284,7 @@
     <string name="nature_shop">Tienda</string>
     <string name="nature_treasure">Tesoro</string>
     <string name="generic_current_value">El valor actual es %1$d</string>
+    <string name="game_message_heavy_enemy_defeated">y un trozo de mapa</string>
+    <string name="maelstorm_inbound">Se acerca una tormenta!</string>
 
 </resources>

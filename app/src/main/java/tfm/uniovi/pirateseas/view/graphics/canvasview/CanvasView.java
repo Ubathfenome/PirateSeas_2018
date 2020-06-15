@@ -267,7 +267,7 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 				s.drawOnScreen(canvas);
 		}
 
-		if(nWhirlpool!=null) {
+		if(nWhirlpool!=null && nWhirlpool.isInBounds()) {
 			nWhirlpool.drawOnScreen(canvas);
 		}
 	}
@@ -569,6 +569,9 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 				if(!messageSent) {
 					int gold = nEnemyShip.getShipType().defaultHealthPoints() / 5;
 					int xp = nEnemyShip.getShipType().defaultHealthPoints() / 2;
+					if(nEnemyShip.getShipType() == ShipType.HEAVY) {
+						nPlayer.addMapPiece();
+					}
 					nPlayer.addGold(gold);
 					nPlayer.addExperience(xp);
 					messageSent = true;
@@ -655,7 +658,6 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 								if (s.getEntityDirection() == Constants.DIRECTION_UP && s.intersection(nEnemyShip)) {
 									nEnemyShip.looseHealth(s.getDamage());
 									s.setShotStatus(Constants.SHOT_HIT);
-									s.setY(nEnemyShip.getY()-nEnemyShip.getHeight());
 								}
 							}
 							if(nPlayerShip != null && nPlayerShip.isAlive()){
@@ -766,17 +768,20 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 	private void managePlayer() throws SaveGameException {
 		if (!nPlayerShip.isAlive()) {
 
-			if(!messageReaded && !messageSent){
+			if(!messageSent){
 				((GameActivity) nContext).playerDefeated();
 				messageSent = true;
 			} else {
-				// Display "Game Over" Screen with calculated score
-				MusicManager.getInstance().changeSong(nContext, MusicManager.MUSIC_GAME_OVER);
-				nMap.setActiveCell(nMap.getLastActiveCell());
-				nPlayerShip.setHealth(nPlayerShipInitialHealth);
-				saveGame();
-				((GameActivity) nContext).gameOver(nPlayer, nMap);
-				nStatus = Constants.GAME_STATE_END;
+				if(messageReaded){
+					pauseLogicThread();
+					// Display "Game Over" Screen with calculated score
+					MusicManager.getInstance().changeSong(nContext, MusicManager.MUSIC_GAME_OVER);
+					nMap.setActiveCell(nMap.getLastActiveCell());
+					nPlayerShip.setHealth(nPlayerShipInitialHealth);
+					saveGame();
+					((GameActivity) nContext).gameOver(nPlayer, nMap);
+					nStatus = Constants.GAME_STATE_END;
+				}
 			}
 		}
 	}

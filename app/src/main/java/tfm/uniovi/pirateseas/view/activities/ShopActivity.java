@@ -12,6 +12,7 @@ import android.content.res.Resources.NotFoundException;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -427,6 +428,12 @@ public class ShopActivity extends ListActivity{
 			super(context, resource, objects);
 		}
 
+		@Nullable
+		@Override
+		public Item getItem(int position) {
+			return itemList.get(position);
+		}
+
 		@NonNull
 		@Override
 		public View getView(final int position, View convertView, @NonNull ViewGroup parent) {
@@ -441,8 +448,11 @@ public class ShopActivity extends ListActivity{
 					public void onClick(View view) {
 						// Obtener el valor actual del barco/jugador de la estadistica relacionada (salud, poder, rango,...)
 						int currentValue = 0;
-						String stat = itemList.get(position).getRelatedStat();
-						if(Constants.PLAYER_ENTITY.equals(itemList.get(position).getRelatedEntity())){
+
+						int pos = (int) view.getTag();
+						String stat = itemList.get(pos).getRelatedStat();
+						String entity = itemList.get(pos).getRelatedEntity();
+						if(Constants.PLAYER_ENTITY.equals(entity)){
 							// Player
 							try {
 								currentValue = (int) dummyPlayer.getClass().getMethod("get" + stat).invoke(dummyPlayer);
@@ -458,7 +468,7 @@ public class ShopActivity extends ListActivity{
 							}
 						}
 
-                        txtDescription.setText(getString(R.string.generic_strings_join, itemList.get(position).getDescription(), getString(R.string.generic_current_value, currentValue)));
+                        txtDescription.setText(getString(R.string.generic_strings_new_line_join, itemList.get(pos).getDescription(), getString(R.string.generic_current_value, currentValue)));
 					}
 				});
 				vHolder.itemIconView = convertView.findViewById(R.id.imgItemIcon);
@@ -473,6 +483,7 @@ public class ShopActivity extends ListActivity{
 			}
 
 			Item item = getItem(position);
+			
 			if(item != null) {
 				if(R.string.shop_item_crew_name == item.getName()){
 				    vHolder.itemIconView.setImageResource(R.mipmap.icon_buff_crew); }
@@ -499,6 +510,7 @@ public class ShopActivity extends ListActivity{
 				else if(R.string.shop_item_valuable_name == item.getName()){
 				    vHolder.itemIconView.setImageResource(R.mipmap.ico_gold); }
 
+				vHolder.itemHelpIcon.setTag(position);
 				vHolder.itemNameView.setText(getString(item.getName()));
 				vHolder.itemPriceView.setText(String.valueOf(item.getPrice()));
 				vHolder.itemPriceIconView.setBackgroundResource(R.mipmap.ico_gold);
