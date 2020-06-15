@@ -13,7 +13,7 @@ public class Constants{
 	private static final int MODE_RELEASE = 0x1;
 
 	// Set on release
-	public static final int MODE = MODE_DEBUG;
+	public static final int MODE = MODE_RELEASE;
 
 	public static final int GAMEMODE_ADVANCE = 0x1;
 	public static final int GAMEMODE_BATTLE = 0x2;
