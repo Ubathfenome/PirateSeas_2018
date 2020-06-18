@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:minWidth="300dp"
+    android:background="@drawable/xml_border">
+
+    <TextView
+        android:id="@+id/txtTitle"
+        style="?android:textAppearanceLarge"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/skullsandcrossbones"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/title_size"
+        android:text="@string/dummy_text"
+        android:padding="@dimen/small_padding_size"/>
+
+    <ListView
+        android:id="@+id/lstEntries"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fadeScrollbars="false"
+        tools:listitem="@layout/list_item_radio_dialog_layout"/>
+
+    <Button
+        android:id="@+id/btnCancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:layout_margin="@dimen/extra_small_padding_size"
+        android:padding="@dimen/small_padding_size"
+        android:fontFamily="@font/skullsandcrossbones"
+        android:text="@string/btn_cancel"
+        android:background="@drawable/xml_btn_style"
+        tools:ignore="ButtonStyle" />
+
+
+</LinearLayout>

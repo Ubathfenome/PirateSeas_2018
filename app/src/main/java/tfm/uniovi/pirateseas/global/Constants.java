@@ -135,7 +135,6 @@ public class Constants{
 	public static final String PREF_AMMO_CONTROL_MODE = "settings_ammunition_preference";
 	public static final String PREF_SHOOT_CONTROL_MODE = "settings_shoot_preference";
 	public static final boolean PREF_IS_ACTIVE = true;
-	public static final String PREF_VOLUME_VALUE = "settings_volume_preference";
 	public static final String PREF_SENSORS_EVENTS = "settings_sensors_events_preference";
 	public static final String PREF_WIPE_MEMORY = "settings_wipe_memory_preference";
 

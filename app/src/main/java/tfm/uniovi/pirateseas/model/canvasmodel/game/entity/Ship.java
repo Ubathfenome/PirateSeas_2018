@@ -193,8 +193,7 @@ public class Ship extends Entity implements Parcelable{
 								this.entityCoordinates.x, this.entityCoordinates.y
 								+ entityLength / 2), new Point(this.entityCoordinates.x,
                                 finalPoint), Constants.DEFAULT_PLAYER_SHIP_DIRECTION,
-								(int) (Constants.DEFAULT_SHOOT_DAMAGE * sType
-										.powerMultiplier()), timestampLastShot);
+								(int) (Constants.DEFAULT_SHOOT_DAMAGE * mPower), timestampLastShot);
 						break;
 					case 1:
 						cannonballVector = new Shot[0];
@@ -209,8 +208,7 @@ public class Ship extends Entity implements Parcelable{
 									this.entityCoordinates.x, this.entityCoordinates.y
 									+ entityLength / 2), new Point(xValue,
 									finalPoint), Constants.DEFAULT_PLAYER_SHIP_DIRECTION,
-									(int) (Constants.DEFAULT_SHOOT_DAMAGE * sType
-											.powerMultiplier()), timestampLastShot);
+									(int) (Constants.DEFAULT_SHOOT_DAMAGE * mPower), timestampLastShot);
 						}
 						break;
 					case 3:
@@ -223,8 +221,7 @@ public class Ship extends Entity implements Parcelable{
 									this.entityCoordinates.x, this.entityCoordinates.y
 									+ entityLength / 2), new Point(xValue,
 									finalPoint), Constants.DEFAULT_PLAYER_SHIP_DIRECTION,
-									(int) (Constants.DEFAULT_SHOOT_DAMAGE * sType
-											.powerMultiplier()), timestampLastShot);
+									(int) (Constants.DEFAULT_SHOOT_DAMAGE * mPower), timestampLastShot);
 						}
 						break;
 				}

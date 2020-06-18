@@ -53,6 +53,8 @@ public class Shot extends Entity{
 
 	static int shotWidth, shotHeight;
 
+	private int yCollision;
+
 	/**
 	 * Constructor
 	 * @param context: Activity where the object is loaded
@@ -135,10 +137,14 @@ public class Shot extends Entity{
 				setImage(mContext.getResources().getDrawable(R.mipmap.txtr_shot_cannonball, null));
 				break;
 			case Constants.SHOT_HIT:
-				// setImage(mContext.getResources().getDrawable(R.mipmap.txtr_shot_hit, null));
 				getCurrentFrame();
 				// Set the correct frame
 				setImage(DrawableHelper.getFrameFromBitmap(mContext.getResources(), bitmap, frameToDraw.left, frameToDraw.top, frameWidth, frameHeight));
+				if(getEntityDirection() == Constants.DIRECTION_UP){
+					y = yCollision - frameHeight;
+				} else if(getEntityDirection() == Constants.DIRECTION_DOWN){
+					y = yCollision + frameHeight;
+				}
 				break;
 			case Constants.SHOT_MISSED:
 				setImage(mContext.getResources().getDrawable(R.mipmap.txtr_shot_miss, null));
@@ -278,5 +284,8 @@ public class Shot extends Entity{
 		Point next = new Point(xDiff > 0 ? nextX : curr.x, yDiff > 0 ? nextY : curr.y);
 		entityCoordinates = new Point(next.x, next.y);
 	}
-	
+
+	public void setYCollision(double y) {
+		this.yCollision = (int) y;
+	}
 }

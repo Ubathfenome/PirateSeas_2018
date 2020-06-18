@@ -73,16 +73,16 @@
     <string name="lbl_control_mode">Ship Control Mode</string>
 
     <string-array name="ship_controls">
-        <item>Move your ship touching the devices\' screen</item>
-        <item>Move your ship moving the device</item>
+        <item>Touching the devices\' screen</item>
+        <item>Moving the device</item>
     </string-array>
     <string-array name="ammo_controls">
-        <item>Change your current ammo touching the selected ammo button</item>
-        <item>Change your current ammo using the device\'s volume keys</item>
+        <item>Touching the selected ammo button</item>
+        <item>Using the device\'s volume keys</item>
     </string-array>
     <string-array name="shoot_controls">
-        <item>Shoot your cannons using your voice</item>
-        <item>Shoot your cannons touching the devices\' screen upwards</item>
+        <item>Using your voice</item>
+        <item>Touching the devices\' screen upwards</item>
     </string-array>
 
     <string-array name="control_values">
@@ -320,5 +320,6 @@
     <string name="generic_strings_join" translatable="false">%1$s %2$s</string>
     <string name="generic_current_value">Current value is %1$d</string>
     <string name="maelstorm_inbound">Maelstorm inbound!</string>
+    <string name="title_map_completed">Map completed</string>
 
 </resources>

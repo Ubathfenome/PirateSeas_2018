@@ -5,17 +5,16 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.content.DialogInterface;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import tfm.uniovi.pirateseas.R;
 import tfm.uniovi.pirateseas.utils.persistence.FontAdapter;
@@ -76,21 +75,16 @@ public class HelpActivity extends Activity {
 					+ "\n"
 					+ ((HelpActivity)getActivity()).versionName;
 			// Use the Builder class for convenient dialog construction
-			AlertDialog.Builder builder = new AlertDialog.Builder(dummyActivity, R.style.Dialog_No_Border);
-			LayoutInflater inflater = dummyActivity.getLayoutInflater();
-			View view = inflater.inflate(R.layout.custom_positive_dialog_layout, null);
-			TextView txtTitle = view.findViewById(R.id.txtTitle);
-			txtTitle.setText(getResources().getString(R.string.about_dialog_title));
-			TextView txtMessage = view.findViewById(R.id.txtMessage);
-			txtMessage.setText(message);
-			Button btnPositive = view.findViewById(R.id.btnPositive);
-			btnPositive.setOnClickListener(new OnClickListener() {
-				@Override
-				public void onClick(View view) {
-					dismiss();
-				}
-			});
-			builder.setView(view);
+			AlertDialog.Builder builder = new AlertDialog.Builder(dummyActivity, R.style.DialogStyle);
+			builder
+					.setTitle(R.string.about_dialog_title)
+					.setMessage(message)
+					.setPositiveButton(R.string.command_ok, new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							dialog.dismiss();
+						}
+					});
 
 			// Create the AlertDialog object and return it
 			return builder.create();

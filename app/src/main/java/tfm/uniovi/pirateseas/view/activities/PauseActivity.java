@@ -166,7 +166,9 @@ public class PauseActivity extends Activity {
 			builder.setView(view);
 
 			// Create the AlertDialog object and return it
-			return builder.create();
+			AlertDialog d = builder.create();
+			d.setView(view, 0,0,0,0);
+			return d;
 		}
 	}
 

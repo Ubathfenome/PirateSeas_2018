@@ -302,7 +302,9 @@ public class ShopActivity extends ListActivity{
 			builder.setView(view);
 
 			// Create the AlertDialog object and return it
-			return builder.create();
+			AlertDialog d = builder.create();
+			d.setView(view, 0,0,0,0);
+			return d;
 		}
 	}
 	
@@ -337,6 +339,9 @@ public class ShopActivity extends ListActivity{
 						if(((ShopActivity)getActivity()).purchaseItem(item)){
 							((ShopActivity)getActivity()).itemList.remove(item);
 							((ShopActivity)getActivity()).listView.setAdapter(((ShopActivity)getActivity()).mItemAdapter);
+							if(((ShopActivity)getActivity()).itemList.size() == 0){
+								((ShopActivity)getActivity()).btnAcceptAll.setVisibility(View.GONE);
+							}
 						}
 					}
 					dismiss();
@@ -351,7 +356,9 @@ public class ShopActivity extends ListActivity{
 			builder.setView(view);
 
 			// Create the AlertDialog object and return it
-			return builder.create();
+			AlertDialog d = builder.create();
+			d.setView(view, 0,0,0,0);
+			return d;
 		}
 	}
 

@@ -28,14 +28,15 @@
             android:src="@drawable/ico_swipe_screen_left" />
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="0.5"
             android:orientation="vertical">
 
             <TextView
                 android:id="@+id/text2"
                 style="?android:textAppearanceMedium"
-                android:layout_width="580dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/xml_border"
                 android:fontFamily="@font/skullsandcrossbones"
@@ -45,9 +46,13 @@
 
             <ImageView
                 android:id="@+id/imgDisplayed"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="0.5"
                 android:background="@mipmap/img_null_background"
+                android:layout_gravity="center_horizontal"
+                android:adjustViewBounds="true"
+                android:scaleType="fitCenter"
                 android:contentDescription="@string/icd_tutorial_image"
                 android:padding="1dp" />
 

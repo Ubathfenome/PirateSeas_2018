@@ -7,6 +7,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -168,9 +169,9 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 
 		mPreferences = getSharedPreferences(Constants.TAG_PREF_NAME,
 				Context.MODE_PRIVATE);
-		shipControlMode = mPreferences.getBoolean(Constants.PREF_SHIP_CONTROL_MODE, !Constants.PREF_IS_ACTIVE);
+		shipControlMode = mPreferences.getBoolean(Constants.PREF_SHIP_CONTROL_MODE, Constants.PREF_IS_ACTIVE);
 		ammoControlMode = mPreferences.getBoolean(Constants.PREF_AMMO_CONTROL_MODE, Constants.PREF_IS_ACTIVE);
-		shootControlMode = mPreferences.getBoolean(Constants.PREF_SHOOT_CONTROL_MODE, !Constants.PREF_IS_ACTIVE);
+		shootControlMode = mPreferences.getBoolean(Constants.PREF_SHOOT_CONTROL_MODE, Constants.PREF_IS_ACTIVE);
 
 		// Launch the game!!
 		setContentView(R.layout.activity_game);
@@ -245,6 +246,8 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 				if(shootControlMode) {
 					mSpeechRecognizer.startListening(mSpeechRecognizerIntent);
 					imgMicStatus.setImageResource(R.drawable.ic_mic_usage);
+				} else {
+					imgMicStatus.setImageResource(R.drawable.ic_mic_disabled);
 				}
 			} else {
 				showText("Permission Denied!");
@@ -321,6 +324,12 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 		shipControlMode = mCanvasView.nUpdateThread.getCanvasViewInstance().getShipControlMode();
 		shootControlMode = mCanvasView.nUpdateThread.getCanvasViewInstance().getShootControlMode();
 
+		if(!shootControlMode){
+			mSpeechRecognizer.stopListening();
+			imgMicStatus.setImageResource(R.drawable.ic_mic_disabled);
+			mIsListening = false;
+		}
+
 		if(!MusicManager.getInstance().isPlaying())
 			MusicManager.getInstance().playBackgroundMusic();
 
@@ -352,8 +361,26 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 				mIsListening = false;
 			}
 		} else {
+			mSpeechRecognizer.stopListening();
 			imgMicStatus.setImageResource(R.drawable.ic_mic_disabled);
+			mIsListening = false;
 		}
+	}
+
+	public void setShootControlMode(boolean nShootControlMode) {
+		this.shootControlMode = nShootControlMode;
+	}
+
+	public void setShipControlMode(boolean nShipControlMode) {
+		this.shipControlMode = nShipControlMode;
+	}
+
+	public boolean getShootControlMode() {
+		return this.shootControlMode;
+	}
+
+	public boolean getShipControlMode() {
+		return this.shipControlMode;
 	}
 
 	/**
@@ -409,27 +436,21 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 			int gold = getArguments().getInt(Constants.ARG_GOLD, 0);
 			int xp = getArguments().getInt(Constants.ARG_XP, 0);
 			boolean mapPiece = getArguments().getBoolean(Constants.ARG_MAP_PIECE);
-			AlertDialog.Builder builder = new AlertDialog.Builder(dummyActivity, R.style.Dialog_No_Border);
-			LayoutInflater inflater = dummyActivity.getLayoutInflater();
-			View view = inflater.inflate(R.layout.custom_positive_dialog_layout, null);
-			TextView txtTitle = view.findViewById(R.id.txtTitle);
-			TextView txtMessage = view.findViewById(R.id.txtMessage);
-			Button btnPositive = view.findViewById(R.id.btnPositive);
-			txtTitle.setText(getResources().getString(R.string.game_message_enemy_defeated_title));
+			AlertDialog.Builder builder = new AlertDialog.Builder(dummyActivity, R.style.DialogStyle);
+			builder.setTitle(R.string.game_message_enemy_defeated_title);
 			if(mapPiece){
-				txtMessage.setText(getResources().getString(R.string.generic_strings_join, getResources().getString(R.string.game_message_enemy_defeated, gold, xp), getResources().getString(R.string.game_message_heavy_enemy_defeated)));
+				builder.setMessage(getResources().getString(R.string.generic_strings_join, getResources().getString(R.string.game_message_enemy_defeated, gold, xp), getResources().getString(R.string.game_message_heavy_enemy_defeated)));
 			} else {
-				txtMessage.setText(String.format(getResources().getString(R.string.game_message_enemy_defeated), gold, xp));
+				builder.setMessage(String.format(getResources().getString(R.string.game_message_enemy_defeated), gold, xp));
 			}
-			btnPositive.setOnClickListener(new OnClickListener() {
+			builder.setPositiveButton(R.string.command_ok, new DialogInterface.OnClickListener() {
 				@Override
-				public void onClick(View view) {
+				public void onClick(DialogInterface dialog, int which) {
 					// Exit
 					setMessageAsRead(true);
-					dismiss();
+					dialog.dismiss();
 				}
 			});
-			builder.setView(view);
 
 			// Create the AlertDialog object and return it
 			return builder.create();
@@ -445,23 +466,18 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 		@Override
 		public Dialog onCreateDialog(Bundle savedInstanceState) {
 			final Activity dummyActivity = getActivity();
-			AlertDialog.Builder builder = new AlertDialog.Builder(dummyActivity, R.style.Dialog_No_Border);
-			LayoutInflater inflater = dummyActivity.getLayoutInflater();
-			View view = inflater.inflate(R.layout.custom_positive_dialog_layout, null);
-			TextView txtTitle = view.findViewById(R.id.txtTitle);
-			TextView txtMessage = view.findViewById(R.id.txtMessage);
-			Button btnPositive = view.findViewById(R.id.btnPositive);
-			txtTitle.setText(getResources().getString(R.string.game_message_player_defeated_title));
-			txtMessage.setText(getResources().getString(R.string.game_message_player_defeated));
-			btnPositive.setOnClickListener(new OnClickListener() {
-				@Override
-				public void onClick(View view) {
-					// Exit
-					setMessageAsRead(true);
-					dismiss();
-				}
-			});
-			builder.setView(view);
+			AlertDialog.Builder builder = new AlertDialog.Builder(dummyActivity, R.style.DialogStyle);
+			builder
+					.setTitle(R.string.game_message_player_defeated_title)
+					.setMessage(R.string.game_message_player_defeated)
+					.setPositiveButton(R.string.command_ok, new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							// Exit
+							setMessageAsRead(true);
+							dialog.dismiss();
+						}
+					});
 
 			// Create the AlertDialog object and return it
 			return builder.create();
@@ -873,6 +889,9 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
      */
 	protected class SpeechRecognitionListener implements RecognitionListener
 	{
+		// 'SpeechRecognizer onResult being called twice' -> Open issue: https://issuetracker.google.com/issues/152628934
+		// Temporal solution found on StackOverflow: https://stackoverflow.com/questions/60853257/android-recognitionlistener-onresults-being-called-twice
+		boolean singleResult = true;
 
 		@Override
 		public void onBeginningOfSpeech()
@@ -891,6 +910,7 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 		{
 			Log.d(TAG, "onEndOfSpeech");
 			imgMicStatus.setImageResource(R.drawable.ic_mic_enabled);
+			mIsListening = false;
 		}
 
 		@Override
@@ -898,6 +918,7 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 		{
 			mSpeechRecognizer.startListening(mSpeechRecognizerIntent);
 			imgMicStatus.setImageResource(R.drawable.ic_mic_usage);
+			mIsListening = true;
 			Log.e(TAG, "onError = " + getErrorText(error));
 		}
 
@@ -922,14 +943,17 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 		@Override
 		public void onResults(Bundle results)
 		{
-			Log.d(TAG, "onResults"); //$NON-NLS-1$
-			ArrayList<String> matches = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
-			// matches are the return values of speech recognition engine
-			// Use these values for whatever you wish to do
+			if(singleResult){
+				Log.d(TAG, "onResults"); //$NON-NLS-1$
+				ArrayList<String> matches = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
+				// matches are the return values of speech recognition engine
+				// Use these values for whatever you wish to do
 
-            if(matches!=null && checkMatches(matches))
-                doAction();
+				if(matches!=null && checkMatches(matches))
+					doAction();
 
+				singleResult = false;
+			}
 		}
 
         /**
@@ -964,8 +988,11 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
         private void doAction() {
             try {
 				imgMicStatus.setImageResource(R.drawable.ic_mic_enabled);
+				mIsListening = false;
 				CanvasView canvasView = mCanvasView.nUpdateThread.getCanvasViewInstance();
+				int initial = canvasView.nShotList.size();
 				canvasView.nShotList.addAll(Arrays.asList(canvasView.nPlayerShip.shootCannon()));
+				Log.d(TAG, "Player shot with voice " + (canvasView.nShotList.size() - initial) + " shots");
             } catch (NoAmmoException e) {
                 showText(e.getMessage());
             }

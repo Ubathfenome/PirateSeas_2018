@@ -97,12 +97,18 @@ public class MainMenuActivity extends Activity {
 
 		mGamesNumber = mPreferences.getInt(Constants.TAG_GAMES_NUMBER, Constants.ZERO_INT);
 
+		SharedPreferences activityPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+
+		boolean shipControlMode = Boolean.parseBoolean(activityPreferences.getString(Constants.PREF_SHIP_CONTROL_MODE, String.valueOf(Constants.PREF_IS_ACTIVE)));
+		boolean ammoControlMode = Boolean.parseBoolean(activityPreferences.getString(Constants.PREF_AMMO_CONTROL_MODE, String.valueOf(Constants.PREF_IS_ACTIVE)));
+		boolean shootControlMode = Boolean.parseBoolean(activityPreferences.getString(Constants.PREF_SHOOT_CONTROL_MODE, String.valueOf(Constants.PREF_IS_ACTIVE)));
+
 		SharedPreferences.Editor editor = mPreferences.edit();
 		editor.putInt(Constants.PREF_DEVICE_WIDTH_RES, screenResolutionWidth);
 		editor.putInt(Constants.PREF_DEVICE_HEIGHT_RES, screenResolutionHeight);
-		editor.putBoolean(Constants.PREF_SHIP_CONTROL_MODE, !Constants.PREF_IS_ACTIVE);
-		editor.putBoolean(Constants.PREF_AMMO_CONTROL_MODE, Constants.PREF_IS_ACTIVE);
-		editor.putBoolean(Constants.PREF_SHOOT_CONTROL_MODE, !Constants.PREF_IS_ACTIVE);
+		editor.putBoolean(Constants.PREF_SHIP_CONTROL_MODE, shipControlMode);
+		editor.putBoolean(Constants.PREF_AMMO_CONTROL_MODE, ammoControlMode);
+		editor.putBoolean(Constants.PREF_SHOOT_CONTROL_MODE, shootControlMode);
 		editor.putBoolean(Constants.TAG_EXE_MODE, Constants.isInDebugMode(mMode));
 		editor.apply();
 
@@ -524,9 +530,9 @@ public class MainMenuActivity extends Activity {
 			btnPositive.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View view) {
-					boolean shipControlMode = ((MainMenuActivity)getActivity()).mPreferences.getBoolean(Constants.PREF_SHIP_CONTROL_MODE, !Constants.PREF_IS_ACTIVE);
+					boolean shipControlMode = ((MainMenuActivity)getActivity()).mPreferences.getBoolean(Constants.PREF_SHIP_CONTROL_MODE, Constants.PREF_IS_ACTIVE);
 					boolean ammoControlMode = ((MainMenuActivity)getActivity()).mPreferences.getBoolean(Constants.PREF_AMMO_CONTROL_MODE, Constants.PREF_IS_ACTIVE);
-					boolean shootControlMode = ((MainMenuActivity)getActivity()).mPreferences.getBoolean(Constants.PREF_SHOOT_CONTROL_MODE, !Constants.PREF_IS_ACTIVE);
+					boolean shootControlMode = ((MainMenuActivity)getActivity()).mPreferences.getBoolean(Constants.PREF_SHOOT_CONTROL_MODE, Constants.PREF_IS_ACTIVE);
 
 					SharedPreferences.Editor editor = ((MainMenuActivity)getActivity()).mPreferences.edit();
 					editor.clear();
@@ -548,7 +554,9 @@ public class MainMenuActivity extends Activity {
 			});
 			builder.setView(view);
 			// Create the AlertDialog object and return it
-			return builder.create();
+			AlertDialog d = builder.create();
+			d.setView(view, 0,0,0,0);
+			return d;
 		}
 	}
 

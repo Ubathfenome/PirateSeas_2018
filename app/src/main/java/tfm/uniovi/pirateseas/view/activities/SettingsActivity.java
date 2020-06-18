@@ -149,7 +149,6 @@ public class SettingsActivity extends PreferenceActivity {
 			pCompanion.bindPreferenceSummaryToValue(findPreference(Constants.PREF_SHIP_CONTROL_MODE));
 			pCompanion.bindPreferenceSummaryToValue(findPreference(Constants.PREF_AMMO_CONTROL_MODE));
 			pCompanion.bindPreferenceSummaryToValue(findPreference(Constants.PREF_SHOOT_CONTROL_MODE));
-			// pCompanion.bindPreferenceSummaryToValue(findPreference(Constants.PREF_VOLUME_VALUE));
 			pCompanion.bindPreferenceSummaryToValue(findPreference(Constants.PREF_SENSORS_EVENTS));
 			pCompanion.bindPreferenceSummaryToValue(findPreference(Constants.PREF_WIPE_MEMORY));
 
@@ -166,6 +165,7 @@ public class SettingsActivity extends PreferenceActivity {
 		public Dialog onCreateDialog(Bundle savedInstanceState) {
 			final Activity dummyActivity = getActivity();
 			AlertDialog.Builder builder = new AlertDialog.Builder(dummyActivity, R.style.Dialog_No_Border);
+
 			LayoutInflater inflater = dummyActivity.getLayoutInflater();
 			View view = inflater.inflate(R.layout.custom_dialog_layout, null);
 			TextView txtTitle = view.findViewById(R.id.txtTitle);
@@ -192,7 +192,9 @@ public class SettingsActivity extends PreferenceActivity {
 			});
 			builder.setView(view);
 			// Create the AlertDialog object and return it
-			return builder.create();
+			AlertDialog d = builder.create();
+			d.setView(view, 0,0,0,0);
+			return d;
 		}
 	}
 
@@ -205,9 +207,9 @@ public class SettingsActivity extends PreferenceActivity {
 		SharedPreferences.Editor editor = mPreferences.edit();
 		editor.clear();
 		editor.putBoolean(Constants.TAG_EXE_MODE, mDebugMode);
-		editor.putBoolean(Constants.PREF_SHIP_CONTROL_MODE, !Constants.PREF_IS_ACTIVE);
+		editor.putBoolean(Constants.PREF_SHIP_CONTROL_MODE, Constants.PREF_IS_ACTIVE);
 		editor.putBoolean(Constants.PREF_AMMO_CONTROL_MODE, Constants.PREF_IS_ACTIVE);
-		editor.putBoolean(Constants.PREF_SHOOT_CONTROL_MODE, !Constants.PREF_IS_ACTIVE);
+		editor.putBoolean(Constants.PREF_SHOOT_CONTROL_MODE, Constants.PREF_IS_ACTIVE);
 		editor.putInt(Constants.APP_VERSION, appVersion);
 		return editor.commit();
 	}
@@ -222,9 +224,9 @@ public class SettingsActivity extends PreferenceActivity {
 		// Save changes in preferences
 		SharedPreferences activityPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
-		boolean shipControlMode = Boolean.parseBoolean(activityPreferences.getString(Constants.PREF_SHIP_CONTROL_MODE, String.valueOf(!Constants.PREF_IS_ACTIVE)));
+		boolean shipControlMode = Boolean.parseBoolean(activityPreferences.getString(Constants.PREF_SHIP_CONTROL_MODE, String.valueOf(Constants.PREF_IS_ACTIVE)));
 		boolean ammoControlMode = Boolean.parseBoolean(activityPreferences.getString(Constants.PREF_AMMO_CONTROL_MODE, String.valueOf(Constants.PREF_IS_ACTIVE)));
-		boolean shootControlMode = Boolean.parseBoolean(activityPreferences.getString(Constants.PREF_SHOOT_CONTROL_MODE, String.valueOf(!Constants.PREF_IS_ACTIVE)));
+		boolean shootControlMode = Boolean.parseBoolean(activityPreferences.getString(Constants.PREF_SHOOT_CONTROL_MODE, String.valueOf(Constants.PREF_IS_ACTIVE)));
 
 		SharedPreferences.Editor editor = mPreferences.edit();
 		editor.putBoolean(Constants.PREF_SHIP_CONTROL_MODE, shipControlMode);

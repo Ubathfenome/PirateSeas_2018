@@ -238,16 +238,16 @@
     <string name="txt_wipe_memory_desc">Borra la memoria de la aplicacion</string>
 
     <string-array name="ship_controls">
-        <item>Mueve tu barco arrastrando el dedo por la pantalla</item>
-        <item>Mueve tu barco inclinando tu dispositivo hacia los lados</item>
+        <item>Arrastrando el dedo por la pantalla</item>
+        <item>Inclinando tu dispositivo hacia los lados</item>
     </string-array>
     <string-array name="ammo_controls">
-        <item>Cambia la municion seleccionada tocando el boton de la municion actual</item>
-        <item>Cambia la municion seleccionada usando los botones de volumen del dispositivo</item>
+        <item>Tocando el boton de la municion actual</item>
+        <item>Usando los botones de volumen del dispositivo</item>
     </string-array>
     <string-array name="shoot_controls">
         <item>Dispara usando tu voz</item>
-        <item>Dispara deslizando el dedo hacia arriba por la pantalla</item>
+        <item>Dispara deslizando el dedo hacia arriba</item>
     </string-array>
 
     <string-array name="control_values">
@@ -286,5 +286,6 @@
     <string name="generic_current_value">El valor actual es %1$d</string>
     <string name="game_message_heavy_enemy_defeated">y un trozo de mapa</string>
     <string name="maelstorm_inbound">Se acerca una tormenta!</string>
+    <string name="title_map_completed">Mapa completado</string>
 
 </resources>

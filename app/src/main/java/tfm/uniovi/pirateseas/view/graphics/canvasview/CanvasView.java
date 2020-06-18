@@ -147,13 +147,6 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 		nUpdateThread = null;
 		nUpdateThread = new MainLogic(getHolder(), this);
 
-		// System.out.println("MainLogic thread is alive: " +
-		// nUpdateThread.isAlive());
-		// System.out.println("MainLogic thread is running: " +
-		// nUpdateThread.getRunning());
-		// System.out.println("MainLogic thread state is: " +
-		// nUpdateThread.getState());
-
 		if (nUpdateThread.isAlive()) {
 			if (!nUpdateThread.getRunning()) {
 				nUpdateThread.setRunning(true);
@@ -169,8 +162,6 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 
 		double HORIZON_HEIGHT_MULTIPLIER = 0.3;
 		HORIZON_Y_VALUE = (int) (mScreenHeight * HORIZON_HEIGHT_MULTIPLIER);
-
-        // BAR_INITIAL_X_VALUE = (int) (nScreenWidth * 0.1);
 
 		nPreferences = nContext.getSharedPreferences(Constants.TAG_PREF_NAME, Context.MODE_PRIVATE);
 		nBaseTimestamp = nPreferences.getLong(Constants.PREF_PLAYER_TIMESTAMP, 0);
@@ -207,8 +198,8 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 		nCheatCounter = 0;
 		nGameMode = Constants.GAMEMODE_IDLE;
 		Log.d(TAG, "Initialization: GameMode set to IDLE");
-		nShipControlMode = nPreferences.getBoolean(Constants.PREF_SHIP_CONTROL_MODE, !Constants.PREF_IS_ACTIVE);
-		nShootControlMode = nPreferences.getBoolean(Constants.PREF_SHOOT_CONTROL_MODE, !Constants.PREF_IS_ACTIVE);
+		nShipControlMode = nPreferences.getBoolean(Constants.PREF_SHIP_CONTROL_MODE, Constants.PREF_IS_ACTIVE);
+		nShootControlMode = nPreferences.getBoolean(Constants.PREF_SHOOT_CONTROL_MODE, Constants.PREF_IS_ACTIVE);
 
 		nInitialized = true;
 	}
@@ -341,6 +332,8 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 		}
 
 		if (nStatus == Constants.GAME_STATE_NORMAL && nGameMode == Constants.GAMEMODE_BATTLE) {
+			loadSettings();
+
 			// If "Touch control" Then
 			switch (event.getAction()) {
 				case MotionEvent.ACTION_MOVE:
@@ -350,11 +343,13 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
                     String direction = pressedMotion(new Point(downX, downY), new Point(x, y));
                     Log.d(TAG, "Pressed motion had direction: " + direction);
                     int xDistance = Math.abs(x - downX);
+
                     switch (direction) {
                         case Constants.FRONT:
                             nCheatCounter = 0;
                             // Add if-clause for the active ShootMode
 							if(!nShootControlMode) {
+								// Manual shot
 								playerDoShot(reloaded);
 							}
                             break;
@@ -385,8 +380,8 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 							throw new IllegalStateException("Unexpected value: " + direction);
 					}
 
-					// Iniciar reconocimiento de voz
-					if(!nShootControlMode) {
+					if(nShootControlMode){
+						// Iniciar reconocimiento de voz
 						((GameActivity) nContext).startVoiceRecognitionRequest();
 					}
 
@@ -407,8 +402,10 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 					MusicManager.getInstance().playSound(MusicManager.SOUND_SHOT_HIT);
 					nPlayerShip.setSelectedAmmunition(nPlayerShip.getSelectedAmmunition() - 1);
 				} else {
+					int initial = nShotList.size();
 					nShotList.addAll(Arrays.asList(nPlayerShip.shootCannon()));
 					MusicManager.getInstance().playSound(MusicManager.SOUND_SHOT_FIRED);
+					Log.d(TAG, "Player shot manually " + (nShotList.size() - initial) + " shots");
 				}
 			} catch (NoAmmoException e) {
 				Log.e(EXCEPTION_TAG, e.getMessage());
@@ -658,12 +655,14 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 								if (s.getEntityDirection() == Constants.DIRECTION_UP && s.intersection(nEnemyShip)) {
 									nEnemyShip.looseHealth(s.getDamage());
 									s.setShotStatus(Constants.SHOT_HIT);
+									s.setYCollision(s.getY());
 								}
 							}
 							if(nPlayerShip != null && nPlayerShip.isAlive()){
 								if(s.getEntityDirection() == Constants.DIRECTION_DOWN && s.intersection(nPlayerShip)){
 									nPlayerShip.looseHealth(s.getDamage());
 									s.setShotStatus(Constants.SHOT_HIT);
+									s.setYCollision(s.getY());
 								}
 							}
 
@@ -715,7 +714,8 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 			} else {
 				// EnemyShip shoot - Enemy wont shoot on debug
 				if (!Constants.isInDebugMode(Constants.MODE)) {
-					if(nEnemyShipSpawnedTimestamp - nGameTimestamp >= Constants.GRACE_PERIOD && nEnemyShip.isReloaded(nGameTimestamp)) {
+					long timeSinceEnemySpawned = nGameTimestamp - nEnemyShipSpawnedTimestamp;
+					if(timeSinceEnemySpawned >= Constants.GRACE_PERIOD && nEnemyShip.isReloaded(nGameTimestamp)) {
 						try {
 							nShotList.addAll(Arrays.asList(nEnemyShip.shootCannon()));
 							MusicManager.getInstance().playSound(MusicManager.SOUND_SHOT_FIRED);
@@ -946,8 +946,8 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 	public void loadSettings() {
 		if(nPreferences==null)
 			nPreferences = nContext.getSharedPreferences(Constants.TAG_PREF_NAME, Context.MODE_PRIVATE);
-		nShipControlMode = nPreferences.getBoolean(Constants.PREF_SHIP_CONTROL_MODE, !Constants.PREF_IS_ACTIVE);
-		nShootControlMode = nPreferences.getBoolean(Constants.PREF_SHOOT_CONTROL_MODE, !Constants.PREF_IS_ACTIVE);
+		nShipControlMode = nPreferences.getBoolean(Constants.PREF_SHIP_CONTROL_MODE, Constants.PREF_IS_ACTIVE);
+		nShootControlMode = nPreferences.getBoolean(Constants.PREF_SHOOT_CONTROL_MODE, Constants.PREF_IS_ACTIVE);
 	}
 
 	/**

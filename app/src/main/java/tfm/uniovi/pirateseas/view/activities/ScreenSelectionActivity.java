@@ -8,6 +8,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -28,7 +29,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -181,15 +181,18 @@ public class ScreenSelectionActivity extends Activity {
 
 		if(map.isAllClear()){
 			// Map completed! Clear map from preferences and start new map
-			Toast.makeText(context, getString(R.string.message_mapcompleted), Toast.LENGTH_LONG).show();
-			clearedMaps++;
+			// Show this toast message as a Dialog of custom_positive_dialog_layout. When OK is pressed -> Reload map content and call reloadSelection
 			Map newMap = new Map(new Date(), Constants.MAP_MIN_HEIGHT, Constants.MAP_MIN_WIDTH);
-			newMap.setClearedMaps(clearedMaps);
+			newMap.setClearedMaps(++clearedMaps);
+			this.map = newMap;
 			// Create new and better PlayerShip?
 			ShipType st = ship.getShipType();
 			ShipType newShipType = getBetterShipType(st);
 			ship.updateShipType(newShipType);
 			GameHelper.saveGameAtPreferences(context, p, ship, newMap);
+
+			CompleteMapDialogFragment completeMapDialog = new CompleteMapDialogFragment();
+			completeMapDialog.show(getFragmentManager(), "CompleteMapDialog");
 		}
 	}
 
@@ -449,6 +452,32 @@ public class ScreenSelectionActivity extends Activity {
 				}
 			});
 			builder.setView(view);
+
+			// Create the AlertDialog object and return it
+			AlertDialog d = builder.create();
+			d.setView(view, 0,0,0,0);
+			return d;
+		}
+	}
+
+	/**
+	 * Class to create a Dialog that tells the player that the current map is complete
+	 */
+	public static class CompleteMapDialogFragment extends DialogFragment {
+
+		@Override
+		public Dialog onCreateDialog(Bundle savedInstanceState) {
+			final Activity dummyActivity = getActivity();
+			AlertDialog.Builder builder = new AlertDialog.Builder(dummyActivity, R.style.DialogStyle);
+			builder
+					.setTitle(R.string.title_map_completed)
+					.setMessage(R.string.message_mapcompleted)
+					.setPositiveButton(R.string.command_ok, new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					((ScreenSelectionActivity)dummyActivity).reloadSelection();
+				}
+			});
 
 			// Create the AlertDialog object and return it
 			return builder.create();
