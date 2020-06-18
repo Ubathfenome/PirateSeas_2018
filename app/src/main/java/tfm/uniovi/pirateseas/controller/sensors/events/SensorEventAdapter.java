@@ -67,6 +67,7 @@ public class SensorEventAdapter extends ArrayAdapter<AppSensorEvent> {
             Drawable[] layers = {base, overlay};
             LayerDrawable layerDrawable = new LayerDrawable(layers);
             layerDrawable.setLayerGravity(1, Gravity.END);
+            viewHolder.txtSensorName.setText(mContext.getResources().getString(mSensorEvents.get(position).getSensorName()));
             viewHolder.imgSensorThumbnail.setImageDrawable(layerDrawable);
             viewHolder.sensorLinearLayout.setClickable(false);
         } else {
