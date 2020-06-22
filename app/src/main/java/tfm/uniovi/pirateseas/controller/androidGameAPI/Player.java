@@ -21,7 +21,7 @@ import tfm.uniovi.pirateseas.global.Constants;
  */
 public class Player implements Parcelable {
 	private static final int INVALID_VALUE = -1;
-	private static final int[] LOG_BASES = {0, 400, 1900, 4500, 8200, 13000, 18900, 24900};
+	private static final int[] LOG_BASES = {0, 40, 190, 450, 820, 1300, 1890, 2490};
 
 	private int level;
 	private int gold;
@@ -164,7 +164,7 @@ public class Player implements Parcelable {
 	 * @param experience XP Points
 	 */
 	public void addExperience(int experience) {		
-		this.experience += experience > 0 ? experience : 0;
+		this.experience += Math.max(experience, 0);
 		this.level = INVALID_VALUE;
 		for(int i = 0, length = LOG_BASES.length; i < length; i++){
 			if(this.experience >= LOG_BASES[i])

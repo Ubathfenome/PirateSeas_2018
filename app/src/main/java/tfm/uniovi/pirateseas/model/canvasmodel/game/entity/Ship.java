@@ -203,7 +203,7 @@ public class Ship extends Entity implements Parcelable{
 						for (int i = 0, length = cannonballVector.length; i < length; i++) {
 							// Calculate value -1 when id is 0, +1 when id is 1
 							int xValue = i==0?-1:1;
-							cannonballVector [i] = new Shot(context, x + halfShipWidth - halfShotWidth, y - Shot.shotHeight - 10,
+							cannonballVector [i] = new Shot(context, x + halfShipWidth - halfShotWidth + (xValue * Shot.shotWidth), y - Shot.shotHeight - 10,
 									mCanvasWidth, mCanvasHeight, new Point(
 									this.entityCoordinates.x, this.entityCoordinates.y
 									+ entityLength / 2), new Point(xValue,
@@ -212,11 +212,11 @@ public class Ship extends Entity implements Parcelable{
 						}
 						break;
 					case 3:
-						int shotsOnScreen = CanvasView.mScreenWidth / Shot.shotWidth;
+						int shotsOnScreen = CanvasView.mScreenWidth / Shot.getCannonImageWidth(context) - 1; // -1 to Round the the number down by 1
 						cannonballVector = new Shot[shotsOnScreen - 1];
 						for (int i = 0, length = cannonballVector.length; i < length; i++) {
-							int xValue = i - (shotsOnScreen/2);
-							cannonballVector[i] = new Shot(context, x + halfShipWidth - halfShotWidth, y - Shot.shotHeight - 10,
+							int xValue = i * Shot.getCannonImageWidth(context);
+							cannonballVector[i] = new Shot(context, xValue, y - Shot.shotHeight - 10,
 									mCanvasWidth, mCanvasHeight, new Point(
 									this.entityCoordinates.x, this.entityCoordinates.y
 									+ entityLength / 2), new Point(xValue,

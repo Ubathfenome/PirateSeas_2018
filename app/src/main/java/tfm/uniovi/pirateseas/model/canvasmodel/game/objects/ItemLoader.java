@@ -139,6 +139,8 @@ public class ItemLoader{
 		
 		itemList.add(getRandomItem());
 		itemList.add(getRandomItem());
+		itemList.add(getRandomItem());
+		itemList.add(getRandomItem());
 		
 		Arrays.sort(itemList.toArray());
 		

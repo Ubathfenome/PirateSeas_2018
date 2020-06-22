@@ -98,6 +98,10 @@ public class Shot extends Entity{
 		setStatus(Constants.STATE_ALIVE);
 	}
 
+	public static int getCannonImageWidth(Context context) {
+		return context.getResources().getDrawable(R.mipmap.txtr_shot_cannonball, null).getIntrinsicWidth();
+	}
+
 	/**
 	 * Get the length between the two Points
 	 * @param origin  Start Point

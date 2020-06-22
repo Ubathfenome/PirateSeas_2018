@@ -291,7 +291,7 @@
     <string name="generic_number" translatable="false">%1$d</string>
     <string name="reset_preferences_ok">Preferences successfully restored</string>
     <string name="reset_preferences_error">Error while restoring preferences</string>
-    <string name="revealed_tile_is">Reveled tile is…</string>
+    <string name="revealed_tile_is">Revealed tile is…</string>
     <string name="game_message_enemy_defeated_title">Enemy defeated</string>
     <string name="btn_continue">Continue</string>
     <string name="dummy_text" translatable="false">Dummy text</string>

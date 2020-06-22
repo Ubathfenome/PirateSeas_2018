@@ -99,6 +99,7 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 	private int nGameMode;
 
 	private boolean nShipControlMode;
+	private boolean nAmmoControlMode;
 	private boolean nShootControlMode;
 
 	private boolean messageSent = false;
@@ -199,6 +200,7 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 		nGameMode = Constants.GAMEMODE_IDLE;
 		Log.d(TAG, "Initialization: GameMode set to IDLE");
 		nShipControlMode = nPreferences.getBoolean(Constants.PREF_SHIP_CONTROL_MODE, Constants.PREF_IS_ACTIVE);
+		nAmmoControlMode = nPreferences.getBoolean(Constants.PREF_AMMO_CONTROL_MODE, Constants.PREF_IS_ACTIVE);
 		nShootControlMode = nPreferences.getBoolean(Constants.PREF_SHOOT_CONTROL_MODE, Constants.PREF_IS_ACTIVE);
 
 		nInitialized = true;
@@ -668,14 +670,14 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 
 							// Change shot behaviour for the type of ammunition used
 							if(s.getEntityDirection() == Constants.DIRECTION_UP) {
-								s.moveShotEntity(s.getEndPoint(), nPixelsWidth, -nPixelsHeight);
+								s.moveShotEntity(s.getEndPoint(), 0, -nPixelsHeight);
 							} else {
 								s.moveShotEntity(s.getEndPoint(), nPixelsWidth, nPixelsHeight);
 							}
 
 							s.setTimestamp(nGameTimestamp);
 
-							if (s.getCoordinates().x == s.getEndPoint().x && s.getCoordinates().y == s.getEndPoint().y) {
+							if (s.getCoordinates().y == s.getEndPoint().y) {
 								s.setShotStatus(Constants.SHOT_MISSED);
 							}
 						}
@@ -947,6 +949,7 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 		if(nPreferences==null)
 			nPreferences = nContext.getSharedPreferences(Constants.TAG_PREF_NAME, Context.MODE_PRIVATE);
 		nShipControlMode = nPreferences.getBoolean(Constants.PREF_SHIP_CONTROL_MODE, Constants.PREF_IS_ACTIVE);
+		nAmmoControlMode = nPreferences.getBoolean(Constants.PREF_AMMO_CONTROL_MODE, Constants.PREF_IS_ACTIVE);
 		nShootControlMode = nPreferences.getBoolean(Constants.PREF_SHOOT_CONTROL_MODE, Constants.PREF_IS_ACTIVE);
 	}
 
@@ -968,5 +971,9 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 
 	public boolean getShootControlMode() {
 		return nShootControlMode;
+	}
+
+	public boolean getAmmoControlMode() {
+		return nAmmoControlMode;
 	}
 }

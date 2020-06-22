@@ -322,6 +322,7 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 		mCanvasView.nUpdateThread.getCanvasViewInstance().loadSettings();
 		// Check if the voice commands have been activated. Ready the speechRecognizer
 		shipControlMode = mCanvasView.nUpdateThread.getCanvasViewInstance().getShipControlMode();
+		ammoControlMode = mCanvasView.nUpdateThread.getCanvasViewInstance().getAmmoControlMode();
 		shootControlMode = mCanvasView.nUpdateThread.getCanvasViewInstance().getShootControlMode();
 
 		if(!shootControlMode){
