@@ -9,6 +9,7 @@ import android.content.DialogInterface;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
@@ -23,6 +24,8 @@ import tfm.uniovi.pirateseas.utils.persistence.FontAdapter;
  * Activity that shows help about the game
  */
 public class HelpActivity extends Activity {
+
+	private long lastClickTimestamp = 0;
 
 	Button btnFinish, btnAbout;
 	String versionName;
@@ -52,6 +55,12 @@ public class HelpActivity extends Activity {
 			
 			@Override
 			public void onClick(View v) {
+				if(SystemClock.elapsedRealtime() - lastClickTimestamp < 1000){
+					return;
+				}
+
+				lastClickTimestamp = SystemClock.elapsedRealtime();
+
 				DisplayInfoDialogFragment displayDialog = new DisplayInfoDialogFragment();
 				displayDialog.show(getFragmentManager(), "DisplayInfoDialogFragment");
 			}

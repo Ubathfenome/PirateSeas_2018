@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.content.res.Resources.NotFoundException;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -63,6 +64,8 @@ public class ShopActivity extends ListActivity{
 	private boolean loadGame;
 	private int mapHeight;
 	private int mapWidth;
+
+	private long lastClickTimestamp = 0;
 
 	Player dummyPlayer;
 	Ship dummyShip;
@@ -163,10 +166,16 @@ public class ShopActivity extends ListActivity{
 			
 			@Override
 			public void onClick(View v) {
-					LeaveActivityDialogFragment exitShopDialog = new LeaveActivityDialogFragment();
-					exitShopDialog.show(getFragmentManager(), "ExitShopDialog");
+				if(SystemClock.elapsedRealtime() - lastClickTimestamp < 1000){
+					return;
+				}
 
-					Log.d(TAG,"Finish Shop Activity");
+				lastClickTimestamp = SystemClock.elapsedRealtime();
+
+				LeaveActivityDialogFragment exitShopDialog = new LeaveActivityDialogFragment();
+				exitShopDialog.show(getFragmentManager(), "ExitShopDialog");
+
+				Log.d(TAG,"Finish Shop Activity");
 			}
 		});
 	}

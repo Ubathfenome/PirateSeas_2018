@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,6 +36,7 @@ import tfm.uniovi.pirateseas.utils.persistence.GameHelper;
 public class PauseActivity extends Activity {
 	private static final String TAG = "PauseActivity";
 
+	private long lastClickTimestamp = 0;
 	private Context context;
 
 	private Ship nShip;
@@ -69,6 +71,12 @@ public class PauseActivity extends Activity {
         ImageButton btnSettings = findViewById(R.id.btnPauseSettings);
 		btnSettings.setOnClickListener(new OnClickListener(){
 			public void onClick(View v){
+				if(SystemClock.elapsedRealtime() - lastClickTimestamp < 1000){
+					return;
+				}
+
+				lastClickTimestamp = SystemClock.elapsedRealtime();
+
 				Intent settingsIntent = new Intent(context, SettingsActivity.class);
 				settingsIntent.putParcelableArrayListExtra(Constants.TAG_SENSOR_EVENTS, (ArrayList<? extends Parcelable>) sensorEvents);
 				startActivity(settingsIntent);
@@ -78,6 +86,12 @@ public class PauseActivity extends Activity {
         ImageButton btnHelp = findViewById(R.id.btnPauseHelp);
 		btnHelp.setOnClickListener(new OnClickListener(){
 			public void onClick(View v){
+				if(SystemClock.elapsedRealtime() - lastClickTimestamp < 1000){
+					return;
+				}
+
+				lastClickTimestamp = SystemClock.elapsedRealtime();
+
 				Intent helpIntent = new Intent(context, HelpActivity.class);
 				startActivity(helpIntent);
 			}
@@ -87,6 +101,12 @@ public class PauseActivity extends Activity {
 		btnExit.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
+				if(SystemClock.elapsedRealtime() - lastClickTimestamp < 1000){
+					return;
+				}
+
+				lastClickTimestamp = SystemClock.elapsedRealtime();
+
 				LeaveGameDialogFragment exitDialog = new LeaveGameDialogFragment();
 				exitDialog.show(getFragmentManager(), "LeaveGameDialog");
 			}

@@ -18,6 +18,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
@@ -70,6 +71,8 @@ public class MainMenuActivity extends Activity {
 	protected static int screenResolutionWidth;
 	protected static int screenResolutionHeight;
 
+	private long lastClickTimestamp = 0;
+
 	private Button btnLoadGame;
 
 	@Override
@@ -115,6 +118,12 @@ public class MainMenuActivity extends Activity {
 		Button btnNewGame = findViewById(R.id.btn_newgame);
 		btnNewGame.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
+				if(SystemClock.elapsedRealtime() - lastClickTimestamp < 1000){
+					return;
+				}
+
+				lastClickTimestamp = SystemClock.elapsedRealtime();
+
 				if(mOverwriteWarning){
 					OverwriteGameDialogFragment overwriteDialog = new OverwriteGameDialogFragment();
 					overwriteDialog.show(getFragmentManager(), "OverwriteGameDialog");
@@ -128,6 +137,12 @@ public class MainMenuActivity extends Activity {
 		btnTutorial.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
+				if(SystemClock.elapsedRealtime() - lastClickTimestamp < 1000){
+					return;
+				}
+
+				lastClickTimestamp = SystemClock.elapsedRealtime();
+
 				Intent tutorialIntent = new Intent(context, TutorialActivity.class);
 				tutorialIntent.putParcelableArrayListExtra(Constants.TAG_SENSOR_EVENTS, (ArrayList<? extends Parcelable>) sensorEvents);
 				tutorialIntent.putExtra(Constants.TAG_LOAD_GAME, true);
@@ -138,6 +153,12 @@ public class MainMenuActivity extends Activity {
 		btnLoadGame = findViewById(R.id.btn_loadgame);
 		btnLoadGame.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
+				if(SystemClock.elapsedRealtime() - lastClickTimestamp < 1000){
+					return;
+				}
+
+				lastClickTimestamp = SystemClock.elapsedRealtime();
+
 				launchGame(false, activeSensors);
 			}
 		});
@@ -145,6 +166,12 @@ public class MainMenuActivity extends Activity {
 		ImageButton btnSettings = findViewById(R.id.btn_settings);
 		btnSettings.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
+				if(SystemClock.elapsedRealtime() - lastClickTimestamp < 1000){
+					return;
+				}
+
+				lastClickTimestamp = SystemClock.elapsedRealtime();
+
 				Intent settingsIntent = new Intent(context,
 						SettingsActivity.class);
 				settingsIntent.putParcelableArrayListExtra(Constants.TAG_SENSOR_EVENTS, (ArrayList<? extends Parcelable>) sensorEvents);
@@ -155,6 +182,12 @@ public class MainMenuActivity extends Activity {
 		ImageButton btnHelp = findViewById(R.id.btn_help);
 		btnHelp.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
+				if(SystemClock.elapsedRealtime() - lastClickTimestamp < 1000){
+					return;
+				}
+
+				lastClickTimestamp = SystemClock.elapsedRealtime();
+
 				Intent helpIntent = new Intent(context, HelpActivity.class);
 				startActivity(helpIntent);
 			}
