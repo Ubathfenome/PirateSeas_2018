@@ -937,10 +937,17 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 		@Override
 		public void onError(int error)
 		{
-			mSpeechRecognizer.startListening(mSpeechRecognizerIntent);
-			imgMicStatus.setImageResource(R.drawable.ic_mic_usage);
-			mIsListening = true;
 			Log.e(TAG, "onError = " + getErrorText(error));
+
+			if(SpeechRecognizer.ERROR_RECOGNIZER_BUSY == error){
+				mSpeechRecognizer.stopListening();
+				imgMicStatus.setImageResource(R.drawable.ic_mic_enabled);
+				mIsListening = false;
+			} else {
+				mSpeechRecognizer.startListening(mSpeechRecognizerIntent);
+				imgMicStatus.setImageResource(R.drawable.ic_mic_usage);
+				mIsListening = true;
+			}
 		}
 
 		@Override
@@ -1052,7 +1059,7 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
                     message = "RecognitionService busy";
                     break;
                 case SpeechRecognizer.ERROR_SERVER:
-                    message = "error from server";
+                    message = "Error from server";
                     break;
                 case SpeechRecognizer.ERROR_SPEECH_TIMEOUT:
                     message = "No speech input";

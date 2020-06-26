@@ -287,5 +287,6 @@
     <string name="game_message_heavy_enemy_defeated">y un trozo de mapa</string>
     <string name="maelstorm_inbound">Se acerca una tormenta!</string>
     <string name="title_map_completed">Mapa completado</string>
+    <string name="island_nature_hint">Seleccione el elemento para abrirlo</string>
 
 </resources>

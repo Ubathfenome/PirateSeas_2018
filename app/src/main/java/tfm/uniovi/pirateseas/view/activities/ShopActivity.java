@@ -413,6 +413,7 @@ public class ShopActivity extends ListActivity{
 							btnAcceptAll.setVisibility(View.VISIBLE);
 						}
 						listView.setAdapter(mItemAdapter);
+						txtDescription.setText(R.string.shop_purchase_hint);
 					}
 				});
 			} else {

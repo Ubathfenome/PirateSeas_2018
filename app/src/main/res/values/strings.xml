@@ -321,5 +321,6 @@
     <string name="generic_current_value">Current value is %1$d</string>
     <string name="maelstorm_inbound">Maelstorm inbound!</string>
     <string name="title_map_completed">Map completed</string>
+    <string name="island_nature_hint">Select the item to open it</string>
 
 </resources>
