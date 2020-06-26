@@ -382,7 +382,7 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 							throw new IllegalStateException("Unexpected value: " + direction);
 					}
 
-					if(nShootControlMode){
+					if(nShootControlMode && !((GameActivity) nContext).isSpeechRecognizerListening()){
 						// Iniciar reconocimiento de voz
 						((GameActivity) nContext).startVoiceRecognitionRequest();
 					}
@@ -400,9 +400,7 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 			try {
 				// If using AIMED ammo, dealt damage to enemy instantly
 				if (nPlayerShip.getSelectedAmmo() == Ammunitions.AIMED && nPlayerShip.getSelectedAmmunition() > 0) {
-					nEnemyShip.looseHealth((int) (Constants.DEFAULT_SHOOT_DAMAGE * nPlayerShip.getPower()));
-					MusicManager.getInstance().playSound(MusicManager.SOUND_SHOT_HIT);
-					nPlayerShip.setSelectedAmmunition(nPlayerShip.getSelectedAmmunition() - 1);
+					enemyHitByAimedShot();
 				} else {
 					int initial = nShotList.size();
 					nShotList.addAll(Arrays.asList(nPlayerShip.shootCannon()));
@@ -423,6 +421,12 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 				((GameActivity) nContext).showText(e.getMessage());
 			}
 		}
+	}
+
+	public void enemyHitByAimedShot() {
+		nEnemyShip.looseHealth((int) (Constants.DEFAULT_SHOOT_DAMAGE * nPlayerShip.getPower()));
+		MusicManager.getInstance().playSound(MusicManager.SOUND_SHOT_HIT);
+		nPlayerShip.setSelectedAmmunition(nPlayerShip.getSelectedAmmunition() - 1);
 	}
 
 	/**

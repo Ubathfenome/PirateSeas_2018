@@ -905,6 +905,14 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 		return mapWidth;
 	}
 
+	/**
+	 * Checks if the speech recognizer is listening
+	 * @return true if the speech recognizer is listening, false otherwise
+	 */
+	public boolean isSpeechRecognizerListening(){
+		return mIsListening;
+	}
+
     /**
      * Speech Recognition Listener
      */
@@ -1021,9 +1029,14 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 				imgMicStatus.setImageResource(R.drawable.ic_mic_enabled);
 				mIsListening = false;
 				CanvasView canvasView = mCanvasView.nUpdateThread.getCanvasViewInstance();
-				int initial = canvasView.nShotList.size();
-				canvasView.nShotList.addAll(Arrays.asList(canvasView.nPlayerShip.shootCannon()));
-				Log.d(TAG, "Player shot with voice " + (canvasView.nShotList.size() - initial) + " shots");
+
+				if(canvasView.nPlayerShip.getSelectedAmmo() == Ammunitions.AIMED && canvasView.nPlayerShip.getSelectedAmmunition() > 0){
+					canvasView.enemyHitByAimedShot();
+				} else {
+					int initial = canvasView.nShotList.size();
+					canvasView.nShotList.addAll(Arrays.asList(canvasView.nPlayerShip.shootCannon()));
+					Log.d(TAG, "Player shot with voice " + (canvasView.nShotList.size() - initial) + " shots");
+				}
             } catch (NoAmmoException e) {
                 showText(e.getMessage());
             }
