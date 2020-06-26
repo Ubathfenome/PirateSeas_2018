@@ -46,7 +46,7 @@ public class Constants{
     public static final int DIRECTION_DOWN = 270;
 
 	public static final int CHT_VALUE = 20;
-	public static final int MAELSTORM_DAMAGE = 15;
+	public static final int MAELSTORM_DAMAGE = 5;
 
 	public static final int DEFAULT_ENEMY_SHIP_DIRECTION = DIRECTION_LEFT;
 	public static final int DEFAULT_ENEMY_Y_LIMIT = 60;
@@ -92,6 +92,8 @@ public class Constants{
 	private static final int MILLIS_TO_SECONDS = 1000;
 	public static final double MILLIS_TO_SECONDS_INV = Math.pow(MILLIS_TO_SECONDS, -1); 
 	public static final double NANOS_TO_SECONDS = Math.pow(10, -9);
+	public static final double NANOS_TO_MILLIS = Math.pow(10, -6);
+	public static final double MILLIS_TO_NANOS = Math.pow(10, 6);
 
 	public static final int SHOT_SPEED = 15;
 	public static final long GRACE_PERIOD = 1500;

@@ -563,6 +563,10 @@ public class MainMenuActivity extends Activity {
 			btnPositive.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View view) {
+
+					boolean tutorialAlreadyShown = ((MainMenuActivity)getActivity()).mPreferences.getBoolean(Constants.PREF_TUTORIAL_ALREADY_SHOWN, false);
+					int appVersion = ((MainMenuActivity)getActivity()).mPreferences.getInt(Constants.APP_VERSION, Constants.ZERO_INT);
+
 					boolean shipControlMode = ((MainMenuActivity)getActivity()).mPreferences.getBoolean(Constants.PREF_SHIP_CONTROL_MODE, Constants.PREF_IS_ACTIVE);
 					boolean ammoControlMode = ((MainMenuActivity)getActivity()).mPreferences.getBoolean(Constants.PREF_AMMO_CONTROL_MODE, Constants.PREF_IS_ACTIVE);
 					boolean shootControlMode = ((MainMenuActivity)getActivity()).mPreferences.getBoolean(Constants.PREF_SHOOT_CONTROL_MODE, Constants.PREF_IS_ACTIVE);
@@ -574,6 +578,8 @@ public class MainMenuActivity extends Activity {
 					editor.putBoolean(Constants.PREF_AMMO_CONTROL_MODE, ammoControlMode);
 					editor.putBoolean(Constants.PREF_SHOOT_CONTROL_MODE, shootControlMode);
 					editor.putBoolean(Constants.TAG_EXE_MODE, Constants.isInDebugMode(((MainMenuActivity)getActivity()).mMode));
+					editor.putBoolean(Constants.PREF_TUTORIAL_ALREADY_SHOWN, tutorialAlreadyShown);
+					editor.putInt(Constants.APP_VERSION, appVersion);
 					editor.apply();
 
 					((MainMenuActivity)getActivity()).launchGame(true,	((MainMenuActivity)getActivity()).activeSensors);

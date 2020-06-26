@@ -75,7 +75,7 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 
 	private static final String TAG = "GameActivity";
 	private static final long DURATION_MILLIS = 1500;
-	private static final long MAELSTORM_COOLDOWN = (long) (60 * Math.pow(10, 9));
+	private static final long MAELSTORM_COOLDOWN = 10000;
 
 	private Context context;
 
@@ -429,6 +429,9 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 		}
 	}
 
+    /**
+     * Class to create a Dialog that shows the player that the enemy has been defeated and the loot collected
+     */
 	public static class EnemyDefeatedFragment extends DialogFragment {
 
 		@Override
@@ -462,6 +465,9 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 		}
 	}
 
+    /**
+     * Class to create a Dialog that shows the player that it has been defeated
+     */
 	public static class PlayerDefeatedFragment extends DialogFragment {
 
 		@Override
@@ -512,6 +518,8 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 					if (!shipControlMode && battleIsGoing(cView)) {
 						if (battleStartedTimestamp == 0)
 							battleStartedTimestamp = event.timestamp;
+						if(lastMaelstormTimestamp == 0)
+							lastMaelstormTimestamp = event.timestamp;
 						timeSinceBattleStarted = event.timestamp - battleStartedTimestamp;
 						timeSinceLastMaelstorm = event.timestamp - lastMaelstormTimestamp;
 						if (Math.abs(axisSpeedY) >= ACCELEROMETER_THRESHOLD) {
@@ -528,12 +536,19 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 							}
 						}
 
+						/*
+						Log.d(TAG, "EventTimestamp: " + event.timestamp + " ns");
+						Log.d(TAG, "BattleStartedTimestamp: " + battleStartedTimestamp + " ns");
+						Log.d(TAG, "LastMaelstormTimestamp: " + lastMaelstormTimestamp + " ns");
+						Log.d(TAG, "TimeSinceBattleStarted: " + timeSinceBattleStarted + " ns. Grace for " + Constants.GRACE_PERIOD * 3 * Constants.MILLIS_TO_NANOS+ " ns");
+                        Log.d(TAG, "TimeSinceLastMaelstorm: " + timeSinceLastMaelstorm + " ns. Cooldown for " + MAELSTORM_COOLDOWN * Constants.MILLIS_TO_NANOS + " ns");
+					    */
 						if (EventWeatherMaelstrom.generateMaelstrom(axisSpeedY) &&
-								(timeSinceBattleStarted >= Constants.GRACE_PERIOD) &&
-								(timeSinceLastMaelstorm >= MAELSTORM_COOLDOWN)) {
+								(timeSinceBattleStarted >= Constants.GRACE_PERIOD * 3 * Constants.MILLIS_TO_NANOS) &&
+								(timeSinceLastMaelstorm >= MAELSTORM_COOLDOWN * Constants.MILLIS_TO_NANOS)) {
 							lastMaelstormTimestamp = event.timestamp;
 							// Notify CanvasView to damage the ships
-							Log.d(TAG, "Maelstorm generated @ " + sensorLastTimestamp + " (" + axisSpeedY + ")");
+							Log.d(TAG, "Maelstorm generated @ " + sensorLastTimestamp + " ns (" + axisSpeedY + ")");
 							showText(getString(R.string.maelstorm_inbound));
 
 							Vibrator v = (Vibrator) getApplicationContext().getSystemService(Context.VIBRATOR_SERVICE);
@@ -755,6 +770,11 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
         return position != -1 && array[position] == 1;
 	}
 
+    /**
+     * Finds the index of the given sensor type code on the sensorEvents list
+     * @param value sensor type code
+     * @return index in the list or -1 if not found
+     */
     private int findAppSensorEventIndexByCode(int value) {
 	    for(int i = 0; i < sensorEvents.size(); i++){
 	        AppSensorEvent event = sensorEvents.get(i);

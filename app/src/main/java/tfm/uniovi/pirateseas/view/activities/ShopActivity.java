@@ -478,7 +478,13 @@ public class ShopActivity extends ListActivity{
 						} else {
 							// Ship
 							try {
-								currentValue = (int) dummyShip.getClass().getMethod("get" + stat).invoke(dummyShip);
+								if(Constants.SHIP_POWER.equals(stat)) {
+									currentValue = Math.round((float)dummyShip.getClass().getMethod("get" + stat).invoke(dummyShip) * Constants.DEFAULT_SHOOT_DAMAGE);
+								} else if (Constants.SHIP_RANGE.equals(stat)) {
+									currentValue = Math.round((float)dummyShip.getClass().getMethod("get" + stat).invoke(dummyShip) * Constants.DEFAULT_SHIP_BASIC_RANGE);
+								} else {
+									currentValue = (int) dummyShip.getClass().getMethod("get" + stat).invoke(dummyShip);
+								}
 							} catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
 								e.printStackTrace();
 							}

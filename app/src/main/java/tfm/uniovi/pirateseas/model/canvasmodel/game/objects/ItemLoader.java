@@ -28,9 +28,11 @@ public class ItemLoader{
 	private Item blackPowder;
 	private Item valuable;
 
-	private static final float ITEM_TIER1_PERCENT = 80;
-	private static final float ITEM_TIER2_PERCENT = 15;
-	private static final float ITEM_TIER3_PERCENT = 5;
+	private Item ammoSimple, ammoAimed, ammoDouble, ammoSweep;
+
+	private static final float ITEM_TIER1_PERCENT = 65;
+	private static final float ITEM_TIER2_PERCENT = 25;
+	private static final float ITEM_TIER3_PERCENT = 10;
 	
 	private Context context;
 	
@@ -48,10 +50,10 @@ public class ItemLoader{
 
 		repairman = new Item(R.string.shop_item_repairman_name,
 				getString(R.string.shop_item_repairman_desc), 1, 15);
-		Item ammoSimple = new Item(R.string.shop_item_ammo_simple_name, getString(R.string.shop_item_ammo_simple_desc), 1, 1);
-		Item ammoAimed = new Item(R.string.shop_item_ammo_aimed_name, getString(R.string.shop_item_ammo_aimed_desc), 1, 10);
-		Item ammoDouble = new Item(R.string.shop_item_ammo_double_name, getString(R.string.shop_item_ammo_double_desc), 2, 20);
-		Item ammoSweep = new Item(R.string.shop_item_ammo_sweep_name, getString(R.string.shop_item_ammo_sweep_desc), 3, 30);
+		ammoSimple = new Item(R.string.shop_item_ammo_simple_name, getString(R.string.shop_item_ammo_simple_desc), 1, 1);
+		ammoAimed = new Item(R.string.shop_item_ammo_aimed_name, getString(R.string.shop_item_ammo_aimed_desc), 1, 10);
+		ammoDouble = new Item(R.string.shop_item_ammo_double_name, getString(R.string.shop_item_ammo_double_desc), 2, 20);
+		ammoSweep = new Item(R.string.shop_item_ammo_sweep_name, getString(R.string.shop_item_ammo_sweep_desc), 3, 30);
 		nest = new Item(R.string.shop_item_nest_name,
 				getString(R.string.shop_item_nest_desc), 3, 35);
 		materials = new Item(R.string.shop_item_mats_name,
@@ -94,6 +96,11 @@ public class ItemLoader{
 		
 		itemList.add(crew);
 		itemList.add(repairman);
+
+		itemList.add(ammoSimple);
+		itemList.add(ammoAimed);
+		itemList.add(ammoDouble);
+		itemList.add(ammoSweep);
 
 		itemList.add(nest);
 		itemList.add(materials);
@@ -153,17 +160,18 @@ public class ItemLoader{
 	 */
 	private Item getRandomItem(){
 		int randomProbability = (int) (Math.random() * 100);
-		Item item = null;
-		
+		Item item;
+		double randomValue = Math.random();
+
 		switch(levelProbabilities[randomProbability]){
 			case 3:
-				item = levelThree.get((int) (Math.random() * (levelThree.size() - 1)));
+				item = levelThree.get((int) (randomValue * (levelThree.size() - 1)));
 				break;
 			case 2:
-				item = levelTwo.get((int) (Math.random() * (levelTwo.size() - 1)));
+				item = levelTwo.get((int) (randomValue * (levelTwo.size() - 1)));
 				break;
 			default:
-				item = levelOne.get((int) (Math.random() * (levelOne.size() - 1)));
+				item = levelOne.get((int) (randomValue * (levelOne.size() - 1)));
 				break;
 		}
 		

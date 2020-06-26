@@ -27,6 +27,7 @@ public class UIDisplayElement extends View {
 	private Drawable mImage;
 	private Drawable mImageCancel;
 	private TypedArray mArray;
+	private Typeface customFont;
 	
 	@SuppressLint("NewApi")
 	/*
@@ -35,7 +36,7 @@ public class UIDisplayElement extends View {
 	public UIDisplayElement(Context context, int drawableResource, int value){
 		super(context);
 
-		Typeface customFont = Typeface.createFromAsset(context.getAssets(), "fonts/" + Constants.FONT_NAME + ".ttf");
+		customFont = Typeface.createFromAsset(context.getAssets(), "fonts/" + Constants.FONT_NAME + ".ttf");
 		paint = new Paint();
 		paint.setColor(Color.WHITE);
 		paint.setTypeface(customFont);
@@ -72,6 +73,7 @@ public class UIDisplayElement extends View {
 		super(context, attrs, defStyle);
 		
 		mArray = context.obtainStyledAttributes(attrs, R.styleable.UIDisplayElement, defStyle, 0);
+		customFont = Typeface.createFromAsset(context.getAssets(), "fonts/" + Constants.FONT_NAME + ".ttf");
 		
 		init();
 		
@@ -85,7 +87,8 @@ public class UIDisplayElement extends View {
 	private void init(){
 		paint = new Paint();
 		paint.setColor(Color.RED);
-		paint.setTextSize(40f);
+		paint.setTextSize(65f);
+		paint.setTypeface(customFont);
 		paint.setStyle(Style.FILL_AND_STROKE);
 		
 		this.mValue = mArray.getInteger(R.styleable.UIDisplayElement_value, 0);

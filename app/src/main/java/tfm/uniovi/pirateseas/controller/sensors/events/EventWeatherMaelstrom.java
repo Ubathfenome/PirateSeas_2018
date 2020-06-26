@@ -9,7 +9,7 @@ import tfm.uniovi.pirateseas.controller.sensors.SensorType;
 public class EventWeatherMaelstrom extends AppSensorEvent{
 	private static final String TAG = "EventWeatherMaelstrom";
 	private static final int AVERAGE = 10;
-	private static final int THRESHOLD = 7;
+	private static final int THRESHOLD = 9;
 
 	public EventWeatherMaelstrom(String name, SensorType sensorType, int imageResource, int eventThumbnailResource, int sensorThumbnailResource, int messageResource, boolean isSensorAvailable) {
 		super(name, sensorType, imageResource, eventThumbnailResource, sensorThumbnailResource, messageResource, isSensorAvailable, true);
