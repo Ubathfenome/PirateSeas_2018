@@ -964,8 +964,8 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 		@Override
 		public void onResults(Bundle results)
 		{
+			Log.d(TAG, "onResults"); //$NON-NLS-1$
 			if(singleResult){
-				Log.d(TAG, "onResults"); //$NON-NLS-1$
 				ArrayList<String> matches = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
 				// matches are the return values of speech recognition engine
 				// Use these values for whatever you wish to do
@@ -974,6 +974,9 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 					doAction();
 
 				singleResult = false;
+			} else {
+				Log.d(TAG, "Player would have shot");
+				singleResult = true;
 			}
 		}
 
