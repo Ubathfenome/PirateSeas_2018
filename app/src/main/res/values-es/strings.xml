@@ -159,10 +159,10 @@
     <!-- Game strings -->
     <string name="tutorial_1">Arrr Grumete!! Bienvenido a PIRATE SEAS!!\nArr, quieres dominar los siete mares? Pues conquista todas las islas y hazte rico.</string>
     <string name="tutorial_2">Escoge tu siguiente paso con cuidado grumetillo! Muchos buenos hombres se han hundido en estas aguas.</string>
-    <string name="tutorial_3">Al navegar a una nueva zona, podrás encontrar una isla o mas mar.</string>
+    <string name="tutorial_3">Al navegar a una nueva zona, podras encontrar una isla o mas mar.</string>
     <string name="tutorial_4">Si te encuentras con neblina en el mar.. Cuidado! Seguro que hay un enemigo tras la niebla. Agita tu dispositivo para aclarar el cielo!</string>
     <string name="tutorial_5">Toca la pantalla hacia arriba para disparar la municion seleccionada.</string>
-    <string name="tutorial_6">Tambien puedes disparar usando comandos de voz, como \'%1$s\', \'%2$s\' y \'%3$s\' tocando la pantalla para hacer que tus hombres escuchen tus ordenes.</string>
+    <string name="tutorial_6">Tambien puedes disparar usando comandos de voz, como \'%1$s\', \'%2$s\' y \'%3$s\' tocando el icono del microfono para hacer que tus hombres escuchen tus ordenes.</string>
     <string name="tutorial_7">Cambia el tipo de municion seleccionada pulsando en el icono de la municion (por defecto) o pulsando las teclas de volumen.</string>
     <string name="tutorial_8">Consigue riquezas hundiendo a tus enemigos o descubriendo tesoros con los mapas que encontraras en tu camino.</string>
     <string name="tutorial_9">Los barcos rojos son mas resistentes y lentos.

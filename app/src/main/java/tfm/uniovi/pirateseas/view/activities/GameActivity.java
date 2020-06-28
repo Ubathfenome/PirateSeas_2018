@@ -220,6 +220,12 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 		});
 
 		imgMicStatus = findViewById(R.id.imgMicStatus);
+		imgMicStatus.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				startVoiceRecognitionRequest();
+			}
+		});
 
 		mAmmo = findViewById(R.id.playerAmmunition);
 		mAmmo.setElementValue(0);

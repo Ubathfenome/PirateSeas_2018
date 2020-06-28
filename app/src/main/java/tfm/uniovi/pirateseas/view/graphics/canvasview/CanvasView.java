@@ -382,10 +382,12 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 							throw new IllegalStateException("Unexpected value: " + direction);
 					}
 
+					/*
 					if(nShootControlMode && !((GameActivity) nContext).isSpeechRecognizerListening()){
 						// Iniciar reconocimiento de voz
 						((GameActivity) nContext).startVoiceRecognitionRequest();
 					}
+					*/
 
                     break;
 			}

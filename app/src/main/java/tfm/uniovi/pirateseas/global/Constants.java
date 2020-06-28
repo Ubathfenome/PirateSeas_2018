@@ -95,7 +95,7 @@ public class Constants{
 	public static final double NANOS_TO_MILLIS = Math.pow(10, -6);
 	public static final double MILLIS_TO_NANOS = Math.pow(10, 6);
 
-	public static final int SHOT_SPEED = 15;
+	public static final int SHOT_SPEED = 25;
 	public static final long GRACE_PERIOD = 1500;
 
     public static final int SHAKE_LIMIT = 2;
