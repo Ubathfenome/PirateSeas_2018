@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Canvas;
-import android.graphics.Paint;
 import android.graphics.Point;
 import android.os.Build;
 import android.os.Parcelable;
@@ -74,8 +73,6 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 	private GameTimer nGameTimer;
 	public Player nPlayer;
 	public Map nMap;
-
-	private Paint paint;
 
 	private Sky nSky;
 	private Sea nSea;
@@ -169,8 +166,6 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 
 		nGameTimer = new GameTimer(nBaseTimestamp);
 		nPlayer = new Player();
-
-		paint = new Paint();
 
 		// Initialize components
 		// Scene

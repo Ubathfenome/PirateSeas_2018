@@ -34,7 +34,7 @@ public class FontAdapter extends ArrayAdapter<String> {
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         LayoutInflater inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View rowView = inflater.inflate(idListView,parent, false);
+        View rowView = inflater.inflate(idListView, parent, false);
         TextView textView = rowView.findViewById(idTextView);
 
         textView.setTypeface(font); // set typeface here

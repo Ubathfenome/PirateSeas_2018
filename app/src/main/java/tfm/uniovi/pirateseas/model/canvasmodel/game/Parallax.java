@@ -3,7 +3,6 @@ package tfm.uniovi.pirateseas.model.canvasmodel.game;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 
 /**
  * Class to manage the behaviour of objects that have 2 images to represent
@@ -20,17 +19,10 @@ public class Parallax {
 	 * Constructor
 	 */
 	public Parallax(Context context, int resourceBase, int resourceTop){
-		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
-			if(resourceBase != 0)
-				imageBase = context.getResources().getDrawable(resourceBase, null);
-			if(resourceTop != 0)
-				imageTop = context.getResources().getDrawable(resourceTop, null);
-		} else {
-			if(resourceBase != 0)
-				imageBase = context.getResources().getDrawable(resourceBase);
-			if(resourceTop != 0)
-				imageTop = context.getResources().getDrawable(resourceTop);
-		}
+		if(resourceBase != 0)
+			imageBase = context.getResources().getDrawable(resourceBase, null);
+		if(resourceTop != 0)
+			imageTop = context.getResources().getDrawable(resourceTop, null);
 	}
 
 	/**

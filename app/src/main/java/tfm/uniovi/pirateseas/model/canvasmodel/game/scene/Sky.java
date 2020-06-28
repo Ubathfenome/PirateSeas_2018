@@ -5,7 +5,6 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.support.annotation.NonNull;
 
 import tfm.uniovi.pirateseas.R;
@@ -32,14 +31,9 @@ public class Sky extends BasicModel{
 	public Sky(Context context, double x, double y, double mCanvasWidth,
             double mCanvasHeight){
 		super(context, x, y, mCanvasWidth, mCanvasHeight, null);
-		
-		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
-			setImage(context.getResources().getDrawable(R.mipmap.txtr_sky_clear, null));
-			mImageAux = context.getResources().getDrawable(R.mipmap.txtr_sky_clear, null);
-		} else {
-			setImage(context.getResources().getDrawable(R.mipmap.txtr_sky_clear));
-			mImageAux = context.getResources().getDrawable(R.mipmap.txtr_sky_clear);
-		}		
+
+		setImage(context.getResources().getDrawable(R.mipmap.txtr_sky_clear, null));
+		mImageAux = context.getResources().getDrawable(R.mipmap.txtr_sky_clear, null);
 	}
 	
 	@Override
