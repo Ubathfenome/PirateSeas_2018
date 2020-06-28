@@ -1030,10 +1030,6 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 		            return true;
                 } else if(match.contains(getString(R.string.command_shoot))){
                     return true;
-                } else if(match.contains(getString(R.string.command_ok))){
-		            return true;
-                } else if(match.contains(getString(R.string.command_go))){
-		            return true;
                 }
             }
 		    return false;

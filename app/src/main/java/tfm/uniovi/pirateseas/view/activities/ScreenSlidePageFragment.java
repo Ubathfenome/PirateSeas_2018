@@ -114,8 +114,7 @@ public class ScreenSlidePageFragment extends Fragment {
                 ((TextView) rootView.findViewById(R.id.text2)).setText(
                         getResources().getString(R.string.tutorial_6,
                                 getResources().getString(R.string.command_fire),
-                                getResources().getString(R.string.command_shoot),
-                                getResources().getString(R.string.command_go)));
+                                getResources().getString(R.string.command_shoot)));
                 break;
             case 6:
                 imageReference = R.mipmap.img_ammunition;
