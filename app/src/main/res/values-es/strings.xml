@@ -187,7 +187,7 @@
     <string name="message_mapcompleted">Mapa completado!</string>
     <string name="message_shakesleft">Agita tu dispositivo %1$d veces mas!</string>
     <string name="game_exit">Salir</string>
-    <string name="game_message_enemy_defeated">Has encontrado %1$d monedas de oro y conseguido %2$d xp</string>
+    <string name="game_message_enemy_defeated">Has encontrado %1$d monedas de oro y conseguido %2$d puntos de experiencia</string>
     <string name="game_message_islands_discovered">Ya hemos encontrado todas las islas de este mar. Venderemos este mapa por 90 monedas de oro!</string>
 
     <!-- Help strings -->

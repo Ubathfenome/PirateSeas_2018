@@ -130,18 +130,7 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-        SpeechRecognitionListener listener = new SpeechRecognitionListener();
-        mSpeechRecognizer = SpeechRecognizer.createSpeechRecognizer(this);
-        Log.i(TAG, "isRecognitionAvailable: " + SpeechRecognizer.isRecognitionAvailable(this));
-        mSpeechRecognizer.setRecognitionListener(listener);
-        mSpeechRecognizerIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-        mSpeechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
-                RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-        mSpeechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE,
-                this.getPackageName());
-        mSpeechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_PREFERENCE,
-                getString(R.string.lang));
-        mSpeechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 3);
+		startRecognizer();
 
 		sensorEvents = new ArrayList<>();
 
@@ -238,7 +227,36 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 		nShakesForceBar.getProgressDrawable().setColorFilter(Color.BLUE, PorterDuff.Mode.SRC_IN);
 	}
 
-    /**
+	/**
+	 * Start the recognizer object
+	 */
+	private void startRecognizer() {
+		SpeechRecognitionListener listener = new SpeechRecognitionListener();
+		mSpeechRecognizer = SpeechRecognizer.createSpeechRecognizer(this);
+		Log.i(TAG, "isRecognitionAvailable: " + SpeechRecognizer.isRecognitionAvailable(this));
+		mSpeechRecognizer.setRecognitionListener(listener);
+		mSpeechRecognizerIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+		mSpeechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+				RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+		mSpeechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE,
+				this.getPackageName());
+		mSpeechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_PREFERENCE,
+				getString(R.string.lang));
+		mSpeechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 3);
+	}
+
+	/**
+	 * Stop the recognizer object
+	 */
+	private void stopRecognizer(){
+		mSpeechRecognizer.stopListening();
+		imgMicStatus.setImageResource(R.drawable.ic_mic_disabled);
+		mIsListening = false;
+		mSpeechRecognizer.destroy();
+		mSpeechRecognizer = null;
+	}
+
+	/**
      * Method called with the result of the permissions request
      * @param requestCode requested code
      * @param permissions requested permissions
@@ -250,6 +268,9 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 		if (requestCode == REQUEST_RECORD_PERMISSION) {
 			if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 				if(shootControlMode) {
+					if(mSpeechRecognizer == null){
+						startRecognizer();
+					}
 					mSpeechRecognizer.startListening(mSpeechRecognizerIntent);
 					imgMicStatus.setImageResource(R.drawable.ic_mic_usage);
 				} else {
@@ -332,9 +353,14 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 		shootControlMode = mCanvasView.nUpdateThread.getCanvasViewInstance().getShootControlMode();
 
 		if(!shootControlMode){
-			mSpeechRecognizer.stopListening();
-			imgMicStatus.setImageResource(R.drawable.ic_mic_disabled);
-			mIsListening = false;
+			if(mSpeechRecognizer != null) {
+				mSpeechRecognizer.stopListening();
+				imgMicStatus.setImageResource(R.drawable.ic_mic_disabled);
+				mIsListening = false;
+			}
+		} else {
+			if(!isSpeechRecognizerListening())
+				imgMicStatus.setImageResource(R.drawable.ic_mic_enabled);
 		}
 
 		if(!MusicManager.getInstance().isPlaying())
@@ -362,15 +388,9 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 								REQUEST_RECORD_PERMISSION);
 				imgMicStatus.setImageResource(R.drawable.ic_mic_usage);
 				mIsListening = true;
-			} else {
-				mSpeechRecognizer.stopListening();
-				imgMicStatus.setImageResource(R.drawable.ic_mic_enabled);
-				mIsListening = false;
 			}
-		} else {
-			mSpeechRecognizer.stopListening();
-			imgMicStatus.setImageResource(R.drawable.ic_mic_disabled);
-			mIsListening = false;
+		} else if(mSpeechRecognizer != null){
+			stopRecognizer();
 		}
 	}
 
@@ -954,9 +974,7 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 			Log.e(TAG, "onError = " + getErrorText(error));
 
 			if(SpeechRecognizer.ERROR_RECOGNIZER_BUSY == error){
-				mSpeechRecognizer.stopListening();
-				imgMicStatus.setImageResource(R.drawable.ic_mic_enabled);
-				mIsListening = false;
+				stopRecognizer();
 			} else {
 				mSpeechRecognizer.startListening(mSpeechRecognizerIntent);
 				imgMicStatus.setImageResource(R.drawable.ic_mic_usage);
